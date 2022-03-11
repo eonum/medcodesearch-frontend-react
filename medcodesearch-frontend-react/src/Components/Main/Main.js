@@ -1,34 +1,8 @@
 import React, {Component} from "react";
 import './Main.css';
+import ICD from "../ICD/ICD";
 
 class Main extends Component {
-
-    zahl = `I`;
-    wege = `ICD10-GM-2014`;
-
-
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            text: "",
-            code: ""
-        }
-    }
-
-
-    componentDidMount() {
-        fetch(`https://search.eonum.ch/de/icd_chapters/`+this.wege+`/`+this.zahl)
-            .then((res) => res.json())
-            .then((json) => {
-                this.setState({
-                    text: json.text,
-                    code: json.code
-                })
-            })
-    }
-
 
 
     render() {
@@ -43,9 +17,7 @@ class Main extends Component {
                                 <h3>ICD-10-GM-2022</h3>
                                 <h4>Untergeordnete Codes</h4>
                                 <ul>
-                                    <li>
-                                        {this.state.code} {this.state.text}
-                                    </li>
+                                    <ICD />
                                 </ul>
                             </div>
                         </div>
