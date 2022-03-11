@@ -1,0 +1,21 @@
+.header {
+    position: fixed;
+    width: 100%;
+    top: 1%;
+    
+}
+
+.language-selection{
+    text-align: right;
+}
+
+.language-btn{
+    background-color: transparent;
+    border-color: transparent;
+    position: relative;
+}
+
+.language-btn:hover{
+    color:rgb(0, 140, 255);
+    text-decoration: underline;
+}
