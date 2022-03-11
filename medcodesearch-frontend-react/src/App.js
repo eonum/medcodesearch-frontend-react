@@ -1,4 +1,5 @@
 import './App.css';
+import './index.css';
 import Button from 'react-bootstrap/Button';
 import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';

@@ -4,7 +4,7 @@ import "./ButtonGroup.css";
 const ButtonGroup = ({ buttons }) => {
     const [clickedId, setClickedId] = useState(-1);
     return (
-        <>
+        <div className="search-center">
             {buttons.map((buttonLabel, i) => (
                 <button
                     key={i}
@@ -15,7 +15,7 @@ const ButtonGroup = ({ buttons }) => {
                     {buttonLabel}
                 </button>
             ))}
-        </>
+        </div>
     );
 };
 
