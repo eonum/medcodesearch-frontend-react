@@ -1,17 +1,17 @@
 .footer {
-    position: fixed;
     width: 100%;
     bottom: 0;
     left: 1%;
+    padding: 10px;
 }
 
 a:link {
-    color:rgb(0, 140, 255);
+    color:#24add3;
     text-decoration: none;
 }
 
 a:visited {
-  color:rgb(0, 140, 255);
+  color:#24add3;
   text-decoration: none;
 }
 

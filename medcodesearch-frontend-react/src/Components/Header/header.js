@@ -8,14 +8,14 @@ class Header extends Component {
 
     render() { 
         return (
-            <header className='header'>
-                <div className='language-selection'>
-                    {this.buttons.map(buttonLabel => 
-                        <button className='language-btn'>
-                           {buttonLabel}
-                        </button>)}
-                </div>
-            </header>
+                <header className='header'>
+                    <div className='language-selection'>
+                        {this.buttons.map(buttonLabel =>
+                            <button className='language-btn'>
+                               {buttonLabel}
+                            </button>)}
+                    </div>
+                </header>
         );
     }
 }

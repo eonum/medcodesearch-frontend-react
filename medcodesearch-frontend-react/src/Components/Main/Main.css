@@ -1,7 +1,14 @@
-.blueBorder {
-    border-radius: 100px;
-    border-left-color: blue;
-}
+
 .whiteBackground {
     background-color: white;
+}
+.Wrapper {
+    padding: 10px;
+}
+
+#color {
+    border-color: #24add3!important;
+}
+.text-start {
+    padding: 10px;
 }

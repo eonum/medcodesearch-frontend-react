@@ -34,9 +34,6 @@ class ICD extends Component{
             })
     }
 
-
-
-
     render() {
         return (
             <div>

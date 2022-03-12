@@ -1,8 +1,7 @@
 .header {
-    position: fixed;
     width: 100%;
     top: 1%;
-    
+    padding: 10px;
 }
 
 .language-selection{
@@ -16,6 +15,6 @@
 }
 
 .language-btn:hover{
-    color:rgb(0, 140, 255);
+    color:#24add3;
     text-decoration: underline;
 }
