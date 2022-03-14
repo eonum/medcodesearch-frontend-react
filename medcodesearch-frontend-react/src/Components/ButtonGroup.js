@@ -30,9 +30,9 @@ class ButtonGroup extends Component {
                     >{btn}</button>
                 },this)}
             </div>
-            )
-        }
-};
+        )
+    }
+}
 
 
 export default ButtonGroup;

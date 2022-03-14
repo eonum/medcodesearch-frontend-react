@@ -10,16 +10,21 @@ class Searchbar extends Component {
         super(props);
         this.state = {
             text: [],
-            code: []
+            code: [],
         }
-        this.fetchForCode("P67A");
     }
+
+
+    updateSearch = (e) => {
+        this.fetchForCode(e.target.value);
+    }
+
     render() {
         return (
             <div>
-                <h1 key={this.state.code}>{this.state.text}</h1>
                 <Form className="d-flex search-center">
                     <FormControl
+                        onChange={this.updateSearch}
                         type="search"
                         placeholder="Suchbegriff oder Code eingeben..."
                         className="me-2"
@@ -29,23 +34,35 @@ class Searchbar extends Component {
                         <BsSearch/>
                     </Button>
                 </Form>
+                {this.state.text.map(function(text, i){
+                    return <p key={i}>{text}</p>;
+                })}
             </div>
         )
     }
 
+
     async fetchForCode(code){
-        await fetch('https://search.eonum.ch/de/' + this.props.list + '/V3.0/'+ code)
-            .then((res) => res.json())
+        await fetch('https://search.eonum.ch/de/' + this.props.list + '/V3.0/search?search='+ code)
+            .then((res) => {
+                this.setState({text: [], code: []}) //reset state before fetching again
+                if(res.ok) {
+                    return res.json()
+                }
+            })
             .then((json) => {
-                console.log(JSON.stringify(json.text));
-                this.setState({
-                    text: [...this.state.text, json.text],
-                    code: [...this.state.code, json.code]
-                });
+                for(let i = 0; i < json.length; i++) {
+                    let obj = json[i]
+                    this.setState({
+                        code: [...this.state.code, obj.code],
+                        text: [...this.state.text, obj.text],
+                    });
+                }
+
             })
             .catch(() => {
                 this.setState({
-                    text: [...this.state.text, "Could not find code"],
+                    text: "Could not find code"
                 });
             });
     }

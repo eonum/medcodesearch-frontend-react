@@ -6,7 +6,7 @@ import Main from './Components/Main/Main';
 import Searchbar from './Components/Searchbar.js'
 import ButtonGroup from "./Components/ButtonGroup";
 import logo from "./assets/medcodesearch_big.png";
-import {Component} from "react";
+import {Component, useState} from "react";
 
 class App extends Component{
     constructor(props) {
@@ -21,7 +21,7 @@ class App extends Component{
                   <Header/>
                   <img id="logo" src={logo}/>
                   <Searchbar list={this.state.list}/>
-                  <ButtonGroup
+                  <ButtonGroup chosenBtn={this.state.list}
                       buttons={["ICD", "CHOP", "SwissDRG", "TARMED"]}/>
                   <Main/>
                   <Footer/>
