@@ -12,9 +12,9 @@ class Searchbar extends Component {
             text: [],
             code: []
         }
+        this.fetchForCode("P67A");
     }
     render() {
-        this.fetchForCode("P67A");
         return (
             <div>
                 <h1 key={this.state.code}>{this.state.text}</h1>

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 
 class ICD extends Component{
 
-    romischeZahlen = ['I','II','III',`IV`, 'V',`VI`,`VII`,`IX`,`X`,`XI`,`XII`,`XIII`,`XIV`,`XV`,`XVI`,`XVII`,`XVIII`,`XIX`,`XIX`,`XX`,`XXI`,`XXII`]
+    romischeZahlen = ['I','II','III',`IV`, 'V',`VI`,`VII`,`IX`,`X`,`XI`,`XII`,`XIII`,`XIV`,`XV`,`XVI`,`XVII`,`XVIII`,`XIX`,`XX`,`XXI`,`XXII`]
 
     constructor(props) {
         super(props);

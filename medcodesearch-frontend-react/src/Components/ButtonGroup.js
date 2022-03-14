@@ -5,30 +5,33 @@ class ButtonGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ICD: false,
-            DRG: false,
-
-        }
+            selectedButton: 'ICD'
+        };
+        this.updateButton = this.updateButton.bind(this);
     }
+
+    updateButton(btn) {
+        this.setState(function() {
+            return {
+                selectedButton: btn
+            }
+        })
+    }
+
     render() {
         return (
-//            const [clickedId, setClickedId] = useState(-1);
-                <div className="search-center">
-                    {buttons.map((buttonLabel, i) => (
-                        <button
-                            key={i}
-                            name={buttonLabel}
-                            onClick={() => clickedButton(i, buttonLabel)}
-                            className={i === clickedId ? "customButton active" : "customButton"}
-                        >
-                            {buttonLabel}
-                        </button>
-                    ))}
-                </div>)};
-    clickedButton(i, buttonLabel){
-        setClickedId(i);
-        this.setState({list = buttonLabel.toLowerCase()});
-    }
+            <div className="search-center">
+                {this.props.buttons.map(function(btn) {
+                    return <button
+                        key={btn}
+                        name={btn}
+                        className={btn === this.state.selectedButton ? "customButton active" : "customButton"}
+                        onClick = {this.updateButton.bind(null, btn)}
+                    >{btn}</button>
+                },this)}
+            </div>
+            )
+        }
 };
 
 
