@@ -40,10 +40,16 @@ class Searchbar extends Component {
                         className="me-2"
                         aria-label="Search"
                     />
-                    <Popup trigger={<button>
-                        <img id="calendarLogo" src={calendarLogo}/>
-                    </button>} position="right center">
-                        <div><Calendar/></div>
+                    <Popup trigger={
+                        <Button id="cal" onClick={(e) => {
+                            e.preventDefault()
+                        }}>
+                            <img id="calendarLogo" src={calendarLogo}/>
+                        </Button>
+                            }position="bottom left">
+                        <div>
+                        <Calendar/>
+                        </div>
                     </Popup>
                     <Button id="btn-go">
                         <BsSearch/>

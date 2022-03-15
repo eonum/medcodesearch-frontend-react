@@ -8,3 +8,10 @@
     background-color: #24add3;
     border: none;
 }
+#cal {
+    border: 1.5px solid rgb(25, 26, 24);
+    background-color: white;
+    color: black;
+    width: auto;
+    margin-right: 8px;
+}
