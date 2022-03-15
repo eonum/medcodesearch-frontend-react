@@ -2,6 +2,7 @@ import {Component} from "react";
 import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
+import {SearchResultModel} from "../../models/SearchResult.model";
 import Calendar from 'react-calendar';
 import SearchResult from "../SearchResult/SearchResult";
 
@@ -10,8 +11,7 @@ class Searchbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: [],
-            code: [],
+            searchResults: []
         }
     }
 
@@ -46,8 +46,8 @@ class Searchbar extends Component {
                         <BsSearch/>
                     </Button>
                 </Form>
-                {this.state.text.map(function(text, i){
-                    return <SearchResult text={text} key={i}/>;
+                {this.state.searchResults.map(function(searchResult, i){
+                    return <SearchResult text={searchResult.text} code={searchResult.code} key={i}/>;
                 })}
             </div>
         )
@@ -56,7 +56,7 @@ class Searchbar extends Component {
     async fetchForCode(code){
         await fetch('https://search.eonum.ch/de/' + this.convertCategory(this.props.selectedButton) + '/search?search='+ code)
             .then((res) => {
-                this.setState({text: [], code: []}) //reset state before fetching again
+                this.setState({searchResults: []}) //reset state before fetching again
                 if(res.ok) {
                     return res.json()
                 }
@@ -65,17 +65,10 @@ class Searchbar extends Component {
                 for(let i = 0; i < json.length; i++) {
                     let obj = json[i]
                     this.setState({
-                        code: [...this.state.code, obj.code],
-                        text: [...this.state.text, obj.text],
+                        searchResults: [...this.state.searchResults, new SearchResultModel(obj.text, obj.code, obj.url)]
                     });
                 }
-
             })
-            .catch(() => {
-                this.setState({
-                    text: "Could not find code"
-                });
-            });
     }
     /*
     componentDidUpdate(prevProps, prevState, snapshot) {

@@ -7,7 +7,8 @@ class SearchResult extends Component {
     }
     render() {
         return (
-            <div class="searchResult">
+            <div className="searchResult">
+                <p>{this.props.code}</p>
                 <p>{this.props.text}</p>
             </div>
         )
