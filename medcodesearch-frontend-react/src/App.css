@@ -14,3 +14,7 @@
   width: 1140px;
   margin: auto;
 }
+#calendarLogo {
+  max-width: 20px;
+  column-gap: 10px;
+}

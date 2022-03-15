@@ -3,8 +3,9 @@ import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import {SearchResultModel} from "../../models/SearchResult.model";
-import Calendar from 'react-calendar';
-import SearchResult from "../SearchResult/SearchResult";
+import calendarLogo from "../../assets/calendar.png";
+import Calendar from "react-calendar";
+import Popup from 'reactjs-popup';
 
 class Searchbar extends Component {
 
@@ -39,6 +40,11 @@ class Searchbar extends Component {
                         className="me-2"
                         aria-label="Search"
                     />
+                    <Popup trigger={<button>
+                        <img id="calendarLogo" src={calendarLogo}/>
+                    </button>} position="right center">
+                        <div><Calendar/></div>
+                    </Popup>
                     <Button id="btn-go">
                         <BsSearch/>
                     </Button>
@@ -63,19 +69,7 @@ class Searchbar extends Component {
             })
     }
     /*
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        fetch('https://search.eonum.ch/de/icds/')
-<!-- <Calendar/> https://www.npmjs.com/package/react-calendar -->
-
-    }
+<Calendar/> https://www.npmjs.com/package/react-calendar
     */
 }
-
-
-
-/*
-link:
-    https://www.emgoto.com/react-search-bar/
-        https://github.com/eonum/medcodesearch-frontend-react/
-*/
 export default Searchbar;

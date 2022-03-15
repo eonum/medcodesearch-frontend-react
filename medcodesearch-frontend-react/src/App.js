@@ -6,19 +6,21 @@ import Main from './Components/Main/Main';
 import Searchbar from './Components/Searchbar/Searchbar.js'
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import SearchResult from "./Components/SearchResult/SearchResult";
-import {SearchResultModel} from "./models/SearchResult.model";
 import logo from "./assets/medcodesearch_big.png";
-import {Component, useState} from "react";
+import {Component} from "react";
 
 class App extends Component{
     constructor(props) {
         super(props);
         this.state = {
             selectedButton: 'ICD',
-            searchResults: []
+            searchResults: [],
         };
     }
 
+    hideComponent() {
+        this.setState({ showHideCalender: !this.state.showHideCalender });
+    }
     updateButton = (btn) => {
         this.setState({selectedButton: btn})
     }
