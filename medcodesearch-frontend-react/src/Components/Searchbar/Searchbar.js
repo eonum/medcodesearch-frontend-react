@@ -13,7 +13,7 @@ class Searchbar extends Component {
     }
 
     updateSearch = (e) => {
-        this.fetchForCode(e.target.value);
+        this.fetchForSearchTerm(e.target.value);
     }
 
     convertCategory(chosenBtn) { //versions are currently harcoded!!
@@ -47,8 +47,8 @@ class Searchbar extends Component {
         )
     }
 
-    async fetchForCode(code){
-        await fetch('https://search.eonum.ch/de/' + this.convertCategory(this.props.selectedButton) + '/search?search='+ code)
+    async fetchForSearchTerm(searchTerm){
+        await fetch('https://search.eonum.ch/de/' + this.convertCategory(this.props.selectedButton) + '/search?search='+ searchTerm)
             .then((res) => {
                 if(res.ok) {
                     return res.json()
