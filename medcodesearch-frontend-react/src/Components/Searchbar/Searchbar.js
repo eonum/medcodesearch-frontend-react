@@ -10,9 +10,6 @@ class Searchbar extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            searchResults: []
-        }
     }
 
     updateSearch = (e) => {
@@ -46,9 +43,6 @@ class Searchbar extends Component {
                         <BsSearch/>
                     </Button>
                 </Form>
-                {this.state.searchResults.map(function(searchResult, i){
-                    return <SearchResult text={searchResult.text} code={searchResult.code} key={i}/>;
-                })}
             </div>
         )
     }
@@ -56,17 +50,15 @@ class Searchbar extends Component {
     async fetchForCode(code){
         await fetch('https://search.eonum.ch/de/' + this.convertCategory(this.props.selectedButton) + '/search?search='+ code)
             .then((res) => {
-                this.setState({searchResults: []}) //reset state before fetching again
                 if(res.ok) {
                     return res.json()
                 }
             })
             .then((json) => {
+                this.props.searchResults("reset") //reset parent array
                 for(let i = 0; i < json.length; i++) {
-                    let obj = json[i]
-                    this.setState({
-                        searchResults: [...this.state.searchResults, new SearchResultModel(obj.text, obj.code, obj.url)]
-                    });
+                    let obj = json[i];
+                    this.props.searchResults(new SearchResultModel(obj.text, obj.code, obj.url));
                 }
             })
     }

@@ -22,16 +22,28 @@ class App extends Component{
     updateButton = (btn) => {
         this.setState({selectedButton: btn})
     }
+    updateSearchResults = (searchResult) => {
+        if(searchResult === "reset") {
+            this.setState({searchResults: []})
+        } else {
+            this.setState({
+                searchResults: [...this.state.searchResults, searchResult]
+            });
+        }
+    }
 
       render() {
           return (
               <div className="App">
                   <Header/>
                   <img id="logo" src={logo}/>
-                  <Searchbar selectedButton={this.state.selectedButton}/>
+                  <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup chosenBtn={this.updateButton}
                       buttons={["ICD", "CHOP", "SwissDRG", "TARMED"]}/>
                   <Main/>
+                  {this.state.searchResults.map(function(searchResult, i){
+                      return <SearchResult text={searchResult.text} code={searchResult.code} key={i}/>;
+                  })}
                   <Footer/>
               </div>
           )
