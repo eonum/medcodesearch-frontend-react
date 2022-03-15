@@ -11,6 +11,7 @@ class ButtonGroup extends Component {
     }
 
     updateButton(btn) {
+        this.props.chosenBtn(btn);
         this.setState(function() {
             return {
                 selectedButton: btn

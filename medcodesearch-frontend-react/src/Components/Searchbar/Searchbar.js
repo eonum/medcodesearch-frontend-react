@@ -3,6 +3,7 @@ import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import Calendar from 'react-calendar';
+import SearchResult from "../SearchResult/SearchResult";
 
 class Searchbar extends Component {
 
@@ -14,9 +15,20 @@ class Searchbar extends Component {
         }
     }
 
-
     updateSearch = (e) => {
         this.fetchForCode(e.target.value);
+    }
+
+    convertCategory(chosenBtn) { //versions are currently harcoded!!
+        if(chosenBtn === "SwissDRG") {
+            return "drgs/V3.0"
+        } else if(chosenBtn === "ICD") {
+            return "icds/ICD10-GM-2014"
+        } else if(chosenBtn === "CHOP") {
+            return "chops/CHOP_2014"
+        } else if(chosenBtn === "TARMED") {
+            return "tarmeds/TARMED_01.09"
+        }
     }
 
     render() {
@@ -35,15 +47,14 @@ class Searchbar extends Component {
                     </Button>
                 </Form>
                 {this.state.text.map(function(text, i){
-                    return <p key={i}>{text}</p>;
+                    return <SearchResult text={text} key={i}/>;
                 })}
             </div>
         )
     }
 
-
     async fetchForCode(code){
-        await fetch('https://search.eonum.ch/de/' + this.props.list + '/V3.0/search?search='+ code)
+        await fetch('https://search.eonum.ch/de/' + this.convertCategory(this.props.selectedButton) + '/search?search='+ code)
             .then((res) => {
                 this.setState({text: [], code: []}) //reset state before fetching again
                 if(res.ok) {
