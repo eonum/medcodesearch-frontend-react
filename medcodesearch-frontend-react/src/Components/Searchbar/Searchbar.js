@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {Component, useState} from "react";
 import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
@@ -11,6 +11,9 @@ class Searchbar extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            date: new Date(),
+        }
     }
 
     updateSearch = (e) => {
@@ -48,7 +51,10 @@ class Searchbar extends Component {
                         </Button>
                             }position="bottom left">
                         <div>
-                        <Calendar/>
+                        <Calendar onChange={(selectedDate) =>{
+                            this.setState({date: selectedDate})}}
+                        />
+                            {console.log(this.state.date)}}/>
                         </div>
                     </Popup>
                     <Button id="btn-go">
@@ -58,6 +64,7 @@ class Searchbar extends Component {
             </div>
         )
     }
+
 
     async fetchForSearchTerm(searchTerm){
         await fetch('https://search.eonum.ch/de/' + this.convertCategory(this.props.selectedButton) + '/search?search='+ searchTerm)
