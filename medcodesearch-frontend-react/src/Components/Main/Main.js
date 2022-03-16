@@ -16,7 +16,7 @@ class Main extends Component {
                                 <h3>ICD-10-GM-2022</h3>
                                 <h4>Untergeordnete Codes</h4>
                                 <ul>
-                                    <ICD />
+                                    <ICD version="ICD10-GM-2022"/>
                                 </ul>
                             </div>
                         </div>
