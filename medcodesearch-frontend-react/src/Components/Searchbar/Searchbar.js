@@ -54,7 +54,7 @@ class Searchbar extends Component {
                         <Calendar onChange={(selectedDate) =>{
                             this.setState({date: selectedDate})}}
                         />
-                            {console.log(this.state.date)}}/>
+                            {console.log(this.state.date)}
                         </div>
                     </Popup>
                     <Button id="btn-go">
