@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import './Main.css';
 import ICD from "../ICD/ICD";
+import ICDChild from "../ICDChild/ICDChild";
 
 class Main extends Component {
     version;

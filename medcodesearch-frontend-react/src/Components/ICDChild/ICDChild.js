@@ -1,43 +1,34 @@
 import React, {Component} from "react";
 
-class ICD extends Component{
-    version;
-
-
-
+class ICDChild  extends Component{
 
     constructor(props) {
         super(props);
 
-        this.version = props.version
-
         this.state = {
-            children:[],
+            children:[]
         }
     }
 
     async componentDidMount() {
-        fetch(`https://search.eonum.ch/de/icd_chapters/`+this.version+`/`+this.version+`?show_detail=1`)
+        fetch(`https://search.eonum.ch/de/icd_chapters/ICD10-GM-2022/I?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
-
+                console.log(json.children)
                 this.setState({children: json.children})
-
             })
     }
 
 
-
     render() {
-        return (
+        return(
             <div>
                 {this.state.children.map((child) => (
                     <li className="ICD" key={child.code}><a href="">{child.code}:</a> {child.text}</li>
                 ))}
-
             </div>
         )
     }
 }
 
-export default ICD
+export default ICDChild
