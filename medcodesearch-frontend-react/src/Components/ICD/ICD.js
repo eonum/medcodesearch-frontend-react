@@ -31,10 +31,13 @@ class ICD extends Component{
     render() {
         return (
             <div>
-                {this.state.children.map((child) => (
-                    <li className="ICD" key={child.code}><a href="">{child.code}:</a> {child.text}</li>
-                ))}
-
+                <h3>{this.version}</h3>
+                <h4>Untergeordnete Codes</h4>
+                <ul>
+                    {this.state.children.map((child) => (
+                        <li className="ICD" key={child.code}><a href="">{child.code}:</a> {child.text}</li>
+                    ))}
+                </ul>
             </div>
         )
     }
