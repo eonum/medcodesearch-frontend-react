@@ -20,6 +20,7 @@ class Searchbar extends Component {
         this.fetchForSearchTerm(e.target.value);
     }
 
+
     convertCategory(chosenBtn) { //versions are currently harcoded!!
         if(chosenBtn === "SwissDRG") {
             return "drgs/V3.0"
@@ -54,7 +55,6 @@ class Searchbar extends Component {
                         <Calendar onChange={(selectedDate) =>{
                             this.setState({date: selectedDate})}}
                         />
-                            {console.log(this.state.date)}
                         </div>
                     </Popup>
                     <Button id="btn-go">

@@ -7,9 +7,11 @@ class SearchResult extends Component {
     }
     render() {
         return (
-            <div className="searchResult">
-                <p>{this.props.code}</p>
-                <p>{this.props.text}</p>
+            <div>
+                <p className="searchResult">
+                    <dt><span className="link">{this.props.code}</span></dt>
+                    <dd>{this.props.text}</dd>
+                </p>
             </div>
         )
     }

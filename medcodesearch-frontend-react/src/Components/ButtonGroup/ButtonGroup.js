@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import "./ButtonGroup.css";
+import {Link} from "react-router-dom";
 
 class ButtonGroup extends Component {
     constructor(props) {
@@ -23,12 +24,12 @@ class ButtonGroup extends Component {
         return (
             <div className="search-center">
                 {this.props.buttons.map(function(btn) {
-                    return <button
+                    return <Link to={"/" + btn}><button
                         key={btn}
                         name={btn}
                         className={btn === this.state.selectedButton ? "customButton active" : "customButton"}
                         onClick = {this.updateButton.bind(null, btn)}
-                    >{btn}</button>
+                    >{btn}</button></Link>
                 },this)}
             </div>
         )

@@ -7,9 +7,11 @@ import Searchbar from './Components/Searchbar/Searchbar.js'
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
-import {Component} from "react";
+import React, {Component} from "react";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
 class App extends Component{
+
     constructor(props) {
         super(props);
         this.state = {
@@ -42,10 +44,14 @@ class App extends Component{
                   <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup chosenBtn={this.updateButton}
                       buttons={["ICD", "CHOP", "SwissDRG", "TARMED"]}/>
-                  <Main/>
-                  {this.state.searchResults.map(function(searchResult, i){
-                      return <SearchResult text={searchResult.text} code={searchResult.code} key={i}/>;
-                  })}
+                  <Routes>
+                      <Route path="/ICD" element={<Main/>} />
+                  </Routes>
+                  <div className="searchResults">
+                      {this.state.searchResults.map(function(searchResult, i){
+                          return <SearchResult text={searchResult.text} code={searchResult.code} key={i}/>;
+                      })}
+                  </div>
                   <Footer/>
               </div>
           )
