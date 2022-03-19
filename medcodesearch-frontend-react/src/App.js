@@ -49,7 +49,7 @@ class App extends Component{
                   </Routes>
                   <div className="searchResults">
                       {this.state.searchResults.map(function(searchResult, i){
-                          return <SearchResult text={searchResult.text} code={searchResult.code} key={i}/>;
+                          return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
                       })}
                   </div>
                   <Footer/>

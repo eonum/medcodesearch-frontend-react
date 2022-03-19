@@ -2,9 +2,9 @@ import {Component, useState} from "react";
 import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
-import {SearchResultModel} from "../../models/SearchResult.model";
 import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
+import {Route} from "react-router-dom";
 import Popup from 'reactjs-popup';
 
 class Searchbar extends Component {
@@ -67,17 +67,18 @@ class Searchbar extends Component {
 
 
     async fetchForSearchTerm(searchTerm){
-        await fetch('https://search.eonum.ch/de/' + this.convertCategory(this.props.selectedButton) + '/search?search='+ searchTerm)
+        await fetch('https://search.eonum.ch/de/' + this.convertCategory(this.props.selectedButton) + '/search?highlight=1&search='+ searchTerm)
             .then((res) => {
                 if(res.ok) {
                     return res.json()
                 }
             })
             .then((json) => {
+                console.log(json)
                 this.props.searchResults("reset") //reset parent array
                 for(let i = 0; i < json.length; i++) {
                     let obj = json[i];
-                    this.props.searchResults(new SearchResultModel(obj.text, obj.code, obj.url));
+                    this.props.searchResults(obj);
                 }
             })
     }
