@@ -35,7 +35,7 @@ class ICD extends Component{
                 <h4>Untergeordnete Codes</h4>
                 <ul>
                     {this.state.children.map((child) => (
-                        <li className="ICD" key={child.code}><a href="">{child.code}:</a> {child.text}</li>
+                        <li className="ICD" key={child.code}><a className="link" href="">{child.code}:</a> {child.text}</li>
                     ))}
                 </ul>
             </div>
