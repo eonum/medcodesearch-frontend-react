@@ -8,7 +8,17 @@ body {
    */
   background-color: rgba(245,245,245,0.8)!important;
   margin: 0;
-
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px!important;
+}
+.link {
+  color: #337ab7;
+  text-decoration: none;
+  cursor: pointer;
+}
+.link:hover {
+  color: #23527c;
+  text-decoration: underline;
 }
 
 code {

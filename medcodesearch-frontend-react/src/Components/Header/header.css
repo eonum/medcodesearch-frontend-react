@@ -13,8 +13,3 @@
     border-color: transparent;
     position: relative;
 }
-
-.language-btn:hover{
-    color:#24add3;
-    text-decoration: underline;
-}

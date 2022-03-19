@@ -8,8 +8,10 @@ import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import {Component} from "react";
 import ButtonParentGroup from "./Components/ButtonGroup/ButtonParentGroup";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
 class App extends Component{
+
     constructor(props) {
         super(props);
         this.state = {
@@ -18,9 +20,6 @@ class App extends Component{
         };
     }
 
-    hideComponent() {
-        this.setState({ showHideCalender: !this.state.showHideCalender });
-    }
     updateButton = (btn) => {
         this.setState({selectedButton: btn})
     }
@@ -45,6 +44,14 @@ class App extends Component{
                   {this.state.searchResults.map(function(searchResult, i){
                       return <SearchResult text={searchResult.text} code={searchResult.code} key={i}/>;
                   })}
+                  <Routes>
+                      <Route path="/ICD" element={<Main/>} />
+                  </Routes>
+                  <div className="searchResults">
+                      {this.state.searchResults.map(function(searchResult, i){
+                          return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
+                      })}
+                  </div>
                   <Footer/>
               </div>
           )

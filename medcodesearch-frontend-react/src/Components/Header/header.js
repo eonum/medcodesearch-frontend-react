@@ -11,7 +11,7 @@ class Header extends Component {
                 <header className='header'>
                     <div className='language-selection'>
                         {this.buttons.map(buttonLabel =>
-                            <button key={buttonLabel} className='language-btn'>
+                            <button key={buttonLabel} className='language-btn link'>
                                {buttonLabel}
                             </button>)}
                     </div>
