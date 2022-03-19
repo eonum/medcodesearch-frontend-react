@@ -1,43 +1,43 @@
 import React, {Component} from "react";
 
 class ICD extends Component{
+    version;
 
-    romischeZahlen = ['I','II','III',`IV`, 'V',`VI`,`VII`,`IX`,`X`,`XI`,`XII`,`XIII`,`XIV`,`XV`,`XVI`,`XVII`,`XVIII`,`XIX`,`XX`,`XXI`,`XXII`]
+
+
 
     constructor(props) {
         super(props);
 
+        this.version = props.version
+
         this.state = {
-            code: [],
-            text: [],
-            url: [],
-            count: []
+            children:[],
         }
     }
 
     async componentDidMount() {
-        for (const romischeZahl of this.romischeZahlen) {
-            await this.fetchForAllICDs(romischeZahl)
-        }
-    }
-
-    async fetchForAllICDs(romischeZahl){
-        await fetch(`https://search.eonum.ch/de/icd_chapters/ICD10-GM-2014/`+romischeZahl)
+        fetch(`https://search.eonum.ch/de/icd_chapters/`+this.version+`/`+this.version+`?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
-                this.setState({
-                    code: [...this.state.code, json.code],
-                    text: [...this.state.text, json.text],
-                    url: [...this.state.url, json.url],
-                    count: [...this.state.count, this.state.count.length]
-                })
+
+                this.setState({children: json.children})
+
             })
     }
+
+
 
     render() {
         return (
             <div>
-                {this.state.count.map(i => <li key={this.state.code[i]}>{this.state.code[i]} {this.state.text[i]}</li>)}
+                <h3>{this.version}</h3>
+                <h4>Untergeordnete Codes</h4>
+                <ul>
+                    {this.state.children.map((child) => (
+                        <li className="ICD" key={child.code}><a href="">{child.code}:</a> {child.text}</li>
+                    ))}
+                </ul>
             </div>
         )
     }
