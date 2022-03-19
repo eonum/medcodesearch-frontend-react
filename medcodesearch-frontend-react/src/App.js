@@ -4,10 +4,10 @@ import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';
 import Main from './Components/Main/Main';
 import Searchbar from './Components/Searchbar/Searchbar.js'
-import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import {Component} from "react";
+import ButtonParentGroup from "./Components/ButtonGroup/ButtonParentGroup";
 
 class App extends Component{
     constructor(props) {
@@ -40,8 +40,7 @@ class App extends Component{
                   <Header/>
                   <img id="logo" src={logo}/>
                   <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
-                  <ButtonGroup chosenBtn={this.updateButton}
-                      buttons={["ICD", "CHOP", "SwissDRG", "TARMED"]}/>
+                  <ButtonParentGroup chosenBtn={this.updateButton} />
                   <Main/>
                   {this.state.searchResults.map(function(searchResult, i){
                       return <SearchResult text={searchResult.text} code={searchResult.code} key={i}/>;
