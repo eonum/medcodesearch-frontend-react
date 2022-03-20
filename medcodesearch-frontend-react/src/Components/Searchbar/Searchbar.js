@@ -2,10 +2,7 @@ import {Component, useState} from "react";
 import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
-import calendarLogo from "../../assets/calendar.png";
-import Calendar from "react-calendar";
-import {Route} from "react-router-dom";
-import Popup from 'reactjs-popup';
+
 
 class Searchbar extends Component {
 
@@ -43,21 +40,7 @@ class Searchbar extends Component {
                         placeholder="Suchbegriff oder Code eingeben..."
                         className="me-2"
                         aria-label="Search"
-                    />
-                    <Popup trigger={
-                        <Button id="cal" onClick={(e) => {
-                            e.preventDefault()
-                        }}>
-                            <img id="calendarLogo" src={calendarLogo}/>
-                        </Button>
-                            }position="bottom left">
-                        <div>
-                        <Calendar onChange={(selectedDate) =>{
-                            this.setState({date: selectedDate})}}
-                        />
-                        </div>
-                    </Popup>
-                    <Button id="btn-go">
+                    /><Button id="btn-go">
                         <BsSearch/>
                     </Button>
                 </Form>
@@ -82,8 +65,5 @@ class Searchbar extends Component {
                 }
             })
     }
-    /*
-<Calendar/> https://www.npmjs.com/package/react-calendar
-    */
 }
 export default Searchbar;
