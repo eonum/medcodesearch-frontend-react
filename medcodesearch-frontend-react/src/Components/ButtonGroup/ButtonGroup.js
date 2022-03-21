@@ -1,9 +1,8 @@
-import NormButton from "./NormButton";
-import CatalogButton from "./CatalogButton";
-import {Component} from "react";
-import ICD from "../ICD/ICD";
+import React, {Component} from "react";
 import ButtonA from "./ButtonA";
 import ButtonB from "./ButtonB";
+import NormButton from "./NormButton";
+import CatalogButton from "./CatalogButton";
 
 class ButtonGroup extends Component {
     constructor(props) {
@@ -14,7 +13,9 @@ class ButtonGroup extends Component {
             showHideCal: false,
             activeList: 'ICD10-GM-2022',
             lastICD:'ICD10-GM-2022',
-            lastDRG:''
+            lastDRG:'V11.0',
+            lastCHOP: '2022',
+            lastTARMED: '01.09'
         }
     }
 
@@ -38,6 +39,12 @@ class ButtonGroup extends Component {
             case 'DRG':
                 this.setState({lastDRG: list})
                 break;
+            case 'CHOP':
+                this.setState({lastICD: list})
+                break;
+            case 'TARMED':
+                this.setState({lastDRG: list})
+                break;
         }
 
     }
@@ -48,14 +55,18 @@ class ButtonGroup extends Component {
                 return this.state.lastICD;
             case 'DRG':
                 return this.state.lastDRG;
+            case 'CHOP':
+                return this.state.lastCHOP;
+            case 'TARMED':
+                return this.state.lastTARMED;
+
         }
     }
 
     //return available lists for this button
-    async fetchLists(btn) {
+    fetchLists = (btn) => {
         let language = 'de';
-        let fetched = await fetch('https://search.eonum.ch/' + language + '/' + btn.toLowerCase() + 's/versions') // fetches the lists
-        return fetched;
+        return fetch('https://search.eonum.ch/' + language + '/' + btn.toLowerCase() + 's/versions') // fetches the lists
     }
 
 

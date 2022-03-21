@@ -4,17 +4,12 @@ import NormButton from "./NormButton";
 
 class ButtonA extends Component{
 
+
     selectThisList = (listName) => {
         this.props.chosenList(listName);
     }
     selectThisButton = (name) => {
         this.props.chosenBtn(name);
-    }
-    getLastList = (button) =>{
-        return this.props.lastList(button);
-    }
-    getCatLists = (button) =>{
-        return this.props.lists(button)
     }
 
 
@@ -30,16 +25,16 @@ class ButtonA extends Component{
                             click={this.selectThisButton.bind(null, buttons)}>
                             >{buttons}
                         </NormButton>
-                        {/*
+                        {
                         <CatalogButton
-                            name={this.getLastList(buttons)}
+                            name={this.props.lastList(buttons)}
                             lastList={this.props.lastList(buttons)}
-                            catalogs={this.getCatLists(buttons)}
+                            catalogs={this.props.lists(buttons)}
                             click={this.selectThisList.bind(null, buttons)}
                             >
                             {this.props.lastList(buttons)}
                         </CatalogButton>
-                        */}
+                        }
                     </div>
                     ))
         )

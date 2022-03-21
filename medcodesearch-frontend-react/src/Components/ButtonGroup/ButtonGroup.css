@@ -1,5 +1,4 @@
 .customButton {
-    margin-right: 10px;
     padding: 10px;
     margin-top: 10px;
     border-radius: 0px;
@@ -9,6 +8,10 @@
     border: 1.5px solid rgb(25, 26, 24);
     cursor: pointer;
 }
+/*
+.customButton:not(:first-child){
+    margin-left: 10px;
+}*/
 .alignButtons {
     align-items: center;
     display: flex;
