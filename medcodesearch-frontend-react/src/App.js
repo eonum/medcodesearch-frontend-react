@@ -44,13 +44,19 @@ class App extends Component{
                   <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup chosenBtn={this.updateButton}
                       buttons={["ICD", "CHOP", "SwissDRG", "TARMED"]}/>
-                  <Routes>
-                      <Route path="/ICD" element={<Main/>} />
-                  </Routes>
-                  <div className="searchResults">
-                      {this.state.searchResults.map(function(searchResult, i){
-                          return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
-                      })}
+                  <div className="container">
+                      <div className="row">
+                          <div className="col-auto">
+                              {this.state.searchResults.map(function(searchResult, i){
+                                  return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
+                              })}
+                          </div>
+                          <div className="col">
+                              <Routes>
+                                  <Route path="/ICD" element={<Main/>} />
+                              </Routes>
+                          </div>
+                      </div>
                   </div>
                   <Footer/>
               </div>
