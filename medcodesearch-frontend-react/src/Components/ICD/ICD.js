@@ -2,6 +2,7 @@ import React, {Component} from "react";
 
 class ICD extends Component{
     version;
+    category;
 
 
 
@@ -10,6 +11,7 @@ class ICD extends Component{
         super(props);
 
         this.version = props.version
+        this.category = props.category
 
         this.state = {
             children:[],
@@ -17,7 +19,7 @@ class ICD extends Component{
     }
 
     async componentDidMount() {
-        fetch(`https://search.eonum.ch/de/icd_chapters/`+this.version+`/`+this.version+`?show_detail=1`)
+        fetch(`https://search.eonum.ch/de/`+this.category+`/`+this.version+`/`+this.version+`?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
 
