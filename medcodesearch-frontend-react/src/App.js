@@ -44,7 +44,7 @@ class App extends Component{
           return (
               <div className="App">
                   <Header/>
-                  <img id="logo" src={logo}/>
+                  <img alt="logo" id="logo" src={logo}/>
                   <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup
                       selectedButton={this.updateButton}
@@ -53,10 +53,6 @@ class App extends Component{
                       buttonsA={['ICD', 'CHOP', 'DRG', 'TARMED']}
                       buttonsB={['MiGeL', 'AL', 'Medikamente']}
                   />
-                  <Main/>
-                  {this.state.searchResults.map(function(searchResult, i){
-                      return <SearchResult text={searchResult.text} code={searchResult.code} key={i}/>;
-                  })}
                   <Routes>
                       <Route path="/ICD" element={<Main/>} />
                   </Routes>
@@ -64,11 +60,26 @@ class App extends Component{
                       {this.state.searchResults.map(function(searchResult, i){
                           return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
                       })}
+                  <div className="container">
+                      <div className="row">
+                          <div className={this.state.searchResults.length === 0 ? "":"col"}>
+                              {this.state.searchResults.map(function(searchResult, i){
+                                  return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
+                              })}
+                          </div>
+                          <div className="col">
+                              <Routes>
+                                  <Route path="/ICD" element={<Main/>} />
+                              </Routes>
+                          </div>
+                      </div>
                   </div>
                   <Footer/>
               </div>
+              </div>
           )
       }
+
 }
 
 export default App;
