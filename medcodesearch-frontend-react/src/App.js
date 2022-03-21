@@ -40,13 +40,13 @@ class App extends Component{
           return (
               <div className="App">
                   <Header/>
-                  <img id="logo" src={logo}/>
+                  <img alt="logo" id="logo" src={logo}/>
                   <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup chosenBtn={this.updateButton}
                       buttons={["ICD", "CHOP", "SwissDRG", "TARMED"]}/>
                   <div className="container">
                       <div className="row">
-                          <div className="col-auto">
+                          <div className={this.state.searchResults.length === 0 ? "":"col"}>
                               {this.state.searchResults.map(function(searchResult, i){
                                   return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
                               })}
