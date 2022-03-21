@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import CatButton from "./CatButton";
+import CatalogButton from "./CatalogButton";
 import NormButton from "./NormButton";
 
 class ButtonA extends Component{
@@ -20,8 +20,8 @@ class ButtonA extends Component{
 
     render() {
         return(
-            <div>
-                {this.props.names.map((buttons, index) => (
+
+                this.props.names.map((buttons, index) => (
                     <div>
                         <NormButton
                             keyN={index}
@@ -31,18 +31,17 @@ class ButtonA extends Component{
                             >{buttons}
                         </NormButton>
                         {/*
-                        <CatButton
+                        <CatalogButton
                             name={this.getLastList(buttons)}
                             lastList={this.props.lastList(buttons)}
                             catalogs={this.getCatLists(buttons)}
                             click={this.selectThisList.bind(null, buttons)}
                             >
                             {this.props.lastList(buttons)}
-                        </CatButton>
+                        </CatalogButton>
                         */}
                     </div>
-                    ))}
-            </div>
+                    ))
         )
     }
 }

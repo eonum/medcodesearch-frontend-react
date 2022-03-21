@@ -17,6 +17,7 @@ class App extends Component{
         this.state = {
             selectedButton: 'ICD',
             selectedList: 'ICD10-GM-2022',
+            selectedDate: new Date(),
             searchResults: [],
         };
     }
@@ -25,6 +26,9 @@ class App extends Component{
     }
     updateButton = (btn) => {
         this.setState({selectedButton: btn})
+    }
+    updateDate = (date) => {
+        this.setState({selectedDate: date});
     }
     updateSearchResults = (searchResult) => {
         if(searchResult === "reset") {
@@ -43,6 +47,9 @@ class App extends Component{
                   <img id="logo" src={logo}/>
                   <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup
+                      selectedButton={this.updateButton}
+                      selectedList={this.updateList}
+                      selectedDate={this.updateDate}
                       buttonsA={['ICD', 'DRG']}
                       buttonsB={['MiGeL', 'AL']}
                   />

@@ -4,7 +4,7 @@ import {DropdownButton} from "react-bootstrap";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
 import DropdownItem from "react-bootstrap/DropdownItem";
 
-class CatButton extends Component{
+class CatalogButton extends Component{
 
     render() {
         return(
@@ -17,4 +17,4 @@ class CatButton extends Component{
     }
 
 }
-export default CatButton;
+export default CatalogButton;

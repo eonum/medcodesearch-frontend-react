@@ -1,5 +1,5 @@
 import NormButton from "./NormButton";
-import CatButton from "./CatButton";
+import CatalogButton from "./CatalogButton";
 import {Component} from "react";
 import ICD from "../ICD/ICD";
 import ButtonA from "./ButtonA";
@@ -20,25 +20,34 @@ class ButtonGroup extends Component {
 
     updateButton = (btn) => {
         this.setState({selectedButton: btn}); //sets new button on click
+        this.props.selectedButton(btn);
     }
     updateDate = (date) => {
         this.setState({selectedDate: date});
+        this.props.selectedDate(date);
     }
     updateList = (btn, list) => {
         //when choosing a list, activating the corresponding button
-        this.setState({selectedButton: btn, activeList: list})
+        this.updateButton(btn);
+        this.setState({activeList: list});
+        this.props.selectedList(list);
         switch (btn){
             case 'ICD':
                 this.setState({lastICD: list})
                 break;
-
+            case 'SwissDRG':
+                this.setState({lastDRG: list})
+                break;
         }
+
     }
     // gets through btn name the last list set for this button
     getLast = (btn) => {
         switch (btn){
             case 'ICD':
-                return this.state.lastICD
+                return this.state.lastICD;
+            case 'SwissDRG':
+                return this.state.lastDRG;
         }
     }
 
