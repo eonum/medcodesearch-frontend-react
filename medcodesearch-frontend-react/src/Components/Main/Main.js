@@ -15,7 +15,7 @@ class Main extends Component {
         super(props);
 
         this.language="de"
-        this.page = "II"
+        this.page = "I"
         this.buttons = "icd_chapters"
         this.version = `ICD10-GM-2022`
     }

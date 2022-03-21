@@ -26,13 +26,24 @@ class ICDChild  extends Component{
         fetch(`https://search.eonum.ch/`+this.language+`/`+this.category+`/`+this.version+`/`+this.page+`?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
-                console.log(json.exclusions)
                 this.setState({
                     children: json.children,
                     exclusions: json.exclusions,
                     inclusions: json.inclusions
                 })
             })
+    }
+
+    lookingForLink(aString) {
+        var splitStr = aString.split(` {`)
+        if (splitStr.length > 1){
+            var endString = splitStr[1].split(`}`)
+            return (
+                <li className="Exclusion" key={aString}>{splitStr[0]} (<a href="">{endString[0]}</a>)</li>
+            )
+        } else {
+            return splitStr
+        }
     }
 
 
@@ -48,7 +59,7 @@ class ICDChild  extends Component{
 
                             <ul>
                                 {this.state.exclusions.map((exclusion) => (
-                                    <li className="Exclusion" key={exclusion}>{exclusion}</li>
+                                    this.lookingForLink(exclusion)
                                 ))}
                             </ul>
                         </div>
