@@ -12,7 +12,7 @@ class CatButton extends Component{
                 {this.props.catalogs.map((list) => (
                     <DropdownItem active={this.props.lastList === list} onClick={this.props.click(list)}>
                         {list}</DropdownItem>
-                ))}
+                ), this)}
             </DropdownButton>)
     }
 

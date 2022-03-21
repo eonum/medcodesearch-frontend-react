@@ -43,8 +43,8 @@ class App extends Component{
                   <img id="logo" src={logo}/>
                   <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup
-                      buttons={['ICD', 'DRG']}
-
+                      buttonsA={['ICD', 'DRG']}
+                      buttonsB={['MiGeL', 'AL']}
                   />
                   <Main/>
                   {this.state.searchResults.map(function(searchResult, i){

@@ -3,6 +3,7 @@ import CatButton from "./CatButton";
 import NormButton from "./NormButton";
 
 class ButtonA extends Component{
+
     selectThisList = (listName) => {
         this.props.chosenList(listName);
     }
@@ -29,6 +30,7 @@ class ButtonA extends Component{
                             click={this.selectThisButton.bind(null, buttons)}>
                             >{buttons}
                         </NormButton>
+                        {/*
                         <CatButton
                             name={this.getLastList(buttons)}
                             lastList={this.props.lastList(buttons)}
@@ -37,6 +39,7 @@ class ButtonA extends Component{
                             >
                             {this.props.lastList(buttons)}
                         </CatButton>
+                        */}
                     </div>
                     ))}
             </div>
