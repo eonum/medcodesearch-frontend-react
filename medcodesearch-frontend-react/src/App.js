@@ -50,8 +50,8 @@ class App extends Component{
                       selectedButton={this.updateButton}
                       selectedList={this.updateList}
                       selectedDate={this.updateDate}
-                      buttonsA={['ICD', 'DRG']}
-                      buttonsB={['MiGeL', 'AL']}
+                      buttonsA={['ICD', 'CHOP', 'DRG', 'TARMED']}
+                      buttonsB={['MiGeL', 'AL', 'Medikamente']}
                   />
                   <Main/>
                   {this.state.searchResults.map(function(searchResult, i){

@@ -9,7 +9,12 @@
     border: 1.5px solid rgb(25, 26, 24);
     cursor: pointer;
 }
-
+.alignButtons {
+    align-items: center;
+    display: flex;
+    text-align: center;
+    align-self: center;
+}
 .active{
     color: white;
     background-color: rgb(25, 26, 24);
@@ -27,4 +32,5 @@
     color: black;
     width: auto;
     margin-right: 8px;
+    height: auto;
 }

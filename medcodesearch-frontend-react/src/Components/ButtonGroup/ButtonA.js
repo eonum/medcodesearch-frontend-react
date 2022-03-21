@@ -45,26 +45,5 @@ class ButtonA extends Component{
         )
     }
 }
-/*
-<button
-                        key={index}
-                        name={buttons}
-                        className={buttons=== this.props.active ? "customButton active" : "customButton"}
-                        onClick={this.selectThisButton.bind(null, buttons)}>
-                        {buttons}
-                    </button>
-
-                    <DropdownButton title={this.getLastList}>
-                        {this.props.lists.map((listNames) => (
-    <DropdownItem
-        active={this.props.lastList(buttons) === listNames}
-        onClick={this.selectThisList.bind(null, listNames)}>
-        {listNames}</DropdownItem>
-))
-}
-</DropdownButton>
-
-
- */
 
 export default ButtonA;

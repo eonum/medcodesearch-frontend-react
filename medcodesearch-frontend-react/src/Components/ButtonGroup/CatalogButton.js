@@ -1,7 +1,6 @@
 import {Component} from "react";
 import "./ButtonGroup.css"
 import {DropdownButton} from "react-bootstrap";
-import DropdownMenu from "react-bootstrap/DropdownMenu";
 import DropdownItem from "react-bootstrap/DropdownItem";
 
 class CatalogButton extends Component{

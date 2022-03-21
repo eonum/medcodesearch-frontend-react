@@ -35,7 +35,7 @@ class ButtonGroup extends Component {
             case 'ICD':
                 this.setState({lastICD: list})
                 break;
-            case 'SwissDRG':
+            case 'DRG':
                 this.setState({lastDRG: list})
                 break;
         }
@@ -46,7 +46,7 @@ class ButtonGroup extends Component {
         switch (btn){
             case 'ICD':
                 return this.state.lastICD;
-            case 'SwissDRG':
+            case 'DRG':
                 return this.state.lastDRG;
         }
     }
@@ -63,10 +63,8 @@ class ButtonGroup extends Component {
         this.setState({showHideCal: state})
     }
     render() {
-        return(<div>
+        return(<div className={"alignButtons"}>
                 <ButtonA
-                    //name={this.props.button} //name of the mainbutton
-                    //index={index}
                     names={this.props.buttonsA}
                     chosenBtn={(btn) => {
                         this.updateButton(btn);
