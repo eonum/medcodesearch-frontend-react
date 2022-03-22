@@ -57,7 +57,6 @@ class Searchbar extends Component {
                 }
             })
             .then((json) => {
-                console.log(json)
                 this.props.searchResults("reset") //reset parent array
                 for(let i = 0; i < json.length; i++) {
                     let obj = json[i];
