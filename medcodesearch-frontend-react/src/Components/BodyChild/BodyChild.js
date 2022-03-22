@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-class ICDChild  extends Component{
+class BodyChild extends Component{
     version;
     category;
     page;
@@ -88,5 +88,4 @@ class ICDChild  extends Component{
         )
     }
 }
-
-export default ICDChild
+export default BodyChild

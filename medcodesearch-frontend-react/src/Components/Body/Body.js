@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-class ICD extends Component{
+class Body extends Component{
     version;
     category;
     language;
@@ -47,4 +47,4 @@ class ICD extends Component{
     }
 }
 
-export default ICD
+export default Body
