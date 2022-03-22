@@ -46,7 +46,7 @@ class App extends Component{
               <div className="App">
                   <Header language={this.updateLanguage}/>
                   <img alt="logo" id="logo" src={logo}/>
-                  <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
+                  <Searchbar language={this.state.language} selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup chosenBtn={this.updateButton}
                       buttons={["ICD", "CHOP", "SwissDRG", "TARMED"]}/>
                   <div className="container">

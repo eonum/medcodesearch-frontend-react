@@ -13,6 +13,7 @@ class Searchbar extends Component {
         super(props);
         this.state = {
             date: new Date(),
+            searchTerm: ""
         }
     }
 
@@ -65,9 +66,17 @@ class Searchbar extends Component {
         )
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(prevProps.language !== this.props.language) {
+            this.fetchForSearchTerm(this.state.searchTerm)
+        }
+
+    }
+
 
     async fetchForSearchTerm(searchTerm){
-        await fetch('https://search.eonum.ch/de/' + this.convertCategory(this.props.selectedButton) + '/search?highlight=1&search='+ searchTerm)
+        this.setState({searchTerm: searchTerm})
+        await fetch('https://search.eonum.ch/' + this.props.language + '/' + this.convertCategory(this.props.selectedButton) + '/search?highlight=1&search='+ searchTerm)
             .then((res) => {
                 if(res.ok) {
                     return res.json()
