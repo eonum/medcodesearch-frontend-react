@@ -15,7 +15,7 @@ class App extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            selectedButton: 'ICD',
+            selectedButton: "ICD",
             searchResults: [],
             language: 'de'
         };
@@ -58,7 +58,7 @@ class App extends Component{
                           </div>
                           <div className="col">
                               <Routes>
-                                  <Route path="/ICD" element={<Main/>} />
+                                  <Route path="/ICD" element={<Main language={this.state.language}/>} />
                               </Routes>
                           </div>
                       </div>

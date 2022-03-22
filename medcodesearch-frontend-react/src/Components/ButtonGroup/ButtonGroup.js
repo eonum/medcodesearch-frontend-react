@@ -20,6 +20,7 @@ class ButtonGroup extends Component {
         })
     }
 
+
     render() {
         return (
             <div className="search-center">
