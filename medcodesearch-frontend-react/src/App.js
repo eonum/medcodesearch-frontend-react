@@ -17,6 +17,7 @@ class App extends Component{
         this.state = {
             selectedButton: 'ICD',
             searchResults: [],
+            language: 'de'
         };
     }
 
@@ -35,12 +36,15 @@ class App extends Component{
             });
         }
     }
+    updateLanguage = (lang) => {
+        this.setState({language: lang})
+    }
 
 
     render() {
           return (
               <div className="App">
-                  <Header/>
+                  <Header language={this.updateLanguage}/>
                   <img alt="logo" id="logo" src={logo}/>
                   <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup chosenBtn={this.updateButton}
