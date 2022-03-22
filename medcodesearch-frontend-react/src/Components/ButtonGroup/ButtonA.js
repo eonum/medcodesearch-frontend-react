@@ -29,7 +29,7 @@ class ButtonA extends Component{
                         <CatalogButton
                             name={this.props.lastList(buttons)}
                             lastList={this.props.lastList(buttons)}
-                            catalogs={this.props.lists(buttons)}
+                            catalogs={this.props.lists}
                             click={this.selectThisList.bind(null, buttons)}
                             >
                             {this.props.lastList(buttons)}

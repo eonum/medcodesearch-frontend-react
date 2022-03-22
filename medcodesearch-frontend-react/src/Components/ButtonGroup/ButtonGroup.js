@@ -5,6 +5,7 @@ import NormButton from "./NormButton";
 import CatalogButton from "./CatalogButton";
 
 class ButtonGroup extends Component {
+    timer;
     constructor(props) {
         super(props);
         this.state = {
@@ -15,10 +16,23 @@ class ButtonGroup extends Component {
             lastICD:'ICD10-GM-2022',
             lastDRG:'V11.0',
             lastCHOP: '2022',
-            lastTARMED: '01.09'
+            lastTARMED: '01.09',
+            selectedList: []
         }
     }
-
+/*
+    componentDidMount() {
+        this.timer = setInterval(() =>
+        this.fetchLists(this.state.selectedButton).then((response) => {
+            return response.json()
+        }).then((list) => {
+            this.setState({...this.state, selectedList: list});
+        }).catch(e => console.log(e)), 10000);
+    }
+    componentWillUnmount() {
+        clearInterval(this.timer);
+    }
+*/
     updateButton = (btn) => {
         this.setState({selectedButton: btn}); //sets new button on click
         this.props.selectedButton(btn);
@@ -62,6 +76,9 @@ class ButtonGroup extends Component {
 
         }
     }
+    showHideCal = (state) => {
+        this.setState({showHideCal: state})
+    }
 
     //return available lists for this button
     fetchLists = (btn) => {
@@ -69,10 +86,6 @@ class ButtonGroup extends Component {
         return fetch('https://search.eonum.ch/' + language + '/' + btn.toLowerCase() + 's/versions') // fetches the lists
     }
 
-
-    showHideCal = (state) => {
-        this.setState({showHideCal: state})
-    }
     render() {
         return(<div className={"alignButtons"}>
                 <ButtonA
@@ -84,7 +97,7 @@ class ButtonGroup extends Component {
                     } // when button is clicked on
                     active={this.state.selectedButton} // to look up which button is the active one
                     chosenList={this.updateList} // when a list is choosen
-                    lists={this.fetchLists} // to get all the possible lists of one button
+                    lists={this.state.selectedList} // to get all the possible lists of one button
                     //{['ICD10-GM-2014','ICD10-GM-2015', 'ICD10-GM-2016','ICD10-GM-2017']}
                     lastList={this.getLast} // to get the last clicked list of a specific button
                 />
