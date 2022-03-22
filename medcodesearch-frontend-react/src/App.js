@@ -36,7 +36,8 @@ class App extends Component{
         }
     }
 
-      render() {
+
+    render() {
           return (
               <div className="App">
                   <Header/>
@@ -48,7 +49,7 @@ class App extends Component{
                       <div className="row">
                           <div className={this.state.searchResults.length === 0 ? "":"col"}>
                               {this.state.searchResults.map(function(searchResult, i){
-                                  return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
+                                  return <SearchResult result = {searchResult} key={i}/>
                               })}
                           </div>
                           <div className="col">

@@ -13,7 +13,6 @@ class Main extends Component {
         this.version = `ICD10-GM-2022`
     }
 
-
     render() {
         return (
             <div className="Wrapper">
