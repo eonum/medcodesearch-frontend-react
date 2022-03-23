@@ -5,6 +5,7 @@ import Popup from "reactjs-popup";
 import {Button} from "react-bootstrap";
 import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
+import {Link} from "react-router-dom";
 
 class ButtonGroup extends Component{
     constructor(props) {
@@ -33,10 +34,10 @@ class ButtonGroup extends Component{
         this.setState({showHideCal: state})
     }
     render() {
-        return(
+        return (
             <div className={"alignButtons"}>
                 {this.state.buttons[0].map((btn, index) => (
-                <div>
+                <div><Link to={'/' + btn}>
                 <ButtonVersion
                     index={index}
                     activate = {(button) => {
@@ -48,12 +49,12 @@ class ButtonGroup extends Component{
                     chooseV={(version) => {
                         this.updateButton(version, btn);
                     }}
-                />
+                /></Link>
                 </div>
                 ),this)}
 
                 {this.state.buttons[1].map((button, index) => (
-                <div>
+                <div><Link to={'/' + button}>
                 <ButtonWithCat
                     name={button}
                     index={index}
@@ -62,7 +63,7 @@ class ButtonGroup extends Component{
                         this.showHideCal(true);
                     }}
                     active={this.state.selectedButton}
-                />
+                /></Link>
                 </div>
                 ))}
                     <div>
