@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import ICDSortService from "../../Services/ICDSortService";
 
 class Body extends Component{
 
@@ -20,6 +21,9 @@ class Body extends Component{
     }
 
     async fetchInformations() {
+        if (this.props.category === "icd_chapters") {
+            ICDSortService(this.state.children)
+        }
         fetch(`https://search.eonum.ch/`+this.props.language+`/`+this.props.category+`/`+this.props.version+`/`+this.props.version+`?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
