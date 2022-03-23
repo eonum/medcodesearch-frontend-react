@@ -15,6 +15,7 @@ class App extends Component{
     constructor(props) {
         super(props);
         this.state = {
+            selectedLanguage: 'de',
             selectedButton: 'ICD',
             selectedList: 'ICD10-GM-2022',
             selectedDate: new Date(),
@@ -48,11 +49,11 @@ class App extends Component{
                   <img alt="logo" id="logo" src={logo}/>
                   <Searchbar selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
                   <ButtonGroup
+                      language={this.state.selectedLanguage}
                       selectedButton={this.updateButton}
                       selectedList={this.updateList}
                       selectedDate={this.updateDate}
-                      buttonsA={['ICD', 'CHOP', 'DRG', 'TARMED']}
-                      buttonsB={['MiGeL', 'AL', 'Medikamente']}
+                      buttons={[['ICD', 'CHOP', 'DRG', 'TARMED'],['MiGeL', 'AL', 'Medikamente']]}
                   />
                   <Routes>
                       <Route path="/ICD" element={<Main/>} />
