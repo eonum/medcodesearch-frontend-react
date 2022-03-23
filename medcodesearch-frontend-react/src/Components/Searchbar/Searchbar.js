@@ -84,6 +84,9 @@ class Searchbar extends Component {
             })
             .then((json) => {
                 this.props.searchResults("reset") //reset parent array
+                if(json.length == 0 && searchTerm !== "") {
+                    this.props.searchResults("empty")
+                }
                 for(let i = 0; i < json.length; i++) {
                     let obj = json[i];
                     this.props.searchResults(obj);

@@ -9,6 +9,7 @@ import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import TranslatorService from "./services/translator.service";
 
 class App extends Component{
 
@@ -42,6 +43,17 @@ class App extends Component{
 
 
     render() {
+        let searchResults;
+        if(this.state.searchResults[0] === "empty") {
+            searchResults = <div className="searchResult"><p>{TranslatorService.searchNoMatch(this.state.language)}</p></div>
+        } else {
+            searchResults =
+                <div>
+                {this.state.searchResults.map(function(searchResult, i){
+                    return <SearchResult result = {searchResult} key={i}/>
+                })}
+                </div>
+        }
           return (
               <div className="App">
                   <Header language={this.updateLanguage}/>
@@ -52,9 +64,7 @@ class App extends Component{
                   <div className="container">
                       <div className="row">
                           <div className={this.state.searchResults.length === 0 ? "":"col"}>
-                              {this.state.searchResults.map(function(searchResult, i){
-                                  return <SearchResult result = {searchResult} key={i}/>
-                              })}
+                              {searchResults}
                           </div>
                           <div className="col">
                               <Routes>
