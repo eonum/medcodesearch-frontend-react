@@ -18,7 +18,6 @@ class ButtonGroup extends Component{
         }
         this.updateButton = this.updateButton.bind(this);
         this.updateDate = this.updateDate.bind(this);
-       // this.updateList = this.updateList.bind(this);
     }
 
     updateButton = (version, btn) => {
@@ -34,15 +33,6 @@ class ButtonGroup extends Component{
     showHideCal = (state) => {
         this.setState({showHideCal: state})
     }
-/*
-    updateList = (list,btn) => {
-        //when choosing a list, activating the corresponding button
-        this.updateButton(btn);
-        this.setState({activeList: list});
-        this.props.selectedList(list);
-    }
-
- */
     render() {
         return(
             <div className={"alignButtons"}>
@@ -54,7 +44,7 @@ class ButtonGroup extends Component{
                         this.updateButton('', button);
                         this.showHideCal(false);
                     }}
-                    category ={btn}
+                    category={btn}
                     language={this.state.language}
                     chooseV={(version) => {
                         this.updateButton(version, btn);

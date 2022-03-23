@@ -12,4 +12,12 @@
     background-color: transparent;
     border-color: transparent;
     position: relative;
+    color: #808080;
+}
+.language-btn:hover {
+    text-decoration-line: underline;
+}
+#activeLan {
+    color: #24add3;
+    text-decoration-line: underline;
 }
