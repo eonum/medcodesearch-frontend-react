@@ -21,14 +21,15 @@ class Body extends Component{
     }
 
     async fetchInformations() {
-        if (this.props.category === "icd_chapters") {
-            ICDSortService(this.state.children)
-        }
         fetch(`https://search.eonum.ch/`+this.props.language+`/`+this.props.category+`/`+this.props.version+`/`+this.props.version+`?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
                 this.setState({children: json.children})
+                if (this.props.category === "icd_chapters") {
+                    this.setState({children: ICDSortService(this.state.children)})
+                }
             })
+
     }
 
     render() {
