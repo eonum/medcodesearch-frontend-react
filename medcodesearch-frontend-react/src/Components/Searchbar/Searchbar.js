@@ -18,16 +18,15 @@ class Searchbar extends Component {
         this.fetchForSearchTerm(e.target.value);
     }
 
-
     convertCategory(chosenBtn) { //versions are currently harcoded!!
         if(chosenBtn === "SwissDRG") {
-            return "drgs/V3.0"
+            return "drgs/" + this.props.version;
         } else if(chosenBtn === "ICD") {
-            return "icds/ICD10-GM-2014"
+            return "icds/" + this.props.version;
         } else if(chosenBtn === "CHOP") {
-            return "chops/CHOP_2014"
+            return "chops/" + this.props.version;
         } else if(chosenBtn === "TARMED") {
-            return "tarmeds/TARMED_01.09"
+            return "tarmeds/" + this.props.version;
         }
     }
 

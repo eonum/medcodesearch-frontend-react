@@ -34,7 +34,7 @@ class App extends Component{
         this.setState({selectedButton: btn})
     }
     updateDate = (date) => {
-        this.setState({selectedDate: date});
+        this.setState({selectedDate: date})
     }
     updateSearchResults = (searchResult) => {
         if(searchResult === "reset") {
@@ -66,7 +66,12 @@ class App extends Component{
               <div className="App">
                   <Header language={this.updateLanguage}/>
                   <img alt="logo" id="logo" src={logo}/>
-                  <Searchbar language={this.state.language} selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
+                  <Searchbar
+                      language={this.state.language}
+                      selectedButton={this.state.selectedButton}
+                      version={this.state.selectedList}
+                      date={this.state.selectedDate}
+                      searchResults={this.updateSearchResults}/>
                   <ButtonGroup
                       language={this.state.language}
                       selectedButton={this.updateButton}
