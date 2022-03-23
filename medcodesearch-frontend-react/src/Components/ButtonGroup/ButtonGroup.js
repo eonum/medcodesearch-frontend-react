@@ -14,7 +14,6 @@ class ButtonGroup extends Component{
             selectedDate: new Date(),
             showHideCal: false,
             buttons: this.props.buttons,
-            language: this.props.language
         }
         this.updateButton = this.updateButton.bind(this);
         this.updateDate = this.updateDate.bind(this);
@@ -45,7 +44,7 @@ class ButtonGroup extends Component{
                         this.showHideCal(false);
                     }}
                     category={btn}
-                    language={this.state.language}
+                    language={this.props.language}
                     chooseV={(version) => {
                         this.updateButton(version, btn);
                     }}

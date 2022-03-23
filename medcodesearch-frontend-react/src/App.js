@@ -74,9 +74,6 @@ class App extends Component{
                       selectedDate={this.updateDate}
                       buttons={[['ICD', 'CHOP', 'DRG', 'TARMED'],['MiGeL', 'AL', 'Medikamente']]}
                   />
-                  <Routes>
-                      <Route path="/ICD" element={<Main/>} />
-                  </Routes>
                   <div className="searchResults">
                       {this.state.searchResults.map(function(searchResult, i){
                           return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
