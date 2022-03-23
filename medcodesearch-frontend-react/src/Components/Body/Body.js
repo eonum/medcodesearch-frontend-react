@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import ICDSortService from "../../Services/ICDSortService";
 
 class Body extends Component{
 
@@ -24,7 +25,11 @@ class Body extends Component{
             .then((res) => res.json())
             .then((json) => {
                 this.setState({children: json.children})
+                if (this.props.category === "icd_chapters") {
+                    this.setState({children: ICDSortService(this.state.children)})
+                }
             })
+
     }
 
     render() {
