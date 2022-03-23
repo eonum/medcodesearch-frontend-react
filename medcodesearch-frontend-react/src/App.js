@@ -21,6 +21,9 @@ class App extends Component{
             selectedDate: new Date(),
             searchResults: [],
         };
+        this.updateButton = this.updateButton.bind(this);
+        this.updateDate = this.updateDate.bind(this);
+        this.updateList = this.updateList.bind(this);
     }
     updateList = (list) => {
         this.setState({selectedList: list})

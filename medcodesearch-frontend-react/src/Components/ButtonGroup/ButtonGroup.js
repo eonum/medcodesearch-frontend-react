@@ -18,20 +18,13 @@ class ButtonGroup extends Component{
         }
         this.updateButton = this.updateButton.bind(this);
         this.updateDate = this.updateDate.bind(this);
-        this.updateList = this.updateList.bind(this);
-    }
-    componentDidMount() {
-        if (this.props.buttons[1].includes(this.state.selectedButton)){
-            this.showHideCal(true);
-        }
-        else{
-            this.showHideCal(false);
-        }
+       // this.updateList = this.updateList.bind(this);
     }
 
-    updateButton = (btn) => {
-        this.setState({selectedButton: btn}); //sets new button on click
+    updateButton = (version, btn) => {
+        this.setState({selectedButton: btn, activeList: version}); //sets new button on click
         this.props.selectedButton(btn);
+        this.props.selectedList(version);
     }
     updateDate = (date) => {
         this.setState({selectedDate: date});
@@ -41,14 +34,15 @@ class ButtonGroup extends Component{
     showHideCal = (state) => {
         this.setState({showHideCal: state})
     }
-
-    updateList = (btn, list) => {
+/*
+    updateList = (list,btn) => {
         //when choosing a list, activating the corresponding button
         this.updateButton(btn);
         this.setState({activeList: list});
         this.props.selectedList(list);
     }
 
+ */
     render() {
         return(
             <div className={"alignButtons"}>
@@ -57,13 +51,13 @@ class ButtonGroup extends Component{
                 <ButtonVersion
                     index={index}
                     activate = {(button) => {
-                        this.updateButton(button);
+                        this.updateButton('', button);
                         this.showHideCal(false);
                     }}
                     category ={btn}
                     language={this.state.language}
                     chooseV={(version) => {
-                        this.updateList(version, btn);
+                        this.updateButton(version, btn);
                     }}
                 />
                 </div>
@@ -75,28 +69,29 @@ class ButtonGroup extends Component{
                     name={button}
                     index={index}
                     select={(btn) => {
-                        this.updateButton(btn);
+                        this.updateButton('', btn);
                         this.showHideCal(true);
                     }}
                     active={this.state.selectedButton}
                 />
-                    <div>
-                    {this.state.showHideCal &&
-                    <Popup trigger={
-                        <Button id="cal" onClick={(e) => {
-                            e.preventDefault()
-                        }}>
-                            <img alt="calender Logo" id="calendarLogo" src={calendarLogo}/>
-                        </Button>
-                    } position="bottom left">
-                        <Calendar onChange={(selectedDate) => {
-                            this.updateDate(selectedDate);
-                        }}/>
-                    </Popup>
-                    }
-                    </div>
                 </div>
                 ))}
+                    <div>
+                        {this.state.showHideCal &&
+                        <Popup trigger={
+                            <Button id="cal" onClick={(e) => {
+                                e.preventDefault()
+                            }}>
+                                <img alt="calender Logo" id="calendarLogo" src={calendarLogo}/>
+                            </Button>
+                        } position="bottom left">
+                            <Calendar onChange={(selectedDate) => {
+                                this.updateDate(selectedDate);
+                            }}/>
+                        </Popup>
+                        }
+                </div>
+
             </div>
         )
     }
