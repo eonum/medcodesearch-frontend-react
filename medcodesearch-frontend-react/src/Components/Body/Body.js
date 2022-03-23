@@ -14,7 +14,7 @@ class Body extends Component{
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.language !== this.props.language) {
+        if(prevProps !== this.props) {
             this.fetchInformations()
         }
     }
