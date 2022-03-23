@@ -9,7 +9,7 @@ import logo from "./assets/medcodesearch_big.png";
 import {Component} from "react";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
-import TranslatorService from "./services/translator.service";
+import TranslatorService from "./Services/translator.service";
 
 
 class App extends Component{

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Dropdown, SplitButton} from "react-bootstrap";
+import CategorysSortService from "../../Services/CategorysSortService";
 
 class ButtonVersion extends Component{
 
@@ -24,12 +25,13 @@ class ButtonVersion extends Component{
             fetch(`https://search.eonum.ch/` + this.state.language + `/` + this.state.category.toLowerCase() + `s/versions`)
                 .then((res) => res.json())
                 .then((json) => {
-                    this.setState({version: json})
+                    this.setState({version: CategorysSortService(json)})
                 })
         }
     }
 
     render() {
+
         return (
             <div>
                 <SplitButton
