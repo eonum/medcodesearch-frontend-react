@@ -21,7 +21,6 @@ class Searchbar extends Component {
         this.fetchForSearchTerm(e.target.value);
     }
 
-
     convertCategory(chosenBtn) { //versions are currently harcoded!!
         if(chosenBtn === "SwissDRG") {
             return "drgs/V3.0"
@@ -67,10 +66,9 @@ class Searchbar extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.language !== this.props.language) {
+        if(prevProps.language !== this.props.language || prevProps.selectedButton !== this.props.selectedButton) {
             this.fetchForSearchTerm(this.state.searchTerm)
         }
-
     }
 
 
