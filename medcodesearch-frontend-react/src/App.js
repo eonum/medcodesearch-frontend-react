@@ -90,9 +90,9 @@ class App extends Component{
                           </div>
                           <div className="col">
                               <Routes>
-                                  <Route path="/ICD" element={<Main version="ICD10-GM-2022" catalog="icd_chapters" language={this.state.language}/>} />
-                                  <Route path="/CHOP" element={<Main version="CHOP_2014" catalog="chop_chapters" language={this.state.language}/>} />
-                                  <Route path="/TARMED" element={<Main version="TARMED_01.09" catalog="tarmed_chapters" language={this.state.language}/>} />
+                                  <Route path="/ICD" element={<Main version={this.state.selectedList} catalog="icd_chapters" language={this.state.language}/>} />
+                                  <Route path="/CHOP" element={<Main version={this.state.selectedList} catalog="chop_chapters" language={this.state.language}/>} />
+                                  <Route path="/TARMED" element={<Main version={this.state.selectedList} catalog="tarmed_chapters" language={this.state.language}/>} />
                               </Routes>
                           </div>
                       </div>
