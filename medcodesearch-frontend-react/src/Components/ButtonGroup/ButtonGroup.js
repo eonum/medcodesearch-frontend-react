@@ -23,6 +23,7 @@ class ButtonGroup extends Component{
     }
 
     updateButton = (version, btn) => {
+        btn = this.getCorrectName(btn)
         if (version === ''){
             version = this.getVersion(btn);
         }
@@ -34,7 +35,7 @@ class ButtonGroup extends Component{
         switch (btn){
             case 'ICD':
                 return 'ICD10-GM-2022';
-            case 'SwissDRG':
+            case 'DRG':
                 return 'V11.0';
             case 'CHOP':
                 return 'CHOP_2022';
@@ -52,11 +53,17 @@ class ButtonGroup extends Component{
     showHideCal = (state) => {
         this.setState({showHideCal: state})
     }
+    getCorrectName(btn){
+        if (btn === 'SwissDRG'){
+            return btn = 'DRG';
+        }
+        return btn
+    }
     render() {
         return (
             <div key={"ButtonGroup"} className={"alignButtons"}>
                 {this.state.buttons[0].map((btn, index) => (
-                <div key={"VersionButton" + index}><Link to={'/' + btn}>
+                <div key={"VersionButton" + index}><Link to={'/' + this.getCorrectName(btn)}>
                 <ButtonVersion
                     index={index}
                     activate = {(button) => {

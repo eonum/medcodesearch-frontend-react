@@ -77,12 +77,9 @@ class App extends Component{
                       selectedButton={this.updateButton}
                       selectedList={this.updateList}
                       selectedDate={this.updateDate}
-                      buttons={[['ICD', 'CHOP', 'DRG', 'TARMED'],['MiGeL', 'AL', 'Medikamente']]}
+                      buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'Medikamente']]}
                   />
                   <div className="searchResults">
-                      {this.state.searchResults.map(function(searchResult, i){
-                          return <SearchResult result = {searchResult} text={searchResult.highlight.text === undefined ? searchResult.text : searchResult.highlight.text} code={searchResult.code} key={i}/>;
-                      })}
                   <div className="container">
                       <div className="row">
                           <div className={this.state.searchResults.length === 0 ? "":"col"}>
@@ -90,9 +87,7 @@ class App extends Component{
                           </div>
                           <div className="col">
                               <Routes>
-                                  <Route path="/ICD" element={<Main version={this.state.selectedList} catalog="icd_chapters" language={this.state.language}/>} />
-                                  <Route path="/CHOP" element={<Main version={this.state.selectedList} catalog="chop_chapters" language={this.state.language}/>} />
-                                  <Route path="/TARMED" element={<Main version={this.state.selectedList} catalog="tarmed_chapters" language={this.state.language}/>} />
+                                  <Route path={"/" + this.state.selectedButton} element={<Main version={this.state.selectedList} catalog={this.state.selectedButton.toLowerCase() + "_chapters"} language={this.state.language}/>} />
                               </Routes>
                           </div>
                       </div>
