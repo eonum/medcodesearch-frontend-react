@@ -25,7 +25,7 @@ class ButtonGroup extends Component{
         if (version === ''){
             version = this.getVersion(btn);
         }
-        this.setState({selectedButton: btn, activeList: version}); //sets new button on click
+        this.setState({selectedButton: btn, activeList: version});
         this.props.selectedButton(btn);
         this.props.selectedList(version);
     }
@@ -51,9 +51,9 @@ class ButtonGroup extends Component{
     }
     render() {
         return (
-            <div className={"alignButtons"}>
+            <div key={"ButtonGroup"} className={"alignButtons"}>
                 {this.state.buttons[0].map((btn, index) => (
-                <div><Link to={'/' + btn}>
+                <div key={"VersionButton" + index}><Link to={'/' + btn}>
                 <ButtonVersion
                     index={index}
                     activate = {(button) => {
@@ -70,7 +70,7 @@ class ButtonGroup extends Component{
                 ),this)}
 
                 {this.state.buttons[1].map((button, index) => (
-                <div><Link to={'/' + button}>
+                <div key={"CalendarButton" + index}><Link to={'/' + button}>
                 <ButtonWithCat
                     name={button}
                     index={index}
