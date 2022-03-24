@@ -6,6 +6,7 @@ import {Button} from "react-bootstrap";
 import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
 import {Link} from "react-router-dom";
+import "./ButtonGroup.css"
 
 class ButtonGroup extends Component{
     constructor(props) {
@@ -39,6 +40,8 @@ class ButtonGroup extends Component{
                 return 'CHOP_2022';
             case 'TARMED':
                 return 'TARMED_01.09';
+            default:
+                return ''
         }
     }
     updateDate = (date) => {

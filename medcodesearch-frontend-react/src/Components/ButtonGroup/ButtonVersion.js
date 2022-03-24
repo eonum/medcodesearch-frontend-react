@@ -16,7 +16,7 @@ class ButtonVersion extends Component{
 
     componentDidMount() {
         if (this.state.category === "SwissDRG") {
-            fetch(`https://search.eonum.ch/` + this.state.language + `/` + `drg` + `s/versions`)
+            fetch(`https://search.eonum.ch/` + this.state.language + `/drgs/versions`)
                 .then((res) => res.json())
                 .then((json) => {
                     this.setState({version: json})
