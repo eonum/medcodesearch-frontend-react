@@ -38,10 +38,10 @@ class ButtonVersion extends Component{
                     key={this.props.index}
                     variant={this.state.category.toLowerCase()}
                     title={this.state.category}
-                    onClick={() => {
+                    onClick={(e) => {
                         this.props.activate(this.state.category);
                     }}
-                >
+                    >
                     {this.state.version.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
                         (versions) => (
                             <Dropdown.Item eventKey={versions}

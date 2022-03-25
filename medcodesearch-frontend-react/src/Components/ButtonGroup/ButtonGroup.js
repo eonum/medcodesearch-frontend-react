@@ -14,6 +14,10 @@ class ButtonGroup extends Component{
         this.state = {
             selectedButton: 'ICD',
             activeList: 'ICD10-GM-2022',
+            lastICD: 'ICD10-GM-2022',
+            lastDRG: 'V11.0',
+            lastCHOP: 'CHOP_2022',
+            lastTARMED: 'TARMED_01.09',
             selectedDate: new Date(),
             showHideCal: false,
             buttons: this.props.buttons,
@@ -27,6 +31,21 @@ class ButtonGroup extends Component{
         if (version === ''){
             version = this.getVersion(btn);
         }
+        switch (btn){
+            case 'ICD':
+                this.setState({lastICD: version});
+                break;
+            case 'DRG':
+                this.setState({lastDRG: version});
+                break;
+            case 'CHOP':
+                this.setState({lastCHOP: version});
+                break;
+            case 'TARMED':
+                this.setState({lastTARMED: version});
+                break;
+            default:
+            }
         this.setState({selectedButton: btn, activeList: version});
         this.props.selectedButton(btn);
         this.props.selectedList(version);
@@ -34,13 +53,13 @@ class ButtonGroup extends Component{
     getVersion(btn) {
         switch (btn){
             case 'ICD':
-                return 'ICD10-GM-2022';
+                return this.state.lastICD;
             case 'DRG':
-                return 'V11.0';
+                return this.state.lastDRG;
             case 'CHOP':
-                return 'CHOP_2022';
+                return this.state.lastCHOP;
             case 'TARMED':
-                return 'TARMED_01.09';
+                return this.state.lastTARMED;
             default:
                 return ''
         }
@@ -55,7 +74,7 @@ class ButtonGroup extends Component{
     }
     getCorrectName(btn){
         if (btn === 'SwissDRG'){
-            return btn = 'DRG';
+            return 'DRG';
         }
         return btn
     }
