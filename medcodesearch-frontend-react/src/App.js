@@ -52,7 +52,7 @@ class App extends Component{
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         let navigate = this.props.navigation
         if(prevState !== this.state) {
-            navigate(this.state.language + "/" + this.state.selectedList + "/" + this.state.selectedButton.toLowerCase() + "_chapters")
+            navigate(this.state.language + "/" + this.state.selectedButton + "/" + this.state.selectedList + "/" + this.state.selectedButton.toLowerCase() + "_chapters/" + this.state.selectedList)
         }
     }
 

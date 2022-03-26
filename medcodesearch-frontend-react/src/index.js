@@ -11,7 +11,7 @@ ReactDOM.render(
     <Router>
         <Routes>
             <Route exact path="/" element={<App />}>
-                <Route path=":language/:version/:catalog" element={<Main/>}/>
+                <Route path=":language/:category/:version/:catalog/:version" element={<Main/>}/>
             </Route>
         </Routes>
     </Router>,
