@@ -2,10 +2,7 @@ import {Component, useState} from "react";
 import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
-import calendarLogo from "../../assets/calendar.png";
-import Calendar from "react-calendar";
-import {Route} from "react-router-dom";
-import Popup from 'reactjs-popup';
+
 
 class Searchbar extends Component {
 
@@ -23,13 +20,13 @@ class Searchbar extends Component {
 
     convertCategory(chosenBtn) { //versions are currently harcoded!!
         if(chosenBtn === "SwissDRG") {
-            return "drgs/V3.0"
+            return "drgs/" + this.props.version;
         } else if(chosenBtn === "ICD") {
-            return "icds/ICD10-GM-2014"
+            return "icds/" + this.props.version;
         } else if(chosenBtn === "CHOP") {
-            return "chops/CHOP_2014"
+            return "chops/" + this.props.version;
         } else if(chosenBtn === "TARMED") {
-            return "tarmeds/TARMED_01.09"
+            return "tarmeds/" + this.props.version;
         }
     }
 
@@ -38,26 +35,17 @@ class Searchbar extends Component {
             <div>
                 <Form className="d-flex search-center">
                     <FormControl
+                        onKeyDown={(e) =>{
+                            if (e.key === 'Enter'){
+                                e.preventDefault();
+                            }
+                        }}
                         onChange={this.updateSearch}
                         type="search"
                         placeholder="Suchbegriff oder Code eingeben..."
                         className="me-2"
                         aria-label="Search"
-                    />
-                    <Popup trigger={
-                        <Button id="cal" onClick={(e) => {
-                            e.preventDefault()
-                        }}>
-                            <img id="calendarLogo" src={calendarLogo}/>
-                        </Button>
-                            }position="bottom left">
-                        <div>
-                        <Calendar onChange={(selectedDate) =>{
-                            this.setState({date: selectedDate})}}
-                        />
-                        </div>
-                    </Popup>
-                    <Button id="btn-go">
+                    /><Button id="btn-go">
                         <BsSearch/>
                     </Button>
                 </Form>
@@ -66,7 +54,10 @@ class Searchbar extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.language !== this.props.language || prevProps.selectedButton !== this.props.selectedButton) {
+        if(prevProps.language !== this.props.language
+            || prevProps.selectedButton !== this.props.selectedButton
+            || prevProps.version !== this.props.version
+            || prevProps.selectedDate !== this.props.selectedDate) {
             this.fetchForSearchTerm(this.state.searchTerm)
         }
     }
@@ -91,8 +82,5 @@ class Searchbar extends Component {
                 }
             })
     }
-    /*
-<Calendar/> https://www.npmjs.com/package/react-calendar
-    */
 }
 export default Searchbar;

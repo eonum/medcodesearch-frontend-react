@@ -4,29 +4,37 @@ import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';
 import Main from './Components/Main/Main';
 import Searchbar from './Components/Searchbar/Searchbar.js'
-import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
-import React, {Component} from "react";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import {Component} from "react";
+import {Outlet, Route, Routes, useNavigate} from "react-router-dom";
+import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import TranslatorService from "./Services/translator.service";
+
 
 class App extends Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            selectedButton: "ICD",
+            language: 'de',
+            selectedButton: 'ICD',
+            selectedList: 'ICD10-GM-2022',
+            selectedDate: new Date(),
             searchResults: [],
-            language: 'de'
         };
+        this.updateButton = this.updateButton.bind(this);
+        this.updateDate = this.updateDate.bind(this);
+        this.updateList = this.updateList.bind(this);
     }
-
-    hideComponent() {
-        this.setState({ showHideCalender: !this.state.showHideCalender });
+    updateList = (list) => {
+        this.setState({selectedList: list})
     }
     updateButton = (btn) => {
         this.setState({selectedButton: btn})
+    }
+    updateDate = (date) => {
+        this.setState({selectedDate: date})
     }
     updateSearchResults = (searchResult) => {
         if(searchResult === "reset") {
@@ -39,6 +47,13 @@ class App extends Component{
     }
     updateLanguage = (lang) => {
         this.setState({language: lang})
+    }
+
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        let navigate = this.props.navigation
+        if(prevState !== this.state) {
+            navigate(this.state.language + "/" + this.state.selectedButton + "/" + this.state.selectedList + "/" + this.state.selectedButton.toLowerCase() + "_chapters/" + this.state.selectedList)
+        }
     }
 
 
@@ -58,27 +73,40 @@ class App extends Component{
               <div className="App">
                   <Header language={this.updateLanguage}/>
                   <img alt="logo" id="logo" src={logo}/>
-                  <Searchbar language={this.state.language} selectedButton={this.state.selectedButton} searchResults={this.updateSearchResults}/>
-                  <ButtonGroup chosenBtn={this.updateButton}
-                      buttons={["ICD", "CHOP", "SwissDRG", "TARMED"]}/>
+                  <Searchbar
+                      language={this.state.language}
+                      selectedButton={this.state.selectedButton}
+                      version={this.state.selectedList}
+                      date={this.state.selectedDate}
+                      searchResults={this.updateSearchResults}/>
+                  <ButtonGroup
+                      language={this.state.language}
+                      selectedButton={this.updateButton}
+                      selectedList={this.updateList}
+                      selectedDate={this.updateDate}
+                      buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'Medikamente']]}
+                  />
+                  <div className="searchResults">
                   <div className="container">
                       <div className="row">
                           <div className={this.state.searchResults.length === 0 ? "":"col"}>
                               {searchResults}
                           </div>
                           <div className="col">
-                              <Routes>
-                                  <Route path="/ICD" element={<Main version="ICD10-GM-2022" catalog="icd_chapters" language={this.state.language}/>} />
-                                  <Route path="/CHOP" element={<Main version="CHOP_2014" catalog="chop_chapters" language={this.state.language}/>} />
-                                  <Route path="/TARMED" element={<Main version="TARMED_01.09" catalog="tarmed_chapters" language={this.state.language}/>} />
-                              </Routes>
+                              <Outlet>
+                              </Outlet>
                           </div>
                       </div>
                   </div>
                   <Footer/>
               </div>
+              </div>
           )
       }
+
 }
 
-export default App;
+export default function(props) {
+    const navigation = useNavigate();
+    return <App {...props} navigation={navigation}/>;
+}
