@@ -7,7 +7,7 @@ import Searchbar from './Components/Searchbar/Searchbar.js'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import {Component} from "react";
-import {Route, Routes} from "react-router-dom";
+import {Outlet, Route, Routes, useNavigate} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import TranslatorService from "./Services/translator.service";
 
@@ -49,6 +49,13 @@ class App extends Component{
         this.setState({language: lang})
     }
 
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        let navigate = this.props.navigation
+        if(prevState !== this.state) {
+            navigate(this.state.language + "/" + this.state.selectedList + "/" + this.state.selectedButton.toLowerCase() + "_chapters")
+        }
+    }
+
 
     render() {
         let searchResults;
@@ -86,9 +93,8 @@ class App extends Component{
                               {searchResults}
                           </div>
                           <div className="col">
-                              <Routes>
-                                  <Route path={"/" + this.state.selectedButton} element={<Main version={this.state.selectedList} catalog={this.state.selectedButton.toLowerCase() + "_chapters"} language={this.state.language}/>} />
-                              </Routes>
+                              <Outlet>
+                              </Outlet>
                           </div>
                       </div>
                   </div>
@@ -100,4 +106,7 @@ class App extends Component{
 
 }
 
-export default App;
+export default function(props) {
+    const navigation = useNavigate();
+    return <App {...props} navigation={navigation}/>;
+}

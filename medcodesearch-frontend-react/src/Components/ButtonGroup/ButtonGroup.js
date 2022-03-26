@@ -82,7 +82,7 @@ class ButtonGroup extends Component{
         return (
             <div key={"ButtonGroup"} className={"alignButtons"}>
                 {this.state.buttons[0].map((btn, index) => (
-                <div key={"VersionButton" + index}><Link to={'/' + this.getCorrectName(btn)}>
+                <div key={"VersionButton" + index}>
                 <ButtonVersion
                     index={index}
                     activate = {(button) => {
@@ -94,7 +94,7 @@ class ButtonGroup extends Component{
                     chooseV={(version) => {
                         this.updateButton(version, btn);
                     }}
-                /></Link>
+                />
                 </div>
                 ),this)}
 
@@ -126,7 +126,6 @@ class ButtonGroup extends Component{
                         </Popup>
                         }
                 </div>
-
             </div>
         )
     }
