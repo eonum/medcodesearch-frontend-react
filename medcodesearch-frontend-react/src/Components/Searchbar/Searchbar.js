@@ -35,6 +35,11 @@ class Searchbar extends Component {
             <div>
                 <Form className="d-flex search-center">
                     <FormControl
+                        onKeyDown={(e) =>{
+                            if (e.key === 'Enter'){
+                                e.preventDefault();
+                            }
+                        }}
                         onChange={this.updateSearch}
                         type="search"
                         placeholder="Suchbegriff oder Code eingeben..."
