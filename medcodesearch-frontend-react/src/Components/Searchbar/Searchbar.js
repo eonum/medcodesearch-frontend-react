@@ -49,7 +49,10 @@ class Searchbar extends Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.language !== this.props.language) {
+        if(prevProps.language !== this.props.language 
+            || prevProps.selectedButton !== this.props.selectedButton
+            || prevProps.version !== this.props.version
+            || prevProps.selectedDate !== this.props.selectedDate) {
             this.fetchForSearchTerm(this.state.searchTerm)
         }
 
