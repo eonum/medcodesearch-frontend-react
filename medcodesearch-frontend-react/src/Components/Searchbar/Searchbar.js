@@ -2,6 +2,7 @@ import {Component, useState} from "react";
 import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
+import {createSearchParams, useLocation, useNavigate} from "react-router-dom";
 
 
 class Searchbar extends Component {
@@ -15,7 +16,13 @@ class Searchbar extends Component {
     }
 
     updateSearch = (e) => {
+        let navigate = this.props.navigation
         this.fetchForSearchTerm(e.target.value);
+        if(e.target.value === "") {
+            navigate({search: ""});
+        } else {
+            navigate({search: createSearchParams({query: e.target.value}).toString()});
+        }
     }
 
     convertCategory(chosenBtn) { //versions are currently harcoded!!
@@ -73,7 +80,7 @@ class Searchbar extends Component {
             })
             .then((json) => {
                 this.props.searchResults("reset") //reset parent array
-                if(json.length == 0 && searchTerm !== "") {
+                if(json.length === 0 && searchTerm !== "") {
                     this.props.searchResults("empty")
                 }
                 for(let i = 0; i < json.length; i++) {
@@ -83,4 +90,7 @@ class Searchbar extends Component {
             })
     }
 }
-export default Searchbar;
+export default function(props) {
+    const navigation = useNavigate();
+    return <Searchbar {...props} navigation={navigation}/>;
+}
