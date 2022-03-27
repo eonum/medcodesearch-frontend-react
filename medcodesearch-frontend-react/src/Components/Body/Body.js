@@ -24,6 +24,7 @@ class Body extends Component{
     }
 
     async fetchInformations() {
+        console.log(this.props.version)
         fetch(`https://search.eonum.ch/`+this.props.language+`/`+this.props.category+`/`+this.props.version+`/`+this.props.version+`?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
@@ -35,9 +36,7 @@ class Body extends Component{
                 } else {
                     this.setState({children: []})
                 }
-
             })
-
     }
 
     render() {

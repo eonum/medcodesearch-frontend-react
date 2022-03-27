@@ -1,5 +1,6 @@
 import {Component} from "react";
 import './SearchResult.css';
+import {useNavigate} from "react-router-dom";
 
 class SearchResult extends Component {
     constructor(props) {
@@ -7,9 +8,10 @@ class SearchResult extends Component {
     }
 
     handleClick = () => {
-        window.location.href = this.props.result.url;
+        let navigate = this.props.navigation
+        navigate(this.props.result.code + "/detail")
     }
-    
+
     render() {
         let synonyms;
         if(this.props.result.highlight.synonyms === undefined || this.props.result.highlight.text !== undefined) {
@@ -43,5 +45,8 @@ class SearchResult extends Component {
         )
     }
 }
-//test
-export default SearchResult;
+
+export default function(props) {
+    const navigation = useNavigate();
+    return <SearchResult {...props} navigation={navigation}/>;
+}

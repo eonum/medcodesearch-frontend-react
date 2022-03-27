@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Navigate, Route, Routes, useParams} from "react-router-dom";
+import {BrowserRouter as Router, Navigate, Redirect, Route, Routes, useParams} from "react-router-dom";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -10,8 +10,10 @@ import Main from "./Components/Main/Main";
 ReactDOM.render(
     <Router>
         <Routes>
-            <Route exact path="/" element={<App />}>
+            <Route path="/" element={<App />}>
+                <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
                 <Route path=":language/:category/:version/:catalog/:version" element={<Main/>}/>
+                <Route path=":code/detail" element={"Detail works"}/>
             </Route>
         </Routes>
     </Router>,
