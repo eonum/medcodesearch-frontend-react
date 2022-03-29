@@ -7,9 +7,10 @@ import Searchbar from './Components/Searchbar/Searchbar.js'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import {Component} from "react";
-import {Outlet, Route, Routes, useNavigate} from "react-router-dom";
+import {Outlet, Route, Routes, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import TranslatorService from "./Services/translator.service";
+import RouterService from "./Services/router.service";
 
 
 class App extends Component{
@@ -55,7 +56,8 @@ class App extends Component{
             prevState.selectedButton !== this.state.selectedButton ||
             prevState.selectedList !== this.state.selectedList ||
             prevState.selectedDate !== this.state.selectedDate) {
-            navigate(this.state.language + "/" + this.state.selectedButton + "/" + this.state.selectedList + "/" + this.state.selectedButton.toLowerCase() + "_chapters/" + this.state.selectedList)
+            navigate({pathname: this.state.language + "/" + this.state.selectedButton + "/" + this.state.selectedList + "/" + this.state.selectedButton.toLowerCase() + "_chapters/" + this.state.selectedList,
+                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
     }
 

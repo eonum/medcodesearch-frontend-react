@@ -3,6 +3,7 @@ import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useLocation, useNavigate} from "react-router-dom";
+import RouterService from "../../Services/router.service";
 
 
 class Searchbar extends Component {
@@ -15,6 +16,12 @@ class Searchbar extends Component {
         }
     }
 
+    componentDidMount() {
+        this.setState({
+            searchTerm: RouterService.getQueryVariable('query')
+        })
+    }
+
     updateSearch = (e) => {
         let navigate = this.props.navigation
         this.fetchForSearchTerm(e.target.value);
@@ -24,6 +31,7 @@ class Searchbar extends Component {
             navigate({search: createSearchParams({query: e.target.value}).toString()});
         }
     }
+
 
     convertCategory(chosenBtn) { //versions are currently harcoded!!
         if(chosenBtn === "SwissDRG") {
@@ -36,6 +44,7 @@ class Searchbar extends Component {
             return "tarmeds/" + this.props.version;
         }
     }
+
 
     render() {
         return (
@@ -50,6 +59,7 @@ class Searchbar extends Component {
                         onChange={this.updateSearch}
                         type="search"
                         placeholder="Suchbegriff oder Code eingeben..."
+                        value={this.state.searchTerm === "" ? "" : this.state.searchTerm}
                         className="me-2"
                         aria-label="Search"
                     /><Button id="btn-go">
@@ -64,7 +74,8 @@ class Searchbar extends Component {
         if(prevProps.language !== this.props.language
             || prevProps.selectedButton !== this.props.selectedButton
             || prevProps.version !== this.props.version
-            || prevProps.selectedDate !== this.props.selectedDate) {
+            || prevProps.selectedDate !== this.props.selectedDate
+            ) {
             this.fetchForSearchTerm(this.state.searchTerm)
         }
     }
