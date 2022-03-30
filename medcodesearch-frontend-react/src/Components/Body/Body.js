@@ -7,6 +7,7 @@ class Body extends Component{
     constructor(props) {
         super(props);
         this.state = {
+            page: undefined,
             children:[],
             exclusions: [],
             inclusions: []
@@ -14,7 +15,7 @@ class Body extends Component{
     }
 
     componentDidMount() {
-        if (this.props.page === undefined) {
+        if (this.state.page === undefined) {
             this.fetchInformationsMain()
         } else {
             this.fetchInformationsChild()
@@ -25,7 +26,7 @@ class Body extends Component{
         if(prevProps.language !== this.props.language ||
             prevProps.version !== this.props.version ||
             prevProps.category !== this.props.category) {
-            if (this.props.page === undefined) {
+            if (this.state.page === undefined) {
                 this.fetchInformationsMain()
             } else {
                 this.fetchInformationsChild()
@@ -49,7 +50,7 @@ class Body extends Component{
     }
 
     async fetchInformationsChild() {
-        fetch(`https://search.eonum.ch/`+this.language+`/`+this.category+`/`+this.version+`/`+this.page+`?show_detail=1`)
+        fetch(`https://search.eonum.ch/`+this.props.language+`/`+this.props.category+`/`+this.props.version+`/`+this.props.page+`?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
                 this.setState({
@@ -75,18 +76,18 @@ class Body extends Component{
     render() {
         return (
             <div>
-                {this.props.page === undefined && (
+                {this.state.page === undefined && (
                     <div>
                         <h3>{this.props.version}</h3>
                         <h4>Untergeordnete Codes</h4>
                         <ul>
                             {this.state.children.map((child) => (
-                                <li className="ICD" key={child.code}><a className="link" href="">{child.code}:</a> {child.text}</li>
+                                <li className="ICD" key={child.code}><a onClick={() => this.setState({page: child.code})} className="link">{child.code}:</a> {child.text}</li>
                             ))}
                         </ul>
                     </div>
                 )}
-                {this.props.page !== undefined && (
+                {this.state.page !== undefined && (
                     <div>
                         <h4>{this.page}</h4>
 
