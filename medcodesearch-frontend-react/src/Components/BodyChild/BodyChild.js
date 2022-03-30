@@ -43,7 +43,7 @@ class BodyChild extends Component{
         if (splitStr.length > 1){
             var endString = splitStr[1].split(`}`)
             return (
-                <li className="Exclusion" key={aString}>{splitStr[0]} (<a href="">{endString[0]}</a>)</li>
+                <li className="Exclusion" key={aString}>{splitStr[0]} (<a className="link" href="">{endString[0]}</a>)</li>
             )
         } else {
             return splitStr
@@ -59,7 +59,6 @@ class BodyChild extends Component{
                     {this.state.exclusions !== undefined && this.state.exclusions.length > 0 && (
                         <div>
                             <h5>Exklusionen</h5>
-
                             <ul>
                                 {this.state.exclusions.map((exclusion) => (
                                     this.lookingForLink(exclusion)
@@ -83,7 +82,7 @@ class BodyChild extends Component{
                     <h5>Untergeordnete Codes</h5>
                     <ul>
                         {this.state.children.map((child) => (
-                            <li className="ICD" key={child.code}><a href="">{child.code}:</a> {child.text}</li>
+                            <li className="ICD" key={child.code}><a className="link" href="">{child.code}:</a> {child.text}</li>
                         ))}
                     </ul>
                 </div>
