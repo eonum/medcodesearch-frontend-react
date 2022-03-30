@@ -19,24 +19,44 @@ class BodyChild extends Component{
 
         this.state = {
             children:[],
-            exclusions: [],
-            inclusions: [],
+            exclusions: null,
+            inclusions: null,
             text: ""
         }
     }
 
-    async componentDidMount() {
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        if(prevProps !== this.props) {
+            this.setState({exclusions: null, inclusions: null})
+            this.fetchInformations()
+        }
+    }
+
+    componentDidMount() {
+        this.fetchInformations()
+    }
+    fetchInformations () {
         fetch(`https://search.eonum.ch/`+this.language+`/`+this.catalog+`/`+this.version+`/`+this.page+`?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
                 this.setState({
                     text: json.text,
                     children: json.children,
-                    exclusions: json.exclusions,
-                    inclusions: json.inclusions
                 })
+                if(json.exclusions !== undefined) {
+                    this.setState({
+                        exclusions: json.exclusions
+                    })
+                }
+                if(json.inclusions !== undefined) {
+                    this.setState({
+                        inclusions: json.inclusions
+                    })
+                }
             })
     }
+
+
 
     lookingForLink(aString) {
         var splitStr = aString.split(` {`)
@@ -51,34 +71,39 @@ class BodyChild extends Component{
     }
 
     render() {
+        let exclusions;
+        let inclusions;
+        if(this.state.exclusions !== null && this.state.exclusions.length > 0) {
+            exclusions =
+                <div>
+                    <h5>Exklusionen</h5>
+                    <ul>
+                        {this.state.exclusions.map((exclusion) => (
+                            this.lookingForLink(exclusion)
+                        ))}
+                 </ul>
+                </div>
+        }
+        if(this.state.inclusions !== null && this.state.exclusions.length > 0) {
+            inclusions =
+                <div>
+                    <h5>Inklusionen</h5>
+
+                    <ul>
+                        {this.state.inclusions.map((inclusion) => (
+                            <li className="Inclusion" key={inclusion}>{inclusion}</li>
+                        ))}
+                    </ul>
+                </div>
+        }
+
         return(
             <div>
                 <div>
                     <h4>{this.page}</h4>
                     <p>{this.state.text}</p>
-                    {this.state.exclusions !== undefined && this.state.exclusions.length > 0 && (
-                        <div>
-                            <h5>Exklusionen</h5>
-                            <ul>
-                                {this.state.exclusions.map((exclusion) => (
-                                    this.lookingForLink(exclusion)
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-
-                    {this.state.inclusions !== undefined && this.state.inclusions.length > 0 && (
-                        <div>
-                            <h5>Inklusionen</h5>
-
-                            <ul>
-                                {this.state.inclusions.map((inclusion) => (
-                                    <li className="Inclusion" key={inclusion}>{inclusion}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-
+                    {exclusions}
+                    {inclusions}
                     <h5>Untergeordnete Codes</h5>
                     <ul>
                         {this.state.children.map((child) => (
