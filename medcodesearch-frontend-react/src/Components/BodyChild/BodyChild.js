@@ -20,7 +20,8 @@ class BodyChild extends Component{
         this.state = {
             children:[],
             exclusions: [],
-            inclusions: []
+            inclusions: [],
+            text: ""
         }
     }
 
@@ -29,6 +30,7 @@ class BodyChild extends Component{
             .then((res) => res.json())
             .then((json) => {
                 this.setState({
+                    text: json.text,
                     children: json.children,
                     exclusions: json.exclusions,
                     inclusions: json.inclusions
@@ -48,12 +50,12 @@ class BodyChild extends Component{
         }
     }
 
-
     render() {
         return(
             <div>
                 <div>
                     <h4>{this.page}</h4>
+                    <p>{this.state.text}</p>
                     {this.state.exclusions !== undefined && this.state.exclusions.length > 0 && (
                         <div>
                             <h5>Exklusionen</h5>

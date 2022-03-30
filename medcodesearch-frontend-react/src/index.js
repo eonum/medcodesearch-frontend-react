@@ -13,8 +13,8 @@ ReactDOM.render(
     <Router>
         <Routes>
             <Route path="/" element={<App />}>
-                <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
-                <Route path="/:language/:category/:version/:catalog" element={<Main/>}>
+                <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters"/>}/>
+                <Route path=":language/:category/:version/:catalog" element={<Main/>}>
                     <Route path="/:language/:category/:version/:catalog" element={<Body/>}/>
                     <Route path="/:language/:category/:version/:catalog/:page" element={<BodyChild/>}/>
                 </Route>

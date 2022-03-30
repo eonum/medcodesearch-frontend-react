@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import ICDSortService from "../../Services/ICDSortService";
-import {generatePath, useParams} from "react-router-dom";
+import {generatePath, useLocation, useNavigate, useParams} from "react-router-dom";
 
 class Body extends Component{
 
@@ -46,15 +46,23 @@ class Body extends Component{
                 <h4>Untergeordnete Codes</h4>
                 <ul>
                     {this.state.children.map((child) => (
-                        <li className="ICD" key={child.code}><a className="link" href="">{child.code}:</a> {child.text}</li>
+                        <li className="ICD" key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
                     ))}
                 </ul>
             </div>
         )
     }
+
+    goToChild(code) {
+        let location = this.props.location
+        let navigate = this.props.navigation
+        navigate(location.pathname + "/" + code)
+    }
 }
 
-export default (props) => (
-    <Body {...props} params={useParams()} />
-)
+export default function(props) {
+    const navigation = useNavigate();
+    const location = useLocation();
+    return <Body {...props} navigation={navigation} location={location} params={useParams()}/>
+}
 
