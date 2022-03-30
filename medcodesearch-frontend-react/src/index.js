@@ -6,14 +6,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from "./Components/Main/Main";
+import Body from "./Components/Body/Body";
+import BodyChild from "./Components/BodyChild/BodyChild";
 
 ReactDOM.render(
     <Router>
         <Routes>
             <Route path="/" element={<App />}>
                 <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
-                <Route path=":language/:category/:version/:catalog/:version" element={<Main/>}/>
-                <Route path=":code/detail" element={"Detail works"}/>
+                <Route path="/:language/:category/:version/:catalog" element={<Main/>}>
+                    <Route path="/:language/:category/:version/:catalog" element={<Body/>}/>
+                    <Route path="/:language/:category/:version/:catalog/:page" element={<BodyChild/>}/>
+                </Route>
             </Route>
         </Routes>
     </Router>,
