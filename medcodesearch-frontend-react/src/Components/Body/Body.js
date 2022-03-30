@@ -25,8 +25,7 @@ class Body extends Component{
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.language !== this.props.language ||
             prevProps.version !== this.props.version ||
-            prevProps.category !== this.props.category ||
-            prevState.page !== this.state.page) {
+            prevProps.category !== this.props.category) {
             if (this.state.page === undefined) {
                 this.fetchInformationsMain()
             } else {
@@ -51,7 +50,7 @@ class Body extends Component{
     }
 
     async fetchInformationsChild() {
-        fetch(`https://search.eonum.ch/`+this.props.language+`/`+this.props.category+`/`+this.props.version+`/`+this.state.page+`?show_detail=1`)
+        fetch(`https://search.eonum.ch/`+this.props.language+`/`+this.props.category+`/`+this.props.version+`/`+this.props.page+`?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
                 this.setState({
@@ -90,7 +89,7 @@ class Body extends Component{
                 )}
                 {this.state.page !== undefined && (
                     <div>
-                        <h4>{this.state.page}</h4>
+                        <h4>{this.page}</h4>
 
                         {this.state.exclusions.length > 0 && (
                             <div>
