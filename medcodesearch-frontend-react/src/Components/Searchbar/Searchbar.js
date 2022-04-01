@@ -33,8 +33,8 @@ class Searchbar extends Component {
     }
 
 
-    convertCategory(chosenBtn) { //versions are currently harcoded!!
-        if(chosenBtn === "SwissDRG") {
+    convertCategory(chosenBtn) {
+        if(chosenBtn === "DRG") {
             return "drgs/" + this.props.version;
         } else if(chosenBtn === "ICD") {
             return "icds/" + this.props.version;

@@ -11,11 +11,16 @@ class BodyChild extends Component{
     constructor(props) {
         super(props);
 
-        this.version = props.params.version;
-        this.category = props.params.category;
+        if(this.props.params.catalog === "drg_chapters") {
+            this.catalog = "mdcs";
+        } else {
+            this.catalog = props.params.catalog;
+        }
         this.page = props.params.page;
         this.language = props.params.language;
-        this.catalog = props.params.catalog;
+        this.version = props.params.version;
+        this.category = props.params.category;
+
 
         this.state = {
             children:[],
@@ -35,20 +40,21 @@ class BodyChild extends Component{
     componentDidMount() {
         this.fetchInformations()
     }
-    fetchInformations () {
-        fetch(`https://search.eonum.ch/`+this.language+`/`+this.catalog+`/`+this.version+`/`+this.page+`?show_detail=1`)
+
+    async fetchInformations() {
+        fetch(`https://search.eonum.ch/` + this.language + `/` + this.catalog + `/` + this.version + `/` + this.page + `?show_detail=1`)
             .then((res) => res.json())
             .then((json) => {
                 this.setState({
                     text: json.text,
                     children: json.children,
                 })
-                if(json.exclusions !== undefined) {
+                if (json.exclusions !== undefined) {
                     this.setState({
                         exclusions: json.exclusions
                     })
                 }
-                if(json.inclusions !== undefined) {
+                if (json.inclusions !== undefined) {
                     this.setState({
                         inclusions: json.inclusions
                     })
@@ -100,7 +106,7 @@ class BodyChild extends Component{
         return(
             <div>
                 <div>
-                    <h4>{this.page}</h4>
+                    <h4>{this.props.params.page}</h4>
                     <p>{this.state.text}</p>
                     {exclusions}
                     {inclusions}

@@ -24,19 +24,30 @@ class Body extends Component{
     }
 
     async fetchInformations() {
-        console.log(this.props.version)
-        fetch(`https://search.eonum.ch/`+this.props.params.language+`/`+this.props.params.catalog+`/`+this.props.params.version+`/`+this.props.params.version+`?show_detail=1`)
-            .then((res) => res.json())
-            .then((json) => {
-                if (json.children != null) {
-                    this.setState({children: json.children})
-                    if (this.props.params.category === "icd_chapters") {
-                        this.setState({children: ICDSortService(this.state.children)})
+        if(this.props.params.catalog === "drg_chapters") {
+            await fetch(`https://search.eonum.ch/` + this.props.params.language + `/mdcs/` + this.props.params.version + `/ALL?show_detail=1`)
+                .then((res) => res.json())
+                .then((json) => {
+                    if (json.children != null) {
+                        this.setState({children: json.children})
+                    } else {
+                        this.setState({children: []})
                     }
-                } else {
-                    this.setState({children: []})
-                }
-            })
+                })
+        } else {
+            fetch(`https://search.eonum.ch/` + this.props.params.language + `/` + this.props.params.catalog + `/` + this.props.params.version + `/` + this.props.params.version + `?show_detail=1`)
+                .then((res) => res.json())
+                .then((json) => {
+                    if (json.children != null) {
+                        this.setState({children: json.children})
+                        if (this.props.params.category === "icd_chapters") {
+                            this.setState({children: ICDSortService(this.state.children)})
+                        }
+                    } else {
+                        this.setState({children: []})
+                    }
+                })
+        }
     }
 
     render() {
@@ -56,6 +67,7 @@ class Body extends Component{
     goToChild(code) {
         let location = this.props.location
         let navigate = this.props.navigation
+        code = code.split(" ").pop()
         navigate(location.pathname + "/" + code)
     }
 }
