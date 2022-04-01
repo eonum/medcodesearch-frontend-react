@@ -90,11 +90,10 @@ class BodyChild extends Component{
                  </ul>
                 </div>
         }
-        if(this.state.inclusions !== null && this.state.exclusions.length > 0) {
+        if(this.state.inclusions !== null && this.state.inclusions.length > 0) {
             inclusions =
                 <div>
                     <h5>Inklusionen</h5>
-
                     <ul>
                         {this.state.inclusions.map((inclusion) => (
                             <li className="Inclusion" key={inclusion}>{inclusion}</li>
