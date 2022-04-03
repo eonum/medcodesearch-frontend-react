@@ -65,10 +65,13 @@ class Body extends Component{
     }
 
     goToChild(code) {
-        let location = this.props.location
         let navigate = this.props.navigation
         code = code.split(" ").pop()
-        navigate(location.pathname + "/" + code)
+        if(this.props.params.catalog === "drg_chapters") {
+            navigate("/" + this.props.params.language + "/" + this.props.params.category + "/" + this.props.params.version + "/mdcs/" + code)
+        } else {
+            navigate("/" + this.props.params.language + "/" + this.props.params.category + "/" + this.props.params.version + "/" + this.props.params.catalog + "/" + code)
+        }
     }
 }
 

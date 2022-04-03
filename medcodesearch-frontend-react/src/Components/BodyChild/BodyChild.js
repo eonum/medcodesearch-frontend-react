@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 class BodyChild extends Component{
     version;
@@ -10,17 +10,6 @@ class BodyChild extends Component{
 
     constructor(props) {
         super(props);
-
-        if(this.props.params.catalog === "drg_chapters") {
-            this.catalog = "mdcs";
-        } else {
-            this.catalog = props.params.catalog;
-        }
-        this.page = props.params.page;
-        this.language = props.params.language;
-        this.version = props.params.version;
-        this.category = props.params.category;
-
 
         this.state = {
             children:[],
@@ -42,8 +31,13 @@ class BodyChild extends Component{
     }
 
     async fetchInformations() {
-        fetch(`https://search.eonum.ch/` + this.language + `/` + this.catalog + `/` + this.version + `/` + this.page + `?show_detail=1`)
-            .then((res) => res.json())
+        await fetch(`https://search.eonum.ch/` + this.props.params.language + `/` + this.props.params.catalog + `/` + this.props.params.version + `/` + this.props.params.page + `?show_detail=1`)
+            .then((res) => {
+                if(res.ok) {
+                    return res.json()
+                }
+                throw new Error('Not found');
+            })
             .then((json) => {
                 this.setState({
                     text: json.text,
@@ -60,8 +54,29 @@ class BodyChild extends Component{
                     })
                 }
             })
+            .catch(async () => {
+                await fetch(`https://search.eonum.ch/` + this.props.params.language + "/" + this.props.params.category.toLowerCase() + "s/" + this.props.params.version + `/` + this.props.params.page + `?show_detail=1`)
+                    .then((res) => {
+                            return res.json()
+                    })
+                    .then((json) => {
+                        this.setState({
+                            text: json.text,
+                            children: json.children,
+                        })
+                        if (json.exclusions !== undefined) {
+                            this.setState({
+                                exclusions: json.exclusions
+                            })
+                        }
+                        if (json.inclusions !== undefined) {
+                            this.setState({
+                                inclusions: json.inclusions
+                            })
+                        }
+                    })
+            })
     }
-
 
 
     lookingForLink(aString) {
@@ -79,6 +94,7 @@ class BodyChild extends Component{
     render() {
         let exclusions;
         let inclusions;
+        let children;
         if(this.state.exclusions !== null && this.state.exclusions.length > 0) {
             exclusions =
                 <div>
@@ -101,6 +117,17 @@ class BodyChild extends Component{
                     </ul>
                 </div>
         }
+        if(this.state.children !== null && this.state.children.length > 0) {
+            children =
+                <div>
+                    <h5>Untergeordnete Codes</h5>
+                    <ul>
+                        {this.state.children.map((child) => (
+                            <li key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
+                        ))}
+                    </ul>
+                </div>
+        }
 
         return(
             <div>
@@ -109,17 +136,19 @@ class BodyChild extends Component{
                     <p>{this.state.text}</p>
                     {exclusions}
                     {inclusions}
-                    <h5>Untergeordnete Codes</h5>
-                    <ul>
-                        {this.state.children.map((child) => (
-                            <li className="ICD" key={child.code}><a className="link" href="">{child.code}:</a> {child.text}</li>
-                        ))}
-                    </ul>
+                    {children}
                 </div>
             </div>
         )
     }
+    goToChild(code) {
+        let navigate = this.props.navigation
+        navigate("/" + this.props.params.language + "/" + this.props.params.category + "/" + this.props.params.version + "/" + this.props.params.category.toLowerCase() + "_groups/" + code)
+    }
 }
-export default (props) => (
-    <BodyChild {...props} params={useParams()} />
-)
+
+export default function(props) {
+    const navigation = useNavigate();
+    const location = useLocation();
+    return <BodyChild {...props} navigation={navigation} location={location} params={useParams()}/>
+}
