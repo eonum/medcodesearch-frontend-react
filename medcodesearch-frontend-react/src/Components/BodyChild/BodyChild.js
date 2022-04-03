@@ -10,7 +10,6 @@ class BodyChild extends Component{
 
     constructor(props) {
         super(props);
-
         this.state = {
             children:[],
             exclusions: null,
@@ -141,6 +140,7 @@ class BodyChild extends Component{
             </div>
         )
     }
+
     goToChild(code) {
         let navigate = this.props.navigation
         navigate("/" + this.props.params.language + "/" + this.props.params.category + "/" + this.props.params.version + "/" + this.props.params.category.toLowerCase() + "_groups/" + code)

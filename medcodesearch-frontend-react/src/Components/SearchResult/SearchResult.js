@@ -1,6 +1,7 @@
 import {Component} from "react";
 import './SearchResult.css';
 import {useNavigate} from "react-router-dom";
+import RouterService from "../../Services/router.service";
 
 class SearchResult extends Component {
     constructor(props) {
@@ -9,7 +10,8 @@ class SearchResult extends Component {
 
     handleClick = () => {
         let navigate = this.props.navigation
-        navigate(this.props.result.code + "/detail")
+        navigate({pathname: "/de/ICD/ICD10-GM-2022/icds/" + this.props.result.code,
+            search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
     }
 
     render() {
