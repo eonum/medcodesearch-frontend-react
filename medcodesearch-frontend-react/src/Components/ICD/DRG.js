@@ -114,7 +114,8 @@ class DRG extends Component {
                     <h4>Untergeordnete Codes</h4>
                     <ul>
                         {this.state.children.map((child) => (
-                            <li className="DRG" key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
+                            <li className="DRG" key={child.code}><a className="link" onClick={() => {
+                                this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
                         ))}
                     </ul>
                 </div>
@@ -133,17 +134,25 @@ class DRG extends Component {
 
     goToChild(code) {
         let navigate = this.props.navigation
-        if(this.props.params.version === this.props.params.code || code === null) {
+        if(this.props.params.version === this.props.params.code) {
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/mdcs/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-        } else if (code.match(/^[A-Z][0-9][0-9]\.?[0-9]?[0-9]?$/)){
-            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/mdcs/" + code,
+        } else if (code.match(/^[A-Z][A-Z]?\s[0-9][0-9]$/)){ //code.match(/^[A-Z][A-Z][A-Z]\s[0-9][0-9]?$/)){
+            let searchCode = code.split(' ');
+            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/mdcs/" + searchCode[1],
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-        }
-        else {
+        } else if(code.match(/^[A-Z]?[A-Z]$/)){
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/partitions/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
+        }else if (/^[A-Z][0-9][0-9][A-Z]$/){
+            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.version + "/drgs/" + code,
+                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
+        else if(/^[A-Z][0-9][0-9]$/){
+            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.version + "/adrgs/" + code,
+                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
+            }
+
     }
 
 
