@@ -48,19 +48,13 @@ class ICD extends Component {
                         this.setState({text: json.text})
                     }
                     if (json.exclusions !== undefined) {
-                        this.setState({
-                            exclusions: json.exclusions
-                        })
+                        this.setState({exclusions: json.exclusions})
                     }
                     if (json.inclusions !== undefined) {
-                        this.setState({
-                            inclusions: json.inclusions
-                        })
+                        this.setState({inclusions: json.inclusions})
                     }
                     if (json.note !== undefined) {
-                        this.setState({
-                            note: json.note
-                        })
+                        this.setState({note: json.note})
                     }
                 })
     }

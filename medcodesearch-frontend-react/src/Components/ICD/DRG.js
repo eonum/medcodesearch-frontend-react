@@ -40,9 +40,6 @@ class DRG extends Component {
                 .then((json) => {
                     if (json.children != null) {
                         this.setState({children: json.children})
-                        if(this.props.params.version === this.props.params.code) {
-                            this.setState({children: json.children})
-                        }
                     }
                     if (json.text !== undefined) {
                         this.setState({text: json.text})

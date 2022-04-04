@@ -1,6 +1,6 @@
 import {Component} from "react";
 import './SearchResult.css';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 
 class SearchResult extends Component {
@@ -10,8 +10,19 @@ class SearchResult extends Component {
 
     handleClick = () => {
         let navigate = this.props.navigation
-        navigate({pathname: "/de/ICD/ICD10-GM-2022/icds/" + this.props.result.code,
-            search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
+        let location = this.props.location
+        let path = location.pathname.split("/")
+        if(path[2] === "SwissDRG") {
+            navigate({
+                pathname: "/" + path[1] + "/" + path[2] + "/" + path[3] + "/mdcs/" + this.props.result.code,
+                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+            })
+        } else {
+            navigate({
+                pathname: "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + path[2].toLowerCase() + "s/" + this.props.result.code,
+                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+            })
+        }
     }
 
     render() {
@@ -50,5 +61,6 @@ class SearchResult extends Component {
 
 export default function(props) {
     const navigation = useNavigate();
-    return <SearchResult {...props} navigation={navigation}/>;
+    const location = useLocation();
+    return <SearchResult {...props} navigation={navigation} location={location}/>;
 }
