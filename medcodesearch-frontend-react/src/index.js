@@ -9,6 +9,7 @@ import Main from "./Components/Main/Main";
 import Body from "./Components/Body/Body";
 import BodyChild from "./Components/BodyChild/BodyChild";
 import ICD from "./Components/ICD/ICD";
+import DRG from "./Components/ICD/DRG";
 
 ReactDOM.render(
     <Router>
@@ -17,6 +18,7 @@ ReactDOM.render(
                 <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
                 <Route path="/" element={<Main/>}>
                     <Route path="/:language/ICD/:version/:catalog/:code" element={<ICD/>}/>
+                    <Route path="/:language/SwissDRG/:version/:catalog/:code" element={<DRG/>}/>
                     <Route path="/:language/:category/:version/:catalog" element={<Body/>}/>
                     <Route path="/:language/:category/:version/:catalog/:page" element={<BodyChild/>}/>
                 </Route>

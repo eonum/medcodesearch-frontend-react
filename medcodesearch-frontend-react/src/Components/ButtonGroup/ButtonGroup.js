@@ -27,7 +27,6 @@ class ButtonGroup extends Component{
     }
 
     updateButton = (version, btn) => {
-        btn = this.getCorrectName(btn)
         if (version === ''){
             version = this.getVersion(btn);
         }
@@ -35,7 +34,7 @@ class ButtonGroup extends Component{
             case 'ICD':
                 this.setState({lastICD: version});
                 break;
-            case 'DRG':
+            case 'SwissDRG':
                 this.setState({lastDRG: version});
                 break;
             case 'CHOP':
@@ -54,7 +53,7 @@ class ButtonGroup extends Component{
         switch (btn){
             case 'ICD':
                 return this.state.lastICD;
-            case 'DRG':
+            case 'SwissDRG':
                 return this.state.lastDRG;
             case 'CHOP':
                 return this.state.lastCHOP;
@@ -71,12 +70,6 @@ class ButtonGroup extends Component{
 
     showHideCal = (state) => {
         this.setState({showHideCal: state})
-    }
-    getCorrectName(btn){
-        if (btn === 'SwissDRG'){
-            return 'DRG';
-        }
-        return btn
     }
     render() {
         return (

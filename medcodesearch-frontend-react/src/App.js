@@ -52,12 +52,21 @@ class App extends Component{
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         let navigate = this.props.navigation
+        let chapters;
         if(prevState.language !== this.state.language ||
             prevState.selectedButton !== this.state.selectedButton ||
             prevState.selectedList !== this.state.selectedList ||
             prevState.selectedDate !== this.state.selectedDate) {
-            navigate({pathname: this.state.language + "/" + this.state.selectedButton + "/" + this.state.selectedList + "/" + this.state.selectedButton.toLowerCase() + "_chapters/" + this.state.selectedList,
-                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
+            if (this.state.selectedButton === 'SwissDRG') {
+                chapters = 'mdcs/';
+            }
+            else {
+                chapters = this.state.selectedButton.toLowerCase() + '_chapters/';
+            }
+            navigate({
+                pathname: this.state.language + "/" + this.state.selectedButton + "/" + this.state.selectedList + "/" + chapters + this.state.selectedList,
+                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+            })
         }
     }
 
