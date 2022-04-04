@@ -60,16 +60,23 @@ class TARMED extends Component {
     }
 
     lookingForLink(aString) {
-        var splitStr = aString.split(` {`)
+        let splitStr = aString.split(` {`)
         if (splitStr.length > 1){
-            var endString = splitStr[1].split(`}`)
+            let endString = splitStr[1].split(`}`)
+            endString = endString[0].split("-")
+            if(endString.length > 1) {
+                endString = <><a className="link">{endString[0]}</a>-<a className="link">{endString[1]}</a></>
+            } else {
+                endString = <a className="link">{endString[0]}</a>
+            }
             return (
-                <li className="Exclusion" key={aString}>{splitStr[0]} (<a className="link" href="">{endString[0]}</a>)</li>
+                <li className="Exclusion" key={aString}>{splitStr[0]} ({endString})</li>
             )
         } else {
             return splitStr
         }
     }
+
 
     render() {
         let categories = []
