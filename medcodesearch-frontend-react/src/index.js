@@ -6,8 +6,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from "./Components/Main/Main";
-import Body from "./Components/Body/Body";
-import BodyChild from "./Components/BodyChild/BodyChild";
 import ICD from "./Components/ICD/ICD";
 import DRG from "./Components/ICD/DRG";
 import CHOP from "./Components/ICD/CHOP";
