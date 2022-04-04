@@ -161,10 +161,10 @@ class DRG extends Component {
             }
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/partitions/" + searchCode,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-            }else if(/^[A-Z][0-9][0-9]$/){ // for example C60
+            }else if(code.match(/^[A-Z][0-9][0-9]$/)){ // for example C60
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/adrgs/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-            }else if (/^[A-Z][0-9][0-9][A-Z]$/){ // for example C60A
+            }else if (code.match(/^[A-Z][0-9][0-9][A-Z]$/)){ // for example C60A
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/drgs/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
