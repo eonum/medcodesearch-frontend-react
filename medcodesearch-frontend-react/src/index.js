@@ -11,6 +11,7 @@ import BodyChild from "./Components/BodyChild/BodyChild";
 import ICD from "./Components/ICD/ICD";
 import DRG from "./Components/ICD/DRG";
 import CHOP from "./Components/ICD/CHOP";
+import TARMED from "./Components/ICD/TARMED";
 
 ReactDOM.render(
     <Router>
@@ -21,6 +22,7 @@ ReactDOM.render(
                     <Route path="/:language/ICD/:version/:catalog/:code" element={<ICD/>}/>
                     <Route path="/:language/SwissDRG/:version/:catalog/:code" element={<DRG/>}/>
                     <Route path="/:language/CHOP/:version/:catalog/:code" element={<CHOP/>}/>
+                    <Route path="/:language/TARMED/:version/:catalog/:code" element={<TARMED/>}/>
                     <Route path="/:language/:category/:version/:catalog" element={<Body/>}/>
                     <Route path="/:language/:category/:version/:catalog/:page" element={<BodyChild/>}/>
                 </Route>
