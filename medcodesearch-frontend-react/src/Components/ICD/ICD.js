@@ -12,6 +12,12 @@ class ICD extends Component {
             exclusions: null,
             inclusions: null,
             note: null,
+            coding_hint: null,
+            synonyms: null,
+            most_relevant_drgs: null,
+            successors: null,
+            predecessors: null,
+            usage: "",
             text: ""
         }
     }
@@ -27,7 +33,13 @@ class ICD extends Component {
                 exclusions: null,
                 inclusions: null,
                 note: null,
-                text: ""
+                coding_hint: null,
+                synonyms: null,
+                most_relevant_drgs: null,
+                successors: null,
+                predecessors: null,
+                text: "",
+                usage: "",
             })
             this.fetchInformations()
         }
@@ -38,23 +50,13 @@ class ICD extends Component {
         fetch('https://search.eonum.ch/' + this.props.params.language + "/" + this.props.params.catalog + "/" + this.props.params.version + "/" + this.props.params.code + "?show_detail=1")
             .then((res) => res.json())
                 .then((json) => {
-                    if (json.children != null) {
-                        this.setState({children: json.children})
-                        if(this.props.params.version === this.props.params.code) {
-                            this.setState({children: ICDSortService(json.children)})
-                        }
+                    for(let category in this.state) {
+                        let newState = {}
+                        newState[category] = json[category]
+                        this.setState(newState)
                     }
-                    if (json.text !== undefined) {
-                        this.setState({text: json.text})
-                    }
-                    if (json.exclusions !== undefined) {
-                        this.setState({exclusions: json.exclusions})
-                    }
-                    if (json.inclusions !== undefined) {
-                        this.setState({inclusions: json.inclusions})
-                    }
-                    if (json.note !== undefined) {
-                        this.setState({note: json.note})
+                    if(this.props.params.version === this.props.params.code) {
+                        this.setState({children: ICDSortService(json.children)})
                     }
                 })
     }
@@ -72,58 +74,57 @@ class ICD extends Component {
     }
 
     render() {
-        let exclusions;
-        let inclusions;
-        let note;
-        let children;
-        if(this.state.note !== null) {
-            note =
-                <div>
-                    <h5>Hinweis</h5>
-                    <p>{this.state.note}</p>
-                </div>
-        }
-        if(this.state.exclusions !== null && this.state.exclusions.length > 0) {
-            exclusions =
-                <div>
-                    <h5>Exklusionen</h5>
-                    <ul>
-                        {this.state.exclusions.map((exclusion) => (
-                            this.lookingForLink(exclusion)
-                        ))}
-                    </ul>
-                </div>
-        }
-        if(this.state.inclusions !== null && this.state.inclusions.length > 0) {
-            inclusions =
-                <div>
-                    <h5>Inklusionen</h5>
-                    <ul>
-                        {this.state.inclusions.map((inclusion) => (
-                            <li className="Inclusion" key={inclusion}>{inclusion}</li>
-                        ))}
-                    </ul>
-                </div>
-        }
-        if(this.state.children !== null && this.state.children.length > 0) {
-            children =
-                <div>
-                    <h4>Untergeordnete Codes</h4>
-                    <ul>
-                        {this.state.children.map((child) => (
-                            <li className="ICD" key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
-                        ))}
-                    </ul>
-                </div>
+        let categories = []
+        for(let category in this.state) {
+            if(this.state[category] !== null && this.state[category] !== undefined && this.state[category].length > 0) {
+                if(category === "note" || category === "coding_hint" || category === "usage") {
+                    categories.push(
+                        <div>
+                            <h5>{category}</h5>
+                            <p>{this.state[category]}</p>
+                        </div>
+                    )
+                } else if(category === "children") {
+                    categories.push(
+                        <div>
+                            <h4>Untergeordnete Codes</h4>
+                            <ul>
+                                {this.state.children.map((child) => (
+                                    <li className="ICD" key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )
+                } else if(category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs") {
+                    categories.push(
+                        <div>
+                            <h5>{category}</h5>
+                            <ul>
+                                {this.state[category].map((element, i) => (
+                                    <li className="Inclusion" key={i}>{element}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )
+                } else if(category === "exclusions") {
+                    categories.push(
+                        <div>
+                            <h5>Exklusionen</h5>
+                            <ul>
+                                {this.state.exclusions.map((exclusion) => (
+                                    this.lookingForLink(exclusion)
+                                ))}
+                            </ul>
+                        </div>
+                    )
+                }
+            }
         }
         return (
             <div>
                 <h3>{this.props.params.code}</h3>
                 <p>{this.state.text}</p>
-                {exclusions}
-                {inclusions}
-                {note}
-                {children}
+                {categories}
             </div>
         )
     }

@@ -34,7 +34,7 @@ class Searchbar extends Component {
 
 
     convertCategory(chosenBtn) {
-        if(chosenBtn === "DRG") {
+        if(chosenBtn === "SwissDRG") {
             return "drgs/" + this.props.version;
         } else if(chosenBtn === "ICD") {
             return "icds/" + this.props.version;

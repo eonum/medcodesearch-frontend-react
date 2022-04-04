@@ -137,7 +137,7 @@ class DRG extends Component {
         if(this.props.params.version === this.props.params.code) { // for first codes
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/mdcs/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-        } else if (code.match(/^[A-Z][A-Z]?\s[0-9][0-9]$/)){ // for example MDC 03
+        } else if (code.match(/^[A-Z][A-Z][A-Z]\s[0-9][0-9]$/)){ // for example MDC 03
             let searchCode = code.split(' ');
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/mdcs/" + searchCode[1],
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
