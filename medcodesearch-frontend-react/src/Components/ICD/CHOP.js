@@ -63,7 +63,7 @@ class CHOP extends Component {
         if (splitStr.length > 1){
             var endString = splitStr[1].split(`}`)
             return (
-                <li className="Exclusion" key={aString}>{splitStr[0]} (<a className="link" href="">{endString[0]}</a>)</li>
+                <li key={aString}>{splitStr[0]} (<a className="link" href="">{endString[0]}</a>)</li>
             )
         } else {
             return splitStr
@@ -87,7 +87,7 @@ class CHOP extends Component {
                             <h4>Untergeordnete Codes</h4>
                             <ul>
                                 {this.state.children.map((child) => (
-                                    <li className="ICD" key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
+                                    <li key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
@@ -98,7 +98,7 @@ class CHOP extends Component {
                             <h5>{category}</h5>
                             <ul>
                                 {this.state[category].map((element, i) => (
-                                    <li className="Inclusion" key={i}>{element}</li>
+                                    <li key={i}>{element}</li>
                                 ))}
                             </ul>
                         </div>

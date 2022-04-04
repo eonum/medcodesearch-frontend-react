@@ -78,7 +78,7 @@ class DRG extends Component {
         if (splitStr.length > 1){
             var endString = splitStr[1].split(`}`)
             return (
-                <li className="Exclusion" key={aString}>{splitStr[0]} (<a className="link" href="">{endString[0]}</a>)</li>
+                <li key={aString}>{splitStr[0]} (<a className="link" href="">{endString[0]}</a>)</li>
             )
         } else {
             return splitStr
@@ -114,7 +114,7 @@ class DRG extends Component {
                     <h5>Inklusionen</h5>
                     <ul>
                         {this.state.inclusions.map((inclusion) => (
-                            <li className="Inclusion" key={inclusion}>{inclusion}</li>
+                            <li key={inclusion}>{inclusion}</li>
                         ))}
                     </ul>
                 </div>
@@ -125,7 +125,7 @@ class DRG extends Component {
                     <h4>Untergeordnete Codes</h4>
                     <ul>
                         {this.state.children.map((child) => (
-                            <li className="CHOP" key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
+                            <li key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
                         ))}
                     </ul>
                 </div>

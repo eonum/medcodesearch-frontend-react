@@ -87,7 +87,7 @@ class TARMED extends Component {
                             <h4>Untergeordnete Codes</h4>
                             <ul>
                                 {this.state.children.map((child) => (
-                                    <li className="ICD" key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
+                                    <li key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
@@ -98,7 +98,7 @@ class TARMED extends Component {
                             <h5>{category}</h5>
                             <ul>
                                 {this.state[category].map((element, i) => (
-                                    <li className="Inclusion" key={i}>{element}</li>
+                                    <li key={i}>{element}</li>
                                 ))}
                             </ul>
                         </div>
