@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import ICDSortService from "../../Services/ICDSortService";
 import Fetch from "../../Services/fetch";
 import RouterService from "../../Services/router.service";
+import TranslatorService from "../../Services/translator.service";
 
 class ICD extends Component {
     constructor(props) {
@@ -80,14 +81,14 @@ class ICD extends Component {
                 if(category === "note" || category === "coding_hint" || category === "usage") {
                     categories.push(
                         <div>
-                            <h5>{category}</h5>
+                            <h5>{TranslatorService.translateCategory(category, this.props.params.language)}</h5>
                             <p>{this.state[category]}</p>
                         </div>
                     )
                 } else if(category === "children") {
                     categories.push(
                         <div>
-                            <h4>Untergeordnete Codes</h4>
+                            <h4>{TranslatorService.translateCategory(category, this.props.params.language)}</h4>
                             <ul>
                                 {this.state.children.map((child) => (
                                     <li key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
@@ -98,7 +99,7 @@ class ICD extends Component {
                 } else if(category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs") {
                     categories.push(
                         <div>
-                            <h5>{category}</h5>
+                            <h5>{TranslatorService.translateCategory(category, this.props.params.language)}</h5>
                             <ul>
                                 {this.state[category].map((element, i) => (
                                     <li key={i}>{element}</li>
@@ -109,7 +110,7 @@ class ICD extends Component {
                 } else if(category === "exclusions") {
                     categories.push(
                         <div>
-                            <h5>Exklusionen</h5>
+                            <h5>{TranslatorService.translateCategory(category, this.props.params.language)}</h5>
                             <ul>
                                 {this.state.exclusions.map((exclusion) => (
                                     this.lookingForLink(exclusion)
