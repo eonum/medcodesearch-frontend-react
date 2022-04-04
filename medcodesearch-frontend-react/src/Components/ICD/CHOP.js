@@ -9,7 +9,6 @@ class CHOP extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            children:[],
             exclusions: null,
             inclusions: null,
             note: null,
@@ -19,7 +18,8 @@ class CHOP extends Component {
             successors: null,
             predecessors: null,
             usage: "",
-            text: ""
+            text: "",
+            children:[]
         }
     }
     componentDidMount() {
@@ -30,7 +30,6 @@ class CHOP extends Component {
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {
             this.setState({
-                children:[],
                 exclusions: null,
                 inclusions: null,
                 note: null,
@@ -41,6 +40,7 @@ class CHOP extends Component {
                 predecessors: null,
                 text: "",
                 usage: "",
+                children:[]
             })
             this.fetchInformations()
         }
@@ -61,16 +61,17 @@ class CHOP extends Component {
 
     lookingForLink(aString) {
         let splitStr = aString.split(` {`)
+        let res
         if (splitStr.length > 1){
             let endString = splitStr[1].split(`}`)
             endString = endString[0].split("-")
-            if(endString.length > 1) {
-                endString = <><a className="link">{endString[0]}</a>-<a className="link">{endString[1]}</a></>
+            if(endString.length > 1 && endString[1] !== "") {
+                res = <><a onClick={() => {this.searchExclusion(endString[0])}} className="link">{endString[0]}</a>-<a onClick={() => {this.searchExclusion(endString[1])}} className="link">{endString[1]}</a></>
             } else {
-                endString = <a className="link">{endString[0]}</a>
+                res = <a onClick={() => {this.searchExclusion(endString[0].replaceAll(".", ""))}} className="link">{endString[0].replaceAll(".", "")}</a>
             }
             return (
-                <li className="Exclusion" key={aString}>{splitStr[0]} ({endString})</li>
+                <li className="Exclusion" key={aString}>{splitStr[0]} ({res})</li>
             )
         } else {
             return splitStr
@@ -143,6 +144,11 @@ class CHOP extends Component {
             navigate({pathname: "/" + this.props.params.language + "/CHOP/" + this.props.params.version + "/chops/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
+    }
+
+    searchExclusion(code) {
+        let navigate = this.props.navigation
+        navigate({search: "?query=" + code})
     }
 }
 export default function(props) {

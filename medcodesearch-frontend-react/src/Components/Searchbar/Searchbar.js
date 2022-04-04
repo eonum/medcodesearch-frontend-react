@@ -20,6 +20,7 @@ class Searchbar extends Component {
         this.setState({
             searchTerm: RouterService.getQueryVariable('query')
         })
+        this.fetchForSearchTerm(RouterService.getQueryVariable('query'));
     }
 
     updateSearch = (e) => {
@@ -75,8 +76,8 @@ class Searchbar extends Component {
             || prevProps.selectedButton !== this.props.selectedButton
             || prevProps.version !== this.props.version
             || prevProps.selectedDate !== this.props.selectedDate
-            ) {
-            this.fetchForSearchTerm(this.state.searchTerm)
+            || prevState.searchTerm !== RouterService.getQueryVariable('query')) {
+            this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
         }
     }
 
