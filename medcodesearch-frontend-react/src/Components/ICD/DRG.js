@@ -107,7 +107,7 @@ class DRG extends Component {
                             <h4>{TranslatorService.translateCategory(category, this.props.params.language)}</h4>
                             <ul>
                                 {this.state.children.map((child) => (
-                                    <li key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
+                                    <li key={child.code}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
@@ -146,30 +146,21 @@ class DRG extends Component {
         )
     }
 
-    goToChild(code) {
+    goToChild(child) {
         let navigate = this.props.navigation
-        if (code.match(/^[A-Z][A-Z][A-Z]\s\w+$/)){ // for example MDC 03 or MDC PRE or MDC a3
-            let searchCode = code.split(' ');
+        if (child.code.match(/^[A-Z][A-Z][A-Z]\s\w+$/)){ // for example MDC 03 or MDC PRE or MDC a3
+            let searchCode = child.code.split(' ');
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/mdcs/" + searchCode[1],
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-        } else if(code.match(/^\D+ Partition$/)){ // for example C_A
-            let searchCode = code.split(' ')
-            if (searchCode[0].match(/^Andere$/)){
-                searchCode = 'C_A';
-            }
-            else if(searchCode[0].match(/^Medizinische$/)){
-                searchCode = 'C_M';
-            }
-            else{
-                searchCode = 'C_O';
-            }
-            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/partitions/" + searchCode,
+        } else if(child.code.match(/^\D+ Partition$/)){ // for example C_A
+            child.code = child.url.split("/")[child.url.split("/").length-1];
+            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/partitions/" + child.code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-            }else if(code.match(/^[A-Z][0-9][0-9]$/)){ // for example C60
-            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/adrgs/" + code,
+        } else if(child.code.match(/^[A-Z][0-9][0-9]$/)){ // for example C60
+            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/adrgs/" + child.code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-            }else if (code.match(/^[A-Z][0-9][0-9][A-Z]$/)){ // for example C60A
-            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/drgs/" + code,
+        } else if (child.code.match(/^[A-Z][0-9][0-9][A-Z]$/)){ // for example C60A
+            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/drgs/" + child.code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
     }
