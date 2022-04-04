@@ -134,19 +134,15 @@ class DRG extends Component {
 
     goToChild(code) {
         let navigate = this.props.navigation
-        if(this.props.params.version === this.props.params.code) { // for first codes
-            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/mdcs/" + code,
-                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-        } else if (code.match(/^[A-Z][A-Z]?\s[0-9][0-9]$/)){ // for example MDC 03
+        if (code.match(/^[A-Z][A-Z][A-Z]\s\w+$/)){ // for example MDC 03 or MDC PRE or MDC a3
             let searchCode = code.split(' ');
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/mdcs/" + searchCode[1],
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-        } else if(code.match(/^[A-Z]?[A-Z]$/)){ // for example C_A
+        } else if(code.match(/^[A-Z]_[A-Z]$/)){ // for example C_A
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/partitions/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }else if (/^[A-Z][0-9][0-9][A-Z]$/) { // for example C60A
-            navigate({
-                pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.version + "/drgs/" + code,
+            navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.version + "/drgs/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }else if(/^[A-Z][0-9][0-9]$/){ // for example C60
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.version + "/adrgs/" + code,
