@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from "./Components/Main/Main";
 import Body from "./Components/Body/Body";
 import BodyChild from "./Components/BodyChild/BodyChild";
+import { ButtonGroup } from 'react-bootstrap';
 
 ReactDOM.render(
     <Router>
@@ -17,6 +18,7 @@ ReactDOM.render(
                 <Route path=":language/:category/:version/:catalog" element={<Main/>}>
                     <Route path="/:language/:category/:version/:catalog" element={<Body/>}/>
                     <Route path="/:language/:category/:version/:catalog/:page" element={<BodyChild/>}/>
+                    <Route path="/:language/:category/:version/:catalog/:page" element={<ButtonGroup/>}/>
                 </Route>
             </Route>
         </Routes>

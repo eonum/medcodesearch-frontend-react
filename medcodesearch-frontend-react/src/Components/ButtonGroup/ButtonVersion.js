@@ -11,10 +11,8 @@ class ButtonVersion extends Component{
         super(props);
         this.state = {
             version:[],
-            currentVersion: this.props.version,
             category: this.props.category,
             language: this.props.language,
-            currentCatalog: this.props.selectedCategory
         }
     }
 
@@ -40,7 +38,8 @@ class ButtonVersion extends Component{
             <div>
                 <Dropdown as={ButtonGroup} className="catalogButtons">
                     <button 
-                        id={this.state.category === this.state.currentCatalog ? "activeCatalog" : ""}
+                        type="button"
+                        id={this.state.category === this.props.selectedCategory ? "activeCatalog" : ""}
                         key={this.props.index}
                         title={this.state.category}
                         onClick={(e) => {
@@ -50,7 +49,7 @@ class ButtonVersion extends Component{
                         >
                         {this.state.category}
                     </button>
-                    <Dropdown.Toggle className="customButton">{this.state.currentVersion}</Dropdown.Toggle>
+                    <Dropdown.Toggle className="customButton" variant="" type="button">{this.props.version === this.props.selectedVersion ? this.props.selectedVersion : this.props.version}</Dropdown.Toggle>
                     <Dropdown.Menu>
                         {this.state.version.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
                             (versions) => (
@@ -58,7 +57,6 @@ class ButtonVersion extends Component{
                                             key={versions}
                                             onClick={() => {
                                                 this.props.chooseV(versions)
-                                                this.state.currentVersion = versions
                                             }}
                                 >{versions}</Dropdown.Item>
                             )

@@ -7,6 +7,7 @@ import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
 import {Link} from "react-router-dom";
 import "./ButtonGroup.css"
+import {useParams} from "react-router-dom";
 
 class ButtonGroup extends Component{
     constructor(props) {
@@ -92,7 +93,8 @@ class ButtonGroup extends Component{
                     category={btn}
                     language={this.props.language}
                     version={this.getVersion(btn)}
-                    selectedCategory={this.state.selectedButton}
+                    selectedVersion={this.props.params.version}
+                    selectedCategory={this.props.params.category}//{this.state.selectedButton}
                     chooseV={(version) => {
                         this.updateButton(version, btn);
                     }}
@@ -132,4 +134,8 @@ class ButtonGroup extends Component{
         )
     }
 
-}export default ButtonGroup;
+}
+export default (props) => (
+    <ButtonGroup {...props} params={useParams()} />
+)
+
