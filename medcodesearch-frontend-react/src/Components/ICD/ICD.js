@@ -67,7 +67,7 @@ class ICD extends Component {
         if (splitStr.length > 1){
             let endString = splitStr[1].split(`}`)
             endString = endString[0].split("-")
-            if(endString.length > 1) {
+            if(endString.length > 1 && endString[1] !== "") {
                 endString = <><a className="link">{endString[0]}</a>-<a className="link">{endString[1]}</a></>
             } else {
                 endString = <a className="link">{endString[0]}</a>
