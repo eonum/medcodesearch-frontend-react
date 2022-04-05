@@ -95,8 +95,8 @@ class CHOP extends Component {
                         <div>
                             <h4>{TranslatorService.translateCategory(category, this.props.params.language)}</h4>
                             <ul>
-                                {this.state.children.map((child) => (
-                                    <li key={child.code}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
+                                {this.state.children.map((child, i) => (
+                                    <li key={child.code + i}><a className="link" onClick={() => {this.goToChild(child.code)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
@@ -107,7 +107,7 @@ class CHOP extends Component {
                             <h5>{TranslatorService.translateCategory(category, this.props.params.language)}</h5>
                             <ul>
                                 {this.state[category].map((element, i) => (
-                                    <li key={i}>{element}</li>
+                                    <li key={element.length + i}>{element}</li>
                                 ))}
                             </ul>
                         </div>

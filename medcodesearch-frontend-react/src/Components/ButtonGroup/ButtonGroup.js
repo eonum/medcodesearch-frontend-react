@@ -13,8 +13,8 @@ class ButtonGroup extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            selectedButton: 'ICD',
-            activeList: 'ICD10-GM-2022',
+            selectedButton: this.props.params.category,
+            activeList: this.props.params.version,
             lastICD: 'ICD10-GM-2022',
             lastDRG: 'V11.0',
             lastCHOP: 'CHOP_2022',
@@ -87,7 +87,7 @@ class ButtonGroup extends Component{
                     language={this.props.language}
                     version={this.getVersion(btn)}
                     selectedVersion={this.props.params.version}
-                    selectedCategory={this.props.params.category}//{this.state.selectedButton}
+                    selectedCategory={this.state.selectedButton}
                     chooseV={(version) => {
                         this.updateButton(version, btn);
                     }}
