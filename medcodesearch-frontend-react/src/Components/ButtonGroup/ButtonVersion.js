@@ -11,20 +11,18 @@ class ButtonVersion extends Component{
         super(props);
         this.state = {
             version:[],
-            category: this.props.category,
-            language: this.props.language,
         }
     }
 
     componentDidMount() {
-        if (this.state.category === "SwissDRG") {
-            fetch(`https://search.eonum.ch/` + this.state.language + `/drgs/versions`)
+        if (this.props.category === "SwissDRG") {
+            fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
                 .then((res) => res.json())
                 .then((json) => {
                     this.setState({version: json})
                 })
         } else {
-            fetch(`https://search.eonum.ch/` + this.state.language + `/` + this.state.category.toLowerCase() + `s/versions`)
+            fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
                 .then((res) => res.json())
                 .then((json) => {
                     this.setState({version: CategorysSortService(json)})
@@ -33,21 +31,20 @@ class ButtonVersion extends Component{
     }
 
     render() {
-
         return (
             <div>
                 <Dropdown as={ButtonGroup} className="catalogButtons">
                     <button 
                         type="button"
-                        id={this.state.category === this.props.selectedCategory ? "activeCatalog" : ""}
-                        key={this.props.index}
-                        title={this.state.category}
+                        id={this.props.category === this.props.selectedCategory ? "activeCatalog" : ""}
+                        key={this.props.category + "" + this.props.index}
+                        title={this.props.category}
                         onClick={(e) => {
-                            this.props.activate(this.state.category);
+                            this.props.activate(this.props.category);
                         }}
                         className="customButton"
                         >
-                        {this.state.category}
+                        {this.props.category}
                     </button>
                     <Dropdown.Toggle className="customButton" variant="" type="button">{this.props.version === this.props.selectedVersion ? this.props.selectedVersion : this.props.version}</Dropdown.Toggle>
                     <Dropdown.Menu>

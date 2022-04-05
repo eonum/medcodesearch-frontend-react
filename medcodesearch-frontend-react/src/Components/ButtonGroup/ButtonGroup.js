@@ -94,7 +94,7 @@ class ButtonGroup extends Component{
                 />
                 </div>
                 ),this)}
-
+                {/*
                 {this.state.buttons[1].map((button, index) => (
                 <div key={"CalendarButton" + index}><Link to={'/' + button}>
                 <ButtonWithCal
@@ -122,7 +122,7 @@ class ButtonGroup extends Component{
                             }}/>
                         </Popup>
                         }
-                </div>
+                </div>*/}
             </div>
         )
     }

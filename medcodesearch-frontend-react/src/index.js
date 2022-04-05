@@ -22,7 +22,7 @@ ReactDOM.render(
                     <Route path="/:language/SwissDRG/:version/:catalog/:code" element={<DRG/>}/>
                     <Route path="/:language/CHOP/:version/:catalog/:code" element={<CHOP/>}/>
                     <Route path="/:language/TARMED/:version/:catalog/:code" element={<TARMED/>}/>
-                    <Route path="/:language/:category/:version/:catalog/:page" element={<ButtonGroup/>}/>
+                    <Route path="/:language/:category/:version/:catalog/:code" element={<ButtonGroup/>}/>
                 </Route>
             </Route>
         </Routes>
