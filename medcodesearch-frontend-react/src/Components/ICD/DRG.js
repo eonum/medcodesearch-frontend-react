@@ -152,7 +152,7 @@ class DRG extends Component {
             let searchCode = child.code.split(' ');
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/mdcs/" + searchCode[1],
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-        } else if(child.code.match(/^\D+ Partition$/)){ // for example C_A
+        } else if(child.code.match(/[P|p]artition/) || child.code.match(/[P|p]artizione/)){ // for example C_A
             child.code = child.url.split("/")[child.url.split("/").length-1];
             navigate({pathname: "/" + this.props.params.language + "/SwissDRG/" + this.props.params.version + "/partitions/" + child.code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})

@@ -85,7 +85,7 @@ class App extends Component{
         }
           return (
               <div className="App">
-                  <Header language={this.updateLanguage}/>
+                  <Header language={this.updateLanguage} activeLangugage={this.state.language}/>
                   <img alt="logo" id="logo" src={logo}/>
                   <Searchbar
                       language={this.state.language}

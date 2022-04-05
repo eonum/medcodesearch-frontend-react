@@ -6,6 +6,7 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            languagePrev: 'de',
             language: 'de'
         };
         this.updateLanguage = this.updateLanguage.bind(this);
@@ -14,10 +15,15 @@ class Header extends Component {
 
     updateLanguage(lang) {
         this.props.language(lang)
-        this.setState({language: lang})
+        this.setState({languagePrev: this.state.language, language: lang})
+    }
+    componentDidMount() {
+        if(this.state.language !== this.props.activeLangugage){
+            this.updateLanguage(this.props.activeLangugage)
+        }
     }
 
-    render() { 
+    render() {
         return (
                 <header className='header'>
                     <div className='language-selection'>
