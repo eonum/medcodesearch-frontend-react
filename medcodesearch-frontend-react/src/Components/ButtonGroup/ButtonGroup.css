@@ -1,23 +1,45 @@
-.customButton {
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 0px;
-    letter-spacing: 0.5px;
-    background-color: white;
-    color: black;
-    border: 1.5px solid rgb(25, 26, 24);
-    cursor: pointer;
+.catalogButtons{
+    padding: 5px;
 }
-/*
-.customButton:not(:first-child){
-    margin-left: 10px;
-}*/
+
+.customButton.customButton{
+    border-radius: 0px;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 1.5px solid rgba(24, 24, 24, 0.195);
+    cursor: pointer;
+    font-size: 14px
+}
+
+.customButton:hover.customButton{
+    background-color: rgb(234, 231, 231);
+    border: 1.5px solid rgba(24, 24, 24, 0.195);
+    color: black;
+}
+
+.customButton:focus.customButton{
+    outline-style: none;
+    box-shadow: none;
+}
+
+.customButton:active.customButton{
+    box-shadow: 2px 1px 4px -1px rgba(89,89,89,0.4);
+}
+
+#activeCatalog{
+    background-color: rgb(234, 231, 231);
+}
+
 .alignButtons {
+    margin-top: 10px;
+    letter-spacing: 0.5px;
     align-items: center;
     display: flex;
     text-align: center;
     align-self: center;
+    margin-left: 7.5%;
 }
+
 .active{
     color: white;
     background-color: rgb(25, 26, 24);

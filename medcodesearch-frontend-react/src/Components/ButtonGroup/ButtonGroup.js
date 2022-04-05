@@ -1,12 +1,13 @@
 import React, {Component} from "react";
 import ButtonVersion from "./ButtonVersion";
-import ButtonWithCat from "./ButtonWithCat";
+import ButtonWithCal from "./ButtonWithCal";
 import Popup from "reactjs-popup";
 import {Button} from "react-bootstrap";
 import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
 import {Link} from "react-router-dom";
 import "./ButtonGroup.css"
+import {useParams} from "react-router-dom";
 
 class ButtonGroup extends Component{
     constructor(props) {
@@ -84,6 +85,9 @@ class ButtonGroup extends Component{
                     }}
                     category={btn}
                     language={this.props.language}
+                    version={this.getVersion(btn)}
+                    selectedVersion={this.props.params.version}
+                    selectedCategory={this.props.params.category}//{this.state.selectedButton}
                     chooseV={(version) => {
                         this.updateButton(version, btn);
                     }}
@@ -93,7 +97,7 @@ class ButtonGroup extends Component{
 
                 {this.state.buttons[1].map((button, index) => (
                 <div key={"CalendarButton" + index}><Link to={'/' + button}>
-                <ButtonWithCat
+                <ButtonWithCal
                     name={button}
                     index={index}
                     select={(btn) => {
@@ -123,4 +127,8 @@ class ButtonGroup extends Component{
         )
     }
 
-}export default ButtonGroup;
+}
+export default (props) => (
+    <ButtonGroup {...props} params={useParams()} />
+)
+

@@ -4,10 +4,10 @@ import {Button} from "react-bootstrap";
 import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
 
-class ButtonWithCat extends Component{
+class ButtonWithCal extends Component{
 
     render(){
-            return(<div>
+            return(<div className="catalogButtons">
                 <Button
                     key={this.props.index}
                     name={this.props.name}
@@ -21,4 +21,4 @@ class ButtonWithCat extends Component{
                 )}
 
 }
-export default ButtonWithCat;
+export default ButtonWithCal;
