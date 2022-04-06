@@ -123,6 +123,12 @@ class CHOP extends Component {
                             </ul>
                         </div>
                     )
+                } else if (this.state.predecessors && this.state.predecessors.length === 0){
+                    categories.push(
+                        <div>
+                            <h5>{TranslatorService.translateCategory("predecessors", this.props.params.language)}</h5>
+                        </div>
+                    )
                 }
             }
         }

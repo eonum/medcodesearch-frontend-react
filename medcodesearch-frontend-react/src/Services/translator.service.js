@@ -17,6 +17,17 @@ class TranslatorService extends Component{
 
     static translateCategory(category, language) {
         switch(category) {
+            case "predecessors":
+                switch (language) {
+                    case 'de':
+                        return "Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat."
+                    case 'en':
+                        return "This is a new code that has no predecessor codes in previous versions."
+                    case 'it':
+                        return "Questo è un nuovo codice che non ha codici predecessori nelle versioni precedenti."
+                    case 'fr':
+                        return "Il s'agit d'un nouveau code qui n'a pas de code antérieur dans les versions précédentes."
+                } break;
             case "exclusions":
                 switch(language) {
                     case 'de':
