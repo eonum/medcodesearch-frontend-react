@@ -4,6 +4,7 @@ import ICDSortService from "../../Services/ICDSortService";
 import Fetch from "../../Services/fetch";
 import RouterService from "../../Services/router.service";
 import TranslatorService from "../../Services/translator.service";
+import CodeSortService from "../../Services/CodeSortService";
 
 class DRG extends Component {
     constructor(props) {
@@ -66,6 +67,9 @@ class DRG extends Component {
                         let newState = {}
                         newState[category] = json[category]
                         this.setState(newState)
+                    }
+                    if(this.props.params.version === this.props.params.code) {
+                        this.setState({children: CodeSortService(json.children)})
                     }
                 })
     }

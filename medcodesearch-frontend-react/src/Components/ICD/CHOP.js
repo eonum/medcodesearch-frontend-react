@@ -4,6 +4,7 @@ import ICDSortService from "../../Services/ICDSortService";
 import Fetch from "../../Services/fetch";
 import RouterService from "../../Services/router.service";
 import TranslatorService from "../../Services/translator.service";
+import CodeSortService from "../../Services/CodeSortService";
 
 class CHOP extends Component {
     constructor(props) {
@@ -21,6 +22,7 @@ class CHOP extends Component {
             text: "",
             children:[]
         }
+
     }
     componentDidMount() {
         this.fetchInformations()
@@ -55,6 +57,9 @@ class CHOP extends Component {
                         let newState = {}
                         newState[category] = json[category]
                         this.setState(newState)
+                    }
+                    if(this.props.params.version === this.props.params.code) {
+                        this.setState({children: CodeSortService(json.children)})
                     }
                 })
     }

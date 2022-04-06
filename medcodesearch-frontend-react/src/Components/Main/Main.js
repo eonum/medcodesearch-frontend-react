@@ -1,7 +1,5 @@
 import React, {Component} from "react";
 import './Main.css';
-import Body from "../Body/Body";
-import BodyChild from "../BodyChild/BodyChild";
 import {Outlet, useParams} from "react-router-dom";
 
 class Main extends Component {
@@ -20,7 +18,6 @@ class Main extends Component {
                             <div className="text-start ms-3">
                                 <h6 className="pb-4">{this.props.params.version}</h6>
                                 <Outlet/>
-                                {/*<BodyChild version={this.version} category={this.buttons} page={this.page} language={this.language}/>*/}
                             </div>
                         </div>
                     </div>
