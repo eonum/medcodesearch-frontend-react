@@ -11,6 +11,7 @@ import DRG from "./Components/ICD/DRG";
 import CHOP from "./Components/ICD/CHOP";
 import TARMED from "./Components/ICD/TARMED";
 import { ButtonGroup } from 'react-bootstrap';
+import Body from "./Components/ICD/Body";
 
 ReactDOM.render(
     <Router>
@@ -18,10 +19,7 @@ ReactDOM.render(
             <Route path="/" element={<App />}>
                 <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
                 <Route path="/" element={<Main/>}>
-                    <Route path="/:language/ICD/:version/:catalog/:code" element={<ICD/>}/>
-                    <Route path="/:language/SwissDRG/:version/:catalog/:code" element={<DRG/>}/>
-                    <Route path="/:language/CHOP/:version/:catalog/:code" element={<CHOP/>}/>
-                    <Route path="/:language/TARMED/:version/:catalog/:code" element={<TARMED/>}/>
+                    <Route path="/:language/:category/:version/:catalog/:code" element={<Body/>}/>
                     <Route path="/:language/:category/:version/:catalog/:code" element={<ButtonGroup/>}/>
                 </Route>
             </Route>
