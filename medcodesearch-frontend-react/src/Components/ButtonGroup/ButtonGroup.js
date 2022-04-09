@@ -61,7 +61,7 @@ class ButtonGroup extends Component{
             case 'TARMED':
                 return this.state.lastTARMED;
             default:
-                return ''
+                return '';
         }
     }
     updateDate = (date) => {
@@ -96,7 +96,7 @@ class ButtonGroup extends Component{
                 ),this)}
                 {
                 this.state.buttons[1].map((button, index) => (
-                <div key={"CalendarButton" + index}><Link to={'/' + button}>
+                <div key={"CalendarButton" + index}>
                 <ButtonWithCal
                     name={button}
                     index={index}
@@ -105,7 +105,7 @@ class ButtonGroup extends Component{
                         this.showHideCal(true);
                     }}
                     active={this.state.selectedButton}
-                /></Link>
+                />
                 </div>
                 ))}
                     <div>

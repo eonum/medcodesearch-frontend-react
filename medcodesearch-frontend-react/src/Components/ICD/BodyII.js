@@ -1,13 +1,9 @@
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import TranslatorService from "../../Services/translator.service";
-import ICD from "./ICD"
-import CHOP from "./CHOP";
-import TARMED from "./TARMED";
-import DRG from "./DRG";
 import MiGeL from "./MiGeL";
 
-class Body extends Component {
+class BodyII extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,7 +12,6 @@ class Body extends Component {
             note: null,
             coding_hint: null,
             synonyms: null,
-            most_relevant_drgs: null,
             successors: null,
             predecessors: null,
             usage: "",
@@ -28,37 +23,31 @@ class Body extends Component {
         this.fetchInformations()
     }
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-        if(prevProps.params.language !== this.props.params.language ||
-            prevProps.params.version !== this.props.params.version ||
-            prevProps.params.code !== this.props.params.code) {
+            if (prevProps.params.language !== this.props.params.language ||
+                prevProps.params.code !== this.props.params.code) {
                 this.setState({
-                exclusions: null,
-                inclusions: null,
-                note: null,
-                coding_hint: null,
-                synonyms: null,
-                most_relevant_drgs: null,
-                successors: null,
-                predecessors: null,
-                text: "",
-                usage: "",
-                children: []
-            })
-            this.fetchInformations()
-        }
+                    exclusions: null,
+                    inclusions: null,
+                    note: null,
+                    coding_hint: null,
+                    synonyms: null,
+                    successors: null,
+                    predecessors: null,
+                    text: "",
+                    usage: "",
+                    children: []
+                })
+                this.fetchInformations()
+
+            }
 
     }
 
     async fetchInformations() {
         let newCategories;
-        if (this.props.params.category === "ICD") {
-            newCategories = await ICD.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
-        } else if (this.props.params.category === "CHOP") {
-            newCategories = await CHOP.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
-        } else if (this.props.params.category === "TARMED") {
-            newCategories = await TARMED.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
-        } else {
-            newCategories = await DRG.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
+        if (this.props.params.category === "MIGEL") {
+            newCategories = await MiGeL.fetchInformations(this.props.params.language, this.props.params.category, 'migels', this.props.params.code, this.state)
+
         }
         this.setState(newCategories)
     }
@@ -84,15 +73,10 @@ class Body extends Component {
 
     goToChild(child) {
         let navigate = this.props.navigation
-        if(this.props.params.category === "ICD") {
-            ICD.goToChild(this.props.params.code, child.code, navigate, this.props.params.version, this.props.params.language)
-        } else if(this.props.params.category === "CHOP") {
-            CHOP.goToChild(this.props.params.code, child.code, navigate, this.props.params.version, this.props.params.language)
-        } else if(this.props.params.category === "TARMED") {
-            TARMED.goToChild(this.props.params.code, child.code, navigate, this.props.params.version, this.props.params.language)
-        } else {
-            DRG.goToChild(child, navigate, this.props.params.version, this.props.params.language)
+        if(this.props.params.category === "MIGEL") {
+            MiGeL.goToChild(this.props.category, child.code, navigate, this.props.params.language)
         }
+
     }
 
     searchExclusion(code) {
@@ -153,14 +137,8 @@ class Body extends Component {
                 }
             }
         }
-        if(this.props.params.category === "ICD") {
-            return <ICD title={this.props.params.code} text={this.state.text} categories={categories}/>
-        } else if(this.props.params.category === "CHOP") {
-            return <CHOP title={this.props.params.code} text={this.state.text} categories={categories}/>
-        } else if(this.props.params.category === "TARMED") {
-            return <TARMED title={this.props.params.code} text={this.state.text} categories={categories}/>
-        } else {
-            return <DRG title={this.props.params.code} text={this.state.text} categories={categories}/>
+        if(this.props.params.category === "MIGEL") {
+            return <MiGeL title={this.props.params.code} text={this.state.text} categories={categories}/>
         }
     }
 }
@@ -168,5 +146,5 @@ class Body extends Component {
 export default function(props) {
     const navigation = useNavigate();
     const location = useLocation();
-    return <Body {...props} navigation={navigation} location={location} params={useParams()}/>
+    return <BodyII {...props} navigation={navigation} location={location} params={useParams()}/>
 }

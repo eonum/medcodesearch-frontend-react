@@ -43,6 +43,8 @@ class Searchbar extends Component {
             return "chops/" + this.props.version;
         } else if(chosenBtn === "TARMED") {
             return "tarmeds/" + this.props.version;
+        } else if (chosenBtn === "MiGeL"){
+            return "migels/" + chosenBtn.toUpperCase();
         }
     }
 

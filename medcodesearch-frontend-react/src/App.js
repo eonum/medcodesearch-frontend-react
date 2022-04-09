@@ -11,6 +11,7 @@ import {Outlet, Route, Routes, useLocation, useNavigate, useParams, useSearchPar
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import TranslatorService from "./Services/translator.service";
 import RouterService from "./Services/router.service";
+import MiGeL from "./Components/ICD/MiGeL";
 
 
 class App extends Component{
@@ -51,20 +52,28 @@ class App extends Component{
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-        let navigate = this.props.navigation
+        let navigate = this.props.navigation;
+        let list = this.state.selectedList;
+        let button = this.state.selectedButton;
+        let i = this.state.selectedList === '' ? '' : '/';
         let chapters;
         if(prevState.language !== this.state.language ||
             prevState.selectedButton !== this.state.selectedButton ||
             prevState.selectedList !== this.state.selectedList ||
             prevState.selectedDate !== this.state.selectedDate) {
-            if (this.state.selectedButton === 'SwissDRG') {
-                chapters = 'mdcs/';
+            if (button === 'MiGeL' || button === 'AL' ){
+                button = button.toUpperCase();
+                chapters = this.state.selectedButton.toLowerCase() + 's'
             }
-            else {
-                chapters = this.state.selectedButton.toLowerCase() + '_chapters/';
+            else if (button === 'SwissDRG') {
+                chapters = 'mdcs';
+            }else {
+                chapters =button.toLowerCase() + '_chapters';
             }
             navigate({
-                pathname: this.state.language + "/" + this.state.selectedButton + "/" + this.state.selectedList + "/" + chapters + this.state.selectedList,
+                // falls liste leer --> de/button/chapters
+                // sonst --> de/button/list/chapters/list
+                pathname: this.state.language + "/" + button +'/' + list + i + chapters + i + list,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
             })
         }
