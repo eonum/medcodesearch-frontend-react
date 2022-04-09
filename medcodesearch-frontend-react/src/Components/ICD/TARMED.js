@@ -28,7 +28,7 @@ class TARMED extends Component {
     render() {
         return (
             <div>
-                <h3>{this.props.title}</h3>
+                <h3>{this.props.title.replace("_", " ")}</h3>
                 <p>{this.props.text}</p>
                 {this.props.categories}
             </div>
