@@ -16,7 +16,7 @@ class ButtonVersion extends Component{
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-        if(prevProps !== this.props) {
+        if(prevProps.language !== this.props.language) {
             this.fetchCurrentVersions()
         }
     }

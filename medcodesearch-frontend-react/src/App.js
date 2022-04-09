@@ -9,7 +9,6 @@ import logo from "./assets/medcodesearch_big.png";
 import {Component} from "react";
 import {Outlet, Route, Routes, useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
-import TranslatorService from "./Services/translator.service";
 import RouterService from "./Services/router.service";
 
 
@@ -73,8 +72,9 @@ class App extends Component{
 
     render() {
         let searchResults;
+        let translateJson = require("./assets/translations/" + this.state.language + ".json")
         if(this.state.searchResults[0] === "empty") {
-            searchResults = <div className="searchResult"><p>{TranslatorService.searchNoMatch(this.state.language)}</p></div>
+            searchResults = <div className="searchResult"><p>{translateJson["LBL_NO_RESULTS"]}</p></div>
         } else {
             searchResults =
                 <div>

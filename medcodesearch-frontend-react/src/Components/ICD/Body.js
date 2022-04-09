@@ -1,6 +1,5 @@
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
-import TranslatorService from "../../Services/translator.service";
 import ICD from "./ICD"
 import ICDSortService from "../../Services/ICDSortService";
 import RouterService from "../../Services/router.service";
@@ -13,12 +12,19 @@ class Body extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            med_interpret: null,
+            tech_interpret: null,
+            tp_al: null,
+            tp_tl: null,
+            groups: null,
             exclusions: null,
             inclusions: null,
             note: null,
             coding_hint: null,
             synonyms: null,
             most_relevant_drgs: null,
+            analogous_code_text: null,
+            descriptions: null,
             successors: null,
             predecessors: null,
             usage: "",
@@ -34,16 +40,23 @@ class Body extends Component {
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {
             this.setState({
+                med_interpret: null,
+                tech_interpret: null,
+                tp_al: null,
+                tp_tl: null,
+                groups: null,
                 exclusions: null,
                 inclusions: null,
                 note: null,
                 coding_hint: null,
                 synonyms: null,
                 most_relevant_drgs: null,
+                analogous_code_text: null,
+                descriptions: null,
                 successors: null,
                 predecessors: null,
-                text: "",
                 usage: "",
+                text: "",
                 children: []
             })
             this.fetchInformations()
@@ -65,22 +78,25 @@ class Body extends Component {
     }
 
     lookingForLink(aString, i) {
-        let splitStr = aString.split(` {`)
         let res
-        if (splitStr.length > 1){
-            let endString = splitStr[1].split(`}`)
-            endString = endString[0].split("-")
-            if(endString.length > 1 && endString[1] !== "") {
-                res = <><a onClick={() => {this.searchExclusion(endString[0])}} key={i} className="link">{endString[0]}</a>-<a onClick={() => {this.searchExclusion(endString[1])}} className="link">{endString[1]}</a></>
-            } else {
-                res = <a onClick={() => {this.searchExclusion(endString[0].replaceAll(".", ""))}} key={i} className="link">{endString[0].replaceAll(".", "")}</a>
-            }
-            return (
-                <li className="Exclusion" key={i}>{splitStr[0]} ({res})</li>
-            )
-        } else {
-            return splitStr
+        let klammer = "{"
+        if(this.props.params.category === "CHOP") {
+            klammer = "("
         }
+        let indexCode = aString.lastIndexOf(klammer)
+        let code = aString.substring(indexCode+1, aString.length-1).split("-")
+        if(code.length > 1 && code[1] !== "") {
+            res = <><a onClick={() => {
+                this.searchExclusion(code[0])
+            }} key={i} className="link">{code[0]}</a>-<a onClick={() => {
+                this.searchExclusion(code[1])
+            }} className="link">{code[1]}</a></>
+        } else {
+            res = <a onClick={() => {
+                this.searchExclusion(code[0])
+            }} key={i} className="link">{code[0]}</a>
+        }
+        return <li key={i}>{aString.substring(0,indexCode)} ({res})</li>
     }
 
     goToChild(child) {
@@ -102,32 +118,59 @@ class Body extends Component {
     }
 
     render() {
+        let translateJson = require("../../assets/translations/" + this.props.params.language + ".json")
         let categories = []
-        let cat;
         for(let category in this.state) {
-            if(this.state[category] !== null && this.state[category] !== undefined && this.state[category].length > 0) {
-                if(category === "note" || category === "coding_hint" || category === "usage") {
+            if(this.state[category] !== null && this.state[category] !== undefined && (this.state[category].length > 0 || typeof this.state[category] == "number")) {
+                if(category === "med_interpret" || category === "tech_interpret") {
                     categories.push(
                         <div>
-                            <h5>{TranslatorService.translateCategory(category, this.props.params.language)}</h5>
+                            <p>{this.state[category]}</p>
+                        </div>
+                    )
+                } else if(category === "tp_al" || category === "tp_tl") {
+                    if(this.state[category] !== 0) {
+                        categories.push(
+                            <div>
+                                <p>{translateJson["LBL_" + category.toUpperCase()]}: {this.state[category]}</p>
+                            </div>
+                        )
+                    }
+                }
+                else if(category === "note" || category === "coding_hint" || category === "usage") {
+                    categories.push(
+                        <div>
+                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <p>{this.state[category]}</p>
                         </div>
                     )
                 } else if(category === "children") {
                     categories.push(
                         <div>
-                            <h4>{TranslatorService.translateCategory(category, this.props.params.language)}</h4>
+                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
-                                {this.state.children.map((child, i) => (
+                                {this.state[category].map((child, i) => (
                                     <li key={i}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
                     )
-                } else if(category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs") {
+                } else if(category === "groups") {
                     categories.push(
                         <div>
-                            <h5>{TranslatorService.translateCategory(category, this.props.params.language)}</h5>
+                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
+                            <ul>
+                                {this.state[category].map((child, i) => (
+                                    <li key={i}>{child.code}: {child.text}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )
+                }
+                else if((category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs" || category === "descriptions")) {
+                    categories.push(
+                        <div>
+                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[category].map((element, i) => (
                                     <li key={i}>{element}</li>
@@ -135,12 +178,12 @@ class Body extends Component {
                             </ul>
                         </div>
                     )
-                } else if(category === "exclusions") {
+                } else if(category === "exclusions" || category === "groups") {
                     categories.push(
                         <div>
-                            <h5>{TranslatorService.translateCategory(category, this.props.params.language)}</h5>
+                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
-                                {this.state.exclusions.map((exclusion, i) => (
+                                {this.state[category].map((exclusion, i) => (
                                     this.lookingForLink(exclusion, i)
                                 ))}
                             </ul>
@@ -149,7 +192,7 @@ class Body extends Component {
                 } else if (this.state.predecessors && this.state.predecessors.length === 0){
                     categories.push(
                         <div>
-                            <h5>{TranslatorService.translateCategory("predecessors", this.props.params.language)}</h5>
+                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                         </div>
                     )
                 }

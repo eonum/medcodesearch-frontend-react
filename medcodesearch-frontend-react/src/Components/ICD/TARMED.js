@@ -3,7 +3,6 @@ import React, {Component} from "react";
 import ICDSortService from "../../Services/ICDSortService";
 import Fetch from "../../Services/fetch";
 import RouterService from "../../Services/router.service";
-import TranslatorService from "../../Services/translator.service";
 import CodeSortService from "../../Services/CodeSortService";
 
 class TARMED extends Component {
@@ -36,7 +35,7 @@ class TARMED extends Component {
     }
 
     static goToChild(oldCode, code, navigate, version, language) {
-        if(version === oldCode) {
+        if(code.match(/^[0-9][0-9]$/)) {
             navigate({pathname: "/" + language + "/TARMED/" + version + "/tarmed_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         } else {

@@ -3,7 +3,6 @@ import React, {Component} from "react";
 import ICDSortService from "../../Services/ICDSortService";
 import Fetch from "../../Services/fetch";
 import RouterService from "../../Services/router.service";
-import TranslatorService from "../../Services/translator.service";
 
 class ICD extends Component {
 
@@ -36,6 +35,7 @@ class ICD extends Component {
                 })
                 .then(() => {return newCategories})
     }
+
 
     render() {
         return (
