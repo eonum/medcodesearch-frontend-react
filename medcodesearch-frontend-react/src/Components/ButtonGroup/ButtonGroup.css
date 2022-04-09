@@ -14,7 +14,6 @@
 
 .customButton:hover.customButton{
     background-color: rgb(234, 231, 231);
-    border: 1.5px solid rgba(24, 24, 24, 0.195);
     color: black;
 }
 
@@ -28,7 +27,9 @@
 }
 
 #activeCatalog{
-    background-color: rgb(234, 231, 231);
+    background-color: #e6e6e6;
+    box-shadow: inset 1px -1px 5px rgb(0 0 0 / 13%);
+    border-color: #adadad;
 }
 
 .alignButtons {
@@ -66,4 +67,8 @@
 }
 .dropdown-item:hover {
     text-decoration-line: none;
+}
+.disabled {
+    cursor: not-allowed !important;
+    pointer-events: all !important;
 }

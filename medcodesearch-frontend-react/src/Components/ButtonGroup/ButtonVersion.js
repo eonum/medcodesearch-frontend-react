@@ -79,11 +79,12 @@ class ButtonVersion extends Component{
                     <Dropdown.Menu className="dropdown">
                         {this.state.allVersions.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
                             (versions) => (
-                                <Dropdown.Item className="dropdown-item"
+                                <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                                                eventKey={versions}
-                                               disabled={!this.state.currentVersions.includes(versions)}
                                                key={versions}
-                                               onClick={() => {this.props.chooseV(versions)
+                                               disabled={!this.state.currentVersions.includes(versions)}
+                                               onClick={() => {
+                                                this.props.chooseV(versions)
                                             }}
                                 >{ConvertCategoryService.convertCategory(this.props.category, versions)}</Dropdown.Item>
                             )
