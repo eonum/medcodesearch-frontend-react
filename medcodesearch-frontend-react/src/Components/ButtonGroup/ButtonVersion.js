@@ -1,31 +1,58 @@
 import React, {Component} from "react";
 import {Dropdown, SplitButton} from "react-bootstrap";
 import CategorysSortService from "../../Services/CategorysSortService";
+import ConvertCategoryService from "../../Services/convertCategory.service";
 import { ButtonGroup, Button } from "react-bootstrap";
 import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
 
 class ButtonVersion extends Component{
 
-
     constructor(props) {
         super(props);
         this.state = {
-            version:[],
+            allVersions:[],
+            currentVersions: []
+        }
+    }
+
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        if(prevProps !== this.props) {
+            this.fetchCurrentVersions()
         }
     }
 
     componentDidMount() {
+        this.fetchInitialVersions()
+    }
+
+    fetchInitialVersions() {
+        if (this.props.category === "SwissDRG") {
+            fetch(`https://search.eonum.ch/de/drgs/versions`)
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({allVersions: json, currentVersions: json})
+                })
+        } else {
+            fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({allVersions: CategorysSortService(json), currentVersions: CategorysSortService(json)})
+                })
+        }
+    }
+
+    fetchCurrentVersions() {
         if (this.props.category === "SwissDRG") {
             fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
                 .then((res) => res.json())
                 .then((json) => {
-                    this.setState({version: json})
+                    this.setState({currentVersions: json})
                 })
         } else {
             fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
                 .then((res) => res.json())
                 .then((json) => {
-                    this.setState({version: CategorysSortService(json)})
+                    this.setState({currentVersions: CategorysSortService(json)})
                 })
         }
     }
@@ -46,16 +73,19 @@ class ButtonVersion extends Component{
                         >
                         {this.props.category}
                     </button>
-                    <Dropdown.Toggle className="customButton" variant="" type="button">{this.props.version === this.props.selectedVersion ? this.props.selectedVersion : this.props.version}</Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        {this.state.version.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
+                    <Dropdown.Toggle className="customButton" variant="" type="button">
+                        {this.props.version === this.props.selectedVersion ? ConvertCategoryService.convertCategory(this.props.category, this.props.selectedVersion) : ConvertCategoryService.convertCategory(this.props.category, this.props.version)}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="dropdown">
+                        {this.state.allVersions.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
                             (versions) => (
-                                <Dropdown.Item eventKey={versions}
-                                            key={versions}
-                                            onClick={() => {
-                                                this.props.chooseV(versions)
+                                <Dropdown.Item className="dropdown-item"
+                                               eventKey={versions}
+                                               disabled={!this.state.currentVersions.includes(versions)}
+                                               key={versions}
+                                               onClick={() => {this.props.chooseV(versions)
                                             }}
-                                >{versions}</Dropdown.Item>
+                                >{ConvertCategoryService.convertCategory(this.props.category, versions)}</Dropdown.Item>
                             )
                         )}
                     </Dropdown.Menu>
