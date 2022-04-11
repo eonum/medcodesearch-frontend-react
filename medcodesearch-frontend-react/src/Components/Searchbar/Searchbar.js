@@ -45,6 +45,10 @@ class Searchbar extends Component {
             return "tarmeds/" + this.props.version;
         } else if (chosenBtn === "MiGeL"){
             return "migels/" + chosenBtn.toUpperCase();
+        } else if (chosenBtn === "AL"){
+            return "laboratory_analyses/" + chosenBtn.toUpperCase();
+        } else if (chosenBtn === "DRUG"){
+            return "drugs/" + chosenBtn.toUpperCase();
         }
     }
 
@@ -87,12 +91,9 @@ class Searchbar extends Component {
     async fetchForSearchTerm(searchTerm){
         let date = '';
         if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
-        || this.props.selectedButton === 'Medis') {
+        || this.props.selectedButton === 'DRUG') {
             if (this.convertDate(this.props.date) !== 'undefined.undefined.undefined') {
                 date = 'date=' + this.convertDate(this.props.date) + '&';
-            }
-            else{
-                date = ''
             }
         }
         this.setState({searchTerm: searchTerm})

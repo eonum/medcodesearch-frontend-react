@@ -60,7 +60,7 @@ class App extends Component{
             prevState.selectedButton !== this.state.selectedButton ||
             prevState.selectedList !== this.state.selectedList ||
             prevState.selectedDate !== this.state.selectedDate) {
-            if (button === 'MiGeL' || button === 'AL' ){
+            if (button === 'MiGeL' || button === 'AL' || button === 'DRUG' ){
                 button = button.toUpperCase();
                 chapters = this.state.selectedButton.toLowerCase() + 's/all'
             }
@@ -106,7 +106,7 @@ class App extends Component{
                       selectedButton={this.updateButton}
                       selectedList={this.updateList}
                       selectedDate={this.updateDate}
-                      buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'Medikamente']]}
+                      buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
                   />
                   <div className="searchResults">
                   <div className="container">

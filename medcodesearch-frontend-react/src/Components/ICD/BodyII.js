@@ -2,6 +2,8 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import TranslatorService from "../../Services/translator.service";
 import MiGeL from "./MiGeL";
+import AL from "./AL";
+import DRUG from "./DRUG";
 
 class BodyII extends Component {
     constructor(props) {
@@ -47,7 +49,10 @@ class BodyII extends Component {
         let newCategories;
         if (this.props.params.category === "MIGEL") {
             newCategories = await MiGeL.fetchInformations(this.props.params.language, this.props.params.category, 'migels', this.props.params.code, this.state)
-
+        }else if (this.props.params.category === "AL") {
+            newCategories = await AL.fetchInformations(this.props.params.language, this.props.params.category, 'laboratory_analyses', this.props.params.code, this.state)
+        }else if (this.props.params.category === "DRUG") {
+            newCategories = await DRUG.fetchInformations(this.props.params.language, this.props.params.category, 'drugs', this.props.params.code, this.state)
         }
         if (newCategories !== null) {
             this.setState(newCategories)
@@ -77,6 +82,12 @@ class BodyII extends Component {
         let navigate = this.props.navigation
         if(this.props.params.category === "MIGEL") {
             MiGeL.goToChild(this.props.category, child.code, navigate, this.props.params.language)
+        }
+        else if(this.props.params.captegory === "AL") {
+            AL.goToChild(this.props.category, child.code, navigate, this.props.params.language)
+        }
+        else if(this.props.params.captegory === "DRUG") {
+            DRUG.goToChild(this.props.category, child.code, navigate, this.props.params.language)
         }
 
     }
@@ -139,13 +150,23 @@ class BodyII extends Component {
                 }
             }
         }
-        if(this.props.params.category === "MIGEL") {
-            let showTitle=false;
-            if (this.props.params.code === 'all'){
-                showTitle = true;
-            }
-            return <MiGeL title={showTitle ? 'MiGeL' : this.props.params.code} text={showTitle ? "Search for a Code" : this.state.text} categories={categories}/>
+        let showTitle = false;
+        if (this.props.params.code === 'all') {
+            showTitle = true;
         }
+        if(this.props.params.category === "MIGEL") {
+            return <MiGeL title={showTitle ? 'MiGeL' : this.props.params.code}
+                          text={showTitle ? "Search for a Code" : this.state.text} categories={categories}/>
+        }
+        else if (this.props.params.category === "AL") {
+            return <AL title={showTitle ? 'AL' : this.props.params.code}
+                       text={showTitle ? "Search for a Code" : this.state.text} categories={categories}/>
+        }
+        else if (this.props.params.category === "DRUG") {
+            return <AL title={showTitle ? 'DRUG' : this.props.params.code}
+                       text={showTitle ? "Search for a Code" : this.state.text} categories={categories}/>
+        }
+
     }
 }
 
