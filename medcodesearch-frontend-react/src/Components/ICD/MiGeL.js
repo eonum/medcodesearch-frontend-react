@@ -11,22 +11,24 @@ class MiGeL extends Component {
     }
 
     static async fetchInformations(language, catalog, version, code, categories) {
-        console.log('inside ' + code)
-
-        let sCode = (code === "undefined") ? '01.01.01.00.1' : '/' + '01.01.01.00.1' + '/all';
-
-        let newCategories = categories
-        return await fetch('https://search.eonum.ch/' + language +  "/" + version + "/" + catalog.toUpperCase()+ sCode)
+        if (code === "all") {
+            return null
+        } else {
+            let newCategories = categories
+            return await fetch('https://search.eonum.ch/' + language + "/" + version + "/" + catalog.toUpperCase() + "/" + code)
                 .then((res) => res.json())
                 .then((json) => {
-                    for(let category in categories) {
+                    for (let category in categories) {
                         newCategories[category] = json[category]
                     }
-                    if(version === code) {
+                    if (version === code) {
                         newCategories["children"] = json["children"]
                     }
                 })
-                .then(() => {return newCategories})
+                .then(() => {
+                    return newCategories
+                })
+        }
     }
 
     render() {

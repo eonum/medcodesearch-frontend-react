@@ -88,7 +88,12 @@ class Searchbar extends Component {
         let date = '';
         if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
         || this.props.selectedButton === 'Medis') {
-            date = 'date=' + this.convertDate(this.props.date) + '&';
+            if (this.convertDate(this.props.date) !== 'undefined.undefined.undefined') {
+                date = 'date=' + this.convertDate(this.props.date) + '&';
+            }
+            else{
+                date = ''
+            }
         }
         this.setState({searchTerm: searchTerm})
         await fetch('https://search.eonum.ch/' + this.props.language + '/' + this.convertCategory(this.props.selectedButton) + '/search?' + date + 'highlight=1&search='+ searchTerm)

@@ -49,7 +49,9 @@ class BodyII extends Component {
             newCategories = await MiGeL.fetchInformations(this.props.params.language, this.props.params.category, 'migels', this.props.params.code, this.state)
 
         }
-        this.setState(newCategories)
+        if (newCategories !== null) {
+            this.setState(newCategories)
+        }
     }
 
     lookingForLink(aString, i) {
@@ -138,7 +140,11 @@ class BodyII extends Component {
             }
         }
         if(this.props.params.category === "MIGEL") {
-            return <MiGeL title={this.props.params.code} text={this.state.text} categories={categories}/>
+            let showTitle=false;
+            if (this.props.params.code === 'all'){
+                showTitle = true;
+            }
+            return <MiGeL title={showTitle ? 'MiGeL' : this.props.params.code} text={showTitle ? "Search for a Code" : this.state.text} categories={categories}/>
         }
     }
 }
