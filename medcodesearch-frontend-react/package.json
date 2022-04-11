@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "react-string-replace": "^1.0.0"
   }
 }

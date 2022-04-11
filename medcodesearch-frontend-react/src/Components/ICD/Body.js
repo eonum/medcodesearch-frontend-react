@@ -27,6 +27,7 @@ class Body extends Component {
             descriptions: null,
             successors: null,
             predecessors: null,
+            supplement_codes: null,
             usage: "",
             text: "",
             children: []
@@ -55,6 +56,7 @@ class Body extends Component {
                 descriptions: null,
                 successors: null,
                 predecessors: null,
+                supplement_codes: null,
                 usage: "",
                 text: "",
                 children: []
@@ -78,25 +80,30 @@ class Body extends Component {
     }
 
     lookingForLink(aString, i) {
-        let res
-        let klammer = "{"
-        if(this.props.params.category === "CHOP") {
-            klammer = "("
-        }
-        let indexCode = aString.lastIndexOf(klammer)
-        let code = aString.substring(indexCode+1, aString.length-1).split("-")
-        if(code.length > 1 && code[1] !== "") {
-            res = <><a onClick={() => {
-                this.searchExclusion(code[0])
-            }} key={i} className="link">{code[0]}</a>-<a onClick={() => {
-                this.searchExclusion(code[1])
-            }} className="link">{code[1]}</a></>
+        let results = []
+        const regex = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
+        let matches = aString.match(regex)
+        if(matches) {
+            let firstIndex = aString.indexOf(matches[0])
+            for (let i = 0; i < matches.length; i++) {
+                matches[i] = matches[i].substring(1, matches[i].length - 1);
+                let arr = matches[i].split("-")
+                if(arr.length > 1 && arr[1] !== "") {
+                    results.push(<span>(<a onClick={() => {
+                        this.searchExclusion(arr[0].replace(/\.$/, ''))
+                    }} className="link">{arr[0].replace(/\.$/, '')}</a>-<a onClick={() => {
+                        this.searchExclusion(arr[1].replace(/\.$/, ''))
+                    }} className="link">{arr[1].replace(/\.$/, '')}</a>) </span>)
+                } else {
+                    results.push(<span>(<a onClick={() => {
+                        this.searchExclusion(arr[0].replace(/\.$/, ''))
+                    }} className="link">{arr[0].replace(/\.$/, '')}</a>) </span>)
+                }
+            }
+            return <li>{aString.substring(0, firstIndex)} {results}</li>
         } else {
-            res = <a onClick={() => {
-                this.searchExclusion(code[0])
-            }} key={i} className="link">{code[0]}</a>
+            return <li>{aString}</li>
         }
-        return <li key={i}>{aString.substring(0,indexCode)} ({res})</li>
     }
 
     goToChild(child) {
@@ -121,7 +128,7 @@ class Body extends Component {
         let translateJson = require("../../assets/translations/" + this.props.params.language + ".json")
         let categories = []
         for(let category in this.state) {
-            if(this.state[category] !== null && this.state[category] !== undefined && (this.state[category].length > 0 || typeof this.state[category] == "number")) {
+            if(this.state[category] !== null && this.state[category] !== undefined) {
                 if(category === "med_interpret" || category === "tech_interpret") {
                     categories.push(
                         <div>
@@ -144,7 +151,7 @@ class Body extends Component {
                             <p>{this.state[category]}</p>
                         </div>
                     )
-                } else if(category === "children") {
+                } else if(this.state[category].length > 0 && category === "children") {
                     categories.push(
                         <div>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
@@ -155,7 +162,7 @@ class Body extends Component {
                             </ul>
                         </div>
                     )
-                } else if(category === "groups") {
+                } else if(this.state[category].length > 0 && category === "groups") {
                     categories.push(
                         <div>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
@@ -167,7 +174,7 @@ class Body extends Component {
                         </div>
                     )
                 }
-                else if((category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs" || category === "descriptions")) {
+                else if(this.state[category].length > 0 && (category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs" || category === "descriptions")) {
                     categories.push(
                         <div>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
@@ -178,7 +185,7 @@ class Body extends Component {
                             </ul>
                         </div>
                     )
-                } else if(category === "exclusions" || category === "groups") {
+                } else if(this.state[category].length > 0 && (category === "exclusions" || category === "supplement_codes")) {
                     categories.push(
                         <div>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
@@ -189,10 +196,10 @@ class Body extends Component {
                             </ul>
                         </div>
                     )
-                } else if (this.state.predecessors && this.state.predecessors.length === 0){
+                } else if(category === "predecessors" && this.state[category].length === 0) {
                     categories.push(
                         <div>
-                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
+                            <h5>{translateJson["LBL_NEW_CODE"]}</h5>
                         </div>
                     )
                 }
