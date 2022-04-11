@@ -7,6 +7,14 @@ import {useState} from "react";
 import CHOP from "./CHOP";
 import TARMED from "./TARMED";
 import DRG from "./DRG";
+import de from "../../assets/translations/de.json"
+import fr from "../../assets/translations/fr.json"
+import en from "../../assets/translations/en.json"
+import it from "../../assets/translations/it.json"
+import deJson from "../../assets/translations/de.json";
+import frJson from "../../assets/translations/fr.json";
+import itJson from "../../assets/translations/it.json";
+import enJson from "../../assets/translations/en.json";
 
 class Body extends Component {
     constructor(props) {
@@ -124,8 +132,21 @@ class Body extends Component {
         navigate({search: "?query=" + code})
     }
 
+    findJson(language) {
+        switch (language) {
+            case "de":
+                return deJson
+            case "fr":
+                return frJson
+            case "it":
+                return itJson
+            case "en":
+                return enJson
+        }
+    }
+
     render() {
-        let translateJson = require("../../assets/translations/" + this.props.params.language + ".json")
+        let translateJson = this.findJson(this.props.params.language)
         let categories = []
         for(let category in this.state) {
             if(this.state[category] !== null && this.state[category] !== undefined) {
