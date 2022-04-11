@@ -1,11 +1,6 @@
-import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
-import ICDSortService from "../../Services/ICDSortService";
-import Fetch from "../../Services/fetch";
 import RouterService from "../../Services/router.service";
-import TranslatorService from "../../Services/translator.service";
 import CodeSortService from "../../Services/CodeSortService";
-import ICD from "./ICD";
 
 class CHOP extends Component {
 

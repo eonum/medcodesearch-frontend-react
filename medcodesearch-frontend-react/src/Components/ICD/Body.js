@@ -5,7 +5,6 @@ import ICD from "./ICD"
 import CHOP from "./CHOP";
 import TARMED from "./TARMED";
 import DRG from "./DRG";
-import MiGeL from "./MiGeL";
 
 class Body extends Component {
     constructor(props) {

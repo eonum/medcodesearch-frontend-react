@@ -2,16 +2,15 @@ import './App.css';
 import './index.css';
 import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';
-import Main from './Components/Main/Main';
 import Searchbar from './Components/Searchbar/Searchbar.js'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import {Component} from "react";
-import {Outlet, Route, Routes, useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
-import TranslatorService from "./Services/translator.service";
 import RouterService from "./Services/router.service";
 import MiGeL from "./Components/ICD/MiGeL";
+import TranslatorService from "./Services/translator.service";
 
 
 class App extends Component{
@@ -63,7 +62,7 @@ class App extends Component{
             prevState.selectedDate !== this.state.selectedDate) {
             if (button === 'MiGeL' || button === 'AL' ){
                 button = button.toUpperCase();
-                chapters = this.state.selectedButton.toLowerCase() + 's'
+                chapters = this.state.selectedButton.toLowerCase() + 's/all'
             }
             else if (button === 'SwissDRG') {
                 chapters = 'mdcs';

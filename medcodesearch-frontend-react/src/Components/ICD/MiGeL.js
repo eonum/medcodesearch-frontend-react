@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import ICDSortService from "../../Services/ICDSortService";
 import RouterService from "../../Services/router.service";
 
 class MiGeL extends Component {
@@ -12,10 +11,12 @@ class MiGeL extends Component {
     }
 
     static async fetchInformations(language, catalog, version, code, categories) {
-        console.log('inside')
+        console.log('inside ' + code)
+
+        let sCode = (code === "undefined") ? '01.01.01.00.1' : '/' + '01.01.01.00.1' + '/all';
+
         let newCategories = categories
-        return await //Fetch(this.props.params.language, this.props.params.version, 'icd_chapters', this.props.params.version)
-            fetch('https://search.eonum.ch/' + language + "/" + catalog.toUpperCase() + "/" + version + "/" + code + "/all")
+        return await fetch('https://search.eonum.ch/' + language +  "/" + version + "/" + catalog.toUpperCase()+ sCode)
                 .then((res) => res.json())
                 .then((json) => {
                     for(let category in categories) {

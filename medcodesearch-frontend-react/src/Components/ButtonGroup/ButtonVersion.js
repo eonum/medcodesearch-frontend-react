@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {Dropdown, SplitButton} from "react-bootstrap";
+import {Dropdown} from "react-bootstrap";
 import CategorysSortService from "../../Services/CategorysSortService";
-import { ButtonGroup, Button } from "react-bootstrap";
+import { ButtonGroup } from "react-bootstrap";
 
 class ButtonVersion extends Component{
 

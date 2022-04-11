@@ -5,7 +5,6 @@ import Popup from "reactjs-popup";
 import {Button} from "react-bootstrap";
 import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
-import {Link} from "react-router-dom";
 import "./ButtonGroup.css"
 import {useParams} from "react-router-dom";
 
@@ -27,11 +26,11 @@ class ButtonGroup extends Component{
         this.updateDate = this.updateDate.bind(this);
     }
 
-    updateButton = (version, btn) => {
-        if (version === ''){
+    updateButton = (version, btn, isCalendarType, date) => {
+        if (version === '') {
             version = this.getVersion(btn);
         }
-        switch (btn){
+        switch (btn) {
             case 'ICD':
                 this.setState({lastICD: version});
                 break;
@@ -45,11 +44,16 @@ class ButtonGroup extends Component{
                 this.setState({lastTARMED: version});
                 break;
             default:
-            }
+        }
+        if (isCalendarType) {
+            version = ''
+        }
         this.setState({selectedButton: btn, activeList: version});
-        this.props.selectedButton(btn);
+        this.updateDate(date);
         this.props.selectedList(version);
+        this.props.selectedButton(btn);
     }
+
     getVersion(btn) {
         switch (btn){
             case 'ICD':
@@ -80,7 +84,7 @@ class ButtonGroup extends Component{
                 <ButtonVersion
                     index={index}
                     activate = {(button) => {
-                        this.updateButton('', button);
+                        this.updateButton('', button, false, '');
                         this.showHideCal(false);
                     }}
                     category={btn}
@@ -101,7 +105,7 @@ class ButtonGroup extends Component{
                     name={button}
                     index={index}
                     select={(btn) => {
-                        this.updateButton('', btn);
+                        this.updateButton('', btn, true, this.state.selectedDate);
                         this.showHideCal(true);
                     }}
                     active={this.state.selectedButton}
