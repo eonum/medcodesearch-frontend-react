@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import RouterService from "../../Services/router.service";
 
-class DRUG extends Component {
+class CalCatalogs extends Component {
 
 
 
@@ -26,4 +26,4 @@ class DRUG extends Component {
         )
     }
 }
-export default DRUG;
+export default CalCatalogs;
