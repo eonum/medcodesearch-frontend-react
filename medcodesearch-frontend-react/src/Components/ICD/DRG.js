@@ -1,9 +1,5 @@
-import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
-import ICDSortService from "../../Services/ICDSortService";
-import Fetch from "../../Services/fetch";
 import RouterService from "../../Services/router.service";
-import CodeSortService from "../../Services/CodeSortService";
 
 class DRG extends Component {
 
@@ -20,8 +16,7 @@ class DRG extends Component {
         else {
             codeForSearch = '/' + code;
         }
-        return await //Fetch(this.props.params.language, this.props.params.version, 'icd_chapters', this.props.params.version)
-            fetch('https://search.eonum.ch/' + language + "/" + cat+ "/" + version + codeForSearch + "?show_detail=1")
+        return await fetch('https://search.eonum.ch/' + language + "/" + cat+ "/" + version + codeForSearch + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
                     for(let category in categories) {

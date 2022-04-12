@@ -1,7 +1,4 @@
-import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
-import ICDSortService from "../../Services/ICDSortService";
-import Fetch from "../../Services/fetch";
 import RouterService from "../../Services/router.service";
 import CodeSortService from "../../Services/CodeSortService";
 
@@ -9,8 +6,7 @@ class TARMED extends Component {
 
     static async fetchInformations(language, catalog, version, code, categories) {
         let newCategories = categories
-        return await //Fetch(this.props.params.language, this.props.params.version, 'icd_chapters', this.props.params.version)
-            fetch('https://search.eonum.ch/' + language + "/" + catalog + "/" + version + "/" + code + "?show_detail=1")
+        return await fetch('https://search.eonum.ch/' + language + "/" + catalog + "/" + version + "/" + code + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
                     for(let category in categories) {
