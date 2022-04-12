@@ -9,8 +9,10 @@ import {Component} from "react";
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
-import TranslatorService from "./Services/translator.service";
-
+import deJson from "./assets/translations/de.json";
+import frJson from "./assets/translations/fr.json";
+import enJson from "./assets/translations/en.json";
+import itJson from "./assets/translations/it.json";
 
 class App extends Component{
 
@@ -77,11 +79,25 @@ class App extends Component{
         }
     }
 
+    findJson(language) {
+        switch (language) {
+            case "de":
+                return deJson
+            case "fr":
+                return frJson
+            case "it":
+                return itJson
+            case "en":
+                return enJson
+        }
+    }
+
 
     render() {
         let searchResults;
+        let translateJson = this.findJson(this.state.language)
         if(this.state.searchResults[0] === "empty") {
-            searchResults = <div className="searchResult"><p>{TranslatorService.searchNoMatch(this.state.language)}</p></div>
+            searchResults = <div className="searchResult"><p>{translateJson["LBL_NO_RESULTS"]}</p></div>
         } else {
             searchResults =
                 <div>

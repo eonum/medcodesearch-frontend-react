@@ -8,12 +8,12 @@
     color: rgb(0, 0, 0);
     border: 1.5px solid rgba(24, 24, 24, 0.195);
     cursor: pointer;
-    font-size: 14px
+    font-size: 14px;
+    padding: 6px 12px;
 }
 
 .customButton:hover.customButton{
     background-color: rgb(234, 231, 231);
-    border: 1.5px solid rgba(24, 24, 24, 0.195);
     color: black;
 }
 
@@ -27,17 +27,17 @@
 }
 
 #activeCatalog{
-    background-color: rgb(234, 231, 231);
+    background-color: #e6e6e6;
+    box-shadow: inset 1px -1px 5px rgb(0 0 0 / 13%);
+    border-color: #adadad;
 }
 
 .alignButtons {
-    margin-top: 10px;
     letter-spacing: 0.5px;
-    align-items: center;
     display: flex;
+    justify-content: center;
     text-align: center;
-    align-self: center;
-    margin-left: 7%;
+    margin-top: 10px;
 }
 
 .active{
@@ -58,4 +58,17 @@
     width: auto;
     margin-right: 8px;
     height: auto;
+}
+.dropdown-item {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    display: block;
+}
+.dropdown-item:hover {
+    text-decoration-line: none;
+}
+.disabled {
+    cursor: not-allowed !important;
+    pointer-events: all !important;
 }

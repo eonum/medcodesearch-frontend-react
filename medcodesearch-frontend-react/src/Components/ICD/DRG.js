@@ -3,7 +3,6 @@ import React, {Component} from "react";
 import ICDSortService from "../../Services/ICDSortService";
 import Fetch from "../../Services/fetch";
 import RouterService from "../../Services/router.service";
-import TranslatorService from "../../Services/translator.service";
 import CodeSortService from "../../Services/CodeSortService";
 
 class DRG extends Component {
