@@ -9,7 +9,6 @@ import {Component} from "react";
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
-import MiGeL from "./Components/ICD/MiGeL";
 import TranslatorService from "./Services/translator.service";
 
 

@@ -1,10 +1,6 @@
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
-import MiGeL from "./MiGeL";
-import AL from "./AL";
 import CalCatalogs from "./CalCatalogs";
-
-// TODO: link whensearching for a code isnt working anymore
 
 class BodyII extends Component {
     constructor(props) {

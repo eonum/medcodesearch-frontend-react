@@ -13,6 +13,7 @@ class SearchResult extends Component {
         let location = this.props.location
         let path = location.pathname.split("/")
         if (path[2] === "MIGEL" || path[2] === "AL" || path[2] === "DRUG"){
+            console.log('hallo')
             navigate({
                 pathname: "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + this.props.result.code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
