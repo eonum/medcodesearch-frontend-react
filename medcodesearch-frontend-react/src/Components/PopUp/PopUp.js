@@ -1,12 +1,17 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {Component} from "react";
 import {Button, Modal} from "react-bootstrap";
+import deJson from "../../assets/translations/de.json";
+import frJson from "../../assets/translations/fr.json";
+import itJson from "../../assets/translations/it.json";
+import enJson from "../../assets/translations/en.json";
 
 class PopUp extends Component{
     constructor() {
         super();
         this.state = {
-            show: false
+            show: false,
+            translateJson: ""
         }
     }
     handleShow(value) {
@@ -17,11 +22,28 @@ class PopUp extends Component{
     }
     componentDidMount() {
         this.handleShow(this.props.show)
+        this.setState({translateJson: this.findJson(this.props.language)})
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.show !== this.props.show) {
             this.handleShow(this.props.show)
+        }
+        if(prevProps.language !== this.props.language) {
+            this.setState({translateJson: this.findJson(this.props.language)})
+        }
+    }
+
+    findJson(language) {
+        switch (language) {
+            case "de":
+                return deJson
+            case "fr":
+                return frJson
+            case "it":
+                return itJson
+            case "en":
+                return enJson
         }
     }
 
@@ -29,18 +51,18 @@ class PopUp extends Component{
     render() {
         return (
             <>
-                <Modal show={this.state.show} onHide={() => this.handleShow(false)}>
+                <Modal className="modal-dialog-centered" show={this.state.show} onHide={() => this.handleShow(false)}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Modal heading</Modal.Title>
+                        <Modal.Title className="pull-left">{this.state.translateJson['LBL_SELECT_LANGUAGE']}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => this.handleShow(false)}>
-                            Close
-                        </Button>
-                        <Button variant="primary" onClick={() => this.handleShow(false)}>
+                    <Modal.Body>{this.state.translateJson['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
+                    <Modal.Footer className="modal-footer">
+                        <button className="btn btn-default" onClick={() => this.handleShow(false)}>
+                            {this.state.translateJson['LBL_BACK']}
+                        </button>
+                        <button type="button" className="btn btn-default" onClick={() => this.handleShow(false)}>
                             Save Changes
-                        </Button>
+                        </button>
                     </Modal.Footer>
                 </Modal>
             </>

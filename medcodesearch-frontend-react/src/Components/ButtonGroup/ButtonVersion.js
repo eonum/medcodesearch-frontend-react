@@ -75,7 +75,7 @@ class ButtonVersion extends Component{
     render() {
         return (
             <div>
-                <PopUp show={this.state.showPopUp} updateValue={this.updatePopUp}/>
+                <PopUp language={this.props.language} show={this.state.showPopUp} updateValue={this.updatePopUp}/>
                 <Dropdown as={ButtonGroup} className="catalogButtons">
                     <button 
                         type="button"
