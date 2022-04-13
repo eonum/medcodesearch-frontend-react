@@ -6,10 +6,15 @@ class CalCatalogs extends Component {
 
 
     static async fetchInformations(language, catalog, version, code) {
-        if (code === "all") {
+        catalog = catalog.toUpperCase();
+        if (code === "all" && code !== 'AL') {
             return null
         } else {
-            return await fetch('https://search.eonum.ch/' + language + "/" + version + "/" + catalog.toUpperCase() + "/" + code)
+            if (version === 'AL'){
+                catalog = catalog + "/" + catalog;
+                code = '?show_detail=1'
+            }
+            return await fetch('https://search.eonum.ch/' + language + "/" + version + "/" + catalog + "/" + code)
                 .then((res) => {
                     return res.json()
                 })
@@ -21,7 +26,6 @@ class CalCatalogs extends Component {
             <div>
                 <h3>{this.props.title}</h3>
                 <p>{this.props.text}</p>
-                {this.props.categories}
             </div>
         )
     }

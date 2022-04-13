@@ -6,14 +6,14 @@ class ICD extends Component {
 
     static goToChild(oldCode, code, navigate, version, language) {
         if(version === oldCode) {
-            navigate({pathname: "/" + language + "/ICD/" + version + "/icd_chapters/" + code,
+            navigate({pathname: "/" + language + "/Bodies/" + version + "/icd_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         } else if (code.match(/^[A-Z][0-9][0-9]\.?[0-9]?[0-9]?$/)){
-            navigate({pathname: "/" + language + "/ICD/" + version + "/icds/" + code,
+            navigate({pathname: "/" + language + "/Bodies/" + version + "/icds/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
         else {
-            navigate({pathname: "/" + language + "/ICD/" + version + "/icd_groups/" + code,
+            navigate({pathname: "/" + language + "/Bodies/" + version + "/icd_groups/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
     }
