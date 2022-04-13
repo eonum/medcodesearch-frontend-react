@@ -1,8 +1,10 @@
-import React, {Component} from "react";
-import {Dropdown} from "react-bootstrap";
+import React, {Component, useState} from "react";
+import {Button, Dropdown, Modal} from "react-bootstrap";
 import CategorysSortService from "../../Services/CategorysSortService";
 import ConvertCategoryService from "../../Services/convertCategory.service";
 import { ButtonGroup} from "react-bootstrap";
+import {isDisabled} from "@testing-library/user-event/dist/utils";
+import PopUp from "../PopUp/PopUp";
 
 class ButtonVersion extends Component{
 
@@ -10,8 +12,13 @@ class ButtonVersion extends Component{
         super(props);
         this.state = {
             allVersions:[],
-            currentVersions: []
+            currentVersions: [],
+            showPopUp: false
         }
+        this.updatePopUp = this.updatePopUp.bind(this);
+    }
+    updatePopUp = (value) => {
+        this.setState({showPopUp: value})
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
@@ -56,9 +63,19 @@ class ButtonVersion extends Component{
         }
     }
 
+    handleVersionClick(version) {
+        const dropdown = document.getElementById(version);
+        if(!dropdown.classList.contains('disabled')) {
+            this.props.chooseV(version)
+        } else {
+            this.setState({showPopUp: true})
+        }
+    }
+
     render() {
         return (
             <div>
+                <PopUp show={this.state.showPopUp} updateValue={this.updatePopUp}/>
                 <Dropdown as={ButtonGroup} className="catalogButtons">
                     <button 
                         type="button"
@@ -81,9 +98,9 @@ class ButtonVersion extends Component{
                                 <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                                                eventKey={versions}
                                                key={versions}
-                                               disabled={!this.state.currentVersions.includes(versions)}
+                                               id={versions}
                                                onClick={() => {
-                                                this.props.chooseV(versions)
+                                                   this.handleVersionClick(versions)
                                             }}
                                 >{ConvertCategoryService.convertCategory(this.props.category, versions)}</Dropdown.Item>
                             )

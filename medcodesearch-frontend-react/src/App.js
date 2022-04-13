@@ -13,6 +13,7 @@ import deJson from "./assets/translations/de.json";
 import frJson from "./assets/translations/fr.json";
 import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
+import PopUp from "./Components/PopUp/PopUp";
 
 class App extends Component{
 
