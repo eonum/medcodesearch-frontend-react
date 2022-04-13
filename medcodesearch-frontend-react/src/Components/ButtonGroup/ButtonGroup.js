@@ -54,6 +54,11 @@ class ButtonGroup extends Component{
         this.props.selectedButton(btn);
     }
 
+    reRender(btn) {
+        if (this.state.selectedButton === btn) {
+            this.props.reSetButton()
+        }
+    }
     getVersion(btn) {
         switch (btn){
             case 'ICD':
@@ -86,6 +91,7 @@ class ButtonGroup extends Component{
                     activate = {(button) => {
                         this.updateButton('', button, false, '');
                         this.showHideCal(false);
+                        this.reRender(button)
                     }}
                     category={btn}
                     language={this.props.language}
@@ -107,6 +113,7 @@ class ButtonGroup extends Component{
                     select={(btn) => {
                         this.updateButton('', btn, true, this.state.selectedDate);
                         this.showHideCal(true);
+                        this.reRender(button)
                     }}
                     active={this.state.selectedButton}
                 />

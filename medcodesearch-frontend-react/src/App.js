@@ -24,10 +24,12 @@ class App extends Component{
             selectedList: 'ICD10-GM-2022',
             selectedDate: new Date(),
             searchResults: [],
+            reSetPath: false
         };
         this.updateButton = this.updateButton.bind(this);
         this.updateDate = this.updateDate.bind(this);
         this.updateList = this.updateList.bind(this);
+        this.reRenderButton = this.reRenderButton.bind(this);
     }
     updateList = (list) => {
         this.setState({selectedList: list})
@@ -60,7 +62,8 @@ class App extends Component{
         if(prevState.language !== this.state.language ||
             prevState.selectedButton !== this.state.selectedButton ||
             prevState.selectedList !== this.state.selectedList ||
-            prevState.selectedDate !== this.state.selectedDate) {
+            prevState.selectedDate !== this.state.selectedDate ||
+            this.state.reSetPath) {
             if (button === 'MiGeL' || button === 'AL' || button === 'DRUG' ){
                 button = button.toUpperCase();
                 chapters = this.state.selectedButton.toLowerCase() + 's/all'
@@ -76,7 +79,11 @@ class App extends Component{
                 pathname: this.state.language + "/" + button +'/' + list + i + chapters + i + list,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
             })
+            this.setState({reSetPath: false})
         }
+    }
+    reRenderButton(){
+        this.setState({reSetPath: true});
     }
 
     findJson(language) {
@@ -117,6 +124,7 @@ class App extends Component{
                       date={this.state.selectedDate}
                       searchResults={this.updateSearchResults}/>
                   <ButtonGroup
+                      reSetButton={this.reRenderButton}
                       language={this.state.language}
                       selectedButton={this.updateButton}
                       selectedList={this.updateList}
