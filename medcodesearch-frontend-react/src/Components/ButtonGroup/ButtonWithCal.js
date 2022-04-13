@@ -1,22 +1,31 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import Popup from "reactjs-popup";
 import {Button} from "react-bootstrap";
 import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
+import BootstrapDatePickerComponent from "./BootstrapDatePickerComponent";
 
 class ButtonWithCal extends Component{
 
     render(){
-            return(<div className="catalogButtons">
-                <Button
-                    key={this.props.index}
-                    name={this.props.name}
-                    className={this.props.name === this.props.active ? "customButton active" : "customButton" }
-                    onClick={() =>{
-                        this.props.select(this.props.name)
-                    }}>
-                    {this.props.name}
-                </Button>
+            return(
+                <div className="catalogButtons alignButtons">
+                    <button
+                        key={this.props.index}
+                        name={this.props.name}
+                        className={this.props.name === this.props.active ? "customButton active" : "customButton" }
+                        onClick={() =>{
+                            this.props.select(this.props.name, '')
+                        }}>
+                        {this.props.name}
+                    </button>
+                        {this.props.showHideCal && (this.props.active === this.props.name) &&
+                            <BootstrapDatePickerComponent
+                                activeDate = {this.props.date}
+                            setDate={(date) => {
+                                this.props.select(this.props.name, date)
+                            }}/>
+                        }
                 </div>
                 )}
 

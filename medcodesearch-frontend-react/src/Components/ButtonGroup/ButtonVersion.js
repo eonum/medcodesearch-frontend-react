@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import {Dropdown} from "react-bootstrap";
 import CategorysSortService from "../../Services/CategorysSortService";
 import ConvertCategoryService from "../../Services/convertCategory.service";
@@ -60,10 +60,10 @@ class ButtonVersion extends React.Component{
         return (
             <div>
                 <Dropdown as={ButtonGroup} className="catalogButtons">
-                    <button 
+                    <button
                         type="button"
                         id={this.props.category === this.props.selectedCategory ? "activeCatalog" : ""}
-                        key={this.props.category + "" + this.props.index}
+                        key={this.props.category + this.props.index}
                         title={this.props.category}
                         onClick={(e) => {
                             this.props.activate(this.props.category);

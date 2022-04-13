@@ -109,10 +109,12 @@ class ButtonGroup extends Component{
                 this.state.buttons[1].map((button, index) => (
                 <div key={"CalendarButton" + index}>
                 <ButtonWithCal
+                    showHideCal={this.state.showHideCal}
+                    date ={this.props.selectedDate}
                     name={button}
                     index={index}
-                    select={(btn) => {
-                        this.updateButton('', btn, true, this.state.selectedDate);
+                    select={(btn, date) => {
+                        this.updateButton('', btn, true, date);
                         this.showHideCal(true);
                         this.reRender(button)
                     }}
@@ -120,21 +122,6 @@ class ButtonGroup extends Component{
                 />
                 </div>
                 ))}
-                    <div>
-                        {this.state.showHideCal &&
-                        <Popup trigger={
-                            <Button id="cal" onClick={(e) => {
-                                e.preventDefault()
-                            }}>
-                                <img alt="calender Logo" id="calendarLogo" src={calendarLogo}/>
-                            </Button>
-                        } position="bottom left">
-                            <Calendar onChange={(selectedDate) => {
-                                this.updateDate(selectedDate);
-                            }}/>
-                        </Popup>
-                        }
-                </div>
             </div>
         )
     }
