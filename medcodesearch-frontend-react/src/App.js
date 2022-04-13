@@ -5,7 +5,6 @@ import Header from './Components/Header/header';
 import Searchbar from './Components/Searchbar/Searchbar.js'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
-import {Component} from "react";
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
@@ -13,6 +12,7 @@ import deJson from "./assets/translations/de.json";
 import frJson from "./assets/translations/fr.json";
 import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
+import {Component} from "react";
 
 class App extends Component{
 

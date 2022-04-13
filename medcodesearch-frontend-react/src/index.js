@@ -10,17 +10,19 @@ import Body from "./Components/ICD/Body";
 import BodyII from "./Components/ICD/BodyII";
 
 ReactDOM.render(
-    <Router>
-        <Routes>
-            <Route path="/" element={<App />}>
-                <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
-                <Route path="/" element={<Main/>}>
-                    <Route path="/:language/:category/:catalog/:code" element={<BodyII/>}/>
-                    <Route path="/:language/:category/:version/:catalog/:code" element={<Body/>}/>
+    <React.StrictMode>
+        <Router>
+            <Routes>
+                <Route path="/" element={<App />}>
+                    <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
+                    <Route path="/" element={<Main/>}>
+                        <Route path="/:language/:category/:catalog/:code" element={<BodyII/>}/>
+                        <Route path="/:language/:category/:version/:catalog/:code" element={<Body/>}/>
+                    </Route>
                 </Route>
-            </Route>
-        </Routes>
-    </Router>,
+            </Routes>
+        </Router>
+    </React.StrictMode>,
   document.getElementById('root')
 );
 

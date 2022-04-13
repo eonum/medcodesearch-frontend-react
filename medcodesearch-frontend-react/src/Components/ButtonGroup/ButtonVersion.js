@@ -4,7 +4,7 @@ import CategorysSortService from "../../Services/CategorysSortService";
 import ConvertCategoryService from "../../Services/convertCategory.service";
 import { ButtonGroup} from "react-bootstrap";
 
-class ButtonVersion extends Component{
+class ButtonVersion extends React.Component{
 
     constructor(props) {
         super(props);
@@ -29,7 +29,7 @@ class ButtonVersion extends Component{
             fetch(`https://search.eonum.ch/de/drgs/versions`)
                 .then((res) => res.json())
                 .then((json) => {
-                    this.setState({allVersions: json, currentVersions: json})
+                    this.setState({allVersions: CategorysSortService(json), currentVersions: CategorysSortService(json)})
                 })
         } else {
             fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)

@@ -82,6 +82,7 @@ class ButtonGroup extends Component{
         this.setState({showHideCal: state})
     }
     render() {
+
         return (
             <div key={"ButtonGroup"} className={"alignButtons"}>
                 {this.state.buttons[0].map((btn, index) => (
