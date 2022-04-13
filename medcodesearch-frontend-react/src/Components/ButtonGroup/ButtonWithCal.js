@@ -7,16 +7,17 @@ import Calendar from "react-calendar";
 class ButtonWithCal extends Component{
 
     render(){
-            return(<div className="catalogButtons">
-                <Button
-                    key={this.props.index}
-                    name={this.props.name}
-                    className={this.props.name === this.props.active ? "customButton active" : "customButton" }
-                    onClick={() =>{
-                        this.props.select(this.props.name)
-                    }}>
-                    {this.props.name}
-                </Button>
+            return(
+                <div className="catalogButtons d-none d-lg-block">
+                    <button
+                        key={this.props.index}
+                        name={this.props.name}
+                        className={this.props.name === this.props.active ? "customButton active" : "customButton" }
+                        onClick={() =>{
+                            this.props.select(this.props.name)
+                        }}>
+                        {this.props.name}
+                    </button>
                 </div>
                 )}
 

@@ -58,7 +58,7 @@ class ButtonVersion extends React.Component{
 
     render() {
         return (
-            <div>
+            <div className="d-none d-lg-block">
                 <Dropdown as={ButtonGroup} className="catalogButtons">
                     <button 
                         type="button"
