@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import ButtonVersion from "./ButtonVersion";
 import ButtonWithCal from "./ButtonWithCal";
 import Popup from "reactjs-popup";
-import {Button} from "react-bootstrap";
+import {Button, Dropdown} from "react-bootstrap";
 import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
 import "./ButtonGroup.css"
@@ -102,6 +102,9 @@ class ButtonGroup extends Component{
                     chooseV={(version) => {
                         this.updateButton(version, btn);
                     }}
+                    chooseC={(category) => {
+                        this.updateButton('', category)
+                    }}
                 />
                 </div>
                 ),this)}
@@ -135,6 +138,7 @@ class ButtonGroup extends Component{
                         </Popup>
                         }
                 </div>
+
             </div>
         )
     }
