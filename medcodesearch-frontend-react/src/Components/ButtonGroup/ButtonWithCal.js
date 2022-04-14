@@ -8,7 +8,7 @@ class ButtonWithCal extends Component{
 
     render(){
             return(<div className="catalogButtons">
-                <Button
+                <button
                     key={this.props.index}
                     name={this.props.name}
                     className={this.props.name === this.props.active ? "customButton active" : "customButton" }
@@ -16,7 +16,7 @@ class ButtonWithCal extends Component{
                         this.props.select(this.props.name)
                     }}>
                     {this.props.name}
-                </Button>
+                </button>
                 </div>
                 )}
 

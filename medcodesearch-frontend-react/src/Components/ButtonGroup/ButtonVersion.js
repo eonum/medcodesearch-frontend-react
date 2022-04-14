@@ -1,10 +1,10 @@
 import React, {Component, useState} from "react";
 import {Button, Dropdown, Modal} from "react-bootstrap";
 import CategorysSortService from "../../Services/CategorysSortService";
-import ConvertCategoryService from "../../Services/convertCategory.service";
 import { ButtonGroup} from "react-bootstrap";
 import {isDisabled} from "@testing-library/user-event/dist/utils";
 import PopUp from "../PopUp/PopUp";
+import {convertCategory, findCategory} from "../../Services/category-version.service";
 
 class ButtonVersion extends Component{
 
@@ -13,7 +13,9 @@ class ButtonVersion extends Component{
         this.state = {
             allVersions:[],
             currentVersions: [],
-            showPopUp: false
+            showPopUp: false,
+            disabledVersion: "",
+            disabledCategory: "",
         }
         this.updatePopUp = this.updatePopUp.bind(this);
     }
@@ -68,6 +70,8 @@ class ButtonVersion extends Component{
         if(!dropdown.classList.contains('disabled')) {
             this.props.chooseV(version)
         } else {
+            this.setState({disabledCategory: findCategory(version)})
+            this.setState({disabledVersion: version})
             this.setState({showPopUp: true})
         }
     }
@@ -75,7 +79,13 @@ class ButtonVersion extends Component{
     render() {
         return (
             <div>
-                <PopUp language={this.props.language} show={this.state.showPopUp} updateValue={this.updatePopUp}/>
+                <PopUp
+                    language={this.props.language}
+                    show={this.state.showPopUp}
+                    updateValue={this.updatePopUp}
+                    version={this.state.disabledVersion}
+                    category={this.state.disabledCategory}
+                />
                 <Dropdown as={ButtonGroup} className="catalogButtons">
                     <button 
                         type="button"
@@ -90,7 +100,7 @@ class ButtonVersion extends Component{
                         {this.props.category}
                     </button>
                     <Dropdown.Toggle className="customButton" variant="" type="button">
-                        {this.props.version === this.props.selectedVersion ? ConvertCategoryService.convertCategory(this.props.category, this.props.selectedVersion) : ConvertCategoryService.convertCategory(this.props.category, this.props.version)}
+                        {this.props.version === this.props.selectedVersion ? convertCategory(this.props.category, this.props.selectedVersion) : convertCategory(this.props.category, this.props.version)}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
                         {this.state.allVersions.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
@@ -102,7 +112,7 @@ class ButtonVersion extends Component{
                                                onClick={() => {
                                                    this.handleVersionClick(versions)
                                             }}
-                                >{ConvertCategoryService.convertCategory(this.props.category, versions)}</Dropdown.Item>
+                                >{convertCategory(this.props.category, versions)}</Dropdown.Item>
                             )
                         )}
                     </Dropdown.Menu>

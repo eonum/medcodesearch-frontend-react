@@ -1,17 +1,20 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {Component} from "react";
+import "./PopUp.css"
 import {Button, Modal} from "react-bootstrap";
 import deJson from "../../assets/translations/de.json";
 import frJson from "../../assets/translations/fr.json";
 import itJson from "../../assets/translations/it.json";
 import enJson from "../../assets/translations/en.json";
+import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
 
 class PopUp extends Component{
     constructor() {
         super();
         this.state = {
             show: false,
-            translateJson: ""
+            translateJson: "",
+            availableLanguages: ['de']
         }
     }
     handleShow(value) {
@@ -26,6 +29,12 @@ class PopUp extends Component{
     }
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        if(prevProps.version !== this.props.version ||
+            prevProps.category !== this.props.category) {
+            this.setState({availableLanguages: ['de']})
+            this.findAvailableLanguages()
+        }
+
         if(prevProps.show !== this.props.show) {
             this.handleShow(this.props.show)
         }
@@ -33,6 +42,21 @@ class PopUp extends Component{
             this.setState({translateJson: this.findJson(this.props.language)})
         }
     }
+    findAvailableLanguages() {
+        let catalog = convertCategoryToCatalog(this.props.category)
+        for(let lang of languages) {
+            if(lang !== this.props.language && lang !== 'de') {
+                fetch(`https://search.eonum.ch/` + lang + "/" + catalog + "/versions")
+                    .then((res) => res.json())
+                    .then((json) => {
+                        if(json.includes(this.props.version)) {
+                            this.setState({availableLanguages: [...this.state.availableLanguages, lang]})
+                        }
+                    })
+            }
+        }
+    }
+
 
     findJson(language) {
         switch (language) {
@@ -51,18 +75,20 @@ class PopUp extends Component{
     render() {
         return (
             <>
-                <Modal className="modal-dialog-centered" show={this.state.show} onHide={() => this.handleShow(false)}>
+                <Modal size="sm" show={this.state.show} onHide={() => this.handleShow(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title className="pull-left">{this.state.translateJson['LBL_SELECT_LANGUAGE']}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>{this.state.translateJson['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
                     <Modal.Footer className="modal-footer">
-                        <button className="btn btn-default" onClick={() => this.handleShow(false)}>
+                        <button className="customButton back" onClick={() => this.handleShow(false)}>
                             {this.state.translateJson['LBL_BACK']}
                         </button>
-                        <button type="button" className="btn btn-default" onClick={() => this.handleShow(false)}>
-                            Save Changes
-                        </button>
+                        {this.state.availableLanguages.map((language, i) => (
+                            <button key={i} className="customButton" onClick={() => this.handleShow(false)}>
+                                {language}
+                            </button>
+                        ))}
                     </Modal.Footer>
                 </Modal>
             </>
