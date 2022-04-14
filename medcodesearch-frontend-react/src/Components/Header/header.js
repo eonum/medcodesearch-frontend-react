@@ -18,8 +18,8 @@ class Header extends Component {
         this.setState({languagePrev: this.state.language, language: lang})
     }
     componentDidMount() {
-        if(this.state.language !== this.props.activeLangugage){
-            this.updateLanguage(this.props.activeLangugage)
+        if(this.state.language !== this.props.activeLanguage){
+            this.updateLanguage(this.props.activeLanguage)
         }
     }
 
@@ -31,7 +31,7 @@ class Header extends Component {
                             <button onClick={this.updateLanguage.bind(null, buttonLabel)}
                                     key={buttonLabel}
                                     className= "language-btn"
-                                    id={buttonLabel === this.state.language ? "activeLan" : ""}
+                                    id={buttonLabel === this.props.activeLanguage ? "activeLan" : ""}
                                     >
                                {buttonLabel}
                             </button>)}

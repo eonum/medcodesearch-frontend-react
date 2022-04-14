@@ -23,25 +23,26 @@ class ButtonVersion extends Component{
         this.setState({showPopUp: value})
     }
 
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.language !== this.props.language) {
-            this.fetchCurrentVersions()
+            await this.fetchCurrentVersions()
         }
     }
 
-    componentDidMount() {
-        this.fetchInitialVersions()
+    async componentDidMount() {
+        await this.fetchInitialVersions()
+        await this.fetchCurrentVersions()
     }
 
-    fetchInitialVersions() {
+    async fetchInitialVersions() {
         if (this.props.category === "SwissDRG") {
-            fetch(`https://search.eonum.ch/de/drgs/versions`)
+            await fetch(`https://search.eonum.ch/de/drgs/versions`)
                 .then((res) => res.json())
                 .then((json) => {
                     this.setState({allVersions: json, currentVersions: json})
                 })
         } else {
-            fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)
+            await fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)
                 .then((res) => res.json())
                 .then((json) => {
                     this.setState({allVersions: CategorysSortService(json), currentVersions: CategorysSortService(json)})
@@ -49,15 +50,16 @@ class ButtonVersion extends Component{
         }
     }
 
-    fetchCurrentVersions() {
+    async fetchCurrentVersions() {
         if (this.props.category === "SwissDRG") {
-            fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
+            await fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
                 .then((res) => res.json())
                 .then((json) => {
+
                     this.setState({currentVersions: json})
                 })
         } else {
-            fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
+            await fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
                 .then((res) => res.json())
                 .then((json) => {
                     this.setState({currentVersions: CategorysSortService(json)})

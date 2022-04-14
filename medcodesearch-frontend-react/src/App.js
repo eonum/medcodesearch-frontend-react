@@ -20,9 +20,9 @@ class App extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            language: 'de',
-            selectedButton: 'ICD',
-            selectedList: 'ICD10-GM-2022',
+            language: RouterService.getLanguageFromURL(),
+            selectedButton: RouterService.getCategoryFromURL(),
+            selectedList: RouterService.getVersionFromURL(),
             selectedDate: new Date(),
             searchResults: [],
         };
@@ -51,7 +51,6 @@ class App extends Component{
     updateLanguage = (lang) => {
         this.setState({language: lang})
     }
-
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         let navigate = this.props.navigation;
         let list = this.state.selectedList;
@@ -109,7 +108,7 @@ class App extends Component{
         }
           return (
               <div className="App">
-                  <Header language={this.updateLanguage} activeLangugage={this.state.language}/>
+                  <Header language={this.updateLanguage} activeLanguage={this.state.language}/>
                   <img alt="logo" id="logo" src={logo}/>
                   <Searchbar
                       language={this.state.language}

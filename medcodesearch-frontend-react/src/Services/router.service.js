@@ -15,5 +15,14 @@ class RouterService extends Component {
         return "";
     }
 
+    static getLanguageFromURL() {
+        return window.location.pathname.split("/")[1]
+    }
+    static getCategoryFromURL() {
+        return window.location.pathname.split("/")[2]
+    }
+    static getVersionFromURL() {
+        return window.location.pathname.split("/")[3]
+    }
 }
 export default RouterService

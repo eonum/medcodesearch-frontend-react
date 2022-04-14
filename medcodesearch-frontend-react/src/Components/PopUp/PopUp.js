@@ -29,11 +29,11 @@ class PopUp extends Component{
         this.setState({translateJson: this.findJson(this.props.language)})
     }
 
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.version !== this.props.version ||
             prevProps.category !== this.props.category) {
             this.setState({availableLanguages: ['de']})
-            this.findAvailableLanguages()
+            await this.findAvailableLanguages()
         }
 
         if(prevProps.show !== this.props.show) {
@@ -43,11 +43,11 @@ class PopUp extends Component{
             this.setState({translateJson: this.findJson(this.props.language)})
         }
     }
-    findAvailableLanguages() {
+    async findAvailableLanguages() {
         let catalog = convertCategoryToCatalog(this.props.category)
         for(let lang of languages) {
             if(lang !== this.props.language && lang !== 'de') {
-                fetch(`https://search.eonum.ch/` + lang + "/" + catalog + "/versions")
+                await fetch(`https://search.eonum.ch/` + lang + "/" + catalog + "/versions")
                     .then((res) => res.json())
                     .then((json) => {
                         if(json.includes(this.props.version)) {
