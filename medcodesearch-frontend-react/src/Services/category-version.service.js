@@ -41,5 +41,17 @@
             case "TARMED":
                 return "tarmeds"
         }
+    }
+    export function convertCategoryToChapters(category) {
+        switch(category) {
+            case "ICD":
+                return "icd_chapters"
+            case "CHOP":
+                return "chop_chapters"
+            case "SwissDRG":
+                return "mdcs"
+            case "TARMED":
+                return "tarmed_chapters"
+        }
 
     }

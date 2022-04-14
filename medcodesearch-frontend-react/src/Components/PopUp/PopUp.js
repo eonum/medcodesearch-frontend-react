@@ -6,7 +6,8 @@ import deJson from "../../assets/translations/de.json";
 import frJson from "../../assets/translations/fr.json";
 import itJson from "../../assets/translations/it.json";
 import enJson from "../../assets/translations/en.json";
-import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
+import {convertCategoryToCatalog, convertCategoryToChapters, languages} from "../../Services/category-version.service";
+import RouterService from "../../Services/router.service";
 
 class PopUp extends Component{
     constructor() {
@@ -71,6 +72,16 @@ class PopUp extends Component{
         }
     }
 
+    handleLanguageClick(language) {
+        let chapters = convertCategoryToChapters(this.props.category)
+        let navigate = this.props.navigation
+        this.handleShow(false)
+        navigate({
+            pathname: language + "/" + this.props.category + '/' + this.props.version + '/'+ chapters + '/' + this.props.version,
+            search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+        })
+    }
+
 
     render() {
         return (
@@ -85,7 +96,7 @@ class PopUp extends Component{
                             {this.state.translateJson['LBL_BACK']}
                         </button>
                         {this.state.availableLanguages.map((language, i) => (
-                            <button key={i} className="customButton" onClick={() => this.handleShow(false)}>
+                            <button key={i} className="customButton" onClick={() => this.handleLanguageClick(language)}>
                                 {language}
                             </button>
                         ))}
