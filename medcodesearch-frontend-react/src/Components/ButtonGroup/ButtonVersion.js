@@ -13,7 +13,7 @@ class ButtonVersion extends React.Component{
         this.state = {
             allVersions:[],
             currentVersions: [],
-            allCategory: ["ICD","TARMED"],
+            allCategory: ["ICD","CHOP", "SwissDRG", "TARMED", "MiGeL", "AL", "DRUG"],
         }
     }
 

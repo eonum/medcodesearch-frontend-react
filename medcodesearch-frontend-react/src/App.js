@@ -13,6 +13,7 @@ import frJson from "./assets/translations/fr.json";
 import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
 import {Component} from "react";
+import {Container} from "react-bootstrap";
 
 class App extends Component{
 
@@ -115,36 +116,38 @@ class App extends Component{
         }
           return (
               <div className="App">
-                  <Header language={this.updateLanguage} activeLangugage={this.state.language}/>
-                  <img alt="logo" id="logo" src={logo}/>
-                  <Searchbar
-                      language={this.state.language}
-                      selectedButton={this.state.selectedButton}
-                      version={this.state.selectedList}
-                      date={this.state.selectedDate}
-                      searchResults={this.updateSearchResults}/>
-                  <ButtonGroup
-                      reSetButton={this.reRenderButton}
-                      language={this.state.language}
-                      selectedButton={this.updateButton}
-                      selectedList={this.updateList}
-                      selectedDate={this.updateDate}
-                      buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
-                  />
-                  <div className="searchResults">
-                  <div className="container">
-                      <div className="row">
-                          <div className={this.state.searchResults.length === 0 ? "":"col"}>
-                              {searchResults}
+                  <Container>
+                      <Header language={this.updateLanguage} activeLangugage={this.state.language}/>
+                      <img alt="logo" id="logo" src={logo}/>
+                      <Searchbar
+                          language={this.state.language}
+                          selectedButton={this.state.selectedButton}
+                          version={this.state.selectedList}
+                          date={this.state.selectedDate}
+                          searchResults={this.updateSearchResults}/>
+                      <ButtonGroup
+                          reSetButton={this.reRenderButton}
+                          language={this.state.language}
+                          selectedButton={this.updateButton}
+                          selectedList={this.updateList}
+                          selectedDate={this.updateDate}
+                          buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
+                      />
+                      <div className="searchResults">
+                          <div className="container">
+                              <div className="row">
+                                  <div className={this.state.searchResults.length === 0 ? "":"col"}>
+                                      {searchResults}
+                                  </div>
+                                  <div className="col">
+                                      <Outlet>
+                                      </Outlet>
+                                  </div>
+                              </div>
                           </div>
-                          <div className="col">
-                              <Outlet>
-                              </Outlet>
-                          </div>
+                          <Footer/>
                       </div>
-                  </div>
-                  <Footer/>
-              </div>
+                  </Container>
               </div>
           )
       }
