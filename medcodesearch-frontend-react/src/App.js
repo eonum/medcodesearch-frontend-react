@@ -13,6 +13,7 @@ import frJson from "./assets/translations/fr.json";
 import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
 import {Component} from "react";
+import convertDate from "./Services/ConvertDate";
 
 class App extends Component{
 
@@ -22,7 +23,7 @@ class App extends Component{
             language: 'de',
             selectedButton: 'ICD',
             selectedList: 'ICD10-GM-2022',
-            selectedDate: new Date(),
+            selectedDate: convertDate(new Date().toISOString()),
             searchResults: [],
             reSetPath: false
         };

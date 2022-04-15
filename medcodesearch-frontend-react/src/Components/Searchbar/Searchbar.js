@@ -4,6 +4,7 @@ import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useLocation, useNavigate} from "react-router-dom";
 import RouterService from "../../Services/router.service";
+import ConvertDate from "../../Services/ConvertDate";
 
 
 class Searchbar extends Component {
@@ -11,7 +12,6 @@ class Searchbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: new Date(),
             searchTerm: ""
         }
     }
@@ -92,8 +92,8 @@ class Searchbar extends Component {
         let date = '';
         if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
         || this.props.selectedButton === 'DRUG') {
-            if (this.convertDate(this.props.date) !== 'undefined.undefined.undefined') {
-                date = 'date=' + this.convertDate(this.props.date) + '&';
+            if(this.props.date !== ConvertDate(new Date().toISOString())){
+                date = 'date=' + this.props.date + '&'
             }
         }
         this.setState({searchTerm: searchTerm})
@@ -113,45 +113,6 @@ class Searchbar extends Component {
                     this.props.searchResults(obj);
                 }
             })
-    }
-
-    convertDate(date) {
-        let split = date.toString().split(' ');
-        let day = split[2];
-        let month = this.monthConverter(split[1]);
-        let year = split[3];
-        let convertedDate = day + '.' + month + '.' + year;
-        return convertedDate;
-    }
-
-    monthConverter(monthString) {
-        switch (monthString){
-            case 'Jan':
-                return '01';
-            case 'Feb':
-                return '02';
-            case 'Mar':
-                return '03';
-            case 'Apr':
-                return '04';
-            case 'May':
-                return '05';
-            case 'Jun':
-                return '06';
-            case 'Jul':
-                return '07';
-            case 'Aug':
-                return '08';
-            case 'Sep':
-                return '09';
-            case 'Oct':
-                return 10;
-            case 'Nov':
-                return 11;
-            case 'Dec':
-                return 12;
-
-        }
     }
 }
 export default function(props) {

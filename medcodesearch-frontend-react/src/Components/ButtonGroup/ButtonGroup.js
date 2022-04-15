@@ -49,8 +49,10 @@ class ButtonGroup extends Component{
         if (isCalendarType) {
             version = ''
         }
+        if (date !== ''){
+            this.updateDate(date);
+        }
         this.setState({selectedButton: btn, activeList: version});
-        this.updateDate(date);
         this.props.selectedList(version);
         this.props.selectedButton(btn);
     }

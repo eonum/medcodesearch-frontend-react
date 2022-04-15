@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form } from 'react-bootstrap';
 import ConvertDate from "../../Services/ConvertDate";
+import convertDate from "../../Services/ConvertDate";
 class BootstrapDatePickerComponent extends React.Component{
     constructor(props) {
         super(props);
@@ -10,9 +11,8 @@ class BootstrapDatePickerComponent extends React.Component{
     updateDate(value) {
         this.props.setDate(ConvertDate(value));
     }
-    render(){
-
-        return(
+render(){
+    return(
             <div id={"text"}>
                 <div className="row">
                     <div className="col">
@@ -20,7 +20,6 @@ class BootstrapDatePickerComponent extends React.Component{
                             <Form.Control
                                 type="date"
                                 name="dob"
-                                placeholder={this.props.activeDate}
                                 onChange={(change => {
                                     this.updateDate(change.target.value)
                             })}/>
