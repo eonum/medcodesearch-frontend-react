@@ -35,7 +35,8 @@ class Body extends Component {
             supplement_codes: null,
             usage: "",
             text: "",
-            children: []
+            children: [],
+            parent: null
         }
     }
     componentDidMount() {
@@ -64,7 +65,8 @@ class Body extends Component {
                 supplement_codes: null,
                 usage: "",
                 text: "",
-                children: []
+                children: [],
+                parent: null
             })
             this.fetchInformations()
         }
