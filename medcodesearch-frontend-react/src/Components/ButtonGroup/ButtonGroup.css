@@ -37,7 +37,7 @@
     display: flex;
     justify-content: center;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .active{
@@ -50,11 +50,13 @@
     margin: auto;
     text-align: center;
 }
+#text {
+    font-size: 1%;
+}
 
 #cal {
-    border: 1.5px solid rgb(25, 26, 24);
-    background-color: white;
-    color: black;
+    display: flex;
+    margin-top: 5px;
     width: auto;
     margin-right: 8px;
     height: auto;

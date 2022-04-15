@@ -7,6 +7,7 @@ import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
 import "./ButtonGroup.css"
 import {useParams} from "react-router-dom";
+import convertDate from "../../Services/ConvertDate";
 
 class ButtonGroup extends Component{
     constructor(props) {
@@ -18,7 +19,7 @@ class ButtonGroup extends Component{
             lastDRG: 'V11.0',
             lastCHOP: 'CHOP_2022',
             lastTARMED: 'TARMED_01.09',
-            selectedDate: new Date(),
+            selectedDate: convertDate(new Date().toISOString()),
             showHideCal: false,
             buttons: this.props.buttons,
         }

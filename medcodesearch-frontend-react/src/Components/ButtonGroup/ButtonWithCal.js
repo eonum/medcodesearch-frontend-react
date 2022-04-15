@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import Popup from "reactjs-popup";
-import {Button} from "react-bootstrap";
+import {Button, FormGroup} from "react-bootstrap";
 import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
 import BootstrapDatePickerComponent from "./BootstrapDatePickerComponent";
@@ -9,7 +9,7 @@ class ButtonWithCal extends Component{
 
     render(){
             return(
-                <div className="catalogButtons alignButtons">
+                <div id={"cal"}>
                     <button
                         key={this.props.index}
                         name={this.props.name}
@@ -22,9 +22,10 @@ class ButtonWithCal extends Component{
                         {this.props.showHideCal && (this.props.active === this.props.name) &&
                             <BootstrapDatePickerComponent
                                 activeDate = {this.props.date}
-                            setDate={(date) => {
-                                this.props.select(this.props.name, date)
-                            }}/>
+                                setDate={(date) => {
+                                    this.props.select(this.props.name, date)
+                                }}
+                            />
                         }
                 </div>
                 )}
