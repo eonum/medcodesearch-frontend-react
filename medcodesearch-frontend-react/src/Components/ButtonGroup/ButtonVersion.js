@@ -72,15 +72,15 @@ class ButtonVersion extends React.Component{
                         >
                         {this.props.category}
                     </button>
-                    <Dropdown.Toggle className="customButton" variant="" type="button">
+                    <Dropdown.Toggle className="customButton" variant="" type="button" key={"DropDown " + this.props.category} >
                         {this.props.version === this.props.selectedVersion ? ConvertCategoryService.convertCategory(this.props.category, this.props.selectedVersion) : ConvertCategoryService.convertCategory(this.props.category, this.props.version)}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
                         {this.state.allVersions.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
-                            (versions) => (
+                            (versions, index) => (
                                 <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                                                eventKey={versions}
-                                               key={versions}
+                                               key={versions + index}
                                                disabled={!this.state.currentVersions.includes(versions)}
                                                onClick={() => {
                                                 this.props.chooseV(versions)
