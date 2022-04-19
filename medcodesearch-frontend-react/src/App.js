@@ -51,6 +51,7 @@ class App extends Component{
     updateLanguage = (lang) => {
         this.setState({language: lang})
     }
+
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         let navigate = this.props.navigation;
         let list = this.state.selectedList;
@@ -94,6 +95,7 @@ class App extends Component{
 
 
     render() {
+        console.log(this.state.language)
         let searchResults;
         let translateJson = this.findJson(this.state.language)
         if(this.state.searchResults[0] === "empty") {
@@ -117,6 +119,7 @@ class App extends Component{
                       date={this.state.selectedDate}
                       searchResults={this.updateSearchResults}/>
                   <ButtonGroup
+                      selectedLanguage={this.updateLanguage}
                       language={this.state.language}
                       selectedButton={this.updateButton}
                       selectedList={this.updateList}

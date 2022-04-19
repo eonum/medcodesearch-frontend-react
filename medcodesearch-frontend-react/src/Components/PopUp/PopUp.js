@@ -14,7 +14,7 @@ class PopUp extends Component{
         super();
         this.state = {
             show: false,
-            translateJson: "",
+            translateJson: deJson,
             availableLanguages: ['de']
         }
     }
@@ -24,9 +24,9 @@ class PopUp extends Component{
         })
         this.props.updateValue(value)
     }
+
     componentDidMount() {
         this.handleShow(this.props.show)
-        this.setState({translateJson: this.findJson(this.props.language)})
     }
 
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
@@ -35,14 +35,11 @@ class PopUp extends Component{
             this.setState({availableLanguages: ['de']})
             await this.findAvailableLanguages()
         }
-
         if(prevProps.show !== this.props.show) {
             this.handleShow(this.props.show)
         }
-        if(prevProps.language !== this.props.language) {
-            this.setState({translateJson: this.findJson(this.props.language)})
-        }
     }
+
     async findAvailableLanguages() {
         let catalog = convertCategoryToCatalog(this.props.category)
         for(let lang of languages) {
@@ -57,7 +54,6 @@ class PopUp extends Component{
             }
         }
     }
-
 
     findJson(language) {
         switch (language) {
@@ -75,6 +71,7 @@ class PopUp extends Component{
     handleLanguageClick(language) {
         let chapters = convertCategoryToChapters(this.props.category)
         let navigate = this.props.navigation
+        this.props.selectedLanguage(language)
         this.handleShow(false)
         navigate({
             pathname: language + "/" + this.props.category + '/' + this.props.version + '/'+ chapters + '/' + this.props.version,
@@ -82,18 +79,17 @@ class PopUp extends Component{
         })
     }
 
-
     render() {
         return (
             <>
                 <Modal size="sm" show={this.state.show} onHide={() => this.handleShow(false)}>
                     <Modal.Header closeButton>
-                        <Modal.Title className="pull-left">{this.state.translateJson['LBL_SELECT_LANGUAGE']}</Modal.Title>
+                        <Modal.Title className="pull-left">{this.findJson(this.props.language)['LBL_SELECT_LANGUAGE']}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>{this.state.translateJson['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
+                    <Modal.Body>{this.findJson(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
                     <Modal.Footer className="modal-footer">
                         <button className="customButton back" onClick={() => this.handleShow(false)}>
-                            {this.state.translateJson['LBL_BACK']}
+                            {this.findJson(this.props.language)['LBL_BACK']}
                         </button>
                         {this.state.availableLanguages.map((language, i) => (
                             <button key={i} className="customButton" onClick={() => this.handleLanguageClick(language)}>

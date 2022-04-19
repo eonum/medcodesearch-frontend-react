@@ -83,6 +83,7 @@ class ButtonVersion extends Component{
             <div>
                 <PopUp
                     language={this.props.language}
+                    selectedLanguage={this.props.selectedLanguage}
                     show={this.state.showPopUp}
                     updateValue={this.updatePopUp}
                     version={this.state.disabledVersion}

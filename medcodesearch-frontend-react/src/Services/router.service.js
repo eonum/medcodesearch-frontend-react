@@ -16,13 +16,22 @@ class RouterService extends Component {
     }
 
     static getLanguageFromURL() {
-        return window.location.pathname.split("/")[1]
+        if(window.location.pathname !== '/') {
+            return window.location.pathname.split("/")[1]
+        }
+        return 'de'
     }
     static getCategoryFromURL() {
-        return window.location.pathname.split("/")[2]
+        if(window.location.pathname !== '/') {
+            return window.location.pathname.split("/")[2]
+        }
+        return 'ICD'
     }
     static getVersionFromURL() {
-        return window.location.pathname.split("/")[3]
+        if(window.location.pathname !== '/') {
+            return window.location.pathname.split("/")[3]
+        }
+        return 'ICD10-GM-2022'
     }
 }
 export default RouterService
