@@ -69,14 +69,10 @@ class PopUp extends Component{
     }
 
     handleLanguageClick(language) {
-        let chapters = convertCategoryToChapters(this.props.category)
-        let navigate = this.props.navigation
-        this.props.selectedLanguage(language)
         this.handleShow(false)
-        navigate({
-            pathname: language + "/" + this.props.category + '/' + this.props.version + '/'+ chapters + '/' + this.props.version,
-            search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
-        })
+        this.props.selectedLanguage(language)
+        this.props.selectedVersion(this.props.version)
+        this.props.selectedCategory(this.props.category)
     }
 
     render() {

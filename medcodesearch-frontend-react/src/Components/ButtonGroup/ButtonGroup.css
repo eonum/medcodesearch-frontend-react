@@ -26,10 +26,10 @@
     box-shadow: 2px 1px 4px -1px rgba(89,89,89,0.4);
 }
 
-#activeCatalog{
-    background-color: #e6e6e6;
-    box-shadow: inset 1px -1px 5px rgb(0 0 0 / 13%);
-    border-color: #adadad;
+.activeCatalog{
+    background-color: #e6e6e6 !important;
+    box-shadow: inset 1px -1px 5px rgb(0 0 0 / 13%) !important;
+    border-color: #adadad !important;
 }
 
 .alignButtons {

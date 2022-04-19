@@ -69,6 +69,7 @@ class ButtonGroup extends Component{
                 return '';
         }
     }
+
     updateDate = (date) => {
         this.setState({selectedDate: date});
         this.props.selectedDate(date);
@@ -92,6 +93,8 @@ class ButtonGroup extends Component{
                     language={this.props.language}
                     version={this.getVersion(btn)}
                     selectedLanguage={this.props.selectedLanguage}
+                    updateVersion={this.props.selectedList}
+                    updateCategory={this.props.selectedButton}
                     selectedVersion={this.props.params.version}
                     selectedCategory={this.state.selectedButton}
                     chooseV={(version) => {

@@ -95,7 +95,6 @@ class App extends Component{
 
 
     render() {
-        console.log(this.state.language)
         let searchResults;
         let translateJson = this.findJson(this.state.language)
         if(this.state.searchResults[0] === "empty") {
