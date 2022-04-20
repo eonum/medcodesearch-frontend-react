@@ -8,12 +8,13 @@ import Calendar from "react-calendar";
 import "./ButtonGroup.css"
 import {useParams} from "react-router-dom";
 import convertDate from "../../Services/ConvertDate";
+import RouterService from "../../Services/router.service";
 
 class ButtonGroup extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            selectedButton: this.props.params.category,
+            selectedButton: RouterService.getCategoryFromURL(),
             activeList: this.props.params.version,
             lastICD: 'ICD10-GM-2022',
             lastDRG: 'V11.0',
@@ -76,6 +77,7 @@ class ButtonGroup extends Component{
                 return '';
         }
     }
+
     updateDate = (date) => {
         this.setState({selectedDate: date});
         this.props.selectedDate(date);
@@ -100,6 +102,9 @@ class ButtonGroup extends Component{
                     category={btn}
                     language={this.props.language}
                     version={this.getVersion(btn)}
+                    selectedLanguage={this.props.selectedLanguage}
+                    updateVersion={this.props.selectedList}
+                    updateCategory={this.props.selectedButton}
                     selectedVersion={this.props.params.version}
                     selectedCategory={this.state.selectedButton}
                     chooseV={(version) => {

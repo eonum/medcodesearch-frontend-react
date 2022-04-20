@@ -14,15 +14,16 @@ import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
 import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
+import PopUp from "./Components/PopUp/PopUp";
 
 class App extends Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            language: 'de',
-            selectedButton: 'ICD',
-            selectedList: 'ICD10-GM-2022',
+            language: RouterService.getLanguageFromURL(),
+            selectedButton: RouterService.getCategoryFromURL(),
+            selectedList: RouterService.getVersionFromURL(),
             selectedDate: convertDate(new Date().toISOString()),
             searchResults: [],
             reSetPath: false
@@ -126,6 +127,7 @@ class App extends Component{
                       searchResults={this.updateSearchResults}/>
                   <ButtonGroup
                       reSetButton={this.reRenderButton}
+                      selectedLanguage={this.updateLanguage}
                       language={this.state.language}
                       selectedButton={this.updateButton}
                       selectedList={this.updateList}
