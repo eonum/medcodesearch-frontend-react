@@ -12,6 +12,7 @@ import deJson from "../../assets/translations/de.json";
 import frJson from "../../assets/translations/fr.json";
 import itJson from "../../assets/translations/it.json";
 import enJson from "../../assets/translations/en.json";
+import ICDSortService from "../../Services/ICDSortService";
 
 class Body extends Component {
     constructor(props) {
@@ -35,13 +36,16 @@ class Body extends Component {
             supplement_codes: null,
             usage: "",
             text: "",
+            parent: null,
+            siblings: [],
             children: []
         }
     }
-    componentDidMount() {
-        this.fetchInformations()
+    async componentDidMount() {
+        await this.fetchInformations()
+        await this.fetchSiblings(this.state.parent)
     }
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.params.language !== this.props.params.language ||
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {
@@ -64,9 +68,12 @@ class Body extends Component {
                 supplement_codes: null,
                 usage: "",
                 text: "",
+                parent: null,
+                siblings: [],
                 children: []
             })
-            this.fetchInformations()
+            await this.fetchInformations()
+            await this.fetchSiblings(this.state.parent)
         }
 
     }
@@ -143,6 +150,24 @@ class Body extends Component {
         }
     }
 
+    async fetchSiblings(parent) {
+        if(this.state.children == null) {
+            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+                .then((res) => res.json())
+                .then((json) => {
+                    for(let i = 0; i < json.children.length; i++) {
+                        if(json.children[i].code !== this.props.params.code) {
+                            if(!this.state.siblings) {
+                                this.setState({siblings: [json.children[i]]})
+                            } else {
+                                this.setState({siblings: [...this.state.siblings, json.children[i]]})
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
     render() {
         let translateJson = this.findJson(this.props.params.language)
         let categories = []
@@ -170,7 +195,7 @@ class Body extends Component {
                             <p>{this.state[category]}</p>
                         </div>
                     )
-                } else if(this.state[category].length > 0 && category === "children") {
+                } else if(this.state[category].length > 0 && (category === "children" || category === "siblings")) {
                     categories.push(
                         <div>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
