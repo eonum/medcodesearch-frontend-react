@@ -107,6 +107,18 @@ class ButtonVersion extends React.Component{
         return classname
     }
 
+    getVersion() {
+        let lastVersion = this.getLastVersion()
+        if(lastVersion === "") {
+            return lastVersion
+        }
+        if(this.props.version === this.props.selectedVersion) {
+            return convertCategory(this.props.category, this.props.selectedVersion)
+        } else {
+            return convertCategory(this.props.category, this.props.version)
+        }
+    }
+
     render() {
         return (
             <div>
@@ -134,7 +146,7 @@ class ButtonVersion extends React.Component{
                         {this.props.category}
                     </button>
                     <Dropdown.Toggle className="customButton" variant="" type="button">
-                        {this.props.version === this.props.selectedVersion ? convertCategory(this.props.category, this.props.selectedVersion): this.getLastVersion()}
+                        {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
                         {this.state.allVersions.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
