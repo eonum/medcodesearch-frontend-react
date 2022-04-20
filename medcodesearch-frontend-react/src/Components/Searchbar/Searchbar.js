@@ -5,6 +5,10 @@ import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useLocation, useNavigate} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 import ConvertDate from "../../Services/ConvertDate";
+import deJson from "../../assets/translations/de.json";
+import frJson from "../../assets/translations/fr.json";
+import itJson from "../../assets/translations/it.json";
+import enJson from "../../assets/translations/en.json";
 
 
 class Searchbar extends Component {
@@ -33,6 +37,19 @@ class Searchbar extends Component {
         }
     }
 
+    findJson(language) {
+        switch (language) {
+            case "de":
+                return deJson
+            case "fr":
+                return frJson
+            case "it":
+                return itJson
+            case "en":
+                return enJson
+        }
+    }
+
 
     convertCategory(chosenBtn) {
         if(chosenBtn === "SwissDRG") {
@@ -54,6 +71,7 @@ class Searchbar extends Component {
 
 
     render() {
+        let translateJson = this.findJson(this.props.language)
         return (
             <div>
                 <Form className="d-flex search-center">
@@ -65,7 +83,7 @@ class Searchbar extends Component {
                         }}
                         onChange={this.updateSearch}
                         type="search"
-                        placeholder="Suchbegriff oder Code eingeben..."
+                        placeholder={translateJson["LBL_SEARCH_PLACEHOLDER"]}
                         value={this.state.searchTerm === "" ? "" : this.state.searchTerm}
                         className="me-2"
                         aria-label="Search"

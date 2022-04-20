@@ -18,6 +18,7 @@ class Body extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            code: "",
             med_interpret: null,
             tech_interpret: null,
             tp_al: null,
@@ -50,6 +51,7 @@ class Body extends Component {
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {
             this.setState({
+                code: "",
                 med_interpret: null,
                 tech_interpret: null,
                 tp_al: null,
@@ -250,13 +252,13 @@ class Body extends Component {
             }
         }
         if(this.props.params.category === "ICD") {
-            return <ICD title={this.props.params.code} text={this.state.text} categories={categories}/>
+            return <ICD title={this.state.code} text={this.state.text} categories={categories}/>
         } else if(this.props.params.category === "CHOP") {
-            return <CHOP title={this.props.params.code} text={this.state.text} categories={categories}/>
+            return <CHOP title={this.state.code} text={this.state.text} categories={categories}/>
         } else if(this.props.params.category === "TARMED") {
-            return <TARMED title={this.props.params.code} text={this.state.text} categories={categories}/>
+            return <TARMED title={this.state.code} text={this.state.text} categories={categories}/>
         } else {
-            return <DRG title={this.props.params.code} text={this.state.text} categories={categories}/>
+            return <DRG title={this.state.code} text={this.state.text} categories={categories}/>
         }
     }
 }
