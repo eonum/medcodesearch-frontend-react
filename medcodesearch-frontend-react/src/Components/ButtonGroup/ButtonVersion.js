@@ -157,7 +157,7 @@ class ButtonVersion extends React.Component{
                                                key={versions}
                                                id={versions}
                                                onClick={() => {
-                                                   this.handleVersionClick(versions)
+                                                   this.props.chooseV(versions)
                                             }}
                                 >{convertCategory(this.props.category, versions)}</Dropdown.Item>
                             )

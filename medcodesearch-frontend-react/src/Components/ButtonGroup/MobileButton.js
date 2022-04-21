@@ -4,6 +4,7 @@ import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
 import {convertCategory} from "../../Services/category-version.service";
 import React, {Component} from "react";
+import CategorysSortService from "../../Services/CategorysSortService";
 
 class MobileButton extends Component{
     constructor(props) {
@@ -12,11 +13,53 @@ class MobileButton extends Component{
             showPopUp: false,
             disabledVersion: "",
             disabledCategory: "",
+            allVersions: [],
             currentVersions: [],
             buttons: [this.props.buttons[0][0],this.props.buttons[0][1],this.props.buttons[0][2],this.props.buttons[0][3],this.props.buttons[1][0],this.props.buttons[1][1],this.props.buttons[1][2]]
         }
         this.updatePopUp = this.updatePopUp.bind(this);
 
+    }
+    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        if(prevProps.language !== this.props.language) {
+            await this.fetchCurrentVersions()
+        }
+    }
+    async componentDidMount() {
+        await this.fetchInitialVersions()
+        await this.fetchCurrentVersions()
+    }
+
+    async fetchInitialVersions() {
+        if (this.props.category === "SwissDRG") {
+            await fetch(`https://search.eonum.ch/de/drgs/versions`)
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({allVersions: CategorysSortService(json), currentVersions: CategorysSortService(json)})
+                })
+        } else {
+            await fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({allVersions: CategorysSortService(json), currentVersions: CategorysSortService(json)})
+                })
+        }
+    }
+
+    async fetchCurrentVersions() {
+        if (this.props.category === "SwissDRG") {
+            await fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({currentVersions: json})
+                })
+        } else {
+            await fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({currentVersions: CategorysSortService(json)})
+                })
+        }
     }
     getLastVersion() {
         let lastVersion = this.state.currentVersions[this.state.currentVersions.length - 1];
