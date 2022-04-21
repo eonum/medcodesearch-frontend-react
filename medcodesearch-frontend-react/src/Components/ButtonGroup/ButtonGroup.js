@@ -1,10 +1,6 @@
 import React, {Component} from "react";
 import ButtonVersion from "./ButtonVersion";
 import ButtonWithCal from "./ButtonWithCal";
-import Popup from "reactjs-popup";
-import {Button} from "react-bootstrap";
-import calendarLogo from "../../assets/calendar.png";
-import Calendar from "react-calendar";
 import "./ButtonGroup.css"
 import {useParams} from "react-router-dom";
 import convertDate from "../../Services/ConvertDate";
@@ -109,6 +105,9 @@ class ButtonGroup extends Component{
                     selectedCategory={this.state.selectedButton}
                     chooseV={(version) => {
                         this.updateButton(version, btn);
+                    }}
+                    chooseC={(category) => {
+                        this.updateButton('', category)
                     }}
                 />
                 </div>
