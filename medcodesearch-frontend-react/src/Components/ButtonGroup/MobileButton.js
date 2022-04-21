@@ -19,7 +19,6 @@ class MobileButton extends Component{
 
     }
     getLastVersion() {
-        //Alessio was here
         let lastVersion = this.state.currentVersions[this.state.currentVersions.length - 1];
         if(lastVersion) {
             return convertCategory(this.props.category, this.state.currentVersions[this.state.currentVersions.length - 1])
