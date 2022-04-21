@@ -13,7 +13,7 @@ import frJson from "./assets/translations/fr.json";
 import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
 import {Component} from "react";
-import {Container} from "react-bootstrap";
+
 
 class App extends Component{
 
@@ -115,40 +115,55 @@ class App extends Component{
                 </div>
         }
           return (
-              <div className="App">
-                  <Container>
-                      <Header language={this.updateLanguage} activeLangugage={this.state.language}/>
-                      <img alt="logo" id="logo" src={logo}/>
-                      <Searchbar
-                          language={this.state.language}
-                          selectedButton={this.state.selectedButton}
-                          version={this.state.selectedList}
-                          date={this.state.selectedDate}
-                          searchResults={this.updateSearchResults}/>
-                      <ButtonGroup
-                          reSetButton={this.reRenderButton}
-                          language={this.state.language}
-                          selectedButton={this.updateButton}
-                          selectedList={this.updateList}
-                          selectedDate={this.updateDate}
-                          buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
-                      />
-                      <div className="searchResults">
-                          <div className="container">
-                              <div className="row">
-                                  <div className={this.state.searchResults.length === 0 ? "":"col"}>
-                                      {searchResults}
-                                  </div>
-                                  <div className="col">
-                                      <Outlet>
-                                      </Outlet>
-                                  </div>
-                              </div>
+              <div>
+                  <div className="container">
+                      <div className="row">
+                          <div className="col-sm-12">
+                              <Header language={this.updateLanguage} activeLangugage={this.state.language}/>
                           </div>
-                          <Footer/>
                       </div>
-                  </Container>
+                      <div className="row">
+                          <div className="col-sm-12">
+                              <img alt="logo" id="logo" src={logo}/>
+                          </div>
+                      </div>
+                  </div>
+                  <div className="container">
+                      <div className="row">
+                          <Searchbar
+                              language={this.state.language}
+                              selectedButton={this.state.selectedButton}
+                              version={this.state.selectedList}
+                              date={this.state.selectedDate}
+                              searchResults={this.updateSearchResults}/>
+                      </div>
+                      <div className="row">
+                          <ButtonGroup
+                              reSetButton={this.reRenderButton}
+                              language={this.state.language}
+                              selectedButton={this.updateButton}
+                              selectedList={this.updateList}
+                              selectedDate={this.updateDate}
+                              buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
+                          />
+                      </div>
+                      <div className="row">
+                          <div className={this.state.searchResults.length === 0 ? "":"col"}>
+                              {searchResults}
+                          </div>
+                          <div className="col">
+                              <Outlet />
+                          </div>
+                      </div>
+                      <div className="navbar row">
+
+                      </div>
+                      <Footer/>
+                  </div>
+
               </div>
+              
+
           )
       }
 
