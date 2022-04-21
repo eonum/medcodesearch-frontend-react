@@ -136,6 +136,7 @@ class ButtonGroup extends Component{
                 </div>
                 <div className="d-lg-none">
                     <MobileButton
+                        category={this.state.selectedButton}
                         language={this.props.language}
                         selectedLanguage={this.props.selectedLanguage}
                         updateVersion={this.props.selectedList}

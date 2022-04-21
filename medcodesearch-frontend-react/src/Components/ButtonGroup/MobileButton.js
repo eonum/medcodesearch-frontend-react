@@ -13,7 +13,7 @@ class MobileButton extends Component{
             disabledVersion: "",
             disabledCategory: "",
             currentVersions: [],
-            array: [this.props.buttons[0][0],this.props.buttons[0][1],this.props.buttons[0][2],this.props.buttons[0][3],this.props.buttons[1][0],this.props.buttons[1][1],this.props.buttons[1][2]]
+            buttons: [this.props.buttons[0][0],this.props.buttons[0][1],this.props.buttons[0][2],this.props.buttons[0][3],this.props.buttons[1][0],this.props.buttons[1][1],this.props.buttons[1][2]]
         }
         this.updatePopUp = this.updatePopUp.bind(this);
 
@@ -59,8 +59,7 @@ class MobileButton extends Component{
                         {this.props.category}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
-                        {this.state.buttons.map(
-                            (category) => (
+                        {this.state.buttons.map((category) => (
                                 <Dropdown.Item className="dropdown-item" eventKey={category} key={category} onClick={() => {
                                     this.props.chooseC(category, false, "")
                                 }}>
