@@ -9,7 +9,7 @@ class ButtonWithCal extends Component{
 
     render(){
             return(
-                <div className="catalogButtons d-none d-lg-block" id={"cal"}>
+                <div id={"cal"} className="catalogButtons d-none d-lg-block" >
                     <button
                         key={this.props.index}
                         name={this.props.name}

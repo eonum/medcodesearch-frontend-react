@@ -164,64 +164,6 @@ class ButtonVersion extends React.Component{
                         )}
                     </Dropdown.Menu>
                 </Dropdown>
-
-
-                {this.props.category === this.props.selectedCategory &&
-                <div className="d-lg-none">
-                    <div className="btn-group">
-                        <PopUp
-                            language={this.props.language}
-                            selectedLanguage={this.props.selectedLanguage}
-                            selectedVersion={this.props.updateVersion}
-                            selectedCategory={this.props.updateCategory}
-                            show={this.state.showPopUp}
-                            updateValue={this.updatePopUp}
-                            version={this.state.disabledVersion}
-                            category={this.state.disabledCategory}
-                        />
-                        <Dropdown className="catalogButtons">
-
-                            <DropdownToggle className="customButton" type="button" >
-                                {this.props.category}
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown" >
-                                {this.state.allCategory.map(
-                                    (category) => (
-                                        <Dropdown.Item className="dropdown-item" eventKey={category} key={category} onClick={() => {
-                                            this.props.chooseC(category)
-                                        }}>
-                                            {category}
-                                        </Dropdown.Item>
-                                    )
-                                )}
-                            </DropdownMenu>
-                        </Dropdown>
-
-
-                        <Dropdown className="catalogButtons">
-                            <Dropdown.Toggle className="customButton" variant="" type="button" >
-                                {this.props.version === this.props.selectedVersion ? ConvertCategoryService.convertCategory(this.props.category, this.props.selectedVersion) : ConvertCategoryService.convertCategory(this.props.category, this.props.version)}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="dropdown">
-                                {this.state.allVersions.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
-                                    (versions) => (
-                                        <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
-                                                       eventKey={versions}
-                                                       key={versions}
-                                                       id={versions}
-                                                       onClick={() => {
-                                                           this.handleVersionClick(versions)
-                                                       }}
-                                        >{convertCategory(this.props.category, versions)}</Dropdown.Item>
-                                    )
-                                )}
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
-
-                </div>
-                    }
-
             </div>
         )
     }

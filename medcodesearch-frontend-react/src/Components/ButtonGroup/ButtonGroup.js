@@ -5,6 +5,7 @@ import "./ButtonGroup.css"
 import {useParams} from "react-router-dom";
 import convertDate from "../../Services/ConvertDate";
 import RouterService from "../../Services/router.service";
+import MobileButton from "./MobileButton";
 
 class ButtonGroup extends Component{
     constructor(props) {
@@ -85,50 +86,66 @@ class ButtonGroup extends Component{
     render() {
 
         return (
-            <div key={"ButtonGroup"} className={"alignButtons"}>
-                {this.state.buttons[0].map((btn, index) => (
-                <div key={"VersionButton" + index}>
-                <ButtonVersion
-                    index={index}
-                    activate = {(button) => {
-                        this.updateButton('', button, false, '');
-                        this.showHideCal(false);
-                        this.reRender(button)
-                    }}
-                    category={btn}
-                    language={this.props.language}
-                    version={this.getVersion(btn)}
-                    selectedLanguage={this.props.selectedLanguage}
-                    updateVersion={this.props.selectedList}
-                    updateCategory={this.props.selectedButton}
-                    selectedVersion={this.props.params.version}
-                    selectedCategory={this.state.selectedButton}
-                    chooseV={(version) => {
-                        this.updateButton(version, btn);
-                    }}
-                    chooseC={(category) => {
-                        this.updateButton('', category)
-                    }}
-                />
+            <div>
+                <div className="d-none d-lg-block">
+                    <div key={"ButtonGroup"} className={"alignButtons"}>
+                        {this.state.buttons[0].map((btn, index) => (
+                            <div key={"VersionButton" + index}>
+                                <ButtonVersion
+                                    index={index}
+                                    activate = {(button) => {
+                                        this.updateButton('', button, false, '');
+                                        this.showHideCal(false);
+                                        this.reRender(button)
+                                    }}
+                                    category={btn}
+                                    language={this.props.language}
+                                    version={this.getVersion(btn)}
+                                    selectedLanguage={this.props.selectedLanguage}
+                                    updateVersion={this.props.selectedList}
+                                    updateCategory={this.props.selectedButton}
+                                    selectedVersion={this.props.params.version}
+                                    selectedCategory={this.state.selectedButton}
+                                    chooseV={(version) => {
+                                        this.updateButton(version, btn);
+                                    }}
+                                    chooseC={(category) => {
+                                        this.updateButton('', category)
+                                    }}
+                                />
+                            </div>
+                        ),this)}
+                        {
+                            this.state.buttons[1].map((button, index) => (
+                                <div key={"CalendarButton" + index}>
+                                    <ButtonWithCal
+                                        showHideCal={this.state.showHideCal}
+                                        date ={this.props.selectedDate}
+                                        name={button}
+                                        index={index}
+                                        select={(btn, date) => {
+                                            this.updateButton('', btn, true, date);
+                                            this.showHideCal(true);
+                                            this.reRender(button)
+                                        }}
+                                        active={this.state.selectedButton}
+                                    />
+                                </div>
+                            ))}
+                    </div>
                 </div>
-                ),this)}
-                {
-                this.state.buttons[1].map((button, index) => (
-                <div key={"CalendarButton" + index}>
-                <ButtonWithCal
-                    showHideCal={this.state.showHideCal}
-                    date ={this.props.selectedDate}
-                    name={button}
-                    index={index}
-                    select={(btn, date) => {
-                        this.updateButton('', btn, true, date);
-                        this.showHideCal(true);
-                        this.reRender(button)
-                    }}
-                    active={this.state.selectedButton}
-                />
+                <div className="d-lg-none">
+                    <MobileButton
+                        language={this.props.language}
+                        selectedLanguage={this.props.selectedLanguage}
+                        updateVersion={this.props.selectedList}
+                        updateCategory={this.props.selectedButton}
+                        buttons={this.props.buttons}
+                        chooseC={(category, isCalendar, date) => {
+                            this.updateButton('', category, isCalendar, date)
+                        }}
+                    />
                 </div>
-                ))}
             </div>
         )
     }
