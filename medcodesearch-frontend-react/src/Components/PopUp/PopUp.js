@@ -83,15 +83,17 @@ class PopUp extends Component{
                         <Modal.Title className="pull-left">{this.findJson(this.props.language)['LBL_SELECT_LANGUAGE']}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>{this.findJson(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
-                    <Modal.Footer className="modal-footer">
-                        <button className="customButton back" onClick={() => this.handleShow(false)}>
-                            {this.findJson(this.props.language)['LBL_BACK']}
-                        </button>
+                    <Modal.Footer>
+                            <button className="customButton" onClick={() => this.handleShow(false)}>
+                                {this.findJson(this.props.language)['LBL_BACK']}
+                            </button>
+                        <div className="float-end">
                         {this.state.availableLanguages.map((language, i) => (
-                            <button key={i} className="customButton" onClick={() => this.handleLanguageClick(language)}>
+                            <button key={i} className="customButton langBtn" onClick={() => this.handleLanguageClick(language)}>
                                 {language}
                             </button>
                         ))}
+                        </div>
                     </Modal.Footer>
                 </Modal>
             </>

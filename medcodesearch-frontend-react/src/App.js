@@ -116,7 +116,8 @@ class App extends Component{
                 </div>
         }
           return (
-              <div>
+
+              <div className="App">
                   <div className="container">
                       <div className="row">
                           <div className="col-sm-12">
@@ -141,6 +142,7 @@ class App extends Component{
                       </div>
                       <div className="row">
                           <ButtonGroup
+                              category={this.state.selectedButton}
                               reSetButton={this.reRenderButton}
                               selectedLanguage={this.updateLanguage}
                               language={this.state.language}

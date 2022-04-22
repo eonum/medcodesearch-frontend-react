@@ -74,6 +74,31 @@ class ButtonGroup extends Component{
                 return '';
         }
     }
+    componentDidMount() {
+        if(this.props.category === "CHOP") {
+            this.setState({lastCHOP: this.props.version})
+        } else if(this.props.category === "ICD") {
+            this.setState({lastICD: this.props.version})
+        } else if(this.props.category === "SwissDRG") {
+            this.setState({lastDRG: this.props.version})
+        } else if(this.props.category === "TARMED") {
+            this.setState({lastTARMED: this.props.version})
+        }
+    }
+
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        if(prevProps.version !== this.props.version) {
+            if(this.props.category === "CHOP") {
+                this.setState({lastCHOP: this.props.version})
+            } else if(this.props.category === "ICD") {
+                this.setState({lastICD: this.props.version})
+            } else if(this.props.category === "SwissDRG") {
+                this.setState({lastDRG: this.props.version})
+            } else if(this.props.category === "TARMED") {
+                this.setState({lastTARMED: this.props.version})
+            }
+        }
+    }
 
     updateDate = (date) => {
         this.setState({selectedDate: date});
@@ -84,7 +109,6 @@ class ButtonGroup extends Component{
         this.setState({showHideCal: state})
     }
     render() {
-
         return (
             <div>
                 <div className="d-none d-lg-block">
