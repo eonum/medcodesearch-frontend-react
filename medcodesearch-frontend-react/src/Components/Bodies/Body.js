@@ -230,10 +230,11 @@ class Body extends Component {
         if(this.props.params.category === "ICD") {
             return <ICD title={this.props.params.code} text={this.state.text} categories={categories}/>
         } else if(this.props.params.category === "CHOP") {
-            console.log(this.state.parent);
             if(this.state.parent !== null) {
                 parents.push(this.state.parent);
+                parents = fetchGrandparents(this.state.parent, parents);
             }
+            console.log("Parents: ", parents);
             return <CHOP title={this.props.params.code} text={this.state.text} categories={categories} parents={parents}/>
         } else if(this.props.params.category === "TARMED") {
             return <TARMED title={this.props.params.code} text={this.state.text} categories={categories}/>
@@ -241,6 +242,18 @@ class Body extends Component {
             return <DRG title={this.props.params.code} text={this.state.text} categories={categories}/>
         }
     }
+}
+
+async function fetchGrandparents(parent, parents) {
+    await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+        .then((res) => res.json())
+        .then((json) => {
+            if(json["parent"] !== null){
+                parents.push(json["parent"]);
+                fetchGrandparents(json["parent"], parents);
+            }
+        })
+    return parents;
 }
 
 export default function(props) {
