@@ -143,6 +143,7 @@ class App extends Component{
                       <div className="row">
                           <ButtonGroup
                               category={this.state.selectedButton}
+                              version={this.state.selectedList}
                               reSetButton={this.reRenderButton}
                               selectedLanguage={this.updateLanguage}
                               language={this.state.language}
