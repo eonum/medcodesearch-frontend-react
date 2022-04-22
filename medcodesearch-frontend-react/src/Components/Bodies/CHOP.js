@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import RouterService from "../../Services/router.service";
 import CodeSortService from "../../Services/CodeSortService";
-import {Breadcrumb} from "react-bootstrap";
+import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 
 class CHOP extends Component {
 
-    static async fetchInformations(language, catalog, version, code, categories, parent) {
+    static async fetchInformations(language, catalog, version, code, categories) {
         let newCategories = categories
         return await fetch('https://search.eonum.ch/' + language + "/" + catalog + "/" + version + "/" + code + "?show_detail=1")
                 .then((res) => res.json())
@@ -16,14 +16,16 @@ class CHOP extends Component {
                     if(version === code) {
                         newCategories["children"] = CodeSortService(json["children"])
                     }
-                    console.log(newCategories);
+                    if(newCategories.parent !== null) {
+                      console.log(newCategories.parent.code);
+                    }
                 })
                 .then(() => {return newCategories})
 
     }
 
     static goToChild(oldCode, code, navigate, version, language) {
-        if(version === oldCode) { //
+        if(version === oldCode) {
             navigate({pathname: "/" + language + "/CHOP/" + version + "/chop_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         } else {
@@ -33,10 +35,14 @@ class CHOP extends Component {
     }
 
     render() {
+        if(this.props.parents.length !== 0){
+            console.log(this.props.parents);
+        }
         return (
             <div>
                 <Breadcrumb>
-                    <Breadcrumb.Item>{this.props.title}</Breadcrumb.Item>
+                    <Breadcrumb.Item>{this.props.title.replace("_", " ")}</Breadcrumb.Item>
+                    <Breadcrumb.Item></Breadcrumb.Item>
                 </Breadcrumb>
                 <h3>{this.props.title.replace("_", " ")}</h3>
                 <p>{this.props.text}</p>

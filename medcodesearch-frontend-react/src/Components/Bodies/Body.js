@@ -78,7 +78,7 @@ class Body extends Component {
         if (this.props.params.category === "ICD") {
             newCategories = await ICD.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
         } else if (this.props.params.category === "CHOP") {
-            newCategories = await CHOP.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state, this.props.params.parent)
+            newCategories = await CHOP.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
         } else if (this.props.params.category === "TARMED") {
             newCategories = await TARMED.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
         } else {
@@ -148,6 +148,7 @@ class Body extends Component {
     render() {
         let translateJson = this.findJson(this.props.params.language)
         let categories = []
+        let parents = []
         for(let category in this.state) {
             if(this.state[category] !== null && this.state[category] !== undefined) {
                 if(category === "med_interpret" || category === "tech_interpret") {
@@ -229,7 +230,11 @@ class Body extends Component {
         if(this.props.params.category === "ICD") {
             return <ICD title={this.props.params.code} text={this.state.text} categories={categories}/>
         } else if(this.props.params.category === "CHOP") {
-            return <CHOP title={this.props.params.code} text={this.state.text} categories={categories}/>
+            console.log(this.state.parent);
+            if(this.state.parent !== null) {
+                parents.push(this.state.parent);
+            }
+            return <CHOP title={this.props.params.code} text={this.state.text} categories={categories} parents={parents}/>
         } else if(this.props.params.category === "TARMED") {
             return <TARMED title={this.props.params.code} text={this.state.text} categories={categories}/>
         } else {
