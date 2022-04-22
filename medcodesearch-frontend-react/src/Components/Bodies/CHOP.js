@@ -35,14 +35,15 @@ class CHOP extends Component {
     }
 
     render() {
-        if(this.props.parents.length !== 0){
-            console.log(this.props.parents);
+        let breadcrumb =  null;
+        if(this.props.parents[0] !== undefined){
+            breadcrumb = <Breadcrumb.Item>{this.props.parents[0].code}</Breadcrumb.Item>;
         }
         return (
             <div>
                 <Breadcrumb>
+                    {breadcrumb}
                     <Breadcrumb.Item>{this.props.title.replace("_", " ")}</Breadcrumb.Item>
-                    <Breadcrumb.Item></Breadcrumb.Item>
                 </Breadcrumb>
                 <h3>{this.props.title.replace("_", " ")}</h3>
                 <p>{this.props.text}</p>
