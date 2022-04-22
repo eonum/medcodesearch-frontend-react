@@ -1,0 +1,7 @@
+.modal-footer {
+    justify-content: normal!important;
+    display: inline-block !important;
+}
+.langBtn {
+    margin-left: 5px !important;
+}

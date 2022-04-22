@@ -17,6 +17,7 @@ class Body extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            code: "",
             med_interpret: null,
             tech_interpret: null,
             tp_al: null,
@@ -35,17 +36,21 @@ class Body extends Component {
             supplement_codes: null,
             usage: "",
             text: "",
+            parent: null,
+            siblings: [],
             children: []
         }
     }
-    componentDidMount() {
-        this.fetchInformations()
+    async componentDidMount() {
+        await this.fetchInformations()
+        await this.fetchSiblings(this.state.parent)
     }
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.params.language !== this.props.params.language ||
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {
             this.setState({
+                code: "",
                 med_interpret: null,
                 tech_interpret: null,
                 tp_al: null,
@@ -64,9 +69,12 @@ class Body extends Component {
                 supplement_codes: null,
                 usage: "",
                 text: "",
+                parent: null,
+                siblings: [],
                 children: []
             })
-            this.fetchInformations()
+            await this.fetchInformations()
+            await this.fetchSiblings(this.state.parent)
         }
 
     }
@@ -143,6 +151,24 @@ class Body extends Component {
         }
     }
 
+    async fetchSiblings(parent) {
+        if(this.state.children == null) {
+            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+                .then((res) => res.json())
+                .then((json) => {
+                    for(let i = 0; i < json.children.length; i++) {
+                        if(json.children[i].code !== this.props.params.code) {
+                            if(!this.state.siblings) {
+                                this.setState({siblings: [json.children[i]]})
+                            } else {
+                                this.setState({siblings: [...this.state.siblings, json.children[i]]})
+                            }
+                        }
+                    }
+                })
+        }
+    }
+
     render() {
         let translateJson = this.findJson(this.props.params.language)
         let categories = []
@@ -170,7 +196,7 @@ class Body extends Component {
                             <p>{this.state[category]}</p>
                         </div>
                     )
-                } else if(this.state[category].length > 0 && category === "children") {
+                } else if(this.state[category].length > 0 && (category === "children" || category === "siblings")) {
                     categories.push(
                         <div>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
@@ -225,13 +251,13 @@ class Body extends Component {
             }
         }
         if(this.props.params.category === "ICD") {
-            return (<ICD title={this.props.params.code} text={this.state.text} categories={categories}/>);
+            return <ICD title={this.state.code} text={this.state.text} categories={categories}/>
         } else if(this.props.params.category === "CHOP") {
-            return (<CHOP title={this.props.params.code} text={this.state.text} categories={categories}/>);
+            return <CHOP title={this.state.code} text={this.state.text} categories={categories}/>
         } else if(this.props.params.category === "TARMED") {
-            return (<TARMED title={this.props.params.code} text={this.state.text} categories={categories}/>);
+            return <TARMED title={this.state.code} text={this.state.text} categories={categories}/>
         } else {
-            return (<DRG title={this.props.params.code} text={this.state.text} categories={categories}/>);
+            return <DRG title={this.state.code} text={this.state.text} categories={categories}/>
         }
     }
 }

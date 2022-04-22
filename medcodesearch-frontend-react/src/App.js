@@ -15,14 +15,15 @@ import itJson from "./assets/translations/it.json";
 import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
 
+
 class App extends Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            language: 'de',
-            selectedButton: 'ICD',
-            selectedList: 'ICD10-GM-2022',
+            language: RouterService.getLanguageFromURL(),
+            selectedButton: RouterService.getCategoryFromURL(),
+            selectedList: RouterService.getVersionFromURL(),
             selectedDate: convertDate(new Date().toISOString()),
             searchResults: [],
             reSetPath: false
@@ -115,37 +116,58 @@ class App extends Component{
                 </div>
         }
           return (
-              <div className="App">
-                  <Header language={this.updateLanguage} activeLangugage={this.state.language}/>
-                  <img onClick={this.reRenderButton} alt="logo" id="logo" src={logo}/>
-                  <Searchbar
-                      language={this.state.language}
-                      selectedButton={this.state.selectedButton}
-                      version={this.state.selectedList}
-                      date={this.state.selectedDate}
-                      searchResults={this.updateSearchResults}/>
-                  <ButtonGroup
-                      reSetButton={this.reRenderButton}
-                      language={this.state.language}
-                      selectedButton={this.updateButton}
-                      selectedList={this.updateList}
-                      selectedDate={this.updateDate}
-                      buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
-                  />
-                  <div className="searchResults">
+
+              <div>
                   <div className="container">
+                      <div className="row">
+                          <div className="col-sm-12">
+                              <Header language={this.updateLanguage} activeLanguage={this.state.language}/>
+                          </div>
+                      </div>
+                      <div className="row">
+                          <div className="col-sm-12">
+                              <img onClick={this.reRenderButton} alt="logo" id="logo" src={logo}/>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div className="container">
+                      <div className="row">
+                          <Searchbar
+                              language={this.state.language}
+                              selectedButton={this.state.selectedButton}
+                              version={this.state.selectedList}
+                              date={this.state.selectedDate}
+                              searchResults={this.updateSearchResults}/>
+                      </div>
+                      <div className="row">
+                          <ButtonGroup
+                              category={this.state.selectedButton}
+                              version={this.state.selectedList}
+                              reSetButton={this.reRenderButton}
+                              selectedLanguage={this.updateLanguage}
+                              language={this.state.language}
+                              selectedButton={this.updateButton}
+                              selectedList={this.updateList}
+                              selectedDate={this.updateDate}
+                              buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
+                          />
+                      </div>
                       <div className="row">
                           <div className={this.state.searchResults.length === 0 ? "":"col"}>
                               {searchResults}
                           </div>
                           <div className="col">
-                              <Outlet>
-                              </Outlet>
+                              <Outlet />
+                          </div>
+                      </div>
+
+                      <div className="navbar row">
+                          <div className="col">
+                              <Footer/>
                           </div>
                       </div>
                   </div>
-                  <Footer/>
-              </div>
               </div>
           )
       }
