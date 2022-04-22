@@ -5,7 +5,7 @@ import {Breadcrumb} from "react-bootstrap";
 
 class CHOP extends Component {
 
-    static async fetchInformations(language, catalog, version, code, categories) {
+    static async fetchInformations(language, catalog, version, code, categories, parent) {
         let newCategories = categories
         return await fetch('https://search.eonum.ch/' + language + "/" + catalog + "/" + version + "/" + code + "?show_detail=1")
                 .then((res) => res.json())
@@ -16,13 +16,14 @@ class CHOP extends Component {
                     if(version === code) {
                         newCategories["children"] = CodeSortService(json["children"])
                     }
+                    console.log(newCategories);
                 })
                 .then(() => {return newCategories})
+
     }
 
     static goToChild(oldCode, code, navigate, version, language) {
-        console.log("Test");
-        if(version === oldCode) {
+        if(version === oldCode) { //
             navigate({pathname: "/" + language + "/CHOP/" + version + "/chop_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         } else {

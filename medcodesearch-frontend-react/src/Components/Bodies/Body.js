@@ -78,7 +78,7 @@ class Body extends Component {
         if (this.props.params.category === "ICD") {
             newCategories = await ICD.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
         } else if (this.props.params.category === "CHOP") {
-            newCategories = await CHOP.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
+            newCategories = await CHOP.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state, this.props.params.parent)
         } else if (this.props.params.category === "TARMED") {
             newCategories = await TARMED.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
         } else {
