@@ -14,7 +14,6 @@ import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
 import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
-import PopUp from "./Components/PopUp/PopUp";
 
 
 class App extends Component{

@@ -2,9 +2,10 @@ import PopUp from "../PopUp/PopUp";
 import {Dropdown} from "react-bootstrap";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
-import {convertCategory} from "../../Services/category-version.service";
+import {convertCategory, findCategory} from "../../Services/category-version.service";
 import React, {Component} from "react";
 import CategorysSortService from "../../Services/CategorysSortService";
+import BootstrapDatePickerComponent from "./BootstrapDatePickerComponent";
 
 class MobileButton extends Component{
     constructor(props) {
@@ -21,7 +22,7 @@ class MobileButton extends Component{
 
     }
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-        if(prevProps.language !== this.props.language) {
+        if(prevProps.language !== this.props.language || prevProps.category !== this.props.category) {
             await this.fetchCurrentVersions()
         }
     }
@@ -29,38 +30,62 @@ class MobileButton extends Component{
         await this.fetchInitialVersions()
         await this.fetchCurrentVersions()
     }
-
-    async fetchInitialVersions() {
-        if (this.props.category === "SwissDRG") {
-            await fetch(`https://search.eonum.ch/de/drgs/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    this.setState({allVersions: CategorysSortService(json), currentVersions: CategorysSortService(json)})
-                })
+    handleVersionClick(version, btn) {
+        const dropdown = document.getElementById(version);
+        if(!dropdown.classList.contains('disabled')) {
+            this.props.chooseC(version, btn)
         } else {
-            await fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    this.setState({allVersions: CategorysSortService(json), currentVersions: CategorysSortService(json)})
-                })
+            this.setState({disabledCategory: findCategory(version)})
+            this.setState({disabledVersion: version})
+            this.setState({showPopUp: true})
+        }
+    }
+    async fetchInitialVersions() {
+        if (!this.isCalBut()) {
+            if (this.props.category === "SwissDRG") {
+                await fetch(`https://search.eonum.ch/de/drgs/versions`)
+                    .then((res) => res.json())
+                    .then((json) => {
+                        this.setState({
+                            allVersions: CategorysSortService(json),
+                            currentVersions: CategorysSortService(json)
+                        })
+                    })
+            } else {
+                await fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)
+                    .then((res) => res.json())
+                    .then((json) => {
+                        this.setState({
+                            allVersions: CategorysSortService(json),
+                            currentVersions: CategorysSortService(json)
+                        })
+                    })
+            }
+        }else {
+            this.setState({allVersions: [], currentVersions: []})
         }
     }
 
     async fetchCurrentVersions() {
-        if (this.props.category === "SwissDRG") {
-            await fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    this.setState({currentVersions: json})
-                })
-        } else {
-            await fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    this.setState({currentVersions: CategorysSortService(json)})
-                })
+        if (!this.isCalBut()) {
+            if (this.props.category === "SwissDRG") {
+                await fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
+                    .then((res) => res.json())
+                    .then((json) => {
+                        this.setState({currentVersions: CategorysSortService(json)})
+                    })
+            } else {
+                await fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
+                    .then((res) => res.json())
+                    .then((json) => {
+                        this.setState({currentVersions: CategorysSortService(json)})
+                    })
+            }
+        }else {
+            this.setState({currentVersions: []})
         }
     }
+
     getLastVersion() {
         let lastVersion = this.state.currentVersions[this.state.currentVersions.length - 1];
         if(lastVersion) {
@@ -71,11 +96,14 @@ class MobileButton extends Component{
     getVersion() {
         let lastVersion = this.getLastVersion()
         if(lastVersion === "") {
+            console.log('gallo' + this);
             return lastVersion
         }
         if(this.props.version === this.props.selectedVersion) {
+            console.log('gallo2' + this);
             return convertCategory(this.props.category, this.props.selectedVersion)
         } else {
+            console.log('gallo3' + this);
             return convertCategory(this.props.category, this.props.version)
         }
     }
@@ -83,6 +111,7 @@ class MobileButton extends Component{
         this.setState({showPopUp: value})
     }
     render(){
+        let renderCal = this.isCalBut()
         return(
         <div className="d-lg-none">
             <div className="btn-group">
@@ -104,7 +133,7 @@ class MobileButton extends Component{
                     <DropdownMenu className="dropdown" >
                         {this.state.buttons.map((category) => (
                                 <Dropdown.Item className="dropdown-item" eventKey={category} key={category} onClick={() => {
-                                    this.props.chooseC(category, false, "")
+                                    this.props.chooseC('', category, false, "")
                                 }}>
                                     {category}
                                 </Dropdown.Item>
@@ -112,31 +141,50 @@ class MobileButton extends Component{
                         )}
                     </DropdownMenu>
                 </Dropdown>
-
-
+                {!renderCal &&
                 <Dropdown className="catalogButtons">
-                    <Dropdown.Toggle className="customButton" variant="" type="button" >
+                    <Dropdown.Toggle className="customButton" variant="" type="button">
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
-                        {this.state.buttons.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
+                        {this.state.currentVersions.map(
                             (versions) => (
-                                <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
-                                               eventKey={versions}
-                                               key={versions}
-                                               id={versions}
-                                               onClick={() => {
-                                                   this.handleVersionClick(versions)
-                                               }}
+                                <Dropdown.Item
+                                    className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
+                                    eventKey={versions}
+                                    key={versions}
+                                    id={versions}
+                                    onClick={() => {
+                                        this.handleVersionClick(versions, this.props.category)
+                                    }}
                                 >{convertCategory(this.props.category, versions)}</Dropdown.Item>
                             )
                         )}
                     </Dropdown.Menu>
                 </Dropdown>
+                }
+                {renderCal &&
+                <BootstrapDatePickerComponent
+                    activeDate = {this.props.date}
+                    setDate={(date) => {
+                        this.props.chooseC('',this.props.selectedButton, true, date)
+                    }}
+                />
+                }
             </div>
 
         </div>
         )
     }
+
+    isCalBut() {
+        let category = this.props.category;
+        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUGS'){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
 }
 export default MobileButton;

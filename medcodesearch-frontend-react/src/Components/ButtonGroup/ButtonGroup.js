@@ -107,10 +107,7 @@ class ButtonGroup extends Component{
                                     selectedVersion={this.props.params.version}
                                     selectedCategory={this.state.selectedButton}
                                     chooseV={(version) => {
-                                        this.updateButton(version, btn);
-                                    }}
-                                    chooseC={(category) => {
-                                        this.updateButton('', category)
+                                        this.updateButton(version, btn, false, '');
                                     }}
                                 />
                             </div>
@@ -136,14 +133,18 @@ class ButtonGroup extends Component{
                 </div>
                 <div className="d-lg-none">
                     <MobileButton
+                        selectedButton ={this.state.selectedButton}
+                        date ={this.props.selectedDate}
+                        version={this.getVersion(this.state.selectedButton)}
+                        selectedVersion={this.props.params.version}
                         category={this.state.selectedButton}
                         language={this.props.language}
                         selectedLanguage={this.props.selectedLanguage}
                         updateVersion={this.props.selectedList}
                         updateCategory={this.props.selectedButton}
                         buttons={this.props.buttons}
-                        chooseC={(category, isCalendar, date) => {
-                            this.updateButton('', category, isCalendar, date)
+                        chooseC={(version, category, isCalendar, date) => {
+                            this.updateButton(version, category, isCalendar, date)
                         }}
                     />
                 </div>
