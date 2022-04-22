@@ -106,33 +106,33 @@ class App extends Component{
         let searchResults;
         let translateJson = this.findJson(this.state.language)
         if(this.state.searchResults[0] === "empty") {
-            searchResults = <div className="searchResult"><p>{translateJson["LBL_NO_RESULTS"]}</p></div>
+            searchResults = <div key={"searchResults array 0"} className="searchResult"><p key={"searchResults array 0 p"}>{translateJson["LBL_NO_RESULTS"]}</p></div>
         } else {
             searchResults =
-                <div>
+                <div key={"searchResults array 1"}>
                 {this.state.searchResults.map(function(searchResult, i){
-                    return <SearchResult result = {searchResult} key={i}/>
+                    return <SearchResult result = {searchResult} key={"searchResults " + i}/>
                 })}
                 </div>
         }
           return (
 
-              <div>
-                  <div className="container">
-                      <div className="row">
-                          <div className="col-sm-12">
+              <div key={"app div 0"}>
+                  <div key={"app div 1"} className="container">
+                      <div key={"app header div 0"}className="row">
+                          <div key={"app header div 1"} className="col-sm-12">
                               <Header language={this.updateLanguage} activeLanguage={this.state.language}/>
                           </div>
                       </div>
-                      <div className="row">
-                          <div className="col-sm-12">
+                      <div key={"app img div 0"} className="row">
+                          <div key={"app img div 1"} className="col-sm-12">
                               <img onClick={this.reRenderButton} alt="logo" id="logo" src={logo}/>
                           </div>
                       </div>
                   </div>
 
-                  <div className="container">
-                      <div className="row">
+                  <div key={"app div 2"} className="container">
+                      <div key={"app searchbar div 0"} className="row">
                           <Searchbar
                               language={this.state.language}
                               selectedButton={this.state.selectedButton}
@@ -140,7 +140,7 @@ class App extends Component{
                               date={this.state.selectedDate}
                               searchResults={this.updateSearchResults}/>
                       </div>
-                      <div className="row">
+                      <div key={"app buttongroup div 0"} className="row">
                           <ButtonGroup
                               category={this.state.selectedButton}
                               version={this.state.selectedList}
@@ -153,17 +153,17 @@ class App extends Component{
                               buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
                           />
                       </div>
-                      <div className="row">
-                          <div className={this.state.searchResults.length === 0 ? "":"col"}>
+                      <div key={"app main div 0"} className="row">
+                          <div key={"app searchresults div 0"} className={this.state.searchResults.length === 0 ? "":"col"}>
                               {searchResults}
                           </div>
-                          <div className="col">
+                          <div key={"app outlet div 0"} className="col">
                               <Outlet />
                           </div>
                       </div>
 
-                      <div className="navbar row">
-                          <div className="col">
+                      <div key={"app footer div 0"}className="navbar row">
+                          <div key={"app footer div 1"} className="col">
                               <Footer/>
                           </div>
                       </div>

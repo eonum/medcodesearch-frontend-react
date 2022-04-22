@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form } from 'react-bootstrap';
 import ConvertDate from "../../Services/ConvertDate";
-import convertDate from "../../Services/ConvertDate";
+
 class BootstrapDatePickerComponent extends React.Component{
     constructor(props) {
         super(props);
@@ -13,9 +13,9 @@ class BootstrapDatePickerComponent extends React.Component{
     }
 render(){
     return(
-            <div id={"text"}>
-                <div className="row">
-                    <div className="col">
+            <div key={"datepicker div 0"} id={"text"}>
+                <div key={"datepicker div 1"} className="row">
+                    <div key={"datepicker div 2"} className="col">
                         <Form.Group controlId="dob">
                             <Form.Control
                                 type="date"

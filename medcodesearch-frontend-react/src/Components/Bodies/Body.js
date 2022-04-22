@@ -265,5 +265,5 @@ class Body extends Component {
 export default function(props) {
     const navigation = useNavigate();
     const location = useLocation();
-    return <Body {...props} navigation={navigation} location={location} params={useParams()}/>
+    return <Body {...props} navigation={navigation} location={location} params={useParams()} key={"body"}/>
 }

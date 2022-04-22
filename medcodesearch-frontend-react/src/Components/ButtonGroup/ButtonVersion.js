@@ -122,7 +122,7 @@ class ButtonVersion extends React.Component{
 
     render() {
         return (
-            <div>
+            <div key={"buttonVersion div 0"}>
                 <PopUp
                     language={this.props.language}
                     selectedLanguage={this.props.selectedLanguage}
@@ -137,7 +137,7 @@ class ButtonVersion extends React.Component{
                     <button 
                         type="button"
                         id={this.props.category}
-                        key={this.props.category + "" + this.props.index}
+                        key={"buttonversion " + this.props.category + "-button"}
                         title={this.props.category}
                         onClick={(e) => {
                             this.handleCategoryClick(this.props.category)
@@ -146,7 +146,7 @@ class ButtonVersion extends React.Component{
                         >
                         {this.props.category}
                     </button>
-                    <Dropdown.Toggle className="customButton" variant="" type="button" key={"DropDown " + this.props.category}>
+                    <Dropdown.Toggle className="customButton" variant="" type="button" key={"buttonversion " + this.props.category + " DropDown"}>
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
@@ -154,7 +154,7 @@ class ButtonVersion extends React.Component{
                             (versions, index) => (
                                 <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                                                eventKey={versions}
-                                               key={versions + index}
+                                               key={"buttonversion " + this.props.category + " DropDown " + versions}
                                                id={versions}
                                                onClick={() => {
                                                    this.props.chooseV(versions)

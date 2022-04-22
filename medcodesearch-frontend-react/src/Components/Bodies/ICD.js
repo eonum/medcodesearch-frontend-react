@@ -36,9 +36,9 @@ class ICD extends Component {
 
     render() {
         return (
-            <div key={this.props.title}>
-                <h3>{this.props.title}</h3>
-                <p>{this.props.text}</p>
+            <div key={this.props.title + " code div"}>
+                <h3 key={this.props.title + " code h3"}>{this.props.title}</h3>
+                <p key={this.props.title + " code p"}>{this.props.text}</p>
                 {this.props.categories}
             </div>
         )

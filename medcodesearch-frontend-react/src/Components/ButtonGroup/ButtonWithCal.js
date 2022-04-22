@@ -9,9 +9,9 @@ class ButtonWithCal extends Component{
 
     render(){
             return(
-                <div id={"cal"}>
+                <div key={"buttonwithCal div 0"} id={"cal"}>
                     <button
-                        key={this.props.index}
+                        key={"buttonwithcal " + this.props.name}
                         name={this.props.name}
                         className={this.props.name === this.props.active ? "customButton active" : "customButton" }
                         onClick={() =>{

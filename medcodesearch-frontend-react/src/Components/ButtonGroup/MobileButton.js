@@ -110,8 +110,8 @@ class MobileButton extends Component{
     render(){
         let renderCal = this.isCalBut()
         return(
-        <div className="d-lg-none">
-            <div className="btn-group">
+        <div key={"mobileButton div 0"} className="d-lg-none">
+            <div key={"mobileButton div 1"} className="btn-group">
                 <PopUp
                     language={this.props.language}
                     selectedLanguage={this.props.selectedLanguage}
@@ -122,14 +122,13 @@ class MobileButton extends Component{
                     version={this.state.disabledVersion}
                     category={this.state.disabledCategory}
                 />
-                <Dropdown className="catalogButtons">
-
-                    <DropdownToggle className="customButton" type="button" >
+                <Dropdown key={"mobileButton dropdown catalog"} className="catalogButtons">
+                    <DropdownToggle key={"mobilebutton dropdown catalog toggle"} className="customButton" type="button" >
                         {this.props.category}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
                         {this.state.buttons.map((category) => (
-                                <Dropdown.Item className="dropdown-item" eventKey={category} key={category} onClick={() => {
+                                <Dropdown.Item className="dropdown-item" eventKey={category} key={"mobileButton dropdown catalog " + category} onClick={() => {
                                     this.props.chooseC('', category, false, "")
                                 }}>
                                     {category}
@@ -139,8 +138,8 @@ class MobileButton extends Component{
                     </DropdownMenu>
                 </Dropdown>
                 {!renderCal &&
-                <Dropdown className="catalogButtons">
-                    <Dropdown.Toggle className="customButton" variant="" type="button">
+                <Dropdown key={"mobileButton dropdown versions"} className="catalogButtons">
+                    <Dropdown.Toggle key={"mobileButton dropdown verisions toggle"} className="customButton" variant="" type="button">
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
@@ -149,7 +148,7 @@ class MobileButton extends Component{
                                 <Dropdown.Item
                                     className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                                     eventKey={versions}
-                                    key={versions}
+                                    key={"mobileButton dropdown versions " + versions}
                                     id={versions}
                                     onClick={() => {
                                         this.handleVersionClick(versions, this.props.category)

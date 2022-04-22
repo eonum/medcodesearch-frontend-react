@@ -110,11 +110,11 @@ class ButtonGroup extends Component{
     }
     render() {
         return (
-            <div>
-                <div className="d-none d-lg-block">
-                    <div key={"ButtonGroup"} className={"alignButtons"}>
+            <div key={"buttongroup div 0"}>
+                <div key={"buttongroup div 1"}className="d-none d-lg-block">
+                    <div key={"ButtonGroup div 2"} className={"alignButtons"}>
                         {this.state.buttons[0].map((btn, index) => (
-                            <div key={"VersionButton" + index}>
+                            <div key={"buttongroup VersionButton div " + index}>
                                 <ButtonVersion
                                     index={index}
                                     activate = {(button) => {
@@ -138,12 +138,11 @@ class ButtonGroup extends Component{
                         ),this)}
                         {
                             this.state.buttons[1].map((button, index) => (
-                                <div key={"CalendarButton" + index}>
+                                <div key={"buttongroup CalendarButton div " + index}>
                                     <ButtonWithCal
                                         showHideCal={this.state.showHideCal}
                                         date ={this.props.selectedDate}
                                         name={button}
-                                        index={index}
                                         select={(btn, date) => {
                                             this.updateButton('', btn, true, date);
                                             this.showHideCal(true);
@@ -155,7 +154,7 @@ class ButtonGroup extends Component{
                             ))}
                     </div>
                 </div>
-                <div className="d-lg-none">
+                <div key={"buttongroup MobileButton div 0"} className="d-lg-none">
                     <MobileButton
                         selectedButton ={this.state.selectedButton}
                         date ={this.props.selectedDate}
