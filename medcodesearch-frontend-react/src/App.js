@@ -117,7 +117,7 @@ class App extends Component{
         }
           return (
 
-              <div className="App">
+              <div>
                   <div className="container">
                       <div className="row">
                           <div className="col-sm-12">

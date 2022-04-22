@@ -10,14 +10,8 @@
 #title > img {
   max-width: 200px;
 }
-.App {
-  width: 1140px;
-  margin: auto;
-}
+
 #calendarLogo {
   max-width: 20px;
   column-gap: 10px;
-}
-.containerTest {
-  margin: 50px 15px 15px;
 }

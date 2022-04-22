@@ -96,14 +96,11 @@ class MobileButton extends Component{
     getVersion() {
         let lastVersion = this.getLastVersion()
         if(lastVersion === "") {
-            console.log('gallo' + this);
             return lastVersion
         }
         if(this.props.version === this.props.selectedVersion) {
-            console.log('gallo2' + this);
             return convertCategory(this.props.category, this.props.selectedVersion)
         } else {
-            console.log('gallo3' + this);
             return convertCategory(this.props.category, this.props.version)
         }
     }
