@@ -129,6 +129,8 @@ class App extends Component{
                       reSetButton={this.reRenderButton}
                       selectedLanguage={this.updateLanguage}
                       language={this.state.language}
+                      version={this.state.selectedList}
+                      category={this.state.selectedButton}
                       selectedButton={this.updateButton}
                       selectedList={this.updateList}
                       selectedDate={this.updateDate}
