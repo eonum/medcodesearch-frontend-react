@@ -14,6 +14,7 @@ import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
 import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
+import {Collapse} from "react-bootstrap";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -33,12 +34,14 @@ class App extends Component{
             selectedList: RouterService.getVersionFromURL(),
             selectedDate: convertDate(new Date().toISOString()),
             searchResults: [],
-            reSetPath: false
+            reSetPath: false,
+            collapseMenu: false
         };
         this.updateButton = this.updateButton.bind(this);
         this.updateDate = this.updateDate.bind(this);
         this.updateList = this.updateList.bind(this);
         this.reRenderButton = this.reRenderButton.bind(this);
+        this.showHide = this.showHide.bind(this);
     }
 
     /**
@@ -148,29 +151,61 @@ class App extends Component{
         }
     }
 
-
-    /**
-     * renders the whole website
-     * @returns {JSX.Element}
-     */
-    render() {
-        let searchResults;
+    searchResults() {
+        let searchResults
         let translateJson = this.findJson(this.state.language)
         if(this.state.searchResults[0] === "empty") {
             searchResults = <div key={"searchResults array 0"} className="searchResult"><p key={"searchResults array 0 p"}>{translateJson["LBL_NO_RESULTS"]}</p></div>
         } else {
             searchResults =
                 <div key={"searchResults array 1"}>
-                {this.state.searchResults.map(function(searchResult, i){
-                    return <SearchResult result = {searchResult} key={"searchResults " + i}/>
-                })}
+                    {this.state.searchResults.map(function(searchResult, i){
+                        return <SearchResult result = {searchResult} key={"searchResults " + i}/>
+                    })}
                 </div>
         }
+        return(
+            <div className="container">
+                <p className="text-center mt-3">
+                    <button
+                        onClick={this.showHide}
+                        className="btn btn-close d-lg-none"
+                        type="button"
+                        data-target="#collapseExample"
+                        aria-expanded="false"
+                        aria-controls="collapseExample"
+                    />
+                </p>
+                <Collapse in={!this.state.collapseMenu}>
+                    <div className="card card-body">
+                        {searchResults}
+                    </div>
+                </Collapse>
+            </div>
+        )
+    }
+
+    showHide(e) {
+        e.preventDefault();
+
+        this.setState({
+            collapseMenu: !this.state.collapseMenu
+        });
+    }
+
+
+    /**
+     * renders the whole website
+     * @returns {JSX.Element}
+     */
+    render() {
+        let searchResults = this.searchResults()
+
           return (
 
               <div key={"app div 0"}>
                   <div key={"app div 1"} className="container">
-                      <div key={"app header div 0"}className="row">
+                      <div key={"app header div 0"} className="row">
                           <div key={"app header div 1"} className="col-sm-12">
                               <Header language={this.updateLanguage} activeLanguage={this.state.language}/>
                           </div>
@@ -205,9 +240,11 @@ class App extends Component{
                           />
                       </div>
                       <div key={"app main div 0"} className="row">
-                          <div key={"app searchresults div 0"} className={this.state.searchResults.length === 0 ? "":"col"}>
+                          {this.state.searchResults.length > 0 &&
+                          <div key={"app searchresults div 0"} className="col-12 col-lg">
                               {searchResults}
-                          </div>
+                          </div>}
+
                           <div key={"app outlet div 0"} className="col">
                               <Outlet />
                           </div>
