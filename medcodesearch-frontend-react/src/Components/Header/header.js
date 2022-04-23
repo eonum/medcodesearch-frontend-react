@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './header.css'
 
 /**
- * header.js renders the header of the website, which is responsible for language changes
+ * is the header of the website, which is responsible for language changes
  * @component
  */
 class Header extends Component {

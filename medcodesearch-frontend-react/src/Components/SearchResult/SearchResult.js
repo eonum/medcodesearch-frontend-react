@@ -13,7 +13,7 @@ class SearchResult extends Component {
     }
 
     /**
-     *
+     * looks for change in the button selection and update the fetchresult
      */
     handleClick = () => {
         let navigate = this.props.navigation
@@ -40,7 +40,7 @@ class SearchResult extends Component {
 
     /**
      * takes a string and sends it to the backend to get all the synonyms of it
-     * @returns {list} a list of synonyms
+     * @returns synonyms a list of synonyms
      */
     getSynonyms() {
         let synonyms;
@@ -58,7 +58,7 @@ class SearchResult extends Component {
 
     /**
      * takes a string and sends it to the backend to get all the inclusions
-     * @returns {list} a list of inclusions
+     * @returns inclusions a list of inclusions
      */
     getInclusions() {
         let inclusions;

@@ -88,7 +88,7 @@ class App extends Component{
     }
 
     /**
-     * sets the correct pathname
+     * sets the correct url
      * @param prevProps
      * @param prevState
      * @param snapshot
