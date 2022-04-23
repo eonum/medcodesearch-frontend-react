@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import './header.css'
 
 /**
- * Render the header of the website, which is responsible for language changes
- *
+ * header.js renders the header of the website, which is responsible for language changes
  * @component
  */
 class Header extends Component {
@@ -62,5 +61,6 @@ class Header extends Component {
         );
     }
 }
- 
+
+
 export default Header;
