@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import './header.css'
 
+/**
+ * Render the header of the website, which is responsible for language changes
+ *
+ * @component
+ */
 class Header extends Component {
 
+    buttons = ['de', 'fr', 'it', 'en']
+
+    /**
+     * Constructor sets the default language and calls the updateLanguage to look for changes
+     * @param props
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -11,18 +22,29 @@ class Header extends Component {
         };
         this.updateLanguage = this.updateLanguage.bind(this);
     }
-    buttons = ['de', 'fr', 'it', 'en']
 
+    /**
+     * Change the languagePrev state to the current language
+     * @param lang
+     */
     updateLanguage(lang) {
         this.props.language(lang)
         this.setState({languagePrev: this.state.language, language: lang})
     }
+
+    /**
+     * If the compounent mounted componentDidMount() looks for a change in the language
+     */
     componentDidMount() {
         if(this.state.language !== this.props.activeLanguage){
             this.updateLanguage(this.props.activeLanguage)
         }
     }
 
+    /**
+     * render full header for the website
+     * @returns {JSX.Element}
+     */
     render() {
         return (
                 <header className='header'>
