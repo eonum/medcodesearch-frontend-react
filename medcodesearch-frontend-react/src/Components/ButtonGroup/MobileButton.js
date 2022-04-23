@@ -7,7 +7,16 @@ import React, {Component} from "react";
 import CategorysSortService from "../../Services/CategorysSortService";
 import BootstrapDatePickerComponent from "./BootstrapDatePickerComponent";
 
+/**
+ * creates the button for the mobile version
+ * @component
+ */
 class MobileButton extends Component{
+
+    /**
+     * sets the default state values and bind the popup
+     * @param props
+     */
     constructor(props) {
         super(props);
         this.state={
@@ -19,17 +28,35 @@ class MobileButton extends Component{
             buttons: [this.props.buttons[0][0],this.props.buttons[0][1],this.props.buttons[0][2],this.props.buttons[0][3],this.props.buttons[1][0],this.props.buttons[1][1],this.props.buttons[1][2]]
         }
         this.updatePopUp = this.updatePopUp.bind(this);
-
     }
+
+    /**
+     * after update of the component calls the fetch
+     * @param prevProps
+     * @param prevState
+     * @param snapshot
+     * @returns {Promise<void>}
+     */
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.language !== this.props.language || prevProps.category !== this.props.category) {
             await this.fetchCurrentVersions()
         }
     }
+
+    /**
+     * after mount initialize the fetch for content and version
+     * @returns {Promise<void>}
+     */
     async componentDidMount() {
         await this.fetchInitialVersions()
         await this.fetchCurrentVersions()
     }
+
+    /**
+     * set the new version and button
+     * @param version
+     * @param btn
+     */
     handleVersionClick(version, btn) {
         const dropdown = document.getElementById(version);
         if(!dropdown.classList.contains('disabled')) {
@@ -40,6 +67,11 @@ class MobileButton extends Component{
             this.setState({showPopUp: true})
         }
     }
+
+    /**
+     * fetches the first version
+     * @returns {Promise<void>}
+     */
     async fetchInitialVersions() {
         if (!this.isCalBut()) {
             if (this.props.category === "SwissDRG") {
@@ -66,6 +98,10 @@ class MobileButton extends Component{
         }
     }
 
+    /**
+     * fetches the current versions
+     * @returns {Promise<void>}
+     */
     async fetchCurrentVersions() {
         if (!this.isCalBut()) {
             if (this.props.category === "SwissDRG") {
@@ -86,6 +122,10 @@ class MobileButton extends Component{
         }
     }
 
+    /**
+     * looks for the last used version
+     * @returns {*|string} last version if it is present
+     */
     getLastVersion() {
         let lastVersion = this.state.currentVersions[this.state.currentVersions.length - 1];
         if(lastVersion) {
@@ -93,6 +133,11 @@ class MobileButton extends Component{
         }
         return ""
     }
+
+    /**
+     * looks for the current version
+     * @returns {*|string} currently used version
+     */
     getVersion() {
         let lastVersion = this.getLastVersion()
         if(lastVersion === "") {
@@ -104,9 +149,32 @@ class MobileButton extends Component{
             return convertCategory(this.props.category, this.props.version)
         }
     }
+
+    /**
+     * updates the current showPopUp with the given value
+     * @param value
+     */
     updatePopUp = (value) => {
         this.setState({showPopUp: value})
     }
+
+    /**
+     * looks if the category uses a calendar
+     * @returns {boolean} if calender is needed or not
+     */
+    isCalBut() {
+        let category = this.props.category;
+        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUGS'){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    /**
+     * renders the mobile button
+     * @returns {JSX.Element}
+     */
     render(){
         let renderCal = this.isCalBut()
         return(
@@ -171,15 +239,6 @@ class MobileButton extends Component{
 
         </div>
         )
-    }
-
-    isCalBut() {
-        let category = this.props.category;
-        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUGS'){
-            return true;
-        }else {
-            return false;
-        }
     }
 
 }

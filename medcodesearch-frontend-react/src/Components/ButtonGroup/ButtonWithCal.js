@@ -5,8 +5,16 @@ import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
 import BootstrapDatePickerComponent from "./BootstrapDatePickerComponent";
 
+/**
+ * creates a button with a calender
+ * @component
+ */
 class ButtonWithCal extends Component{
 
+    /**
+     * renders the ButtonWithCal
+     * @returns {JSX.Element}
+     */
     render(){
             return(
                 <div key={"buttonwithCal div 0"} id={"cal"}>
