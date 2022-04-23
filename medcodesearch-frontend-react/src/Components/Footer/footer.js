@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import './footer.css';
 
+/**
+ * is the footer of the website and shows the copyright by eonum
+ * @component
+ */
 class Footer extends Component {
+
+    /**
+     * renders the footer
+     * @returns {JSX.Element}
+     */
     render() { 
         return (
             <footer className='footer'> 
