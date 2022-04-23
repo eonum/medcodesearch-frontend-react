@@ -114,8 +114,9 @@ class ButtonGroup extends Component{
                 <div key={"buttongroup div 1"}className="d-none d-lg-block">
                     <div key={"ButtonGroup div 2"} className={"alignButtons"}>
                         {this.state.buttons[0].map((btn, index) => (
-                            <div key={"buttongroup VersionButton div " + index}>
+                            <div key={"buttongroup VersionButton " + btn + " div " + index}>
                                 <ButtonVersion
+                                    key={btn + " " + index}
                                     index={index}
                                     activate = {(button) => {
                                         this.updateButton('', button, false, '');

@@ -29,7 +29,7 @@ class DRG extends Component {
 
     render() {
         return (
-            <div key={this.props.title}>
+            <div key={"DRG child code " + this.props.title}>
                 <h3>{this.props.title}</h3>
                 <p>{this.props.text}</p>
                 {this.props.categories}

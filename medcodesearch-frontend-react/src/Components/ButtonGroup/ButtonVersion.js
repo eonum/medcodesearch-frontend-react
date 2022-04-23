@@ -16,7 +16,6 @@ class ButtonVersion extends React.Component{
             showPopUp: false,
             disabledVersion: "",
             disabledCategory: "",
-            allCategory: ["ICD","CHOP", "SwissDRG", "TARMED", "MiGeL", "AL", "DRUG"],
         }
         this.updatePopUp = this.updatePopUp.bind(this);
     }
@@ -133,7 +132,7 @@ class ButtonVersion extends React.Component{
                     version={this.state.disabledVersion}
                     category={this.state.disabledCategory}
                 />
-                <Dropdown as={ButtonGroup} className="catalogButtons d-none d-lg-block">
+                <Dropdown accessKey={"buttonversion dropdown"} className="catalogButtons d-none d-lg-block">
                     <button 
                         type="button"
                         id={this.props.category}
@@ -146,12 +145,16 @@ class ButtonVersion extends React.Component{
                         >
                         {this.props.category}
                     </button>
-                    <Dropdown.Toggle className="customButton" variant="" type="button" key={"buttonversion " + this.props.category + " DropDown"}>
+                    <Dropdown.Toggle
+                        className="customButton"
+                        type="button"
+                        key={"buttonversion " + this.props.category + " DropDown"
+                    }>
                         {this.getVersion()}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown">
+                    <Dropdown.Menu accessKey={"buttonversion dropdown menu for versions"} className="dropdown">
                         {this.state.allVersions.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
-                            (versions, index) => (
+                            (versions) => (
                                 <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                                                eventKey={versions}
                                                key={"buttonversion " + this.props.category + " DropDown " + versions}

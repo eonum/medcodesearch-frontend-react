@@ -93,7 +93,7 @@ class Body extends Component {
         this.setState(newCategories)
     }
 
-    lookingForLink(aString, i) {
+    lookingForLink(aString, index) {
         let results = []
         const regex = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
         let matches = aString.match(regex)
@@ -114,9 +114,9 @@ class Body extends Component {
                     }} className="link">{arr[0].replace(/\.$/, '')}</a>) </span>)
                 }
             }
-            return <li>{aString.substring(0, firstIndex)} {results}</li>
+            return <li key={"link" + index}>{aString.substring(0, firstIndex)} {results}</li>
         } else {
-            return <li>{aString}</li>
+            return <li key={"link" + index} >{aString}</li>
         }
     }
 
@@ -176,14 +176,14 @@ class Body extends Component {
             if(this.state[category] !== null && this.state[category] !== undefined) {
                 if(category === "med_interpret" || category === "tech_interpret") {
                     categories.push(
-                        <div>
+                        <div key={"med/tech interpret"}>
                             <p>{this.state[category]}</p>
                         </div>
                     )
                 } else if(category === "tp_al" || category === "tp_tl") {
                     if(this.state[category] !== 0) {
                         categories.push(
-                            <div>
+                            <div key={"tp_al/tl"}>
                                 <p>{translateJson["LBL_" + category.toUpperCase()]}: {this.state[category]}</p>
                             </div>
                         )
@@ -191,29 +191,29 @@ class Body extends Component {
                 }
                 else if(category === "note" || category === "coding_hint" || category === "usage") {
                     categories.push(
-                        <div>
+                        <div key={"note coding_hint usage"}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <p>{this.state[category]}</p>
                         </div>
                     )
                 } else if(this.state[category].length > 0 && (category === "children" || category === "siblings")) {
                     categories.push(
-                        <div>
+                        <div key={"children siblings"}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[category].map((child, i) => (
-                                    <li key={i}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
+                                    <li key={child + " number " + i}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
                     )
                 } else if(this.state[category].length > 0 && category === "groups") {
                     categories.push(
-                        <div>
+                        <div key={"groups"}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[category].map((child, i) => (
-                                    <li key={i}>{child.code}: {child.text}</li>
+                                    <li key={child.code + "childcode " + i}>{child.code}: {child.text}</li>
                                 ))}
                             </ul>
                         </div>
@@ -221,18 +221,18 @@ class Body extends Component {
                 }
                 else if(this.state[category].length > 0 && (category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs" || category === "descriptions")) {
                     categories.push(
-                        <div>
+                        <div key={"incl, syn, rel_drgs, descr"}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[category].map((element, i) => (
-                                    <li key={i}>{element}</li>
+                                    <li key={"element nr " + i}>{element}</li>
                                 ))}
                             </ul>
                         </div>
                     )
                 } else if(this.state[category].length > 0 && (category === "exclusions" || category === "supplement_codes")) {
                     categories.push(
-                        <div>
+                        <div key={"exclusions supp_codes"}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[category].map((exclusion, i) => (
@@ -243,7 +243,7 @@ class Body extends Component {
                     )
                 } else if(category === "predecessors" && this.state[category].length === 0) {
                     categories.push(
-                        <div>
+                        <div key={"predec"}>
                             <h5>{translateJson["LBL_NEW_CODE"]}</h5>
                         </div>
                     )
@@ -251,13 +251,13 @@ class Body extends Component {
             }
         }
         if(this.props.params.category === "ICD") {
-            return <ICD title={this.state.code} text={this.state.text} categories={categories}/>
+            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
         } else if(this.props.params.category === "CHOP") {
-            return <CHOP title={this.state.code} text={this.state.text} categories={categories}/>
+            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
         } else if(this.props.params.category === "TARMED") {
-            return <TARMED title={this.state.code} text={this.state.text} categories={categories}/>
+            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
         } else {
-            return <DRG title={this.state.code} text={this.state.text} categories={categories}/>
+            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
         }
     }
 }
@@ -265,5 +265,5 @@ class Body extends Component {
 export default function(props) {
     const navigation = useNavigate();
     const location = useLocation();
-    return <Body {...props} navigation={navigation} location={location} params={useParams()} key={"body"}/>
+    return <Body {...props} navigation={navigation} location={location} params={useParams()} key={"bodyI"}/>
 }
