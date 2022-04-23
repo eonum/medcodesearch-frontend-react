@@ -16,9 +16,6 @@ class CHOP extends Component {
                     if(version === code) {
                         newCategories["children"] = CodeSortService(json["children"])
                     }
-                    // if(newCategories.parent !== null) {
-                     // console.log(newCategories.parent.code);
-                   // }
                 })
                 .then(() => {return newCategories})
 
@@ -36,11 +33,14 @@ class CHOP extends Component {
 
     render() {
         let parentBreadcrumbs =  [];
-        console.log("this.props.parents: ", this.props.parents[0]);
-        if(this.props.parents.length > 0){
-            this.props.parents.map((parent) =>
-            parentBreadcrumbs.push(<Breadcrumb.Item>{parent.code}</Breadcrumb.Item>))
+        let parents = this.props.parents;
+        console.log("this.props.parents: ", this.props.parents);
+        if(parents.length > 0){
+            for(let i=parents.length-1; i>=0; i--){
+                parentBreadcrumbs.push(<Breadcrumb.Item>{parents[i].code}</Breadcrumb.Item>)
+            }
         }
+        console.log(parentBreadcrumbs);
         return (
             <div>
                 <Breadcrumb>

@@ -244,11 +244,11 @@ class Body extends Component {
     }
 }
 
-async function fetchGrandparents(parent, parents) {
-    await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+function fetchGrandparents(parent, parents) {
+    fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
         .then((res) => res.json())
         .then((json) => {
-            if(json["parent"] !== null){
+            if (json["parent"] !== null) {
                 parents.push(json["parent"]);
                 fetchGrandparents(json["parent"], parents);
             }
