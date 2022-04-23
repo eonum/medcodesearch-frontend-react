@@ -6,8 +6,16 @@ import {convertCategory, findCategory} from "../../Services/category-version.ser
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
 
+/**
+ * is responsible for the buttons with versions
+ * @component
+ */
 class ButtonVersion extends React.Component{
 
+    /**
+     *  sets the default state values and bind the popup
+     * @param props
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -19,21 +27,41 @@ class ButtonVersion extends React.Component{
         }
         this.updatePopUp = this.updatePopUp.bind(this);
     }
+
+    /**
+     * updates the current showPopUp with the given value
+     * @param value
+     */
     updatePopUp = (value) => {
         this.setState({showPopUp: value})
     }
 
+    /**
+     * after update of the component calls the fetch
+     * @param prevProps
+     * @param prevState
+     * @param snapshot
+     * @returns {Promise<void>}
+     */
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.language !== this.props.language) {
             await this.fetchCurrentVersions()
         }
     }
 
+    /**
+     * after mount initialize the fetch for content and version
+     * @returns {Promise<void>}
+     */
     async componentDidMount() {
         await this.fetchInitialVersions()
         await this.fetchCurrentVersions()
-}
+    }
 
+    /**
+     * fetches the first version
+     * @returns {Promise<void>}
+     */
     async fetchInitialVersions() {
         if (this.props.category === "SwissDRG") {
             await fetch(`https://search.eonum.ch/de/drgs/versions`)
@@ -50,6 +78,10 @@ class ButtonVersion extends React.Component{
         }
     }
 
+    /**
+     * fetches the current versions
+     * @returns {Promise<void>}
+     */
     async fetchCurrentVersions() {
         if (this.props.category === "SwissDRG") {
             await fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
@@ -66,6 +98,11 @@ class ButtonVersion extends React.Component{
         }
     }
 
+    /**
+     * set the new version and button
+     * @param version
+     * @param btn
+     */
     handleVersionClick(version) {
         const dropdown = document.getElementById(version);
         if(!dropdown.classList.contains('disabled')) {
@@ -77,6 +114,10 @@ class ButtonVersion extends React.Component{
         }
     }
 
+    /**
+     * looks for the last used version
+     * @returns {*|string} last version if it is present
+     */
     getLastVersion() {
         let lastVersion = this.state.currentVersions[this.state.currentVersions.length - 1];
         if(lastVersion) {
@@ -85,6 +126,10 @@ class ButtonVersion extends React.Component{
         return ""
     }
 
+    /**
+     * set the new category
+     * @param category
+     */
     handleCategoryClick(category) {
         const dropdown = document.getElementById(category);
         if(!dropdown.classList.contains('disabled')) {
@@ -96,6 +141,10 @@ class ButtonVersion extends React.Component{
         }
     }
 
+    /**
+     * looks for old versions
+     * @returns {string} classname of the button
+     */
     getClassName() {
         let classname = "customButton"
         if(this.props.category === this.props.selectedCategory) {
@@ -107,6 +156,10 @@ class ButtonVersion extends React.Component{
         return classname
     }
 
+    /**
+     * looks for the current version
+     * @returns {*|string} currently used version
+     */
     getVersion() {
         let lastVersion = this.getLastVersion()
         if(lastVersion === "") {
@@ -119,6 +172,10 @@ class ButtonVersion extends React.Component{
         }
     }
 
+    /**
+     * renders the buttons with versions
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <div key={"buttonVersion div 0"}>
