@@ -3,11 +3,18 @@ import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 
+/**
+ *
+ */
 class SearchResult extends Component {
+
     constructor(props) {
         super(props);
     }
 
+    /**
+     *
+     */
     handleClick = () => {
         let navigate = this.props.navigation
         let location = this.props.location
@@ -31,17 +38,29 @@ class SearchResult extends Component {
         }
     }
 
-    render() {
+    /**
+     * takes a string and sends it to the backend to get all the synonyms of it
+     * @returns {list} a list of synonyms
+     */
+    getSynonyms() {
         let synonyms;
         if(this.props.result.highlight.synonyms === undefined || this.props.result.highlight.text !== undefined) {
             synonyms = <></>
         } else {
-             synonyms = <div className="small">Synonyme<ul>
+            synonyms = <div className="small">Synonyme<ul>
                 {this.props.result.highlight.synonyms.map(function(synonym, i) {
                     return <li key={"synonym" + i} dangerouslySetInnerHTML={{__html: synonym.replace(/(<em>)/g, "<strong>").replace(/(<\/em>)/g, "</strong>")}}/>
                 })}
             </ul></div>
         }
+        return synonyms
+    }
+
+    /**
+     * takes a string and sends it to the backend to get all the inclusions
+     * @returns {list} a list of inclusions
+     */
+    getInclusions() {
         let inclusions;
         if(this.props.result.highlight.inclusions === undefined || this.props.result.highlight.text !== undefined) {
             inclusions = <></>
@@ -52,14 +71,22 @@ class SearchResult extends Component {
                 })}
             </ul></div>
         }
+        return inclusions
+    }
+
+    /**
+     * render the search results
+     * @returns {JSX.Element}
+     */
+    render() {
         return (
             <div key={"searchresults"} className="searchResult" onClick={this.handleClick}>
                 <dl>
                     <dt><span className="link">{this.props.result.code}</span></dt>
                     <dd id="noMargin" dangerouslySetInnerHTML={{__html: this.props.result.highlight.text === undefined ? this.props.result.text : this.props.result.highlight.text[0].replace(/(<em>)/g, "<strong>").replace(/(<\/em>)/g, "</strong>")}}/>
                 </dl>
-                {inclusions}
-                {synonyms}
+                {this.getInclusions()}
+                {this.getSynonyms()}
             </div>
         )
     }
