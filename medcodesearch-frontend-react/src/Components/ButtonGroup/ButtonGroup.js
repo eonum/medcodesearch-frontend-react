@@ -7,7 +7,16 @@ import convertDate from "../../Services/ConvertDate";
 import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
 
+/**
+ * is responsible for all buttons to render
+ * @component
+ */
 class ButtonGroup extends Component{
+
+    /**
+     * sets the default state values and bind the buttons
+     * @param props
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -25,6 +34,13 @@ class ButtonGroup extends Component{
         this.updateDate = this.updateDate.bind(this);
     }
 
+    /**
+     * updates the button with the new params
+     * @param version
+     * @param btn
+     * @param isCalendarType
+     * @param date
+     */
     updateButton = (version, btn, isCalendarType, date) => {
         if (version === '') {
             version = this.getVersion(btn);
@@ -55,11 +71,21 @@ class ButtonGroup extends Component{
         this.props.selectedButton(btn);
     }
 
+    /**
+     * takes a button name and compares it to the selected button to reset the button
+     * @param btn
+     */
     reRender(btn) {
         if (this.state.selectedButton === btn) {
             this.props.reSetButton()
         }
     }
+
+    /**
+     * take a button name and return the version of the button
+     * @param btn
+     * @returns {string|string|*}
+     */
     getVersion(btn) {
         switch (btn){
             case 'ICD':
@@ -74,7 +100,11 @@ class ButtonGroup extends Component{
                 return '';
         }
     }
-    componentDidMount() {
+
+    /**
+     * sets the category of the state
+     */
+    getVersionCategory() {
         if(this.props.category === "CHOP") {
             this.setState({lastCHOP: this.props.version})
         } else if(this.props.category === "ICD") {
@@ -86,28 +116,46 @@ class ButtonGroup extends Component{
         }
     }
 
+    /**
+     * calls, if successful mounted, getVersionCategory()
+     */
+    componentDidMount() {
+        this.getVersionCategory()
+    }
+
+    /**
+     * calls getVersionCategory() if the version has changed
+     * @param prevProps
+     * @param prevState
+     * @param snapshot
+     */
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.version !== this.props.version) {
-            if(this.props.category === "CHOP") {
-                this.setState({lastCHOP: this.props.version})
-            } else if(this.props.category === "ICD") {
-                this.setState({lastICD: this.props.version})
-            } else if(this.props.category === "SwissDRG") {
-                this.setState({lastDRG: this.props.version})
-            } else if(this.props.category === "TARMED") {
-                this.setState({lastTARMED: this.props.version})
-            }
+            this.getVersionCategory()
         }
     }
 
+    /**
+     * set the date of the state
+     * @param date
+     */
     updateDate = (date) => {
         this.setState({selectedDate: date});
         this.props.selectedDate(date);
     }
 
+    /**
+     * sets the state of the calendar visibility
+     * @param state
+     */
     showHideCal = (state) => {
         this.setState({showHideCal: state})
     }
+
+    /**
+     * renders the ButtonGroup
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <div key={"buttongroup div 0"}>
