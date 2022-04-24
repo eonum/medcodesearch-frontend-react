@@ -18,7 +18,6 @@ class CHOP extends Component {
                     }
                 })
                 .then(() => {return newCategories})
-
     }
 
     static goToChild(oldCode, code, navigate, version, language) {
@@ -32,15 +31,17 @@ class CHOP extends Component {
     }
 
     render() {
-        let parentBreadcrumbs =  [];
+        let parentBreadcrumbs = [];
         let parents = this.props.parents;
-        console.log("this.props.parents: ", this.props.parents);
+        let i = parents.length;
+        console.log("(CHOP) Parents:", parents);
         if(parents.length > 0){
-            for(let i=parents.length-1; i>=0; i--){
-                parentBreadcrumbs.push(<Breadcrumb.Item>{parents[i].code}</Breadcrumb.Item>)
+            for(i=parents.length-1; i>=0; i--){
+                parentBreadcrumbs.push(<Breadcrumb.Item>{parents[i].code}</Breadcrumb.Item>);
             }
         }
-        console.log(parentBreadcrumbs);
+    //    console.log(counter, " parent.length-1: ", parents.length-1);
+    //    console.log(parentBreadcrumbs);
         return (
             <div>
                 <Breadcrumb>

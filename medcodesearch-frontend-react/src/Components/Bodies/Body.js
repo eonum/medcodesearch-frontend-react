@@ -36,7 +36,8 @@ class Body extends Component {
             usage: "",
             text: "",
             children: [],
-            parent: null
+            parent: null,
+            parents: []
         }
     }
     componentDidMount() {
@@ -66,7 +67,8 @@ class Body extends Component {
                 usage: "",
                 text: "",
                 children: [],
-                parent: null
+                parent: null,
+                parents: []
             })
             this.fetchInformations()
         }
@@ -146,9 +148,9 @@ class Body extends Component {
     }
 
     render() {
+        let parents = [];
         let translateJson = this.findJson(this.props.params.language)
         let categories = []
-        let parents = []
         for(let category in this.state) {
             if(this.state[category] !== null && this.state[category] !== undefined) {
                 if(category === "med_interpret" || category === "tech_interpret") {
@@ -227,33 +229,34 @@ class Body extends Component {
                 }
             }
         }
+        if(this.state.parent !== null) {
+            parents.push(this.state.parent);
+            parents = fetchGrandparents(this.state.parent, parents);
+        // console.log("parents after fetching: ", parents);
+        }
         if(this.props.params.category === "ICD") {
-            return <ICD title={this.props.params.code} text={this.state.text} categories={categories}/>
+            return <ICD title={this.props.params.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         } else if(this.props.params.category === "CHOP") {
-            if(this.state.parent !== null) {
-                parents.push(this.state.parent);
-                parents = fetchGrandparents(this.state.parent, parents);
-            }
-            console.log("Parents: ", parents);
             return <CHOP title={this.props.params.code} text={this.state.text} categories={categories} parents={parents}/>
         } else if(this.props.params.category === "TARMED") {
-            return <TARMED title={this.props.params.code} text={this.state.text} categories={categories}/>
+            return <TARMED title={this.props.params.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         } else {
-            return <DRG title={this.props.params.code} text={this.state.text} categories={categories}/>
+            return <DRG title={this.props.params.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         }
     }
 }
 
-function fetchGrandparents(parent, parents) {
-    fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+
+async function fetchGrandparents(parent, parents) {
+    await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
         .then((res) => res.json())
         .then((json) => {
             if (json["parent"] !== null) {
                 parents.push(json["parent"]);
-                fetchGrandparents(json["parent"], parents);
+                parents = fetchGrandparents(json["parent"], parents);
             }
-        })
-    return parents;
+        }).then(() => {return parents})
+    return parents; // Falls das weggelassen wird wird ist [[PromiseResult]] undefined, sonst Array
 }
 
 export default function(props) {
