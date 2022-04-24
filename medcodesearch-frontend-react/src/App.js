@@ -14,7 +14,7 @@ import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
 import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
-import {Collapse} from "react-bootstrap";
+import {CloseButton, Collapse} from "react-bootstrap";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -165,19 +165,21 @@ class App extends Component{
                 </div>
         }
         return(
-            <div className="container">
+            <div className="container" id="searchResults">
                 <p className="text-center mt-3">
                     <button
                         onClick={this.showHide}
-                        className="btn btn-close d-lg-none"
+                        className="btn d-lg-none"
                         type="button"
                         data-target="#collapseExample"
                         aria-expanded="false"
                         aria-controls="collapseExample"
-                    />
+                    >
+                        <CloseButton />
+                    </button>
                 </p>
                 <Collapse in={!this.state.collapseMenu}>
-                    <div className="card card-body">
+                    <div>
                         {searchResults}
                     </div>
                 </Collapse>
@@ -245,7 +247,7 @@ class App extends Component{
                               {searchResults}
                           </div>}
 
-                          <div key={"app outlet div 0"} className="col">
+                          <div key={"app outlet div 0"} className="col" id="main">
                               <Outlet />
                           </div>
                       </div>

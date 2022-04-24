@@ -5,7 +5,7 @@ import DropdownMenu from "react-bootstrap/DropdownMenu";
 import {convertCategory, findCategory} from "../../Services/category-version.service";
 import React, {Component} from "react";
 import CategorysSortService from "../../Services/CategorysSortService";
-import BootstrapDatePickerComponent from "./BootstrapDatePickerComponent";
+import DatePicker from "./DatePicker";
 
 /**
  * creates the button for the mobile version
@@ -39,6 +39,7 @@ class MobileButton extends Component{
      */
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.language !== this.props.language || prevProps.category !== this.props.category) {
+            await this.fetchInitialVersions()
             await this.fetchCurrentVersions()
         }
     }
@@ -164,7 +165,7 @@ class MobileButton extends Component{
      */
     isCalBut() {
         let category = this.props.category;
-        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUGS'){
+        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG'){
             return true;
         }else {
             return false;
@@ -191,12 +192,14 @@ class MobileButton extends Component{
                     category={this.state.disabledCategory}
                 />
                 <Dropdown key={"mobileButton dropdown catalog"} className="catalogButtons">
-                    <DropdownToggle key={"mobilebutton dropdown catalog toggle"} className="customButton" type="button" >
+                    <DropdownToggle key={"mobileButton dropdown catalog toggle"} className="customButton" type="button" >
                         {this.props.category}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
                         {this.state.buttons.map((category) => (
-                                <Dropdown.Item className="dropdown-item" eventKey={category} key={"mobileButton dropdown catalog " + category} onClick={() => {
+                                <Dropdown.Item className="dropdown-item"
+                                               eventKey={category} key={"mobileButton dropdown catalog " + category}
+                                               onClick={() => {
                                     this.props.chooseC('', category, false, "")
                                 }}>
                                     {category}
@@ -211,7 +214,7 @@ class MobileButton extends Component{
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
-                        {this.state.currentVersions.map(
+                        {this.state.allVersions.map(
                             (versions) => (
                                 <Dropdown.Item
                                     className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
@@ -228,7 +231,7 @@ class MobileButton extends Component{
                 </Dropdown>
                 }
                 {renderCal &&
-                <BootstrapDatePickerComponent
+                <DatePicker
                     activeDate = {this.props.date}
                     setDate={(date) => {
                         this.props.chooseC('',this.props.selectedButton, true, date)
@@ -236,7 +239,6 @@ class MobileButton extends Component{
                 />
                 }
             </div>
-
         </div>
         )
     }

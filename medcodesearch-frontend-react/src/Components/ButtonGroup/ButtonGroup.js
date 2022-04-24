@@ -178,7 +178,7 @@ class ButtonGroup extends Component{
                                     updateVersion={this.props.selectedList}
                                     updateCategory={this.props.selectedButton}
                                     selectedVersion={this.props.params.version}
-                                    selectedCategory={this.state.selectedButton}
+                                    selectedCategory={this.props.category}
                                     chooseV={(version) => {
                                         this.updateButton(version, btn, false, '');
                                     }}
@@ -197,7 +197,7 @@ class ButtonGroup extends Component{
                                             this.showHideCal(true);
                                             this.reRender(button)
                                         }}
-                                        active={this.state.selectedButton}
+                                        active={this.props.category}
                                     />
                                 </div>
                             ))}
