@@ -192,7 +192,7 @@ class MobileButton extends Component{
                     category={this.state.disabledCategory}
                 />
                 <Dropdown key={"mobileButton dropdown catalog"} className="catalogButtons">
-                    <DropdownToggle key={"mobileButton dropdown catalog toggle"} className="customButton" type="button" >
+                    <DropdownToggle key={"mobileButton dropdown catalog toggle"} className="customButton" variant="" type="button" >
                         {this.props.category}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >

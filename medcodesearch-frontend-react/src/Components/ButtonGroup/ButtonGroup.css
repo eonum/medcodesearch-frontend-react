@@ -2,7 +2,7 @@
     padding: 5px;
 }
 
-.customButton.customButton{
+.customButton.customButton {
     border-radius: 0px;
     background-color: white;
     color: rgb(0, 0, 0);
@@ -12,7 +12,7 @@
     padding: 6px 12px;
 }
 
-.customButton:hover.customButton{
+.customButton:hover.customButton {
     background-color: rgb(234, 231, 231);
     color: black;
 }
