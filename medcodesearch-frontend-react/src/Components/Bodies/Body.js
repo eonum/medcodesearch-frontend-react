@@ -148,7 +148,6 @@ class Body extends Component {
     }
 
     render() {
-        let parents = [];
         let translateJson = this.findJson(this.props.params.language)
         let categories = []
         for(let category in this.state) {
@@ -229,34 +228,16 @@ class Body extends Component {
                 }
             }
         }
-        if(this.state.parent !== null) {
-            parents.push(this.state.parent);
-            parents = fetchGrandparents(this.state.parent, parents);
-        // console.log("parents after fetching: ", parents);
-        }
         if(this.props.params.category === "ICD") {
             return <ICD title={this.props.params.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         } else if(this.props.params.category === "CHOP") {
-            return <CHOP title={this.props.params.code} text={this.state.text} categories={categories} parents={parents}/>
+            return <CHOP title={this.props.params.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         } else if(this.props.params.category === "TARMED") {
             return <TARMED title={this.props.params.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         } else {
             return <DRG title={this.props.params.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         }
     }
-}
-
-
-async function fetchGrandparents(parent, parents) {
-    await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
-        .then((res) => res.json())
-        .then((json) => {
-            if (json["parent"] !== null) {
-                parents.push(json["parent"]);
-                parents = fetchGrandparents(json["parent"], parents);
-            }
-        }).then(() => {return parents})
-    return parents; // Falls das weggelassen wird wird ist [[PromiseResult]] undefined, sonst Array
 }
 
 export default function(props) {

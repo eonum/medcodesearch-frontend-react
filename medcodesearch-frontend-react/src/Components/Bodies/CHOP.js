@@ -7,6 +7,18 @@ class CHOP extends Component {
 
     static async fetchInformations(language, catalog, version, code, categories) {
         let newCategories = categories
+
+        async function fetchGrandparents(parent, parents) {
+            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+                .then((res) => res.json())
+                .then((json) => {
+                    if (json["parent"] !== null) {
+                        parents.push(json["parent"]);
+                        fetchGrandparents(json["parent"], parents);
+                    }
+                })
+        }
+
         return await fetch('https://search.eonum.ch/' + language + "/" + catalog + "/" + version + "/" + code + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
@@ -16,8 +28,20 @@ class CHOP extends Component {
                     if(version === code) {
                         newCategories["children"] = CodeSortService(json["children"])
                     }
-                })
-                .then(() => {return newCategories})
+                }).then( async () => {
+                    newCategories["parents"] = [];
+                    if (newCategories["parent"] != null) {
+                        console.log("newCategories[parent]: ", newCategories["parent"]);
+                        let parent = newCategories["parent"];
+                        newCategories["parents"].push(parent);
+                        console.log("newCategories[parents]: ", newCategories["parents"]);
+                        await fetchGrandparents(parent, newCategories["parents"]);
+                    }
+                    //  console.log(newCategories);
+                }
+
+            )
+            .then(() => {return newCategories})
     }
 
     static goToChild(oldCode, code, navigate, version, language) {
@@ -33,15 +57,11 @@ class CHOP extends Component {
     render() {
         let parentBreadcrumbs = [];
         let parents = this.props.parents;
-        let i = parents.length;
-        console.log("(CHOP) Parents:", parents);
         if(parents.length > 0){
-            for(i=parents.length-1; i>=0; i--){
+            for(let i=parents.length-1; i>=0; i--){
                 parentBreadcrumbs.push(<Breadcrumb.Item>{parents[i].code}</Breadcrumb.Item>);
             }
         }
-    //    console.log(counter, " parent.length-1: ", parents.length-1);
-    //    console.log(parentBreadcrumbs);
         return (
             <div>
                 <Breadcrumb>
