@@ -12,6 +12,7 @@ import deJson from "../../assets/translations/de.json";
 import frJson from "../../assets/translations/fr.json";
 import itJson from "../../assets/translations/it.json";
 import enJson from "../../assets/translations/en.json";
+import {Breadcrumb} from "react-bootstrap";
 
 class Body extends Component {
     constructor(props) {
@@ -36,14 +37,16 @@ class Body extends Component {
             supplement_codes: null,
             usage: "",
             text: "",
+            children: [],
             parent: null,
-            siblings: [],
-            children: []
+            parents: [],
+            siblings: []
         }
     }
     async componentDidMount() {
         await this.fetchInformations()
         await this.fetchSiblings(this.state.parent)
+        await this.fetchGrandparents(this.state.parent)
     }
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.params.language !== this.props.params.language ||
@@ -69,14 +72,15 @@ class Body extends Component {
                 supplement_codes: null,
                 usage: "",
                 text: "",
+                children: [],
                 parent: null,
-                siblings: [],
-                children: []
+                parents: [],
+                siblings: []
             })
             await this.fetchInformations()
             await this.fetchSiblings(this.state.parent)
+            await this.fetchGrandparents(this.state.parent)
         }
-
     }
 
     async fetchInformations() {
@@ -123,11 +127,11 @@ class Body extends Component {
     goToChild(child) {
         let navigate = this.props.navigation
         if(this.props.params.category === "ICD") {
-            ICD.goToChild(this.props.params.code, child.code, navigate, this.props.params.version, this.props.params.language)
+            ICD.goToChild(child.code, navigate, this.props.params.version, this.props.params.language)
         } else if(this.props.params.category === "CHOP") {
-            CHOP.goToChild(this.props.params.code, child.code, navigate, this.props.params.version, this.props.params.language)
+            CHOP.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
         } else if(this.props.params.category === "TARMED") {
-            TARMED.goToChild(this.props.params.code, child.code, navigate, this.props.params.version, this.props.params.language)
+            TARMED.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
         } else {
             DRG.goToChild(child, navigate, this.props.params.version, this.props.params.language)
         }
@@ -169,9 +173,32 @@ class Body extends Component {
         }
     }
 
+    async fetchGrandparents(parent) {
+        let parents = []
+        while(parent) {
+            parents = [...parents, parent]
+            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+                .then((res) => res.json())
+                .then((json) => {
+                    parent = json["parent"]
+                })
+        }
+        this.setState({parents: parents})
+    }
+
     render() {
         let translateJson = this.findJson(this.props.params.language)
         let categories = []
+        let parentBreadCrumbs = []
+        if(this.state.parents && this.state.parents.length > 0){
+            for(let i=this.state.parents.length-1; i>=0; i--){
+                parentBreadCrumbs.push(<Breadcrumb.Item
+                    key={i}
+                    onClick={() => this.goToChild(this.state.parents[i])}
+                    className="breadLink"
+                >{this.state.parents[i].code}</Breadcrumb.Item>)
+            }
+        }
         for(let category in this.state) {
             if(this.state[category] !== null && this.state[category] !== undefined) {
                 if(category === "med_interpret" || category === "tech_interpret") {
@@ -251,13 +278,13 @@ class Body extends Component {
             }
         }
         if(this.props.params.category === "ICD") {
-            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
+            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
         } else if(this.props.params.category === "CHOP") {
-            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
+            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
         } else if(this.props.params.category === "TARMED") {
-            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
+            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
         } else {
-            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
+            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
         }
     }
 }

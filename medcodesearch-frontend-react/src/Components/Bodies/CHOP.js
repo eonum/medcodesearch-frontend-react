@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import RouterService from "../../Services/router.service";
 import CodeSortService from "../../Services/CodeSortService";
+import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 
 class CHOP extends Component {
 
@@ -16,11 +17,11 @@ class CHOP extends Component {
                         newCategories["children"] = CodeSortService(json["children"])
                     }
                 })
-                .then(() => {return newCategories})
+            .then(() => {return newCategories})
     }
 
-    static goToChild(oldCode, code, navigate, version, language) {
-        if(version === oldCode) {
+    static goToChild(code, navigate, version, language) {
+        if(code.match(/^CHOP_[0-9][0-9][0-9][0-9]|C[0-9]?[0-9]$/)) {
             navigate({pathname: "/" + language + "/CHOP/" + version + "/chop_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         } else {
@@ -31,7 +32,11 @@ class CHOP extends Component {
 
     render() {
         return (
-            <div key={this.props.title}>
+            <div>
+                <Breadcrumb>
+                    {this.props.parents}
+                    <Breadcrumb.Item active>{this.props.title.replace("_", " ")}</Breadcrumb.Item>
+                </Breadcrumb>
                 <h3>{this.props.title.replace("_", " ")}</h3>
                 <p>{this.props.text}</p>
                 {this.props.categories}

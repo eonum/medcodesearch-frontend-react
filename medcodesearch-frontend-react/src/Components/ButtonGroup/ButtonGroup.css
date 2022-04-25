@@ -40,11 +40,6 @@
     margin-top: 5px;
 }
 
-.active{
-    color: white;
-    background-color: rgb(25, 26, 24);
-}
-
 .search-center {
     max-width: 983px;
     margin: auto;

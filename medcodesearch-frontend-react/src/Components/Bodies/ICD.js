@@ -1,11 +1,14 @@
 import React, {Component} from "react";
 import ICDSortService from "../../Services/ICDSortService";
 import RouterService from "../../Services/router.service";
+import {Breadcrumb} from "react-bootstrap";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 class ICD extends Component {
 
-    static goToChild(oldCode, code, navigate, version, language) {
-        if(version === oldCode) {
+
+    static goToChild(code, navigate, version, language) {
+        if(code.match(/^ICD10-GM-[0-9][0-9][0-9][0-9]|[XVI]+$/)) {
             navigate({pathname: "/" + language + "/ICD/" + version + "/icd_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         } else if (code.match(/^[A-Z][0-9][0-9]\.?[0-9]?[0-9]?$/)){
@@ -30,15 +33,19 @@ class ICD extends Component {
                         newCategories["children"] = ICDSortService(json["children"])
                     }
                 })
-                .then(() => {return newCategories})
+            .then(() => {return newCategories})
     }
 
 
     render() {
         return (
-            <div key={this.props.title + " code div"}>
-                <h3 key={this.props.title + " code h3"}>{this.props.title}</h3>
-                <p key={this.props.title + " code p"}>{this.props.text}</p>
+            <div>
+                <Breadcrumb>
+                    {this.props.parents}
+                    <Breadcrumb.Item active>{this.props.title.replace("_", " ")}</Breadcrumb.Item>
+                </Breadcrumb>
+                <h3>{this.props.title}</h3>
+                <p>{this.props.text}</p>
                 {this.props.categories}
             </div>
         )
