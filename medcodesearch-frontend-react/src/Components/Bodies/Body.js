@@ -12,6 +12,7 @@ import deJson from "../../assets/translations/de.json";
 import frJson from "../../assets/translations/fr.json";
 import itJson from "../../assets/translations/it.json";
 import enJson from "../../assets/translations/en.json";
+import {Breadcrumb} from "react-bootstrap";
 
 class Body extends Component {
     constructor(props) {
@@ -45,6 +46,7 @@ class Body extends Component {
     async componentDidMount() {
         await this.fetchInformations()
         await this.fetchSiblings(this.state.parent)
+        await this.fetchGrandparents(this.state.parent)
     }
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.params.language !== this.props.params.language ||
@@ -77,8 +79,8 @@ class Body extends Component {
             })
             await this.fetchInformations()
             await this.fetchSiblings(this.state.parent)
+            await this.fetchGrandparents(this.state.parent)
         }
-
     }
 
     async fetchInformations() {
@@ -171,9 +173,31 @@ class Body extends Component {
         }
     }
 
+    async fetchGrandparents(parent) {
+        let parents = []
+        while(parent) {
+            parents = [...parents, parent]
+            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+                .then((res) => res.json())
+                .then((json) => {
+                    parent = json["parent"]
+                })
+        }
+        this.setState({parents: parents})
+    }
+
     render() {
         let translateJson = this.findJson(this.props.params.language)
         let categories = []
+        let parentBreadCrumbs = []
+        if(this.state.parents && this.state.parents.length > 0){
+            for(let i=this.state.parents.length-1; i>=0; i--){
+                parentBreadCrumbs.push(<Breadcrumb.Item
+                    key={i}
+                    className="breadLink"
+                >{this.state.parents[i].code}</Breadcrumb.Item>)
+            }
+        }
         for(let category in this.state) {
             if(this.state[category] !== null && this.state[category] !== undefined) {
                 if(category === "med_interpret" || category === "tech_interpret") {
@@ -253,13 +277,13 @@ class Body extends Component {
             }
         }
         if(this.props.params.category === "ICD") {
-            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
+            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
         } else if(this.props.params.category === "CHOP") {
-            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
+            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
         } else if(this.props.params.category === "TARMED") {
-            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
+            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
         } else {
-            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
+            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
         }
     }
 }

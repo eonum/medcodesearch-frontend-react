@@ -19,58 +19,23 @@ class DRG extends Component {
             codeForSearch = '/' + code;
         }
 
-        async function fetchGrandparents(parent, parents) {
-            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    if (json["parent"] !== null) {
-                        parents.push(json["parent"]);
-                        fetchGrandparents(json["parent"], parents);
-                    }
-                })
-        }
-
         return await fetch('https://search.eonum.ch/' + language + "/" + cat+ "/" + version + codeForSearch + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
                         for (let category in categories) {
                             newCategories[category] = json[category]
                         }}
-                    ).then( async () => {
-                    newCategories["parents"] = [];
-                    if (newCategories["parent"] != null) {
-                        console.log("newCategories[parent]: ", newCategories["parent"]);
-                        let parent = newCategories["parent"];
-                        newCategories["parents"].push(parent);
-                        console.log("newCategories[parents]: ", newCategories["parents"]);
-                        await fetchGrandparents(parent, newCategories["parents"]);
-                    }
-                    //  console.log(newCategories);
-                }
-
-                )
+                    )
                 .then(() => {return newCategories})
     }
 
 
     render() {
-        let parentBreadcrumbs =  [];
-        let renderedOutput;
-        let parents = this.props.parents;
-         //console.log("(DRG) Parents:", parents);
-        if(parents.length > 0){
-            console.log("parents length: ", parents.length);
-            for(let i=parents.length-1; i>=0; i--){
-              parentBreadcrumbs.push(parents[i].code);
-            }
-            renderedOutput = parentBreadcrumbs.map(parent => <Breadcrumb.Item>{parent}</Breadcrumb.Item>);
-         //console.log(parentBreadcrumbs);
-        }
         return (
             <div>
                 <Breadcrumb>
-                    {renderedOutput}
-                    <Breadcrumb.Item>{this.props.title.replace("_", " ")}</Breadcrumb.Item>
+                    {this.props.parents}
+                    <Breadcrumb.Item active>{this.props.title.replace("_", " ")}</Breadcrumb.Item>
                 </Breadcrumb>
                 <h3>{this.props.title}</h3>
                 <p>{this.props.text}</p>
