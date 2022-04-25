@@ -1,10 +1,6 @@
 
     export const languages = ['de', 'fr', 'it', 'en']
 
-    export function versionExists(language, version) {
-        fetch()
-    }
-
     export function convertCategory(category, version) {
         switch(category) {
             case "ICD":

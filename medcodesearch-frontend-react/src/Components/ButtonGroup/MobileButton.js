@@ -25,9 +25,24 @@ class MobileButton extends Component{
             disabledCategory: "",
             allVersions: [],
             currentVersions: [],
-            buttons: [this.props.buttons[0][0],this.props.buttons[0][1],this.props.buttons[0][2],this.props.buttons[0][3],this.props.buttons[1][0],this.props.buttons[1][1],this.props.buttons[1][2]]
+            buttons: this.convertButtons()
         }
         this.updatePopUp = this.updatePopUp.bind(this);
+    }
+
+    /**
+     * converts button-arrays to one button array
+     * @returns {[]}
+     */
+    convertButtons(){
+        let buttons= [];
+        for(let i =0 ; i < this.props.buttons[0].length; i++){
+            buttons[i]= this.props.buttons[0][i]
+        }
+        for(let j=0 ; j < this.props.buttons[1].length; j++){
+            buttons[j+ this.props.buttons[0].length]=this.props.buttons[1][j];
+        }
+        return buttons;
     }
 
     /**
