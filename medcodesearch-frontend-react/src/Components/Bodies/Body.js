@@ -36,9 +36,10 @@ class Body extends Component {
             supplement_codes: null,
             usage: "",
             text: "",
+            children: [],
             parent: null,
-            siblings: [],
-            children: []
+            parents: [],
+            siblings: []
         }
     }
     async componentDidMount() {
@@ -69,9 +70,10 @@ class Body extends Component {
                 supplement_codes: null,
                 usage: "",
                 text: "",
+                children: [],
                 parent: null,
-                siblings: [],
-                children: []
+                parents: [],
+                siblings: []
             })
             await this.fetchInformations()
             await this.fetchSiblings(this.state.parent)
@@ -251,13 +253,13 @@ class Body extends Component {
             }
         }
         if(this.props.params.category === "ICD") {
-            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
+            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         } else if(this.props.params.category === "CHOP") {
-            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
+            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         } else if(this.props.params.category === "TARMED") {
-            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
+            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         } else {
-            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} categories={categories}/>
+            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={this.state.parents}/>
         }
     }
 }
