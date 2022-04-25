@@ -20,8 +20,8 @@ class CHOP extends Component {
             .then(() => {return newCategories})
     }
 
-    static goToChild(oldCode, code, navigate, version, language) {
-        if(version === oldCode) {
+    static goToChild(code, navigate, version, language) {
+        if(code.match(/^CHOP_[0-9][0-9][0-9][0-9]|C[0-9]?[0-9]$/)) {
             navigate({pathname: "/" + language + "/CHOP/" + version + "/chop_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         } else {

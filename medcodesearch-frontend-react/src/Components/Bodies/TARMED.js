@@ -34,8 +34,8 @@ class TARMED extends Component {
         )
     }
 
-    static goToChild(oldCode, code, navigate, version, language) {
-        if(code.match(/^[0-9][0-9]$/)) {
+    static goToChild(code, navigate, version, language) {
+        if(code.match(/^TARMED_[0-9][0-9].[0-9][0-9]$|^[0-9][0-9]$/)) {
             navigate({pathname: "/" + language + "/TARMED/" + version + "/tarmed_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         } else {

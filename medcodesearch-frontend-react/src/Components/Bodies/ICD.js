@@ -7,8 +7,8 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 class ICD extends Component {
 
 
-    static goToChild(oldCode, code, navigate, version, language) {
-        if(version === oldCode) {
+    static goToChild(code, navigate, version, language) {
+        if(code.match(/^ICD10-GM-[0-9][0-9][0-9][0-9]|[XVI]+$/)) {
             navigate({pathname: "/" + language + "/ICD/" + version + "/icd_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         } else if (code.match(/^[A-Z][0-9][0-9]\.?[0-9]?[0-9]?$/)){

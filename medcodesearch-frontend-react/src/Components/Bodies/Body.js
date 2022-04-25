@@ -127,11 +127,11 @@ class Body extends Component {
     goToChild(child) {
         let navigate = this.props.navigation
         if(this.props.params.category === "ICD") {
-            ICD.goToChild(this.props.params.code, child.code, navigate, this.props.params.version, this.props.params.language)
+            ICD.goToChild(child.code, navigate, this.props.params.version, this.props.params.language)
         } else if(this.props.params.category === "CHOP") {
-            CHOP.goToChild(this.props.params.code, child.code, navigate, this.props.params.version, this.props.params.language)
+            CHOP.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
         } else if(this.props.params.category === "TARMED") {
-            TARMED.goToChild(this.props.params.code, child.code, navigate, this.props.params.version, this.props.params.language)
+            TARMED.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
         } else {
             DRG.goToChild(child, navigate, this.props.params.version, this.props.params.language)
         }
@@ -194,6 +194,7 @@ class Body extends Component {
             for(let i=this.state.parents.length-1; i>=0; i--){
                 parentBreadCrumbs.push(<Breadcrumb.Item
                     key={i}
+                    onClick={() => this.goToChild(this.state.parents[i])}
                     className="breadLink"
                 >{this.state.parents[i].code}</Breadcrumb.Item>)
             }
