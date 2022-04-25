@@ -204,6 +204,7 @@ class ButtonVersion extends React.Component{
                     </button>
                     <Dropdown.Toggle
                         className="customButton"
+                        id={"buttonversion"}
                         type="button"
                         variant=""
                         key={"buttonversion " + this.props.category + " DropDown"

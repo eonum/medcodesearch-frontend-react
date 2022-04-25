@@ -207,13 +207,20 @@ class MobileButton extends Component{
                     category={this.state.disabledCategory}
                 />
                 <Dropdown key={"mobileButton dropdown catalog"} className="catalogButtons">
-                    <DropdownToggle key={"mobileButton dropdown catalog toggle"} className="customButton" variant="" type="button" >
+                    <DropdownToggle
+                        key={"mobileButton dropdown catalog toggle"}
+                        className="customButton"
+                        variant=""
+                        type="button"
+                        id={"mobilebutton catalog"}>
                         {this.props.category}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
-                        {this.state.buttons.map((category) => (
+                        {this.state.buttons.map((category, index) => (
                                 <Dropdown.Item className="dropdown-item"
-                                               eventKey={category} key={"mobileButton dropdown catalog " + category}
+                                               eventKey={category}
+                                               key={"mobileButton dropdown catalog " + category}
+                                               id={category + " " + index}
                                                onClick={() => {
                                     this.props.chooseC('', category, false, "")
                                 }}>
@@ -225,7 +232,12 @@ class MobileButton extends Component{
                 </Dropdown>
                 {!renderCal &&
                 <Dropdown key={"mobileButton dropdown versions"} className="catalogButtons">
-                    <Dropdown.Toggle key={"mobileButton dropdown verisions toggle"} className="customButton" variant="" type="button">
+                    <Dropdown.Toggle
+                        key={"mobileButton dropdown verisions toggle"}
+                        className="customButton"
+                        variant=""
+                        type="button"
+                        id={"mobilebutton version"}>
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
