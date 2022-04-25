@@ -43,7 +43,10 @@
     ]
   },
   "devDependencies": {
+    "chromedriver": "^100.0.0",
+    "geckodriver": "^3.0.1",
     "jest": "^27.5.1",
-    "react-string-replace": "^1.0.0"
+    "react-string-replace": "^1.0.0",
+    "selenium-webdriver": "^3.6.0"
   }
 }
