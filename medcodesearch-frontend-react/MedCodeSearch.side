@@ -14,13 +14,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "a3dd8600-f8ae-464f-9397-39ce1cae199a",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "ff773072-efa1-4df2-87d2-604933ad8664",
       "comment": "",
       "command": "click",
@@ -624,13 +617,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "3308a060-1d7e-4400-9c0c-130d438d30f3",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "c89a6203-d717-44ee-91cb-7920eb77b301",
       "comment": "",
       "command": "click",
@@ -1073,13 +1059,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "2d9f2f13-5ebd-4e52-8d26-e1a3c57e854b",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "8375d209-1ce2-4958-bd96-9346f8658fb3",
       "comment": "",
       "command": "click",
@@ -1140,13 +1119,6 @@
       "comment": "",
       "command": "open",
       "target": "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "1d22b8e5-08b4-434d-90ac-f7e59c12c0b5",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
       "targets": [],
       "value": ""
     }, {
@@ -1246,13 +1218,6 @@
       "comment": "",
       "command": "open",
       "target": "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "bacd963d-9caf-4b84-a8f7-c4039564539f",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
       "targets": [],
       "value": ""
     }, {
@@ -1453,13 +1418,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "07dcf8e1-c753-4df1-a7b8-bb86d9d014bb",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "f2c851a9-866c-4f31-a290-ea112da098b2",
       "comment": "",
       "command": "click",
@@ -1635,13 +1593,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "1cae1145-f8da-4c96-bf5b-45663fa62ef2",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "74e471c2-8f58-4277-ae4d-985b228ea20b",
       "comment": "",
       "command": "click",
@@ -1797,13 +1748,6 @@
       "comment": "",
       "command": "open",
       "target": "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "318680af-0562-4619-8d66-52b0e2075172",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
       "targets": [],
       "value": ""
     }, {
@@ -2139,13 +2083,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "b81fab8f-654b-4219-ba97-34dd7adfca13",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "e2f96c7c-d21a-4696-9df6-014a677ef96c",
       "comment": "",
       "command": "click",
@@ -2189,13 +2126,6 @@
       "comment": "",
       "command": "open",
       "target": "/fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "b4ec1e3b-dea4-4c2d-afb9-fa813ae4023a",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
       "targets": [],
       "value": ""
     }, {
@@ -2245,13 +2175,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "a44f1ca3-821b-4a7b-a0be-3f2f4ae39030",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "da41c7b6-f158-4ef6-b441-fac88931e88b",
       "comment": "",
       "command": "click",
@@ -2295,13 +2218,6 @@
       "comment": "",
       "command": "open",
       "target": "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "fef2bb9e-b056-4967-a6cf-76b0ae57835e",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
       "targets": [],
       "value": ""
     }, {
@@ -2351,13 +2267,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "74504e61-9e9e-4bc7-9f2c-b47435dca858",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "80650504-d7e5-462c-a45b-df4aac9544e4",
       "comment": "",
       "command": "click",
@@ -2401,13 +2310,6 @@
       "comment": "",
       "command": "open",
       "target": "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "c481313c-bed3-4e33-9604-c9ba3ab5cefb",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
       "targets": [],
       "value": ""
     }, {
@@ -2457,13 +2359,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "239dd488-87af-4ed2-a347-c5550ccf0a78",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "29f1f44b-9b28-4942-8abf-759f04e16a6c",
       "comment": "",
       "command": "click",
@@ -2507,13 +2402,6 @@
       "comment": "",
       "command": "open",
       "target": "/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "80934df9-3fcb-44ff-ab72-3471c1d62b5b",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
       "targets": [],
       "value": ""
     }, {
@@ -2563,13 +2451,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "6f29d786-092b-4354-980c-8ec9ae068351",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "81bc823d-01f7-4a50-9bbc-d268ded60889",
       "comment": "",
       "command": "click",
@@ -2613,13 +2494,6 @@
       "comment": "",
       "command": "open",
       "target": "/fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "05455c91-a646-46b0-887e-231fe995e123",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
       "targets": [],
       "value": ""
     }, {
@@ -2669,13 +2543,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "80cf3183-d641-4d6b-9c51-d8999f778201",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "38ccc7fc-9c03-4d96-980f-85a39af0679a",
       "comment": "",
       "command": "click",
@@ -2722,13 +2589,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "f3c6c05e-0092-4d7d-a82d-178839d09c17",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "75028e20-d238-4e2f-b058-f1319ec8a96e",
       "comment": "",
       "command": "click",
@@ -2772,13 +2632,6 @@
       "comment": "",
       "command": "open",
       "target": "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "267db60a-cc81-4920-86a3-7b0b0ef3fb86",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "809x702",
       "targets": [],
       "value": ""
     }, {
@@ -3134,13 +2987,6 @@
       "comment": "",
       "command": "open",
       "target": "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "cfd4c9cb-a209-4641-9701-e3f28df4976a",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1381x885",
       "targets": [],
       "value": ""
     }, {
@@ -3594,13 +3440,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "cfc8c9eb-f7dc-4447-8854-ddb3d8d25abe",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1042x692",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "455da90a-6cf1-46e2-9d0e-43e503b257b2",
       "comment": "",
       "command": "click",
@@ -3625,13 +3464,6 @@
         ["xpath=//ul/li/a", "xpath:position"],
         ["xpath=//a[contains(.,'A00-A09:')]", "xpath:innerText"]
       ],
-      "value": ""
-    }, {
-      "id": "d54c1590-7286-47e1-b3b1-aeb40cbb8013",
-      "comment": "",
-      "command": "runScript",
-      "target": "window.scrollTo(0,0)",
-      "targets": [],
       "value": ""
     }, {
       "id": "decbb6f8-e9ff-4c47-80e2-2df00434890f",
@@ -4314,13 +4146,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "9924bbe7-2a41-49b7-8a89-bb429c31964c",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1042x692",
-      "targets": [],
-      "value": ""
-    }, {
       "id": "99fa9759-3430-4fc3-8900-2541936f1161",
       "comment": "",
       "command": "click",
@@ -4345,13 +4170,6 @@
         ["xpath=//ul/li/a", "xpath:position"],
         ["xpath=//a[contains(.,'A00-A09:')]", "xpath:innerText"]
       ],
-      "value": ""
-    }, {
-      "id": "dec0ca5e-ad8c-436a-8aba-38687a347ebf",
-      "comment": "",
-      "command": "runScript",
-      "target": "window.scrollTo(0,0)",
-      "targets": [],
       "value": ""
     }, {
       "id": "a5ef1dcc-66ae-4898-bb98-5cd475d2f197",

@@ -51,7 +51,7 @@ class Searchbar extends Component {
             if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
                 || this.props.selectedButton === 'DRUG') {
                 if(this.props.date !== ConvertDate(new Date().toISOString())){
-                    date = 'date=' + this.props.date + '&'
+                   date = 'date=' + this.props.date + '&'
                 }
             }
             navigate({search: date + createSearchParams({query: e.target.value}).toString()});
@@ -109,7 +109,7 @@ class Searchbar extends Component {
         if(prevProps.language !== this.props.language
             || prevProps.selectedButton !== this.props.selectedButton
             || prevProps.version !== this.props.version
-            || prevProps.selectedDate !== this.props.date
+            || prevProps.date !== this.props.date
             || prevState.searchTerm !== RouterService.getQueryVariable('query')) {
             this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
         }

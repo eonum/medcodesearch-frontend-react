@@ -16,6 +16,7 @@ describe('Default Suite', function() {
   afterEach(async function() {
     await driver.quit();
   })
+
   it('clicking from one catalog to another (de)', async function() {
     // Test name: clicking from one catalog to another (de)
     // Step # | name | target | value
@@ -116,7 +117,7 @@ describe('Default Suite', function() {
       await driver.actions({ bridge: true }).moveToElement(element, 0, 0).perform()
     }
   })
-  it('click from button to toher buttons version', async function() {
+  it('click from button to other buttons version', async function() {
     // Test name: click from button to toher buttons version
     // Step # | name | target | value
     // 1 | open | /de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022 | 
@@ -124,7 +125,7 @@ describe('Default Suite', function() {
     // 3 | click | css=div:nth-child(2) > div > .catalogButtons > #buttonversion | 
     await driver.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
     // 4 | click | id=CHOP_2020 | 
-    await driver.findElement(By.id("CHOP_2020")).click()
+    await driver.findElement(By.id("CHOP")).click()
     // 5 | click | css=div:nth-child(3) #buttonversion | 
     await driver.findElement(By.css("div:nth-child(3) #buttonversion")).click()
     // 6 | click | id=V8.0 | 

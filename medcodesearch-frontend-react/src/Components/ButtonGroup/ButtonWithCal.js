@@ -5,6 +5,7 @@ import calendarLogo from "../../assets/calendar.png";
 import Calendar from "react-calendar";
 import DatePicker from "./DatePicker";
 import ConvertDate from "../../Services/ConvertDate";
+import convertDate from "../../Services/ConvertDate";
 
 /**
  * creates a button with a calender
@@ -24,7 +25,7 @@ class ButtonWithCal extends Component{
                         name={this.props.name}
                         className={this.props.name === this.props.active ? "customButton activeCatalog" : "customButton" }
                         onClick={() =>{
-                            this.props.select(this.props.name, ConvertDate(new Date()))
+                            this.props.select(this.props.name, convertDate(new Date().toISOString()))
                         }}>
                         {this.props.name}
                     </button>
