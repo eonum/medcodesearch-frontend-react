@@ -103,13 +103,13 @@ class Body extends Component {
                 matches[i] = matches[i].substring(1, matches[i].length - 1);
                 let arr = matches[i].split("-")
                 if(arr.length > 1 && arr[1] !== "") {
-                    results.push(<span>(<a onClick={() => {
+                    results.push(<span key={(index + 7)*3}>(<a onClick={() => {
                         this.searchExclusion(arr[0].replace(/\.$/, ''))
                     }} className="link">{arr[0].replace(/\.$/, '')}</a>-<a onClick={() => {
                         this.searchExclusion(arr[1].replace(/\.$/, ''))
                     }} className="link">{arr[1].replace(/\.$/, '')}</a>) </span>)
                 } else {
-                    results.push(<span>(<a onClick={() => {
+                    results.push(<span key={(index + 11)*3}>(<a onClick={() => {
                         this.searchExclusion(arr[0].replace(/\.$/, ''))
                     }} className="link">{arr[0].replace(/\.$/, '')}</a>) </span>)
                 }
@@ -176,14 +176,14 @@ class Body extends Component {
             if(this.state[category] !== null && this.state[category] !== undefined) {
                 if(category === "med_interpret" || category === "tech_interpret") {
                     categories.push(
-                        <div key={"med/tech interpret"}>
+                        <div key={"med/tech interpret" + this.state[category].length * 41}>
                             <p>{this.state[category]}</p>
                         </div>
                     )
                 } else if(category === "tp_al" || category === "tp_tl") {
                     if(this.state[category] !== 0) {
                         categories.push(
-                            <div key={"tp_al/tl"}>
+                            <div key={"tp_al/tl" + this.state[category] * 37}>
                                 <p>{translateJson["LBL_" + category.toUpperCase()]}: {this.state[category]}</p>
                             </div>
                         )
@@ -191,29 +191,29 @@ class Body extends Component {
                 }
                 else if(category === "note" || category === "coding_hint" || category === "usage") {
                     categories.push(
-                        <div key={"note coding_hint usage"}>
+                        <div key={"note coding_hint usage" + this.state[category].length * 31}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <p>{this.state[category]}</p>
                         </div>
                     )
                 } else if(this.state[category].length > 0 && (category === "children" || category === "siblings")) {
                     categories.push(
-                        <div key={"children siblings"}>
+                        <div key={"children siblings" + this.state[category] * 29}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[category].map((child, i) => (
-                                    <li key={child + " number " + i}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
+                                    <li key={child + " number " + (i * 23)}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
                     )
                 } else if(this.state[category].length > 0 && category === "groups") {
                     categories.push(
-                        <div key={"groups"}>
+                        <div key={"groups " + this.state[category].length * 19}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[category].map((child, i) => (
-                                    <li key={child.code + "childcode " + i}>{child.code}: {child.text}</li>
+                                    <li key={child.code + "childcode " + (i * 17)}>{child.code}: {child.text}</li>
                                 ))}
                             </ul>
                         </div>
@@ -221,7 +221,7 @@ class Body extends Component {
                 }
                 else if(this.state[category].length > 0 && (category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs" || category === "descriptions")) {
                     categories.push(
-                        <div key={"incl, syn, rel_drgs, descr"}>
+                        <div key={"incl, syn, rel_drgs, descr " + this.state[category].length * 13}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[category].map((element, i) => (
@@ -232,7 +232,7 @@ class Body extends Component {
                     )
                 } else if(this.state[category].length > 0 && (category === "exclusions" || category === "supplement_codes")) {
                     categories.push(
-                        <div key={"exclusions supp_codes"}>
+                        <div key={"exclusions supp_codes " + this.state[category].length * 11}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[category].map((exclusion, i) => (
@@ -243,7 +243,7 @@ class Body extends Component {
                     )
                 } else if(category === "predecessors" && this.state[category].length === 0) {
                     categories.push(
-                        <div key={"predec"}>
+                        <div key={"predec " + this.state[category].length * 7}>
                             <h5>{translateJson["LBL_NEW_CODE"]}</h5>
                         </div>
                     )
