@@ -196,7 +196,7 @@ class MobileButton extends Component{
         return(
         <div key={"mobileButton div 0"} className="d-lg-none text-center">
             <div key={"mobileButton div 1"} className="btn-group">
-                <PopUp
+                {/*<PopUp
                     language={this.props.language}
                     selectedLanguage={this.props.selectedLanguage}
                     selectedVersion={this.props.updateVersion}
@@ -205,7 +205,7 @@ class MobileButton extends Component{
                     updateValue={this.updatePopUp}
                     version={this.state.disabledVersion}
                     category={this.state.disabledCategory}
-                />
+                />*/}
                 <Dropdown key={"mobileButton dropdown catalog"} className="catalogButtons">
                     <DropdownToggle
                         key={"mobileButton dropdown catalog toggle"}
@@ -241,7 +241,7 @@ class MobileButton extends Component{
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
-                        {this.state.allVersions.map(
+                        {this.state.allVersions.reverse().map(
                             (versions) => (
                                 <Dropdown.Item
                                     className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}

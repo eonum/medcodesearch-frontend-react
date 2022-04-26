@@ -179,7 +179,7 @@ class ButtonVersion extends React.Component{
     render() {
         return (
             <div key={"buttonVersion div 0"}>
-                <PopUp
+                {/*<PopUp
                     language={this.props.language}
                     selectedLanguage={this.props.selectedLanguage}
                     selectedVersion={this.props.updateVersion}
@@ -188,7 +188,7 @@ class ButtonVersion extends React.Component{
                     updateValue={this.updatePopUp}
                     version={this.state.disabledVersion}
                     category={this.state.disabledCategory}
-                />
+                />*/}
                 <Dropdown accessKey={"buttonversion dropdown"} className="catalogButtons d-none d-lg-block">
                     <button 
                         type="button"
@@ -212,7 +212,7 @@ class ButtonVersion extends React.Component{
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu accessKey={"buttonversion dropdown menu for versions"} className="dropdown">
-                        {this.state.allVersions.reduceRight(function (arr, last, index, coll) {return (arr = arr.concat(last))},[]).map(
+                        {this.state.allVersions.reverse().map(
                             (versions) => (
                                 <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                                                eventKey={versions}
