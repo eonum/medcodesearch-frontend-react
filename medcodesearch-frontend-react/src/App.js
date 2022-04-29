@@ -166,7 +166,7 @@ class App extends Component{
 
     getFullLabels(language){
         if(language === "fr"){
-            return['Liste des moyens et appareils', 'Liste des analyses']
+            return['Liste des moyens et appareils', 'Liste des analyses', 'drogues']
         }
         else if(language === "it"){
            return ['Elenco dei mezzi e degli apparecchi', 'Elenco delle analisi', 'it: drugs']

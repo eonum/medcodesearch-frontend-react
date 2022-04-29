@@ -1,8 +1,5 @@
 import React, {Component} from "react";
-import Popup from "reactjs-popup";
-import {Button, FormGroup, OverlayTrigger, Tooltip} from "react-bootstrap";
-import calendarLogo from "../../assets/calendar.png";
-import Calendar from "react-calendar";
+import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import DatePicker from "./DatePicker";
 
 /**
@@ -25,6 +22,7 @@ class ButtonWithCal extends Component{
             return(
                 <div key={"buttonwithCal div 0"} id={"cal"}>
                     <OverlayTrigger
+                        placement="bottom"
                         delay={{ show: 250, hide: 400 }}
                         overlay={this.renderTooltip}
                     >
