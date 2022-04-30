@@ -42,6 +42,7 @@ class App extends Component{
         this.updateDate = this.updateDate.bind(this);
         this.updateList = this.updateList.bind(this);
         this.reRenderButton = this.reRenderButton.bind(this);
+        this.reNavigateToHome = this.reNavigateToHome.bind(this)
         this.showHide = this.showHide.bind(this);
     }
 
@@ -196,6 +197,10 @@ class App extends Component{
         });
     }
 
+    reNavigateToHome(){
+        this.updateButton('ICD')
+        this.updateList('ICD10-GM-2022')
+    }
 
     /**
      * renders the whole website
@@ -215,7 +220,7 @@ class App extends Component{
                       </div>
                       <div key={"app img div 0"} className="row">
                           <div key={"app img div 1"} className="col-sm-12">
-                              <img onClick={this.reRenderButton} alt="logo" id="logo" src={logo}/>
+                              <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
                           </div>
                       </div>
                   </div>
