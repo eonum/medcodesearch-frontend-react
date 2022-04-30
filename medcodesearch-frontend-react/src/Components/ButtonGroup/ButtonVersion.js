@@ -179,7 +179,7 @@ class ButtonVersion extends React.Component{
     render() {
         return (
             <div key={"buttonVersion div 0"}>
-                {/*<PopUp
+                {<PopUp
                     language={this.props.language}
                     selectedLanguage={this.props.selectedLanguage}
                     selectedVersion={this.props.updateVersion}
@@ -188,7 +188,7 @@ class ButtonVersion extends React.Component{
                     updateValue={this.updatePopUp}
                     version={this.state.disabledVersion}
                     category={this.state.disabledCategory}
-                />*/}
+                />}
                 <Dropdown accessKey={"buttonversion dropdown"} className="catalogButtons d-none d-lg-block">
                     <button 
                         type="button"
