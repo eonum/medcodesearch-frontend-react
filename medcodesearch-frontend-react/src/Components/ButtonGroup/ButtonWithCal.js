@@ -1,11 +1,7 @@
 import React, {Component} from "react";
-import Popup from "reactjs-popup";
-import {Button, FormGroup} from "react-bootstrap";
-import calendarLogo from "../../assets/calendar.png";
-import Calendar from "react-calendar";
-import DatePicker from "./DatePicker";
-import ConvertDate from "../../Services/ConvertDate";
+
 import convertDate from "../../Services/ConvertDate";
+import DatePicker from "./DatePicker";
 
 /**
  * creates a button with a calender
@@ -18,26 +14,26 @@ class ButtonWithCal extends Component{
      * @returns {JSX.Element}
      */
     render(){
-            return(
+        return(
                 <div key={"buttonwithCal div 0"} id={"cal"}>
                     <button
                         key={"buttonwithcal " + this.props.name}
                         name={this.props.name}
                         className={this.props.name === this.props.active ? "customButton activeCatalog" : "customButton" }
                         onClick={() =>{
-                            this.props.select(this.props.name, convertDate(new Date().toISOString()))
+                            this.props.select(this.props.name, convertDate(new Date().toDateString()))
                         }}>
                         {this.props.name}
                     </button>
                         {this.props.showHideCal && (this.props.active === this.props.name) &&
-                            <DatePicker
+
+                        <DatePicker
                                 activeDate = {this.props.date}
                                 setDate={(date) => {
                                     this.props.select(this.props.name, date)
                                 }}
                             />
                         }
-
                 </div>
                 )}
 

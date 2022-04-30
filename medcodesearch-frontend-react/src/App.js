@@ -15,6 +15,7 @@ import itJson from "./assets/translations/it.json";
 import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
 import {CloseButton, Collapse} from "react-bootstrap";
+import ConvertDate from "./Services/ConvertDate";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -32,7 +33,7 @@ class App extends Component{
             language: RouterService.getLanguageFromURL(),
             selectedButton: RouterService.getCategoryFromURL(),
             selectedList: RouterService.getVersionFromURL(),
-            selectedDate: convertDate(new Date().toISOString()),
+            selectedDate: convertDate(new Date().toDateString()),
             searchResults: [],
             reSetPath: false,
             collapseMenu: false

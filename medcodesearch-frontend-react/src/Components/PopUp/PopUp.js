@@ -7,7 +7,6 @@ import frJson from "../../assets/translations/fr.json";
 import itJson from "../../assets/translations/it.json";
 import enJson from "../../assets/translations/en.json";
 import {convertCategoryToCatalog, convertCategoryToChapters, languages} from "../../Services/category-version.service";
-import RouterService from "../../Services/router.service";
 
 class PopUp extends Component{
     constructor() {

@@ -50,8 +50,8 @@ class Searchbar extends Component {
         } else {
             if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
                 || this.props.selectedButton === 'DRUG') {
-                if(this.props.date !== ConvertDate(new Date().toISOString())){
-                   date = 'date=' + this.props.date + '&'
+                if(this.props.date !== ConvertDate(new Date().toDateString())){
+                    date = 'date=' + this.props.date + '&'
                 }
             }
             navigate({search: date + createSearchParams({query: e.target.value}).toString()});
@@ -90,7 +90,7 @@ class Searchbar extends Component {
             return "chops/" + this.props.version;
         } else if(chosenBtn === "TARMED") {
             return "tarmeds/" + this.props.version;
-        } else if (chosenBtn === "MiGeL"){
+        } else if (chosenBtn.toUpperCase() === "MIGEL"){
             return "migels/" + chosenBtn.toUpperCase();
         } else if (chosenBtn === "AL"){
             return "laboratory_analyses/" + chosenBtn.toUpperCase();
@@ -122,9 +122,8 @@ class Searchbar extends Component {
      */
     async fetchForSearchTerm(searchTerm){
         let date = '';
-        if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
-            || this.props.selectedButton === 'DRUG') {
-            if(this.props.date !== ConvertDate(new Date().toISOString())){
+        if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'){
+            if(this.props.date !== ConvertDate(new Date().toDateString())){
                 date = 'date=' + this.props.date + '&'
             }
         }

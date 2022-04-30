@@ -6,6 +6,7 @@ import {useParams} from "react-router-dom";
 import convertDate from "../../Services/ConvertDate";
 import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
+import ConvertDate from "../../Services/ConvertDate";
 
 /**
  * is responsible for all buttons to render
@@ -26,7 +27,7 @@ class ButtonGroup extends Component{
             lastDRG: 'V11.0',
             lastCHOP: 'CHOP_2022',
             lastTARMED: 'TARMED_01.09',
-            selectedDate: convertDate(new Date().toISOString()),
+            selectedDate: convertDate(new Date().toDateString()),
             showHideCal: false,
             buttons: this.props.buttons,
         }
@@ -63,9 +64,10 @@ class ButtonGroup extends Component{
         if (isCalendarType) {
             version = ''
         }
-        if (date !== ''){
-            this.updateDate(date);
+        if (date === ''){
+            date = ConvertDate(new Date().toDateString())
         }
+        this.updateDate(date);
         this.setState({selectedButton: btn, activeList: version});
         this.props.selectedList(version);
         this.props.selectedButton(btn);
@@ -190,7 +192,7 @@ class ButtonGroup extends Component{
                                 <div key={"buttongroup CalendarButton div " + index}>
                                     <ButtonWithCal
                                         showHideCal={this.state.showHideCal}
-                                        date ={this.props.selectedDate}
+                                        date ={this.state.selectedDate}
                                         name={button}
                                         select={(btn, date) => {
                                             this.updateButton('', btn, true, date);
@@ -206,7 +208,7 @@ class ButtonGroup extends Component{
                 <div key={"buttongroup MobileButton div 0"} className="d-lg-none">
                     <MobileButton
                         selectedButton ={this.state.selectedButton}
-                        date ={this.props.selectedDate}
+                        date ={this.state.selectedDate}
                         version={this.getVersion(this.state.selectedButton)}
                         selectedVersion={this.props.params.version}
                         category={this.state.selectedButton}
