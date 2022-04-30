@@ -24,7 +24,8 @@ render(){
                                 name="form"
                                 onChange={(change => {
                                     this.updateDate(change.target.value)
-                            })}/>
+                                })}
+                            />
                         </Form.Group>
                     </div>
                 </div>

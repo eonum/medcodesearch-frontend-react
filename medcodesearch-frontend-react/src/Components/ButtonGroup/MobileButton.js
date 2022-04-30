@@ -196,16 +196,18 @@ class MobileButton extends Component{
         return(
         <div key={"mobileButton div 0"} className="d-lg-none text-center">
             <div key={"mobileButton div 1"} className="btn-group">
-                {/*<PopUp
-                    language={this.props.language}
-                    selectedLanguage={this.props.selectedLanguage}
-                    selectedVersion={this.props.updateVersion}
-                    selectedCategory={this.props.updateCategory}
-                    show={this.state.showPopUp}
-                    updateValue={this.updatePopUp}
-                    version={this.state.disabledVersion}
-                    category={this.state.disabledCategory}
-                />*/}
+                {
+                    <PopUp
+                        language={this.props.language}
+                        selectedLanguage={this.props.selectedLanguage}
+                        selectedVersion={this.props.updateVersion}
+                        selectedCategory={this.props.updateCategory}
+                        show={this.state.showPopUp}
+                        updateValue={this.updatePopUp}
+                        version={this.state.disabledVersion}
+                        category={this.state.disabledCategory}
+                    />
+                }
                 <Dropdown key={"mobileButton dropdown catalog"} className="catalogButtons">
                     <DropdownToggle
                         key={"mobileButton dropdown catalog toggle"}
@@ -261,7 +263,7 @@ class MobileButton extends Component{
                 <DatePicker
                     activeDate = {this.props.date}
                     setDate={(date) => {
-                        this.props.chooseC('',this.props.selectedButton, true, date)
+                        this.props.chooseC('',this.props.category, true, date)
                     }}
                 />
                 }

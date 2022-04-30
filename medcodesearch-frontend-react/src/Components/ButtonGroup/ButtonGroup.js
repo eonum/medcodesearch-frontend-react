@@ -135,6 +135,10 @@ class ButtonGroup extends Component{
         if(prevProps.version !== this.props.version) {
             this.getVersionCategory()
         }
+        if (this.props.clickedOnLogo){
+            this.setState({selectedButton: prevProps.category,})
+            this.props.reSetClickOnLogo()
+        }
     }
 
     /**
@@ -207,7 +211,6 @@ class ButtonGroup extends Component{
                 </div>
                 <div key={"buttongroup MobileButton div 0"} className="d-lg-none">
                     <MobileButton
-                        selectedButton ={this.state.selectedButton}
                         date ={this.state.selectedDate}
                         version={this.getVersion(this.state.selectedButton)}
                         selectedVersion={this.props.params.version}

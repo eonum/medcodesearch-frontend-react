@@ -35,6 +35,7 @@ class App extends Component{
             selectedList: RouterService.getVersionFromURL(),
             selectedDate: convertDate(new Date().toDateString()),
             searchResults: [],
+            clickedOnLogo: false,
             reSetPath: false,
             collapseMenu: false
         };
@@ -43,6 +44,7 @@ class App extends Component{
         this.updateList = this.updateList.bind(this);
         this.reRenderButton = this.reRenderButton.bind(this);
         this.reNavigateToHome = this.reNavigateToHome.bind(this)
+        this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
         this.showHide = this.showHide.bind(this);
     }
 
@@ -198,8 +200,12 @@ class App extends Component{
     }
 
     reNavigateToHome(){
+        this.setState({clickedOnLogo: true})
         this.updateButton('ICD')
         this.updateList('ICD10-GM-2022')
+    }
+    reSetClickedOnLogo(){
+        this.setState({clickedOnLogo: false})
     }
 
     /**
@@ -236,8 +242,10 @@ class App extends Component{
                       </div>
                       <div key={"app buttongroup div 0"} className="row">
                           <ButtonGroup
+                              clickedOnLogo={this.state.clickedOnLogo}
                               category={this.state.selectedButton}
                               version={this.state.selectedList}
+                              reSetClickOnLogo={this.reSetClickedOnLogo}
                               reSetButton={this.reRenderButton}
                               selectedLanguage={this.updateLanguage}
                               language={this.state.language}
