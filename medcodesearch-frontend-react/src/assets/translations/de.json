@@ -50,6 +50,17 @@
   "LBL_ACTIVE_SUBSTANCES": "Wirkstoff",
   "LBL_ATC_CODE": "ATC code",
   "LBL_UNIT": "Einheit",
-  "LBL_COMMENT": "Kommentar"
+  "LBL_COMMENT": "Kommentar",
+  "LBL_HVB_SELF": "HVB Selbstanwendung",
+  "LBL_HVB_CARE": "HVB Pflege",
+  "LBL_PHARMA_FORM": "Pharmazeutische Form",
+  "LBL_EXCIPIENTS": "Hilfsstoffe",
+  "LBL_REMEDY_CODE": "Abhilfekodex",
+  "LBL_AUTH_NUMBER": "Autorisierungsnummer",
+  "LBL_PACKAGE_CODE": "Paketcode",
+  "LBL_PACK_SIZE": "Packmass",
+  "LBL_PACK_UNIT": "Verpackungseineit",
+  "LBL_DISPENS_CAT": "Dispenser-Kategorie",
+  "LBL_AUTH_STATE": "Authentifizierungsstatus"
 }
 

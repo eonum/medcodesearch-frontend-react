@@ -19,7 +19,7 @@ class ButtonWithCal extends Component{
                     <button
                         key={"buttonwithcal " + this.props.name}
                         name={this.props.name}
-                        className={this.props.name === this.props.active ? "customButton activeCatalog" : "customButton" }
+                        className={this.props.name.toUpperCase() === this.props.active.toUpperCase() ? "customButton activeCatalog" : "customButton" }
                         onClick={() =>{
                             this.props.select(this.props.name, convertDate(new Date().toDateString()))
                         }}>
