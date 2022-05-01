@@ -227,7 +227,7 @@ class MobileButton extends Component{
                         variant=""
                         type="button"
                         id={"mobilebutton catalog"}>
-                        {this.props.category}
+                        {this.convertToLabel()}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
                         {this.state.buttons.map((category, index) => (
@@ -282,6 +282,23 @@ class MobileButton extends Component{
             </div>
         </div>
         )
+    }
+
+    convertToLabel() {
+        if(this.props.category === "SwissDRG" || this.props.category === "ICD" || this.props.category === "CHOP" || this.props.category === "TARMED"){
+            return this.props.category;
+        }
+        else{
+            if(this.props.category.toUpperCase() === "MIGEL"){
+                return this.props.labels[0];
+            }
+            else if(this.props.category.toUpperCase() === "AL"){
+                return this.props.labels[1];
+            }
+            else{
+                return this.props.labels[2];
+            }
+        }
     }
 }
 export default MobileButton;

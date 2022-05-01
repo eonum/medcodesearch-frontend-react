@@ -160,13 +160,13 @@ class App extends Component{
             return ['EMAp', 'EA', 'it: drugs']
         }
         else{
-            return ['MiGeL', 'AL', 'DRUGS']
+            return ['MiGeL', 'AL', 'DRUG']
         }
     }
 
     getFullLabels(language){
         if(language === "fr"){
-            return['Liste des moyens et appareils', 'Liste des analyses', 'drogues']
+            return['Liste des moyens et appareils', 'Liste des analyses', 'médicaments']
         }
         else if(language === "it"){
            return ['Elenco dei mezzi e degli apparecchi', 'Elenco delle analisi', 'it: drugs']
@@ -175,7 +175,7 @@ class App extends Component{
         //    return ['insert english: MiGel', 'insert english: AL', 'insert english: drugs']
         // }
         else{
-            return ['Mittel und Gegenständeliste', 'Analysenliste', 'Drogen und Medikamente']
+            return ['Mittel und Gegenständeliste', 'Analysenliste', 'Medikamente']
         }
     }
 
