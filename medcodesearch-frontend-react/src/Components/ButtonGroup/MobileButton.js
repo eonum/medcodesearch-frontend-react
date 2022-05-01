@@ -189,6 +189,28 @@ class MobileButton extends Component{
 
     /**
      * converts a category into a label so that it shows buttons with calendars in the correct language
+     * only used for the selected button
+     * @returns label
+     */
+    convertToLabel() {
+        if(this.props.category === "SwissDRG" || this.props.category === "ICD" || this.props.category === "CHOP" || this.props.category === "TARMED"){
+            return this.props.category;
+        }
+        else{
+            if(this.props.category.toUpperCase() === "MIGEL"){
+                return this.props.labels[0];
+            }
+            else if(this.props.category.toUpperCase() === "AL"){
+                return this.props.labels[1];
+            }
+            else{
+                return this.props.labels[2];
+            }
+        }
+    }
+
+    /**
+     * converts a category into a label so that it shows buttons with calendars in the correct language, depends on the index
      * @returns label
      */
     extractLabels(category, index) {
@@ -282,23 +304,6 @@ class MobileButton extends Component{
             </div>
         </div>
         )
-    }
-
-    convertToLabel() {
-        if(this.props.category === "SwissDRG" || this.props.category === "ICD" || this.props.category === "CHOP" || this.props.category === "TARMED"){
-            return this.props.category;
-        }
-        else{
-            if(this.props.category.toUpperCase() === "MIGEL"){
-                return this.props.labels[0];
-            }
-            else if(this.props.category.toUpperCase() === "AL"){
-                return this.props.labels[1];
-            }
-            else{
-                return this.props.labels[2];
-            }
-        }
     }
 }
 export default MobileButton;
