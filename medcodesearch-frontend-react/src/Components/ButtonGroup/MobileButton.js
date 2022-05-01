@@ -188,8 +188,8 @@ class MobileButton extends Component{
     }
 
     /**
-     * renders the mobile button
-     * @returns {JSX.Element}
+     * converts a category into a label so that it shows buttons with calendars in the correct language
+     * @returns label
      */
     extractLabels(category, index) {
         if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG'){
