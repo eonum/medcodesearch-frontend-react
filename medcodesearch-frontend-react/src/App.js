@@ -152,6 +152,10 @@ class App extends Component{
         }
     }
 
+    /**
+     * returns the labels for the buttons depending on the chosen language
+     * @returns labels
+     */
     getLabels(language){
         if(language === "fr"){
             return['LiMA', 'LA', 'meds']
