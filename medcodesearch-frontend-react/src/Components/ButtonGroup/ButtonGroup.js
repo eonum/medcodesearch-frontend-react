@@ -217,7 +217,7 @@ class ButtonGroup extends Component{
                         updateVersion={this.props.selectedList}
                         updateCategory={this.props.selectedButton}
                         buttons={this.props.buttons}
-                        label={this.props.label}
+                        labels={this.props.labels}
                         chooseC={(version, category, isCalendar, date) => {
                             this.updateButton(version, category, isCalendar, date)
                         }}

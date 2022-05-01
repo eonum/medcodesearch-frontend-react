@@ -160,7 +160,7 @@ class App extends Component{
             return ['EMAp', 'EA', 'it: drugs']
         }
         else{
-            return ['MiGel', 'AL', 'DRUGS']
+            return ['MiGeL', 'AL', 'DRUGS']
         }
     }
 
@@ -171,9 +171,9 @@ class App extends Component{
         else if(language === "it"){
            return ['Elenco dei mezzi e degli apparecchi', 'Elenco delle analisi', 'it: drugs']
         }
-        else if(language === "en"){
-            return ['insert english: MiGel', 'insert english: AL', 'insert english: drugs']
-        }
+        //else if(language === "en"){
+        //    return ['insert english: MiGel', 'insert english: AL', 'insert english: drugs']
+        // }
         else{
             return ['Mittel und Gegenständeliste', 'Analysenliste', 'Drogen und Medikamente']
         }

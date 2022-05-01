@@ -191,6 +191,20 @@ class MobileButton extends Component{
      * renders the mobile button
      * @returns {JSX.Element}
      */
+    extractLabels(category, index) {
+        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG'){
+            console.log("1: Category: ", category);
+            return this.props.labels[index-4];
+        }
+        else {
+            return category;
+        }
+    }
+
+    /**
+     * renders the mobile button
+     * @returns {JSX.Element}
+     */
     render(){
         let renderCal = this.isCalBut()
         return(
@@ -224,7 +238,7 @@ class MobileButton extends Component{
                                                onClick={() => {
                                     this.props.chooseC('', category, false, "")
                                 }}>
-                                    {category}
+                                    {this.extractLabels(category, index)}
                                 </Dropdown.Item>
                             )
                         )}
@@ -233,7 +247,7 @@ class MobileButton extends Component{
                 {!renderCal &&
                 <Dropdown key={"mobileButton dropdown versions"} className="catalogButtons">
                     <Dropdown.Toggle
-                        key={"mobileButton dropdown verisions toggle"}
+                        key={"mobileButton dropdown versions toggle"}
                         className="customButton"
                         variant=""
                         type="button"
@@ -269,6 +283,5 @@ class MobileButton extends Component{
         </div>
         )
     }
-
 }
 export default MobileButton;
