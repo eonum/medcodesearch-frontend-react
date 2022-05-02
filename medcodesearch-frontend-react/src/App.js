@@ -229,7 +229,8 @@ class App extends Component{
     }
 
     reNavigateToHome(){
-        this.setState({clickedOnLogo: true})
+        this.setState({clickedOnLogo: true});
+        this.props.navigation({search: ''});
         this.updateButton('ICD')
         this.updateList('ICD10-GM-2022')
     }
