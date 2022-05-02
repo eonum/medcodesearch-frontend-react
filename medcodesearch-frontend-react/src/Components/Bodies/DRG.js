@@ -29,7 +29,6 @@ class DRG extends Component {
                 .then(() => {return newCategories})
     }
 
-
     render() {
         return (
             <div>

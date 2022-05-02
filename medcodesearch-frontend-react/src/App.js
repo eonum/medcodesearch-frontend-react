@@ -17,6 +17,7 @@ import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
 import {Collapse} from "react-bootstrap";
 import ConvertDate from "./Services/ConvertDate";
+import {isValidVersion, languages} from "./Services/category-version.service";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -101,7 +102,7 @@ class App extends Component{
      * @param prevState
      * @param snapshot
      */
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         let navigate = this.props.navigation;
         let list = this.state.selectedList;
         let button = this.state.selectedButton;
@@ -122,14 +123,27 @@ class App extends Component{
             }else {
                 chapters =button.toLowerCase() + '_chapters';
             }
-            navigate({
-                // falls liste leer --> de/button/chapters
-                // sonst --> de/button/list/chapters/list
-                pathname: this.state.language + "/" + button +'/' + list + i + chapters + i + list,
-                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
-            })
+            if(await isValidVersion(this.state.language, button, list, chapters)) {
+                navigate({
+                    // falls liste leer --> de/button/chapters
+                    // sonst --> de/button/list/chapters/list
+                    pathname: this.state.language + "/" + button + '/' + list + i + chapters + i + list,
+                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+                })
+            } else {
+                this.updateButton("ICD")
+                this.updateList("ICD10-GM-2022")
+                navigate({
+                    pathname: this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
+                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+                })
+            }
             this.setState({reSetPath: false})
         }
+    }
+
+    isValidVersion() {
+
     }
 
     /**
@@ -154,6 +168,34 @@ class App extends Component{
                 return itJson
             case "en":
                 return enJson
+        }
+    }
+
+    /**
+     * returns the labels for the buttons depending on the chosen language
+     * @returns labels
+     */
+    getLabels(language){
+        if(language === "fr"){
+            return['LiMA', 'LA', 'meds']
+        }
+        else if(language === "it"){
+            return ['EMAp', 'EA', 'meds']
+        }
+        else{
+            return ['MiGeL', 'AL', 'DRUG']
+        }
+    }
+
+    getFullLabels(language){
+        if(language === "fr"){
+            return['Liste des moyens et appareils', 'Liste des analyses', 'médicaments']
+        }
+        else if(language === "it"){
+           return ['Elenco dei mezzi e degli apparecchi', 'Elenco delle analisi', 'droga']
+        }
+        else{
+            return ['Mittel und Gegenständeliste', 'Analysenliste', 'Medikamente']
         }
     }
 
@@ -206,7 +248,8 @@ class App extends Component{
     }
 
     reNavigateToHome(){
-        this.setState({clickedOnLogo: true})
+        this.setState({clickedOnLogo: true});
+        this.props.navigation({search: ''});
         this.updateButton('ICD')
         this.updateList('ICD10-GM-2022')
     }
@@ -258,6 +301,8 @@ class App extends Component{
                               selectedButton={this.updateButton}
                               selectedList={this.updateList}
                               selectedDate={this.updateDate}
+                              labels={this.getLabels(this.state.language)}
+                              fullLabels={this.getFullLabels(this.state.language)}
                               buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
                           />
                       </div>
