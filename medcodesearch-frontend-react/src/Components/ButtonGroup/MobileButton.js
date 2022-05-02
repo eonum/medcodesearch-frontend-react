@@ -188,6 +188,42 @@ class MobileButton extends Component{
     }
 
     /**
+     * converts a category into a label so that it shows buttons with calendars in the correct language
+     * only used for the selected button
+     * @returns label
+     */
+    convertToLabel() {
+        if(this.props.category === "SwissDRG" || this.props.category === "ICD" || this.props.category === "CHOP" || this.props.category === "TARMED"){
+            return this.props.category;
+        }
+        else{
+            if(this.props.category.toUpperCase() === "MIGEL"){
+                return this.props.labels[0];
+            }
+            else if(this.props.category.toUpperCase() === "AL"){
+                return this.props.labels[1];
+            }
+            else{
+                return this.props.labels[2];
+            }
+        }
+    }
+
+    /**
+     * converts a category into a label so that it shows buttons with calendars in the correct language, depends on the index
+     * @returns label
+     */
+    extractLabels(category, index) {
+        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG'){
+            console.log("1: Category: ", category);
+            return this.props.labels[index-4];
+        }
+        else {
+            return category;
+        }
+    }
+
+    /**
      * renders the mobile button
      * @returns {JSX.Element}
      */
@@ -215,7 +251,7 @@ class MobileButton extends Component{
                         variant=""
                         type="button"
                         id={"mobilebutton catalog"}>
-                        {this.props.category}
+                        {this.convertToLabel()}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
                         {this.state.buttons.map((category, index) => (
@@ -226,7 +262,7 @@ class MobileButton extends Component{
                                                onClick={() => {
                                     this.props.chooseC('', category, false, "")
                                 }}>
-                                    {category}
+                                    {this.extractLabels(category, index)}
                                 </Dropdown.Item>
                             )
                         )}
@@ -235,7 +271,7 @@ class MobileButton extends Component{
                 {!renderCal &&
                 <Dropdown key={"mobileButton dropdown versions"} className="catalogButtons">
                     <Dropdown.Toggle
-                        key={"mobileButton dropdown verisions toggle"}
+                        key={"mobileButton dropdown versions toggle"}
                         className="customButton"
                         variant=""
                         type="button"
@@ -271,6 +307,5 @@ class MobileButton extends Component{
         </div>
         )
     }
-
 }
 export default MobileButton;

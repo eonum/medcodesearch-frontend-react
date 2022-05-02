@@ -16,6 +16,7 @@ import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
 import {CloseButton, Collapse} from "react-bootstrap";
 import ConvertDate from "./Services/ConvertDate";
+import {languages} from "./Services/category-version.service";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -155,6 +156,34 @@ class App extends Component{
         }
     }
 
+    /**
+     * returns the labels for the buttons depending on the chosen language
+     * @returns labels
+     */
+    getLabels(language){
+        if(language === "fr"){
+            return['LiMA', 'LA', 'meds']
+        }
+        else if(language === "it"){
+            return ['EMAp', 'EA', 'meds']
+        }
+        else{
+            return ['MiGeL', 'AL', 'DRUG']
+        }
+    }
+
+    getFullLabels(language){
+        if(language === "fr"){
+            return['Liste des moyens et appareils', 'Liste des analyses', 'médicaments']
+        }
+        else if(language === "it"){
+           return ['Elenco dei mezzi e degli apparecchi', 'Elenco delle analisi', 'droga']
+        }
+        else{
+            return ['Mittel und Gegenständeliste', 'Analysenliste', 'Medikamente']
+        }
+    }
+
     searchResults() {
         let searchResults
         let translateJson = this.findJson(this.state.language)
@@ -252,6 +281,8 @@ class App extends Component{
                               selectedButton={this.updateButton}
                               selectedList={this.updateList}
                               selectedDate={this.updateDate}
+                              labels={this.getLabels(this.state.language)}
+                              fullLabels={this.getFullLabels(this.state.language)}
                               buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
                           />
                       </div>

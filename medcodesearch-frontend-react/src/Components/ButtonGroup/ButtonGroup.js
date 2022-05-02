@@ -198,6 +198,8 @@ class ButtonGroup extends Component{
                                         showHideCal={this.state.showHideCal}
                                         date ={this.state.selectedDate}
                                         name={button}
+                                        label={this.props.labels[index]}
+                                        fullLabel={this.props.fullLabels[index]}
                                         select={(btn, date) => {
                                             this.updateButton('', btn, true, date);
                                             this.showHideCal(true);
@@ -220,6 +222,7 @@ class ButtonGroup extends Component{
                         updateVersion={this.props.selectedList}
                         updateCategory={this.props.selectedButton}
                         buttons={this.props.buttons}
+                        labels={this.props.labels}
                         chooseC={(version, category, isCalendar, date) => {
                             this.updateButton(version, category, isCalendar, date)
                         }}
