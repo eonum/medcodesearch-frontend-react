@@ -186,7 +186,7 @@ class App extends Component{
                     </button>
                 </p>
                 
-                <Collapse in={!this.state.collapseMenu}>
+                <Collapse in={!this.state.collapseMenu} onClick={this.showHide}>
                     <div>
                         {searchResults}
                     </div>
@@ -196,11 +196,13 @@ class App extends Component{
     }
 
     showHide(e) {
-        e.preventDefault();
+        if (window.innerWidth <= 991) {
+            e.preventDefault();
 
-        this.setState({
-            collapseMenu: !this.state.collapseMenu
-        });
+            this.setState({
+                collapseMenu: !this.state.collapseMenu
+            });
+        }
     }
 
     reNavigateToHome(){
