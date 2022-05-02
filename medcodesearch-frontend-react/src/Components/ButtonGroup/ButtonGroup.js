@@ -195,6 +195,10 @@ class ButtonGroup extends Component{
                             this.state.buttons[1].map((button, index) => (
                                 <div key={"buttongroup CalendarButton div " + index}>
                                     <ButtonWithCal
+                                        updateCategory={this.props.selectedButton}
+                                        updateVersion={this.props.selectedList}
+                                        selectedLanguage={this.props.selectedLanguage}
+                                        language={this.props.language}
                                         showHideCal={this.state.showHideCal}
                                         date ={this.state.selectedDate}
                                         name={button}

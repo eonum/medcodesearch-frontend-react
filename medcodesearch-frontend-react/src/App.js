@@ -16,7 +16,7 @@ import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
 import {CloseButton, Collapse} from "react-bootstrap";
 import ConvertDate from "./Services/ConvertDate";
-import {languages} from "./Services/category-version.service";
+import {isValidVersion, languages} from "./Services/category-version.service";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -101,7 +101,7 @@ class App extends Component{
      * @param prevState
      * @param snapshot
      */
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         let navigate = this.props.navigation;
         let list = this.state.selectedList;
         let button = this.state.selectedButton;
@@ -121,14 +121,27 @@ class App extends Component{
             }else {
                 chapters =button.toLowerCase() + '_chapters';
             }
-            navigate({
-                // falls liste leer --> de/button/chapters
-                // sonst --> de/button/list/chapters/list
-                pathname: this.state.language + "/" + button +'/' + list + i + chapters + i + list,
-                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
-            })
+            if(await isValidVersion(this.state.language, button, list, chapters)) {
+                navigate({
+                    // falls liste leer --> de/button/chapters
+                    // sonst --> de/button/list/chapters/list
+                    pathname: this.state.language + "/" + button + '/' + list + i + chapters + i + list,
+                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+                })
+            } else {
+                this.updateButton("ICD")
+                this.updateList("ICD10-GM-2022")
+                navigate({
+                    pathname: this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
+                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+                })
+            }
             this.setState({reSetPath: false})
         }
+    }
+
+    isValidVersion() {
+
     }
 
     /**

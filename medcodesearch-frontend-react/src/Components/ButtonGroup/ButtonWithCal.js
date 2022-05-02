@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import convertDate from "../../Services/ConvertDate";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import DatePicker from "./DatePicker";
+import PopUp from "../PopUp/PopUp";
 
 /**
  * creates a button with a calender
@@ -10,11 +11,44 @@ import DatePicker from "./DatePicker";
  */
 class ButtonWithCal extends Component{
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            disabledCategory: "",
+            showPopUp: false
+        }
+    }
+
+    handleCategoryClick(category) {
+        const button = document.getElementById(category);
+        if(!button.classList.contains("disabled")) {
+            this.props.select(this.props.name, convertDate(new Date().toDateString()))
+        } else {
+            this.setState({showPopUp: true})
+            this.setState({disabledCategory: category})
+        }
+    }
+
     renderTooltip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
             {this.props.fullLabel}
         </Tooltip>
     );
+
+    getClassName() {
+        let classname = "customButton"
+        if(this.props.name.toUpperCase() === this.props.active.toUpperCase()) {
+            classname += " activeCatalog"
+        }
+        if(this.props.language === "en") {
+            classname += " disabled"
+        }
+        return classname
+    }
+
+    updatePopUp = (value) => {
+        this.setState({showPopUp: value})
+    }
 
     /**
      * renders the ButtonWithCal
@@ -23,17 +57,28 @@ class ButtonWithCal extends Component{
     render(){
         return(
                 <div key={"buttonwithCal div 0"} id={"cal"}>
+                    <PopUp
+                        language={this.props.language}
+                        version={""}
+                        selectedVersion={this.props.updateVersion}
+                        selectedLanguage={this.props.selectedLanguage}
+                        category={this.state.disabledCategory}
+                        selectedCategory={this.props.updateCategory}
+                        show={this.state.showPopUp}
+                        updateValue={this.updatePopUp}
+                    />
                     <OverlayTrigger
                         placement="bottom"
                         delay={{ show: 250, hide: 400 }}
                         overlay={this.renderTooltip}
                     >
                     <button
+                        id={this.props.name}
                         key={"buttonwithcal " + this.props.name}
                         name={this.props.name}
-                        className={this.props.name.toUpperCase() === this.props.active.toUpperCase() ? "customButton activeCatalog" : "customButton" }
+                        className={this.getClassName()}
                         onClick={() =>{
-                            this.props.select(this.props.name, convertDate(new Date().toDateString()))
+                            this.handleCategoryClick(this.props.name)
                         }}>
                         {this.props.label}
                     </button>

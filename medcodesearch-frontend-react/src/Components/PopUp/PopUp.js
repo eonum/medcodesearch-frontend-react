@@ -40,16 +40,20 @@ class PopUp extends Component{
     }
 
     async findAvailableLanguages() {
-        let catalog = convertCategoryToCatalog(this.props.category)
-        for(let lang of languages) {
-            if(lang !== this.props.language && lang !== 'de') {
-                await fetch(`https://search.eonum.ch/` + lang + "/" + catalog + "/versions")
-                    .then((res) => res.json())
-                    .then((json) => {
-                        if(json.includes(this.props.version)) {
-                            this.setState({availableLanguages: [...this.state.availableLanguages, lang]})
-                        }
-                    })
+        if(this.props.category === "AL" || this.props.category === "DRUG" || this.props.category === "MiGeL") {
+            this.setState({availableLanguages: ["de", "fr", "it"]})
+        } else {
+            let catalog = convertCategoryToCatalog(this.props.category)
+            for(let lang of languages) {
+                if(lang !== this.props.language && lang !== 'de') {
+                    await fetch(`https://search.eonum.ch/` + lang + "/" + catalog + "/versions")
+                        .then((res) => res.json())
+                        .then((json) => {
+                            if(json.includes(this.props.version)) {
+                                this.setState({availableLanguages: [...this.state.availableLanguages, lang]})
+                            }
+                        })
+                }
             }
         }
     }
