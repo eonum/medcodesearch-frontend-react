@@ -22,3 +22,7 @@
 #main {
   margin-top: 15px;
 }
+
+#arrow-rotate {
+  transform: rotate(180deg);
+}
