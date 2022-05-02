@@ -25,7 +25,8 @@ class MobileButton extends Component{
             disabledCategory: "",
             allVersions: [],
             currentVersions: [],
-            buttons: this.convertButtons()
+            buttons: this.convertButtons(),
+            selectedButton: this.props.category
         }
         this.updatePopUp = this.updatePopUp.bind(this);
     }
@@ -53,7 +54,8 @@ class MobileButton extends Component{
      * @returns {Promise<void>}
      */
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-        if(prevProps.language !== this.props.language || prevProps.category !== this.props.category) {
+        if(prevProps.language !== this.props.language || prevProps.category !== this.props.category
+            || this.props.reRender) {
             await this.fetchInitialVersions()
             await this.fetchCurrentVersions()
         }
