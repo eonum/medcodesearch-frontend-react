@@ -215,7 +215,6 @@ class MobileButton extends Component{
      */
     extractLabels(category, index) {
         if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG'){
-            console.log("1: Category: ", category);
             return this.props.labels[index-4];
         }
         else {
