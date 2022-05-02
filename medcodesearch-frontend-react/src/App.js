@@ -5,6 +5,7 @@ import Header from './Components/Header/header';
 import Searchbar from './Components/Searchbar/Searchbar.js'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
+import { ReactComponent as Arrow } from './arrow-up.svg';
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
@@ -14,7 +15,7 @@ import enJson from "./assets/translations/en.json";
 import itJson from "./assets/translations/it.json";
 import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
-import {CloseButton, Collapse} from "react-bootstrap";
+import {Collapse} from "react-bootstrap";
 import ConvertDate from "./Services/ConvertDate";
 import {isValidVersion, languages} from "./Services/category-version.service";
 
@@ -107,6 +108,7 @@ class App extends Component{
         let button = this.state.selectedButton;
         let i = this.state.selectedList === '' ? '' : '/';
         let chapters;
+
         if(prevState.language !== this.state.language ||
             prevState.selectedButton !== this.state.selectedButton ||
             prevState.selectedList !== this.state.selectedList ||
@@ -216,15 +218,17 @@ class App extends Component{
                     <button
                         onClick={this.showHide}
                         className="btn d-lg-none"
+                        id={this.state.collapseMenu ? 'arrow-rotate': null}
                         type="button"
                         data-target="#collapseExample"
                         aria-expanded="false"
                         aria-controls="collapseExample"
                     >
-                        <CloseButton />
+                        <Arrow />
                     </button>
                 </p>
-                <Collapse in={!this.state.collapseMenu}>
+                
+                <Collapse in={!this.state.collapseMenu} onClick={this.showHide}>
                     <div>
                         {searchResults}
                     </div>
@@ -234,11 +238,13 @@ class App extends Component{
     }
 
     showHide(e) {
-        e.preventDefault();
+        if (window.innerWidth <= 991) {
+            e.preventDefault();
 
-        this.setState({
-            collapseMenu: !this.state.collapseMenu
-        });
+            this.setState({
+                collapseMenu: !this.state.collapseMenu
+            });
+        }
     }
 
     reNavigateToHome(){
@@ -300,7 +306,7 @@ class App extends Component{
                               buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
                           />
                       </div>
-                      <div key={"app main div 0"} className="row">
+                         <div key={"app main div 0"} className="row">
                           {this.state.searchResults.length > 0 &&
                           <div key={"app searchresults div 0"} className="col-12 col-lg">
                               {searchResults}
