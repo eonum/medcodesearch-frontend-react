@@ -135,19 +135,18 @@ class BodyII extends Component {
         }
         for(let category in this.state.categories) {
             if(this.state.categories[category] !== null && this.state.categories[category] !== undefined) {
-                if(category === "hvb_self" || category === "hvb_care") {
+                if(this.state.categories[category].length > 0 && category === "limitation") {
                     categories.push (
-                        <div>
-                            <p>{translateJson["LBL_" + category.toUpperCase()]}: {this.state.categories[category]}</p>
-                        </div>
-                    )
-                } else if(this.state.categories[category].length > 0 && category !== "children" && category !== "text" &&
-                    category !== "code" && category !== "version" && category !== "valid_to" && category !== "valid_from" &&
-                    category !== "it_number" && category !== "gln" && category !== "auth_holder_nr" && category !== "atc_code") {
-                    categories.push(
                         <div>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <p dangerouslySetInnerHTML={{__html: this.state.categories[category]}}/>
+                        </div>
+                    )
+                } else if(this.state.categories[category].length > 0 && category !== "children" && category !== "text" && category !== "rev" &&
+                    category !== "code" && category !== "version" && category !== "valid_to" && category !== "valid_from" && category !== "auth_holder_nr" && category !== "atc_code") {
+                    categories.push(
+                        <div>
+                            <p><span><strong>{translateJson["LBL_" + category.toUpperCase()]}: </strong> </span><span dangerouslySetInnerHTML={{__html: this.state.categories[category]}}/></p>
                         </div>
                     )
                 } else if((category === "children") && this.state.categories[category].length > 0) {
