@@ -3,6 +3,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver')
 const assert = require('assert')
 
 describe('search', function() {
+  this.timeout(30000)
   let driver
   let vars
   beforeEach(async function() {
@@ -13,147 +14,75 @@ describe('search', function() {
     await driver.quit();
   })
   it('search de icd code (A15.3)', async function() {
-    // Test name: search de icd code (A15.3)
-    // Step # | name | target | value
-    // 1 | open | /de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022 | 
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | A15.3
     await driver.findElement(By.css(".me-2")).sendKeys("A15.3")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search it icd (letters)', async function() {
-    // Test name: search it icd (letters)
-    // Step # | name | target | value
-    // 1 | open | /it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020 | 
     await driver.get("http://localhost:3000/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | asdf
     await driver.findElement(By.css(".me-2")).sendKeys("asdf")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search de icd ($$$)', async function() {
-    // Test name: search de icd ($$$)
-    // Step # | name | target | value
-    // 1 | open | /de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022 | 
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | $$$
     await driver.findElement(By.css(".me-2")).sendKeys("$$$")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search en icd (letters)', async function() {
-    // Test name: search en icd (letters)
-    // Step # | name | target | value
-    // 1 | open | /en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022 | 
     await driver.get("http://localhost:3000/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | asdf
     await driver.findElement(By.css(".me-2")).sendKeys("asdf")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search fr icd (letters)', async function() {
-    // Test name: search fr icd (letters)
-    // Step # | name | target | value
-    // 1 | open | /fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020 | 
     await driver.get("http://localhost:3000/fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | letters
     await driver.findElement(By.css(".me-2")).sendKeys("letters")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search de icd (letters)', async function() {
-    // Test name: search de icd (letters)
-    // Step # | name | target | value
-    // 1 | open | /de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022 | 
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | letters
     await driver.findElement(By.css(".me-2")).sendKeys("letters")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search en icd ($$$)', async function() {
-    // Test name: search en icd ($$$)
-    // Step # | name | target | value
-    // 1 | open | /en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022 | 
     await driver.get("http://localhost:3000/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | $$$
     await driver.findElement(By.css(".me-2")).sendKeys("$$$")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search en icd code (A15.3)', async function() {
-    // Test name: search en icd code (A15.3)
-    // Step # | name | target | value
-    // 1 | open | /en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022 | 
     await driver.get("http://localhost:3000/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | A15.3
     await driver.findElement(By.css(".me-2")).sendKeys("A15.3")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search fr icd ($$$)', async function() {
-    // Test name: search fr icd ($$$)
-    // Step # | name | target | value
-    // 1 | open | /fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020 | 
     await driver.get("http://localhost:3000/fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | $$$
     await driver.findElement(By.css(".me-2")).sendKeys("$$$")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search fr icd code (A15.3)', async function() {
-    // Test name: search fr icd code (A15.3)
-    // Step # | name | target | value
-    // 1 | open | /fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020 | 
     await driver.get("http://localhost:3000/fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | A15.3
     await driver.findElement(By.css(".me-2")).sendKeys("A15.3")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search it icd ($$$)', async function() {
-    // Test name: search it icd ($$$)
-    // Step # | name | target | value
-    // 1 | open | /it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020 | 
     await driver.get("http://localhost:3000/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | $$$
     await driver.findElement(By.css(".me-2")).sendKeys("$$$")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
   it('search it icd code (A15.3)', async function() {
-    // Test name: search it icd code (A15.3)
-    // Step # | name | target | value
-    // 1 | open | /it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020 | 
     await driver.get("http://localhost:3000/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    // 2 | click | css=.me-2 | 
     await driver.findElement(By.css(".me-2")).click()
-    // 3 | type | css=.me-2 | A15.3
     await driver.findElement(By.css(".me-2")).sendKeys("A15.3")
-    // 4 | click | css=.searchResult:nth-child(1) | 
     await driver.findElement(By.css(".searchResult:nth-child(1)")).click()
   })
 })
