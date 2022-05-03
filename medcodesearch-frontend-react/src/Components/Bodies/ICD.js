@@ -1,8 +1,7 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import ICDSortService from "../../Services/ICDSortService";
 import RouterService from "../../Services/router.service";
 import {Breadcrumb} from "react-bootstrap";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 class ICD extends Component {
 

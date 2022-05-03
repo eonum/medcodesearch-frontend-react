@@ -1,10 +1,8 @@
 import React from "react";
-import {ButtonGroup, Dropdown} from "react-bootstrap";
+import {Dropdown} from "react-bootstrap";
 import CategorysSortService from "../../Services/CategorysSortService";
 import PopUp from "../PopUp/PopUp";
 import {convertCategory, findCategory} from "../../Services/category-version.service";
-import DropdownToggle from "react-bootstrap/DropdownToggle";
-import DropdownMenu from "react-bootstrap/DropdownMenu";
 
 /**
  * is responsible for the buttons with versions
@@ -189,7 +187,7 @@ class ButtonVersion extends React.Component{
                     version={this.state.disabledVersion}
                     category={this.state.disabledCategory}
                 />}
-                <Dropdown accessKey={"buttonversion dropdown"} className="catalogButtons d-none d-lg-block">
+                <Dropdown className="catalogButtons d-none d-lg-block">
                     <button 
                         type="button"
                         id={this.props.category}
@@ -211,7 +209,7 @@ class ButtonVersion extends React.Component{
                     }>
                         {this.getVersion()}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu accessKey={"buttonversion dropdown menu for versions"} className="dropdown">
+                    <Dropdown.Menu className="dropdown">
                         {this.state.allVersions.reverse().map(
                             (versions) => (
                                 <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}

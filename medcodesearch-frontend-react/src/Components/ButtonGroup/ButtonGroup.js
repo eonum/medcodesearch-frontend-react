@@ -136,7 +136,7 @@ class ButtonGroup extends Component{
             this.getVersionCategory()
         }
         if (this.props.clickedOnLogo){
-            this.setState({selectedButton: prevProps.category,})
+            this.setState({selectedButton: prevProps.category})
             this.props.reSetClickOnLogo()
         }
     }

@@ -1,5 +1,3 @@
-import React from "react";
-
 function ConvertDate(value) {
     if (!value.match(/^\d\d.\d\d.\d\d\d\d/)) {
         if (value.match(/^\d\d\d\d-\d\d-\d\d/)) {
@@ -34,6 +32,8 @@ function ConvertDate(value) {
                         return "11"
                     case "dec":
                         return "12"
+                    default:
+                        return
                 }
             }
 

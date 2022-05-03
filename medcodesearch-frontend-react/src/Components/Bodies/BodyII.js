@@ -2,11 +2,8 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import MIGEL from "./MIGEL";
 import AL from "./AL";
-import deJson from "../../assets/translations/de.json";
-import frJson from "../../assets/translations/fr.json";
-import itJson from "../../assets/translations/it.json";
-import enJson from "../../assets/translations/en.json";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
+import findJson from "../../Services/findJson";
 
 class BodyII extends Component {
     constructor(props) {
@@ -107,21 +104,10 @@ class BodyII extends Component {
             AL.goToChild(child.code, navigate, this.props.params.language)
         }
     }
-    findJson(language) {
-        switch (language) {
-            case "de":
-                return deJson
-            case "fr":
-                return frJson
-            case "it":
-                return itJson
-            case "en":
-                return enJson
-        }
-    }
+
 
     render() {
-        let translateJson = this.findJson(this.props.params.language)
+        let translateJson = findJson(this.props.params.language)
         let categories = []
         let parentBreadCrumbs = []
         if(this.state.parents && this.state.parents.length > 0){
@@ -155,8 +141,8 @@ class BodyII extends Component {
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state.categories[category].map((child, i) => (
-                                    <li><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
-                                        <span dangerouslySetInnerHTML={{__html: child.text}}/></li>
+                                    <li><a key={"link to child: " + i} className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
+                                        <span key={"child text"} dangerouslySetInnerHTML={{__html: child.text}}/></li>
                                 ))}
                             </ul>
                         </div>

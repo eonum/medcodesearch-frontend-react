@@ -4,15 +4,8 @@ import ICD from "./ICD"
 import CHOP from "./CHOP";
 import TARMED from "./TARMED";
 import DRG from "./DRG";
-import de from "../../assets/translations/de.json"
-import fr from "../../assets/translations/fr.json"
-import en from "../../assets/translations/en.json"
-import it from "../../assets/translations/it.json"
-import deJson from "../../assets/translations/de.json";
-import frJson from "../../assets/translations/fr.json";
-import itJson from "../../assets/translations/it.json";
-import enJson from "../../assets/translations/en.json";
 import {Breadcrumb} from "react-bootstrap";
+import findJson from "../../Services/findJson";
 
 class Body extends Component {
     constructor(props) {
@@ -142,19 +135,6 @@ class Body extends Component {
         navigate({search: "?query=" + code})
     }
 
-    findJson(language) {
-        switch (language) {
-            case "de":
-                return deJson
-            case "fr":
-                return frJson
-            case "it":
-                return itJson
-            case "en":
-                return enJson
-        }
-    }
-
     async fetchSiblings(parent) {
         if(this.state.children == null) {
             await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
@@ -187,7 +167,7 @@ class Body extends Component {
     }
 
     render() {
-        let translateJson = this.findJson(this.props.params.language)
+        let translateJson = findJson(this.props.params.language)
         let categories = []
         let parentBreadCrumbs = []
         if(this.state.parents && this.state.parents.length > 0){
