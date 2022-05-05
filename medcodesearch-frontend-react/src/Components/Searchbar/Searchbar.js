@@ -115,7 +115,7 @@ class Searchbar extends Component {
             || prevProps.version !== this.props.version
             || prevProps.date !== this.props.date
             || this.state.reSearch) {
-
+            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
             this.setState({reSearch: false})
         }
     }
