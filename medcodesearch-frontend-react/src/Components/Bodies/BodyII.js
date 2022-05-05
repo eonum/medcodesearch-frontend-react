@@ -120,6 +120,33 @@ class BodyII extends Component {
         }
     }
 
+    extractLabel(code){
+        console.log(this.props.label);
+        let language = this.props.params.language;
+        if(code=="MIGEL"){
+            switch (language) {
+                case "fr":
+                    return "LiMA"
+                case "it":
+                    return "EMAp"
+                default: return "MiGeL";
+            }
+        }
+        else if(code=="AL"){
+            switch (language) {
+                case "fr":
+                    return "LA"
+                case "it":
+                    return "EA"
+                default: return code;
+            }
+        }
+        else if(code=="DRUG") {
+            return "Med";
+        }
+        else return code;
+    }
+
     render() {
         let translateJson = this.findJson(this.props.params.language)
         let categories = []
@@ -130,7 +157,7 @@ class BodyII extends Component {
                     key={i}
                     onClick={() => this.goToChild(this.state.parents[i])}
                     className="breadLink"
-                >{this.state.parents[i].code}</Breadcrumb.Item>)
+                >{this.extractLabel(this.state.parents[i].code)}</Breadcrumb.Item>)
             }
         }
         for(let category in this.state.categories) {
@@ -181,9 +208,9 @@ class BodyII extends Component {
             <div>
                 <Breadcrumb>
                     {parentBreadCrumbs}
-                    <BreadcrumbItem active>{this.state.categories["code"]}</BreadcrumbItem>
+                    <BreadcrumbItem active>{this.extractLabel(this.state.categories["code"])}</BreadcrumbItem>
                 </Breadcrumb>
-                <h3>{this.state.categories["code"]}</h3>
+                <h3>{this.extractLabel(this.state.categories["code"])}</h3>
                 <p dangerouslySetInnerHTML={{__html: this.state.categories["text"]}} />
                 {categories}
             </div>
