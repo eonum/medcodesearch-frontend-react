@@ -165,7 +165,7 @@ describe('Default Suite', function() {
       await driver.actions({ bridge: true }).move({origin: element}).perform()
     }
   })
-  it('click from button to toher buttons version', async function() {
+  it('click from button to other buttons version', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await sleep(1000);
     await driver.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()

@@ -6,7 +6,7 @@ require('geckodriver')
 describe('Default Suite', function() {
   let driver
   let vars
-  let n = 500;
+  let n = 1000;
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -76,16 +76,19 @@ describe('Default Suite', function() {
     await driver.findElement(By.linkText("III:")).click()
   })
   it('breadcrumbs in mobile', async function() {
-
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(1000);
     await driver.manage().window().setRect({ width: 400, height: 800 })
     await sleep(n);
     await driver.findElement(By.linkText("III:")).click()
     await sleep(n);
+    await driver.executeScript("window.scrollTo(0,400)")
+    await sleep(n);
     await driver.findElement(By.linkText("D55-D59:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("III")).click()
+    await sleep(n);
+    await driver.executeScript("window.scrollTo(0,400)")
     await sleep(n);
     await driver.findElement(By.linkText("D65-D69:")).click()
     await sleep(n);
@@ -95,7 +98,8 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("D69.0:")).click()
     await sleep(n);
-
+    await driver.executeScript("window.scrollTo(0,0)")
+    await sleep(n);
     {
       const element = await driver.findElement(By.linkText("ICD10-GM-2022"))
       await driver.actions({ bridge: true }).move({origin:element}).perform()
@@ -109,6 +113,8 @@ describe('Default Suite', function() {
     await driver.findElement(By.id("ICD10-GM-2014")).click()
     await sleep(n);
     await driver.findElement(By.linkText("XII:")).click()
+    await sleep(n);
+    await driver.executeScript("window.scrollTo(0,400)")
     await sleep(n);
     await driver.findElement(By.linkText("L00-L08:")).click()
     await sleep(n);
@@ -171,20 +177,16 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("Operative Partition:")).click()
     await sleep(n);
-    {
-      const element = await driver.findElement(By.linkText("eonum"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
 
     {
       const element = await driver.findElement(By.id("main"))
       await driver.actions({ bridge: true }).move({origin:element}).perform()
     }
     await sleep(n);
+    await driver.executeScript("window.scrollTo(0,0)")
+    await sleep(n);
     await driver.findElement(By.id("mobilebutton catalog")).click()
     await sleep(n);
-
     await driver.findElement(By.id("CHOP 1")).click()
     await sleep(n);
     await driver.findElement(By.linkText("C4:")).click()
@@ -204,7 +206,7 @@ describe('Default Suite', function() {
   it('testing breadcrumbs de', async function() {
 
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(1000);
+    await sleep(2000);
     await driver.manage().window().setRect({ width: 1200, height: 800 })
     await sleep(n);
     await driver.findElement(By.linkText("I:")).click()
@@ -215,11 +217,13 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("A01.0:")).click()
     await sleep(n);
-    await driver.executeScript("window.scrollTo(0,248)")
+    await driver.executeScript("window.scrollTo(0,800)")
     await sleep(n);
     await driver.findElement(By.linkText("A01.2:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A01.3:")).click()
+    await sleep(n);
+    await driver.executeScript("window.scrollTo(0,0)")
     await sleep(n);
     await driver.findElement(By.linkText("A00-A09")).click()
     await sleep(n);
@@ -227,22 +231,18 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("A01.0:")).click()
     await sleep(n);
-
-    {
-      const element = await driver.findElement(By.linkText("eonum"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
+    await driver.executeScript("window.scrollTo(0,0)")
     await sleep(n);
     await driver.findElement(By.linkText("I")).click()
+    await sleep(n);
+    await driver.executeScript("window.scrollTo(0,1000)")
     await sleep(n);
     await driver.findElement(By.linkText("B00-B09:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("B08:")).click()
     await sleep(n);
-
     await driver.findElement(By.id("CHOP")).click()
     await sleep(n);
-
     await driver.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
     await sleep(n);
     await driver.findElement(By.id("CHOP_2018")).click()
@@ -331,7 +331,11 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("07.0120:")).click()
     await sleep(n);
+    await driver.executeScript("window.scrollTo(0,400)")
+    await sleep(n);
     await driver.findElement(By.linkText("07.0260:")).click()
+    await sleep(n);
+    await driver.executeScript("window.scrollTo(0,400)")
     await sleep(n);
     await driver.findElement(By.linkText("07.0250:")).click()
     await sleep(n);
@@ -357,7 +361,7 @@ describe('Default Suite', function() {
     await driver.findElement(By.linkText("A01.2:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A01.3:")).click()
-    await sleep(n);
+    await sleep(2*n);
     await driver.findElement(By.linkText("A00-A09")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A01:")).click()
@@ -486,7 +490,7 @@ describe('Default Suite', function() {
     await driver.findElement(By.linkText("A00:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A00.0:")).click()
-    await sleep(n);
+    await sleep(2*n);
     await driver.findElement(By.linkText("A00")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A00-A09")).click()
@@ -505,12 +509,12 @@ describe('Default Suite', function() {
     await driver.findElement(By.linkText("A00:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A00.0:")).click()
-    await sleep(n);
+    await sleep(2*n);
     await driver.findElement(By.linkText("A00")).click()
+    await sleep(2*n);
+    await driver.findElement(By.linkText("A00-A09")).click()
     await sleep(n);
-    await driver.findElement(By.linkText("A00-A09:")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("I:")).click()
+    await driver.findElement(By.linkText("I")).click()
     await sleep(n);
     await driver.findElement(By.linkText("ICD10-GM-2022")).click()
   })
