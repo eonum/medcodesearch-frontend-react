@@ -129,7 +129,8 @@ class BodyII extends Component {
                         </div>
                     )
                 } else if(this.state.categories[category].length > 0 && category !== "children" && category !== "text" && category !== "rev" &&
-                    category !== "code" && category !== "version" && category !== "valid_to" && category !== "valid_from" && category !== "auth_holder_nr" && category !== "atc_code") {
+                    category !== "code" && category !== "version" && category !== "valid_to" && category !== "valid_from" && category !== "auth_holder_nr"
+                    && category !== "atc_code" && category !== "pharma_form" && category !== "package_code" && category!=="auth_number") {
                     categories.push(
                         <div>
                             <p><span><strong>{translateJson["LBL_" + category.toUpperCase()]}: </strong> </span><span dangerouslySetInnerHTML={{__html: this.state.categories[category]}}/></p>

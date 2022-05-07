@@ -29,27 +29,26 @@ class Searchbar extends Component {
     /**
      * set the state for searchTerm and calls the fetch
      */
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({
             searchTerm: RouterService.getQueryVariable('query')
         })
-        this.fetchForSearchTerm(RouterService.getQueryVariable('query'));
+        await this.fetchForSearchTerm(RouterService.getQueryVariable('query'));
     }
 
     /**
      * changes the url to the search
      * @param e
      */
-    updateSearch = (e) => {
+    updateSearch = async (e) => {
         let date = '';
         let navigate = this.props.navigation
-        this.fetchForSearchTerm(e.target.value);
-        if(e.target.value === "") {
+        if (e.target.value === "") {
             navigate({search: ""});
         } else {
             if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
                 || this.props.selectedButton === 'DRUG') {
-                if(this.props.date !== ConvertDate(new Date().toDateString())){
+                if (this.props.date !== ConvertDate(new Date().toDateString())) {
                     date = 'date=' + this.props.date + '&'
                 }
             }
@@ -87,14 +86,16 @@ class Searchbar extends Component {
      * @param prevState
      * @param snapshot
      */
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.state.searchTerm !== RouterService.getQueryVariable('query')) {
+            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
+        }
         if(prevProps.language !== this.props.language
             || prevProps.selectedButton !== this.props.selectedButton
             || prevProps.version !== this.props.version
             || prevProps.date !== this.props.date
-            || prevState.searchTerm !== RouterService.getQueryVariable('query')
             || this.state.reSearch) {
-            this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
+            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
             this.setState({reSearch: false})
         }
     }
@@ -105,13 +106,13 @@ class Searchbar extends Component {
      * @returns {Promise<void>}
      */
     async fetchForSearchTerm(searchTerm){
+        this.setState({searchTerm: searchTerm})
         let date = '';
         if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'){
             if(this.props.date !== ConvertDate(new Date().toDateString())){
                 date = 'date=' + this.props.date + '&'
             }
         }
-        this.setState({searchTerm: searchTerm})
         await fetch('https://search.eonum.ch/' + this.props.language + '/' + this.convertCategory(this.props.selectedButton) + '/search?' + date + 'highlight=1&search='+ searchTerm)
             .then((res) => {
                 if(res.ok) {
@@ -146,13 +147,12 @@ class Searchbar extends Component {
                         onKeyDown={(e) =>{
                             if (e.key === 'Enter'){
                                 e.preventDefault()
-                                this.reSearch();
                             }
                         }}
                         onChange={this.updateSearch}
                         type="search"
                         placeholder={translateJson["LBL_SEARCH_PLACEHOLDER"]}
-                        value={this.state.searchTerm === "" ? "" : this.state.searchTerm}
+                        value={this.state.searchTerm === "" ? "" : this.state.searchTerm.replace("+", " ")}
                         className="me-2"
                         aria-label="Search"
                     /><Button id="btn-go" onClick={this.reSearch}>
