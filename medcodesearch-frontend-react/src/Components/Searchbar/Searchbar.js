@@ -139,6 +139,7 @@ class Searchbar extends Component {
      * @returns {JSX.Element}
      */
     render() {
+        console.log(this.state.searchTerm)
         let translateJson = findJson(this.props.language)
         return (
             <div>
@@ -152,7 +153,7 @@ class Searchbar extends Component {
                         onChange={this.updateSearch}
                         type="search"
                         placeholder={translateJson["LBL_SEARCH_PLACEHOLDER"]}
-                        value={this.state.searchTerm === "" ? "" : this.state.searchTerm.replace("+", " ")}
+                        value={this.state.searchTerm === "" ? "" : this.state.searchTerm.replaceAll("+", " ")}
                         className="me-2"
                         aria-label="Search"
                     /><Button id="btn-go" onClick={this.reSearch}>
