@@ -1,12 +1,10 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {Component} from "react";
 import "./PopUp.css"
-import {Button, Modal} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import deJson from "../../assets/translations/de.json";
-import frJson from "../../assets/translations/fr.json";
-import itJson from "../../assets/translations/it.json";
-import enJson from "../../assets/translations/en.json";
-import {convertCategoryToCatalog, convertCategoryToChapters, languages} from "../../Services/category-version.service";
+import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
+import findJson from "../../Services/findJson";
 
 class PopUp extends Component{
     constructor() {
@@ -58,18 +56,7 @@ class PopUp extends Component{
         }
     }
 
-    findJson(language) {
-        switch (language) {
-            case "de":
-                return deJson
-            case "fr":
-                return frJson
-            case "it":
-                return itJson
-            case "en":
-                return enJson
-        }
-    }
+
 
     handleLanguageClick(language) {
         this.handleShow(false)
@@ -83,12 +70,12 @@ class PopUp extends Component{
             <>
                 <Modal size="sm" show={this.state.show} onHide={() => this.handleShow(false)}>
                     <Modal.Header closeButton>
-                        <Modal.Title className="pull-left">{this.findJson(this.props.language)['LBL_SELECT_LANGUAGE']}</Modal.Title>
+                        <Modal.Title className="pull-left">{findJson(this.props.language)['LBL_SELECT_LANGUAGE']}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>{this.findJson(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
+                    <Modal.Body>{findJson(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
                     <Modal.Footer>
                             <button className="customButton" onClick={() => this.handleShow(false)}>
-                                {this.findJson(this.props.language)['LBL_BACK']}
+                                {findJson(this.props.language)['LBL_BACK']}
                             </button>
                         <div className="float-end">
                         {this.state.availableLanguages.map((language, i) => (

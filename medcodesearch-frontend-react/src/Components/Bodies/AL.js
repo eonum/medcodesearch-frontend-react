@@ -1,7 +1,5 @@
-import React, {Component} from "react";
-import ICDSortService from "../../Services/ICDSortService";
+import {Component} from "react";
 import RouterService from "../../Services/router.service";
-import {Breadcrumb} from "react-bootstrap";
 
 class AL extends Component {
     static goToChild(code, navigate, language) {

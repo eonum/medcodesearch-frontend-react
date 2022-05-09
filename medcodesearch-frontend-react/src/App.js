@@ -5,19 +5,15 @@ import Header from './Components/Header/header';
 import Searchbar from './Components/Searchbar/Searchbar.js'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
-import { ReactComponent as Arrow } from './arrow-up.svg';
+import { ReactComponent as Arrow } from './assets/arrow-up.svg';
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
-import deJson from "./assets/translations/de.json";
-import frJson from "./assets/translations/fr.json";
-import enJson from "./assets/translations/en.json";
-import itJson from "./assets/translations/it.json";
 import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
 import {Collapse} from "react-bootstrap";
-import ConvertDate from "./Services/ConvertDate";
-import {isValidVersion, languages} from "./Services/category-version.service";
+import {isValidVersion} from "./Services/category-version.service";
+import findJson from "./Services/findJson";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -153,23 +149,6 @@ class App extends Component{
         this.setState({reSetPath: true});
     }
 
-    /**
-     * takes a language and looks for the correct language json
-     * @param language
-     * @returns {{LANGUAGE: string, LBL_NO_RESULTS: string, LBL_BACK_SEARCH: string, LBL_CHILDREN: string, LBL_SEARCH_PLACEHOLDER: string, LBL_EXCLUSIONS: string, LBL_INCLUSIONS: string, LBL_DESCRIPTIONS: string, LBL_RELEVANT_CODES: string, LBL_NOTE: string, LBL_NOTES: string, LBL_CODING_HINT: string, LBL_SUPPLEMENT_CODES: string, LBL_USAGE: string, LBL_SYNONYMS: string, LBL_SELECT_LANGUAGE: string, LBL_CATALOG_LANGUAGE_NOT_AVAILABLE: string, LBL_BACK: string, LBL_FAVORITE_TITLE: string, LBL_FAVORITE_NOELEMENTS: string, LBL_ELEMENT_ADDED: string, LBL_ELEMENT_REMOVED: string, LBL_FAVORITE_ELEMENT: string, LBL_IS_FAVORITE: string, LBL_SIBLINGS: string, LBL_REDIRECT_CASEMATCH: string, LBL_REDIRECT_SWISSDRG: string, LBL_ANALOGOUS_CODE_TEXT: string, LBL_PREDECESSORS: string, LBL_SUCCESSORS: string, LBL_NEW_CODE: string, LBL_REG_op: string, LBL_REG: string, LBL_MED_INTERPRET: string, LBL_TECH_INTERPRET: string, LBL_SUBSTANCE_NAME: string, LBL_FIELD_OF_APP: string, LBL_LIMITATION: string, LBL_FACULTY: string, LBL_ACTIVE_SUBSTANCES: string, LBL_ATC_CODE: string, LBL_UNIT: string, LBL_COMMENT: string, LBL_GROUPS: string, LBL_BLOCKS: string}}
-     */
-    findJson(language) {
-        switch (language) {
-            case "de":
-                return deJson
-            case "fr":
-                return frJson
-            case "it":
-                return itJson
-            case "en":
-                return enJson
-        }
-    }
 
     /**
      * returns the labels for the buttons depending on the chosen language
@@ -201,7 +180,7 @@ class App extends Component{
 
     searchResults() {
         let searchResults
-        let translateJson = this.findJson(this.state.language)
+        let translateJson = findJson(this.state.language)
         if(this.state.searchResults[0] === "empty") {
             searchResults = <div key={"searchResults array 0"} className="searchResult"><p key={"searchResults array 0 p"}>{translateJson["LBL_NO_RESULTS"]}</p></div>
         } else {
@@ -251,7 +230,12 @@ class App extends Component{
         this.setState({clickedOnLogo: true});
         this.props.navigation({search: ''});
         this.updateButton('ICD')
-        this.updateList('ICD10-GM-2022')
+        if (this.state.language === 'de' || this.state.language === 'en') {
+            this.updateList('ICD10-GM-2022')
+        }
+        else {
+            this.updateList('ICD10-GM-2020')
+        }
     }
     reSetClickedOnLogo(){
         this.setState({clickedOnLogo: false})

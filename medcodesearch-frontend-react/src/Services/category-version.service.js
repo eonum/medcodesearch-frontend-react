@@ -1,5 +1,3 @@
-import CategorysSortService from "./CategorysSortService";
-
 export const languages = ['de', 'fr', 'it', 'en']
 
     export function convertCategory(category, version) {
@@ -12,6 +10,8 @@ export const languages = ['de', 'fr', 'it', 'en']
                 return version
             case "TARMED":
                 return version.substring(7)
+            default:
+              return
         }
     }
 
@@ -37,6 +37,8 @@ export const languages = ['de', 'fr', 'it', 'en']
                 return "drgs"
             case "TARMED":
                 return "tarmeds"
+            default:
+                return
         }
     }
     export function convertCategoryToChapters(category) {
@@ -49,6 +51,8 @@ export const languages = ['de', 'fr', 'it', 'en']
                 return "mdcs"
             case "TARMED":
                 return "tarmed_chapters"
+            default:
+                return
         }
     }
     export async function isValidVersion(language, button, list, chapters ) {

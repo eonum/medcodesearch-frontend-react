@@ -7,11 +7,6 @@ import RouterService from "../../Services/router.service";
  *
  */
 class SearchResult extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     /**
      * looks for change in the button selection and update the fetchresult
      */
