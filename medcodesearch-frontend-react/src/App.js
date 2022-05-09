@@ -265,7 +265,7 @@ class App extends Component{
                   </div>
 
                   <div key={"app div 2"} className="container">
-                      <div key={"app searchbar div 0"} className="row">
+                      <div key={"app searchbar div 0"} className="row" onClick={this.showHide}>
                           <Searchbar
                               language={this.state.language}
                               selectedButton={this.state.selectedButton}
