@@ -55,7 +55,7 @@ class MobileButton extends Component{
      */
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.language !== this.props.language || prevProps.category !== this.props.category
-            || this.props.reRender) {
+            || this.props.reRender || prevProps.category !== this.props.category) {
             await this.fetchInitialVersions()
             await this.fetchCurrentVersions()
         }
@@ -82,6 +82,18 @@ class MobileButton extends Component{
         } else {
             this.setState({disabledCategory: findCategory(version)})
             this.setState({disabledVersion: version})
+            this.setState({showPopUp: true})
+        }
+    }
+
+    handleCategoryClick(category) {
+        console.log(this.state.allVersions)
+        const cat = document.getElementById(category);
+        if(!cat.classList.contains('disabled')) {
+            this.props.chooseC('', category, false, "")
+        } else {
+            this.setState({disabledCategory: category})
+            this.setState({disabledVersion: this.getLastVersion(category)})
             this.setState({showPopUp: true})
         }
     }
@@ -144,12 +156,17 @@ class MobileButton extends Component{
      * looks for the last used version
      * @returns {*|string} last version if it is present
      */
-    getLastVersion() {
-        let lastVersion = this.state.currentVersions[this.state.currentVersions.length - 1];
-        if(lastVersion) {
-            return convertCategory(this.props.category, this.state.currentVersions[this.state.currentVersions.length - 1])
+    getLastVersion(category) {
+        switch (category) {
+            case "ICD":
+                return "ICD-GM-2022"
+            case "CHOP":
+                return "CHOP_2022"
+            case "TARMED":
+                return "TARMED_01.09"
+            case "SwissDRG":
+                return "V11.0"
         }
-        return ""
     }
 
     /**
@@ -157,14 +174,14 @@ class MobileButton extends Component{
      * @returns {*|string} currently used version
      */
     getVersion() {
-        let lastVersion = this.getLastVersion()
+        let lastVersion = this.getLastVersion(this.props.category)
         if(lastVersion === "") {
             return lastVersion
         }
         if(this.props.version === this.props.selectedVersion) {
             return convertCategory(this.props.category, this.props.selectedVersion)
         } else {
-            return convertCategory(this.props.category, this.props.version)
+            return convertCategory(this.props.category, this.getLastVersion(this.props.category))
         }
     }
 
@@ -182,11 +199,7 @@ class MobileButton extends Component{
      */
     isCalBut() {
         let category = this.props.category;
-        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG'){
-            return true;
-        }else {
-            return false;
-        }
+        return category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG';
     }
 
     /**
@@ -224,6 +237,14 @@ class MobileButton extends Component{
         }
     }
 
+    getClassName(category) {
+        let name = "dropdown-item"
+        if(this.props.language === "en" && category !== "ICD") {
+            name += " disabled"
+        }
+        return name
+    }
+
     /**
      * renders the mobile button
      * @returns {JSX.Element}
@@ -256,12 +277,12 @@ class MobileButton extends Component{
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
                         {this.state.buttons.map((category, index) => (
-                                <Dropdown.Item className="dropdown-item"
+                                <Dropdown.Item className={this.getClassName(category)}
                                                eventKey={category}
                                                key={"mobileButton dropdown catalog " + category}
-                                               id={category + " " + index}
+                                               id={category}
                                                onClick={() => {
-                                    this.props.chooseC('', category, false, "")
+                                                   this.handleCategoryClick(category)
                                 }}>
                                     {this.extractLabels(category, index)}
                                 </Dropdown.Item>
