@@ -17,8 +17,6 @@ class ButtonVersion extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            allVersions:[],
-            currentVersions: [],
             showPopUp: false,
             disabledVersion: "",
             disabledCategory: "",
@@ -32,68 +30,6 @@ class ButtonVersion extends React.Component{
      */
     updatePopUp = (value) => {
         this.setState({showPopUp: value})
-    }
-
-    /**
-     * after update of the component calls the fetch
-     * @param prevProps
-     * @param prevState
-     * @param snapshot
-     * @returns {Promise<void>}
-     */
-    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-        if(prevProps.language !== this.props.language) {
-            await this.fetchCurrentVersions()
-        }
-    }
-
-    /**
-     * after mount initialize the fetch for content and version
-     * @returns {Promise<void>}
-     */
-    async componentDidMount() {
-        await this.fetchInitialVersions()
-        await this.fetchCurrentVersions()
-    }
-
-    /**
-     * fetches the first version
-     * @returns {Promise<void>}
-     */
-    async fetchInitialVersions() {
-        if (this.props.category === "SwissDRG") {
-            await fetch(`https://search.eonum.ch/de/drgs/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    this.setState({allVersions: CategorysSortService(json), currentVersions: CategorysSortService(json)})
-                })
-        } else {
-            await fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    this.setState({allVersions: CategorysSortService(json), currentVersions: CategorysSortService(json)})
-                })
-        }
-    }
-
-    /**
-     * fetches the current versions
-     * @returns {Promise<void>}
-     */
-    async fetchCurrentVersions() {
-        if (this.props.category === "SwissDRG") {
-            await fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    this.setState({currentVersions: json})
-                })
-        } else {
-            await fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    this.setState({currentVersions: CategorysSortService(json)})
-                })
-        }
     }
 
     /**
@@ -117,9 +53,11 @@ class ButtonVersion extends React.Component{
      * @returns {*|string} last version if it is present
      */
     getLastVersion() {
-        let lastVersion = this.state.currentVersions[this.state.currentVersions.length - 1];
-        if(lastVersion) {
-            return convertCategory(this.props.category, this.state.currentVersions[this.state.currentVersions.length - 1])
+        if(this.props.currentVersions) {
+            let lastVersion = this.props.currentVersions[this.props.currentVersions.length - 1];
+            if (lastVersion) {
+                return convertCategory(this.props.category, this.props.currentVersions[this.props.currentVersions.length - 1])
+            }
         }
         return ""
     }
@@ -135,7 +73,7 @@ class ButtonVersion extends React.Component{
         } else {
             this.setState({showPopUp: true})
             this.setState({disabledCategory: category})
-            this.setState({disabledVersion: this.state.allVersions[this.state.allVersions.length-1]})
+            this.setState({disabledVersion: this.props.initialVersions[this.props.initialVersions.length-1]})
         }
     }
 
@@ -148,7 +86,7 @@ class ButtonVersion extends React.Component{
         if(this.props.category === this.props.selectedCategory) {
             classname += " activeCatalog"
         }
-        if(this.state.currentVersions.length === 0) {
+        if(this.props.currentVersions && this.props.currentVersions.length === 0) {
             classname += " disabled"
         }
         return classname
@@ -175,6 +113,25 @@ class ButtonVersion extends React.Component{
      * @returns {JSX.Element}
      */
     render() {
+        let dropdown;
+        if(this.props.initialVersions && this.props.currentVersions) {
+            dropdown = <Dropdown.Menu className="dropdown">
+                {this.props.initialVersions.reverse().map(
+                    (versions) => (
+                        <Dropdown.Item
+                            className={this.props.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
+                            eventKey={versions}
+                            key={"buttonversion " + this.props.category + " DropDown " + versions}
+                            id={versions}
+                            onClick={() => {
+                                this.handleVersionClick(versions)
+                            }}
+                        >{convertCategory(this.props.category, versions)}</Dropdown.Item>
+                    )
+                )}
+            </Dropdown.Menu>
+        }
+        console.log(this.props.initialVersions)
         return (
             <div key={"buttonVersion div 0"}>
                 {<PopUp
@@ -209,20 +166,7 @@ class ButtonVersion extends React.Component{
                     }>
                         {this.getVersion()}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown">
-                        {this.state.allVersions.reverse().map(
-                            (versions) => (
-                                <Dropdown.Item className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
-                                               eventKey={versions}
-                                               key={"buttonversion " + this.props.category + " DropDown " + versions}
-                                               id={versions}
-                                               onClick={() => {
-                                                   this.handleVersionClick(versions)
-                                            }}
-                                >{convertCategory(this.props.category, versions)}</Dropdown.Item>
-                            )
-                        )}
-                    </Dropdown.Menu>
+                    {dropdown}
                 </Dropdown>
             </div>
         )

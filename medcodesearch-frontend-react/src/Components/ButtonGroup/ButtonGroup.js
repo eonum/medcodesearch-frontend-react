@@ -165,7 +165,7 @@ class ButtonGroup extends Component{
     render() {
         return (
             <div key={"buttongroup div 0"}>
-                <div key={"buttongroup div 1"}className="d-none d-lg-block">
+                <div key={"buttongroup div 1"} className="d-none d-lg-block">
                     <div key={"ButtonGroup div 2"} className={"alignButtons"}>
                         {this.state.buttons[0].map((btn, index) => (
                             <div key={"buttongroup VersionButton " + btn + " div " + index}>
@@ -178,6 +178,8 @@ class ButtonGroup extends Component{
                                         this.reRender(button)
                                     }}
                                     category={btn}
+                                    initialVersions={this.props.initialVersions[btn]}
+                                    currentVersions={this.props.currentVersions[btn]}
                                     language={this.props.language}
                                     version={this.getVersion(btn)}
                                     selectedLanguage={this.props.selectedLanguage}
@@ -217,6 +219,8 @@ class ButtonGroup extends Component{
                 </div>
                 <div key={"buttongroup MobileButton div 0"} className="d-lg-none">
                     <MobileButton
+                        initialVersions={this.props.initialVersions}
+                        currentVersions={this.props.currentVersions}
                         date ={this.state.selectedDate}
                         version={this.getVersion(this.state.selectedButton)}
                         selectedVersion={this.props.params.version}

@@ -1,4 +1,5 @@
 export const languages = ['de', 'fr', 'it', 'en']
+export const categories = ['ICD', 'SwissDRG', 'CHOP', 'TARMED']
 
     export function convertCategory(category, version) {
         switch(category) {
@@ -55,36 +56,15 @@ export const languages = ['de', 'fr', 'it', 'en']
                 return
         }
     }
-    export async function isValidVersion(language, button, list, chapters ) {
-        if(language === "en") {
-            if(button !== "ICD") {
-                return false
-            }
-        } else if(language === "fr" || language === "it") {
-            if(button !== "MIGEL" && button !== "AL" && button !== "DRUG") {
-                let versions = await fetchVersions(language, button);
-                if(!versions.includes(list)) {
-                    return false
-                }
-            }
-        }
-        return true
-    }
 
-    async function fetchVersions(language, button) {
-    let ret;
-        if (button === "SwissDRG") {
-            await fetch(`https://search.eonum.ch/` + language + `/drgs/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    ret = json
-                })
-        } else {
-            await fetch(`https://search.eonum.ch/` + language + `/` + button.toLowerCase() + `s/versions`)
-                .then((res) => res.json())
-                .then((json) => {
-                    ret = json
-                })
+    export async function getVersionsByLanguage(language) {
+        let allVersions = {}
+            for(let category of categories) {
+                await fetch('https://search.eonum.ch/' + language + "/" + convertCategoryToCatalog(category) + '/versions')
+                    .then((res) => res.json())
+                    .then((json) => {
+                        allVersions[category] = json;
+                    })
         }
-        return ret;
+        return allVersions
     }
