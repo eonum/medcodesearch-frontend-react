@@ -149,7 +149,6 @@ class App extends Component{
     async componentDidMount() {
         this.setState({initialVersions: await getVersionsByLanguage('de')})
         this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
-        console.log(this.state.currentVersions)
     }
 
     /**

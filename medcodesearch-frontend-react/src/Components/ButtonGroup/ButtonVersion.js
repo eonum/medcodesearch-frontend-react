@@ -131,7 +131,6 @@ class ButtonVersion extends React.Component{
                 )}
             </Dropdown.Menu>
         }
-        console.log(this.props.initialVersions)
         return (
             <div key={"buttonVersion div 0"}>
                 {<PopUp
