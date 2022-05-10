@@ -139,6 +139,7 @@ class Searchbar extends Component {
      * @returns {JSX.Element}
      */
     render() {
+        console.log(this.state.searchTerm)
         let translateJson = findJson(this.props.language)
         return (
             <div>

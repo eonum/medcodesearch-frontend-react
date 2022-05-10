@@ -221,7 +221,7 @@ class ButtonGroup extends Component{
                         version={this.getVersion(this.state.selectedButton)}
                         selectedVersion={this.props.params.version}
                         reRender={this.props.clickedOnLogo}
-                        category={this.props.category}
+                        category={this.state.selectedButton}
                         language={this.props.language}
                         selectedLanguage={this.props.selectedLanguage}
                         updateVersion={this.props.selectedList}
