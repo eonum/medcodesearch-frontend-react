@@ -57,7 +57,6 @@ class PopUp extends Component{
     }
 
 
-
     handleLanguageClick(language) {
         this.handleShow(false)
         this.props.selectedLanguage(language)
@@ -66,6 +65,8 @@ class PopUp extends Component{
     }
 
     render() {
+        console.log(this.props.category)
+        console.log(this.props.version)
         return (
             <>
                 <Modal size="sm" show={this.state.show} onHide={() => this.handleShow(false)}>

@@ -12,7 +12,9 @@ import RouterService from "./Services/router.service";
 import {Component} from "react";
 import convertDate from "./Services/ConvertDate";
 import {Collapse} from "react-bootstrap";
-import {isValidVersion} from "./Services/category-version.service";
+import {
+    getVersionsByLanguage
+} from "./Services/category-version.service";
 import findJson from "./Services/findJson";
 
 /**
@@ -35,7 +37,9 @@ class App extends Component{
             searchResults: [],
             clickedOnLogo: false,
             reSetPath: false,
-            collapseMenu: false
+            collapseMenu: false,
+            initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': []},
+            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': []}
         };
         this.updateButton = this.updateButton.bind(this);
         this.updateDate = this.updateDate.bind(this);
@@ -105,6 +109,10 @@ class App extends Component{
         let i = this.state.selectedList === '' ? '' : '/';
         let chapters;
 
+        if(prevState.language !== this.state.language) {
+            this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
+        }
+
         if(prevState.language !== this.state.language ||
             prevState.selectedButton !== this.state.selectedButton ||
             prevState.selectedList !== this.state.selectedList ||
@@ -119,7 +127,7 @@ class App extends Component{
             }else {
                 chapters =button.toLowerCase() + '_chapters';
             }
-            if(await isValidVersion(this.state.language, button, list, chapters)) {
+            if((button === 'MIGEL' || button === 'AL' || button === 'DRUG') || this.state.currentVersions[button].includes(list)) {
                 navigate({
                     // falls liste leer --> de/button/chapters
                     // sonst --> de/button/list/chapters/list
@@ -138,8 +146,10 @@ class App extends Component{
         }
     }
 
-    isValidVersion() {
-
+    async componentDidMount() {
+        this.setState({initialVersions: await getVersionsByLanguage('de')})
+        this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
+        console.log(this.state.currentVersions)
     }
 
     /**
@@ -275,6 +285,8 @@ class App extends Component{
                       </div>
                       <div key={"app buttongroup div 0"} className="row">
                           <ButtonGroup
+                              initialVersions={this.state.initialVersions}
+                              currentVersions={this.state.currentVersions}
                               clickedOnLogo={this.state.clickedOnLogo}
                               category={this.state.selectedButton}
                               version={this.state.selectedList}
