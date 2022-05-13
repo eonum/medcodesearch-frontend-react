@@ -1,17 +1,14 @@
 const { Builder, By, Key, until } = require('selenium-webdriver')
 const assert = require('assert')
-require('selenium-webdriver/firefox')
-require('geckodriver')
+const {browser, sleep} = require("../setupTests");
 
 describe('Default Suite', function() {
   let driver
   let n = 1500;
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   beforeEach(async function() {
-    driver = await new Builder().forBrowser('firefox').build()
+    driver = await new Builder().forBrowser(browser).build()
     await driver.manage().setTimeouts( { implicit: 10000 } );
     await driver.manage().window().maximize();
 
@@ -33,7 +30,6 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.id("mobilebutton catalog")).click()
     await sleep(n);
-
     await driver.findElement(By.id("CHOP 1")).click()
     await sleep(n);
     await driver.findElement(By.id("mobilebutton version")).click()
@@ -56,30 +52,8 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.id("mobilebutton catalog")).click()
     await sleep(n);
-    await driver.findElement(By.id("SwissDRG 2")).click()
+    await driver.findElement(By.id("TARMED 3")).click()
     await sleep(n);
-    await driver.findElement(By.id("mobilebutton catalog")).click()
-    await sleep(n);
-
-    await driver.findElement(By.id("CHOP 1")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("C1:")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("01:")).click()
-    await sleep(n);
-    await driver.findElement(By.id("mobilebutton catalog")).click()
-    await sleep(n);
-
-    await driver.findElement(By.id("ICD 0")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("V:")).click()
-    await sleep(n);
-    await driver.findElement(By.id("mobilebutton version")).click()
-    await sleep(n);
-
-    await driver.findElement(By.id("ICD10-GM-2018")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("III:")).click()
   })
   it('breadcrumbs in mobile', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
@@ -115,7 +89,6 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.id("mobilebutton version")).click()
     await sleep(n);
-
     await driver.findElement(By.id("ICD10-GM-2014")).click()
     await sleep(n);
     await driver.findElement(By.linkText("XII:")).click()
@@ -124,7 +97,6 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("L00-L08:")).click()
     await sleep(n);
-
     {
       const element = await driver.findElement(By.linkText("XII"))
       await driver.actions({ bridge: true }).move({origin:element}).perform()
@@ -132,15 +104,8 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("XII")).click()
     await sleep(n);
-
-    {
-      const element = await driver.findElement(By.id("mobilebutton catalog"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
     await driver.findElement(By.id("mobilebutton catalog")).click()
     await sleep(n);
-
     {
       const element = await driver.findElement(By.id("main"))
       await driver.actions({ bridge: true }).move({origin:element}).perform()
@@ -152,7 +117,6 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.id("SwissDRG 2")).click()
     await sleep(n);
-
     await driver.findElement(By.css("li:nth-child(3)")).click()
     await sleep(n);
     await driver.findElement(By.linkText("MDC 03:")).click()
@@ -163,58 +127,14 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("D62B:")).click()
     await sleep(n);
-
-    {
-      const element = await driver.findElement(By.linkText("Medizinische Partition"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
-    await driver.findElement(By.linkText("Medizinische Partition")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("D60:")).click()
-    await sleep(n);
-
-    {
-      const element = await driver.findElement(By.linkText("MDC 03"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
     await driver.findElement(By.linkText("MDC 03")).click()
     await sleep(n);
-    await driver.findElement(By.linkText("Operative Partition:")).click()
-    await sleep(n);
 
-    {
-      const element = await driver.findElement(By.id("main"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
-    await driver.executeScript("window.scrollTo(0,0)")
-    await sleep(n);
-    await driver.findElement(By.id("mobilebutton catalog")).click()
-    await sleep(n);
-    await driver.findElement(By.id("CHOP 1")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("C4:")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("20:")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("C4")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("18:")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("18.3:")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("18.31:")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("CHOP 2022")).click()
   })
   it('testing breadcrumbs de', async function() {
 
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2000);
-    await driver.manage().window().setRect({ width: 1200, height: 800 })
-    await sleep(n);
     await driver.findElement(By.linkText("I:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A00-A09:")).click()
@@ -223,21 +143,9 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("A01.0:")).click()
     await sleep(n);
-    await driver.executeScript("window.scrollTo(0,800)")
-    await sleep(n);
-    await driver.findElement(By.linkText("A01.2:")).click()
-    await sleep(n);
     await driver.findElement(By.linkText("A00-A09")).click()
     await sleep(n);
-    await driver.findElement(By.linkText("A01:")).click()
-    await sleep(n);
-    await driver.findElement(By.linkText("A01.0:")).click()
-    await sleep(n);
-    await driver.executeScript("window.scrollTo(0,0)")
-    await sleep(n);
     await driver.findElement(By.linkText("I")).click()
-    await sleep(n);
-    await driver.executeScript("window.scrollTo(0,2*n)")
     await sleep(n);
     await driver.findElement(By.linkText("B00-B09:")).click()
     await sleep(n);
@@ -253,44 +161,16 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("20:")).click()
     await sleep(n);
-    await driver.findElement(By.linkText("20.1:")).click()
-    await sleep(n);
     await driver.findElement(By.linkText("20.4:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("20.41:")).click()
     await sleep(n);
     await driver.findElement(By.id("SwissDRG")).click()
     await sleep(n);
-
-    {
-      const element = await driver.findElement(By.id("SwissDRG"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
-
-    {
-      const element = await driver.findElement(By.id("main"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
     await driver.findElement(By.linkText("MDC 05:")).click()
     await sleep(n);
-
     await driver.findElement(By.css("div:nth-child(3) #buttonversion")).click()
     await sleep(n);
-
-    {
-      const element = await driver.findElement(By.css("div:nth-child(3) #buttonversion"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
-
-    {
-      const element = await driver.findElement(By.id("main"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
-
     await driver.findElement(By.id("V8.0")).click()
     await sleep(n);
     await driver.findElement(By.linkText("MDC 06:")).click()
@@ -311,24 +191,16 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("G40Z:")).click()
     await sleep(n);
-
-    {
-      const element = await driver.findElement(By.linkText("eonum"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
     await driver.findElement(By.id("TARMED")).click()
     await sleep(n);
     await driver.findElement(By.linkText("07:")).click()
     await sleep(n);
-
     await driver.findElement(By.css("ul > li:nth-child(2)")).click()
     await sleep(n);
     await driver.findElement(By.linkText("07.02:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("07.0140:")).click()
     await sleep(n);
-
     await driver.findElement(By.css("ul > li:nth-child(2)")).click()
     await sleep(n);
     await driver.findElement(By.linkText("07.0120:")).click()
