@@ -25,9 +25,6 @@ describe('PopUp', function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
 
-    // 2 | setWindowSize | 1101x993 |  | 
-    await driver.manage().window().setRect({ width: 2000, height: 1000 })
-    await sleep(n);
     // 3 | mouseOver | css=.language-btn:nth-child(4) |  |
     {
       const element = await driver.wait(until.elementLocated(By.css(".language-btn:nth-child(4)")))
@@ -54,75 +51,6 @@ describe('PopUp', function() {
     await sleep(n);
     // 10 | click | css=.langBtn:nth-child(1) |  |
     await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(1)"))).click()
-    await sleep(n);
-    // 11 | mouseOver | css=div:nth-child(3) #buttonversion |  |
-    {
-      const element = await driver.wait(until.elementLocated(By.css("div:nth-child(3) #buttonversion")))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
-    // 12 | mouseOut | css=div:nth-child(3) #buttonversion |  |
-    {
-      const element = await driver.wait(until.elementLocated(By.id("main")))
-            await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
-    // 13 | click | css=.language-btn:nth-child(3) |  |
-    await driver.wait(until.elementLocated(By.css(".language-btn:nth-child(3)"))).click()
-    await sleep(n);
-    // 14 | click | id=buttonversion |  |
-    await driver.wait(until.elementLocated(By.id("buttonversion"))).click()
-    await sleep(n);
-    // 15 | click | id=ICD10-GM-2015 |  |
-    await driver.wait(until.elementLocated(By.id("ICD10-GM-2015"))).click()
-    await sleep(n);
-    // 16 | click | css=.langBtn:nth-child(2) |  |
-    await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(2)"))).click()
-    await sleep(n);
-    // 17 | click | id=TARMED |  |
-    await driver.wait(until.elementLocated(By.id("TARMED"))).click()
-    await sleep(n);
-    // 18 | click | css=.langBtn:nth-child(2) |  |
-    await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(2)"))).click()
-    await sleep(n);
-    // 19 | click | id=buttonversion |  |
-    await driver.wait(until.elementLocated(By.id("buttonversion"))).click()
-    await sleep(n);
-    // 20 | click | id=ICD10-GM-2019 |  |
-    await driver.wait(until.elementLocated(By.id("ICD10-GM-2019"))).click()
-    await sleep(n);
-    // 21 | click | css=.langBtn:nth-child(2) |  |
-    await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(2)"))).click()
-    await sleep(n);
-    // 22 | click | css=div:nth-child(3) #buttonversion |  |
-    await driver.wait(until.elementLocated(By.css("div:nth-child(3) #buttonversion"))).click()
-    await sleep(n);
-    // 23 | mouseOver | css=div:nth-child(3) #buttonversion |  |
-    {
-      const element = await driver.wait(until.elementLocated(By.css("div:nth-child(3) #buttonversion")))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
-    // 24 | mouseOut | css=.show > #buttonversion |  |
-    {
-      const element = await driver.wait(until.elementLocated(By.id("main")))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
-    }
-    await sleep(n);
-    // 25 | click | id=V10.0 |  |
-    await driver.wait(until.elementLocated(By.id("V10.0"))).click()
-    await sleep(n);
-    // 26 | click | css=.modal-footer > .customButton |  |
-    await driver.wait(until.elementLocated(By.css(".modal-footer > .customButton"))).click()
-    await sleep(n);
-    // 27 | click | css=div:nth-child(2) > div > .catalogButtons > #buttonversion |  |
-    await driver.wait(until.elementLocated(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion"))).click()
-    await sleep(n);
-    // 28 | click | id=CHOP_2021 |  |
-    await driver.wait(until.elementLocated(By.id("CHOP_2021"))).click()
-    await sleep(n);
-    // 29 | click | css=.modal-footer > .customButton |  |
-    await driver.wait(until.elementLocated(By.css(".modal-footer > .customButton"))).click()
     await sleep(n);
   })
   it('PopUp mobile', async function() {
@@ -158,6 +86,7 @@ describe('PopUp', function() {
     // 10 | click | css=.langBtn:nth-child(2) |  |
     await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(2)"))).click()
     await sleep(n);
+    /*
     // 11 | click | id=mobilebutton catalog |  |
     await driver.wait(until.elementLocated(By.id("mobilebutton catalog"))).click()
     await sleep(n);
@@ -185,5 +114,7 @@ describe('PopUp', function() {
     // 17 | click | css=.customButton:nth-child(3) |  |
     await driver.wait(until.elementLocated(By.css(".customButton:nth-child(3)"))).click()
     await sleep(n);
+
+     */
   })
 })
