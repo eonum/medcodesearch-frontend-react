@@ -1,31 +1,41 @@
 const { Builder, By, Key, until } = require('selenium-webdriver')
 const assert = require('assert')
 require('selenium-webdriver/firefox')
+require('selenium-webdriver/chrome')
 require('geckodriver')
+require('chromedriver')
+require('selenium-webdriver/safari')
+
+const {urlMatches} = require("selenium-webdriver/lib/until");
 
 describe('Default Suite', function() {
-  let driver
-  let vars
-  let n = 250;
+  let driver;
+  let n = 1000;
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   beforeEach(async function() {
-    driver = await new Builder().forBrowser('firefox').build()
-    vars = {}
+      driver = await new Builder().forBrowser('firefox').build()
+      await driver.manage().setTimeouts( { implicit: 10000 } );
   })
+
   afterEach(async function() {
-    await driver.quit();
+      await sleep(250);
+      await driver.quit();
+      await sleep(250);
   })
+
   it('clicking from one catalog to another (de)', async function() {
 
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(1000);
+        await sleep(2*n);
     await driver.findElement(By.css("div:nth-child(3) .customButton:nth-child(1)")).click()
-        await sleep(n);
+      assert(urlMatches(/\\de\\SwissDRG\\V11.0\\mdcs\\V11.0/), "matches the url for drg")
+      await sleep(n);
     await driver.findElement(By.css("div:nth-child(4) > div > .catalogButtons > .customButton:nth-child(1)")).click()
-        await sleep(n);
+      assert(urlMatches(/de\\TARMED\\TARMED_01.09\\tarmed_chapters\\TARMED_01.09/), "matches the url for tarmed")
+      await sleep(n);
     await driver.findElement(By.css("div:nth-child(2) > div > .catalogButtons > .customButton:nth-child(1)")).click()
         await sleep(n);
     await driver.findElement(By.css("div:nth-child(1) > div > .catalogButtons > .customButton:nth-child(1)")).click()
@@ -52,7 +62,7 @@ describe('Default Suite', function() {
   })
   it('icd version newer to older and back (de)', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(1000);
+        await sleep(2*n);
     await driver.manage().window().setRect({ width: 1042, height: 796 })
         await sleep(n);
     await driver.findElement(By.id("buttonversion")).click()
@@ -104,7 +114,7 @@ describe('Default Suite', function() {
   it('changing languages', async function() {
 
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(1000);
+        await sleep(2*n);
     await driver.findElement(By.css(".language-btn:nth-child(2)")).click()
         await sleep(n);
     await driver.findElement(By.css(".language-btn:nth-child(3)")).click()
@@ -153,21 +163,11 @@ describe('Default Suite', function() {
         await sleep(n);
     await driver.findElement(By.id("ICD10-GM-2021")).click()
         await sleep(n);
-    await driver.findElement(By.css(".language-btn:nth-child(1)")).click()
-        await sleep(n);
-    {
-      const element = await driver.findElement(By.css("div:nth-child(3) #buttonversion"))
-      await driver.actions({ bridge: true }).move({origin: element}).perform()
-    }
-        await sleep(n);
-    {
-      const element = await driver.findElement(By.id("main"))
-      await driver.actions({ bridge: true }).move({origin: element}).perform()
-    }
+
   })
   it('click from button to other buttons version', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(1000);
+        await sleep(2*n);
     await driver.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
         await sleep(n);
     await driver.findElement(By.id("CHOP_2020")).click()
@@ -190,7 +190,7 @@ describe('Default Suite', function() {
   })
   it('hover over buttons', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(1000);
+        await sleep(2*n);
     await driver.findElement(By.id("buttonversion")).click()
         await sleep(n);
     await driver.findElement(By.id("CHOP")).click()

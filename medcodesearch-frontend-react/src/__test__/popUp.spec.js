@@ -4,7 +4,6 @@ const assert = require('assert')
 
 describe('PopUp', function() {
   let driver
-  let vars
   let n = 1000;
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -12,10 +11,12 @@ describe('PopUp', function() {
 
   beforeEach(async function() {
     driver = await new Builder().forBrowser('firefox').build()
-    vars = {}
+    await driver.manage().setTimeouts( { implicit: 10000 } );
   })
   afterEach(async function() {
+    await sleep(250);
     await driver.quit();
+    await sleep(250);
   })
   it('PopUp', async function() {
     // Test name: PopUp
@@ -29,99 +30,99 @@ describe('PopUp', function() {
     await sleep(n);
     // 3 | mouseOver | css=.language-btn:nth-child(4) |  |
     {
-      const element = await driver.findElement(By.css(".language-btn:nth-child(4)"))
+      const element = await driver.wait(until.elementLocated(By.css(".language-btn:nth-child(4)")))
       await driver.actions({ bridge: true }).move({origin:element}).perform()
     }
     await sleep(n);
     // 4 | click | css=.language-btn:nth-child(2) |  |
-    await driver.findElement(By.css(".language-btn:nth-child(2)")).click()
+    await driver.wait(until.elementLocated(By.css(".language-btn:nth-child(2)"))).click()
     await sleep(n);
     // 5 | click | id=buttonversion |  |
-    await driver.findElement(By.id("buttonversion")).click()
+    await driver.wait(until.elementLocated(By.id("buttonversion"))).click()
     await sleep(n);
     // 6 | click | id=ICD10-GM-2021 |  |
-    await driver.findElement(By.id("ICD10-GM-2021")).click()
+    await driver.wait(until.elementLocated(By.id("ICD10-GM-2021"))).click()
     await sleep(n);
     // 7 | click | css=.modal-footer > .customButton |  |
-    await driver.findElement(By.css(".modal-footer > .customButton")).click()
+    await driver.wait(until.elementLocated(By.css(".modal-footer > .customButton"))).click()
     await sleep(n);
     // 8 | click | id=buttonversion |  |
-    await driver.findElement(By.id("buttonversion")).click()
+    await driver.wait(until.elementLocated(By.id("buttonversion"))).click()
     await sleep(n);
     // 9 | click | id=ICD10-GM-2019 |  |
-    await driver.findElement(By.id("ICD10-GM-2019")).click()
+    await driver.wait(until.elementLocated(By.id("ICD10-GM-2019"))).click()
     await sleep(n);
     // 10 | click | css=.langBtn:nth-child(1) |  |
-    await driver.findElement(By.css(".langBtn:nth-child(1)")).click()
+    await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(1)"))).click()
     await sleep(n);
     // 11 | mouseOver | css=div:nth-child(3) #buttonversion |  |
     {
-      const element = await driver.findElement(By.css("div:nth-child(3) #buttonversion"))
+      const element = await driver.wait(until.elementLocated(By.css("div:nth-child(3) #buttonversion")))
       await driver.actions({ bridge: true }).move({origin:element}).perform()
     }
     await sleep(n);
     // 12 | mouseOut | css=div:nth-child(3) #buttonversion |  |
     {
-      const element = await driver.findElement(By.id("main"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
+      const element = await driver.wait(until.elementLocated(By.id("main")))
+            await driver.actions({ bridge: true }).move({origin:element}).perform()
     }
     await sleep(n);
     // 13 | click | css=.language-btn:nth-child(3) |  |
-    await driver.findElement(By.css(".language-btn:nth-child(3)")).click()
+    await driver.wait(until.elementLocated(By.css(".language-btn:nth-child(3)"))).click()
     await sleep(n);
     // 14 | click | id=buttonversion |  |
-    await driver.findElement(By.id("buttonversion")).click()
+    await driver.wait(until.elementLocated(By.id("buttonversion"))).click()
     await sleep(n);
     // 15 | click | id=ICD10-GM-2015 |  |
-    await driver.findElement(By.id("ICD10-GM-2015")).click()
+    await driver.wait(until.elementLocated(By.id("ICD10-GM-2015"))).click()
     await sleep(n);
     // 16 | click | css=.langBtn:nth-child(2) |  |
-    await driver.findElement(By.css(".langBtn:nth-child(2)")).click()
+    await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(2)"))).click()
     await sleep(n);
     // 17 | click | id=TARMED |  |
-    await driver.findElement(By.id("TARMED")).click()
+    await driver.wait(until.elementLocated(By.id("TARMED"))).click()
     await sleep(n);
     // 18 | click | css=.langBtn:nth-child(2) |  |
-    await driver.findElement(By.css(".langBtn:nth-child(2)")).click()
+    await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(2)"))).click()
     await sleep(n);
     // 19 | click | id=buttonversion |  |
-    await driver.findElement(By.id("buttonversion")).click()
+    await driver.wait(until.elementLocated(By.id("buttonversion"))).click()
     await sleep(n);
     // 20 | click | id=ICD10-GM-2019 |  |
-    await driver.findElement(By.id("ICD10-GM-2019")).click()
+    await driver.wait(until.elementLocated(By.id("ICD10-GM-2019"))).click()
     await sleep(n);
     // 21 | click | css=.langBtn:nth-child(2) |  |
-    await driver.findElement(By.css(".langBtn:nth-child(2)")).click()
+    await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(2)"))).click()
     await sleep(n);
     // 22 | click | css=div:nth-child(3) #buttonversion |  |
-    await driver.findElement(By.css("div:nth-child(3) #buttonversion")).click()
+    await driver.wait(until.elementLocated(By.css("div:nth-child(3) #buttonversion"))).click()
     await sleep(n);
     // 23 | mouseOver | css=div:nth-child(3) #buttonversion |  |
     {
-      const element = await driver.findElement(By.css("div:nth-child(3) #buttonversion"))
+      const element = await driver.wait(until.elementLocated(By.css("div:nth-child(3) #buttonversion")))
       await driver.actions({ bridge: true }).move({origin:element}).perform()
     }
     await sleep(n);
     // 24 | mouseOut | css=.show > #buttonversion |  |
     {
-      const element = await driver.findElement(By.id("main"))
+      const element = await driver.wait(until.elementLocated(By.id("main")))
       await driver.actions({ bridge: true }).move({origin:element}).perform()
     }
     await sleep(n);
     // 25 | click | id=V10.0 |  |
-    await driver.findElement(By.id("V10.0")).click()
+    await driver.wait(until.elementLocated(By.id("V10.0"))).click()
     await sleep(n);
     // 26 | click | css=.modal-footer > .customButton |  |
-    await driver.findElement(By.css(".modal-footer > .customButton")).click()
+    await driver.wait(until.elementLocated(By.css(".modal-footer > .customButton"))).click()
     await sleep(n);
     // 27 | click | css=div:nth-child(2) > div > .catalogButtons > #buttonversion |  |
-    await driver.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
+    await driver.wait(until.elementLocated(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion"))).click()
     await sleep(n);
     // 28 | click | id=CHOP_2021 |  |
-    await driver.findElement(By.id("CHOP_2021")).click()
+    await driver.wait(until.elementLocated(By.id("CHOP_2021"))).click()
     await sleep(n);
     // 29 | click | css=.modal-footer > .customButton |  |
-    await driver.findElement(By.css(".modal-footer > .customButton")).click()
+    await driver.wait(until.elementLocated(By.css(".modal-footer > .customButton"))).click()
     await sleep(n);
   })
   it('PopUp mobile', async function() {
@@ -134,55 +135,55 @@ describe('PopUp', function() {
     await driver.manage().window().setRect({ width: 400, height: 800 })
     await sleep(n);
     // 3 | click | css=.language-btn:nth-child(2) |  |
-    await driver.findElement(By.css(".language-btn:nth-child(2)")).click()
+    await driver.wait(until.elementLocated(By.css(".language-btn:nth-child(2)"))).click()
     await sleep(n);
     // 4 | click | id=mobilebutton version |  |
-    await driver.findElement(By.id("mobilebutton version")).click()
+    await driver.wait(until.elementLocated(By.id("mobilebutton version"))).click()
     await sleep(n);
     // 5 | click | id=ICD10-GM-2021 |  |
-    await driver.findElement(By.id("ICD10-GM-2021")).click()
+    await driver.wait(until.elementLocated(By.id("ICD10-GM-2021"))).click()
     await sleep(n);
     // 6 | click | css=.langBtn:nth-child(1) |  |
-    await driver.findElement(By.css(".langBtn:nth-child(1)")).click()
+    await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(1)"))).click()
     await sleep(n);
     // 7 | click | css=.language-btn:nth-child(2) |  |
-    await driver.findElement(By.css(".language-btn:nth-child(2)")).click()
+    await driver.wait(until.elementLocated(By.css(".language-btn:nth-child(2)"))).click()
     await sleep(n);
     // 8 | click | id=mobilebutton version |  |
-    await driver.findElement(By.id("mobilebutton version")).click()
+    await driver.wait(until.elementLocated(By.id("mobilebutton version"))).click()
     await sleep(n);
     // 9 | click | id=ICD10-GM-2019 |  |
-    await driver.findElement(By.id("ICD10-GM-2019")).click()
+    await driver.wait(until.elementLocated(By.id("ICD10-GM-2019"))).click()
     await sleep(n);
     // 10 | click | css=.langBtn:nth-child(2) |  |
-    await driver.findElement(By.css(".langBtn:nth-child(2)")).click()
+    await driver.wait(until.elementLocated(By.css(".langBtn:nth-child(2)"))).click()
     await sleep(n);
     // 11 | click | id=mobilebutton catalog |  |
-    await driver.findElement(By.id("mobilebutton catalog")).click()
+    await driver.wait(until.elementLocated(By.id("mobilebutton catalog"))).click()
     await sleep(n);
     // 12 | mouseOver | id=mobilebutton catalog |  |
     {
-      const element = await driver.findElement(By.id("mobilebutton catalog"))
+      const element = await driver.wait(until.elementLocated(By.id("mobilebutton catalog")))
       await driver.actions({ bridge: true }).move({origin:element}).perform()
     }
     await sleep(n);
     // 13 | mouseOut | id=mobilebutton catalog |  |
     {
-      const element = await driver.findElement(By.id( "main"))
-      await driver.actions({ bridge: true }).move({origin:element}).perform()
+      const element = await driver.wait(until.elementLocated(By.id( "main")))
+            await driver.actions({ bridge: true }).move({origin:element}).perform()
     }
     await sleep(n);
     // 14 | click | id=SwissDRG 2 |  |
-    await driver.findElement(By.id("SwissDRG 2")).click()
+    await driver.wait(until.elementLocated(By.id("SwissDRG 2"))).click()
     await sleep(n);
     // 15 | click | id=mobilebutton version |  |
-    await driver.findElement(By.id("mobilebutton version")).click()
+    await driver.wait(until.elementLocated(By.id("mobilebutton version"))).click()
     await sleep(n);
     // 16 | click | id=V11.0 |  |
-    await driver.findElement(By.id("V11.0")).click()
+    await driver.wait(until.elementLocated(By.id("V11.0"))).click()
     await sleep(n);
     // 17 | click | css=.customButton:nth-child(3) |  |
-    await driver.findElement(By.css(".customButton:nth-child(3)")).click()
+    await driver.wait(until.elementLocated(By.css(".customButton:nth-child(3)"))).click()
     await sleep(n);
   })
 })

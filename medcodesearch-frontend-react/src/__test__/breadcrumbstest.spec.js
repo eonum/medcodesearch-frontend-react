@@ -5,24 +5,26 @@ require('geckodriver')
 
 describe('Default Suite', function() {
   let driver
-  let vars
-  let n = 1000;
+  let n = 1500;
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   beforeEach(async function() {
     driver = await new Builder().forBrowser('firefox').build()
-    vars = {}
+    await driver.manage().setTimeouts( { implicit: 10000 } );
   })
   afterEach(async function() {
+    await sleep(250);
     await driver.quit();
+    await sleep(250);
+
   })
 
   it('click through mobile buttons (de)', async function() {
 
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(1000);
+    await sleep(2*n);
     await driver.manage().window().setRect({ width: 400, height: 800 })
     await sleep(n);
     await driver.findElement(By.id("mobilebutton catalog")).click()
@@ -77,18 +79,18 @@ describe('Default Suite', function() {
   })
   it('breadcrumbs in mobile', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(1000);
+    await sleep(2*n);
     await driver.manage().window().setRect({ width: 400, height: 800 })
     await sleep(n);
     await driver.findElement(By.linkText("III:")).click()
     await sleep(n);
-    await driver.executeScript("window.scrollTo(0,400)")
+    await driver.executeScript("window.scrollTo(0,1500)")
     await sleep(n);
     await driver.findElement(By.linkText("D55-D59:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("III")).click()
     await sleep(n);
-    await driver.executeScript("window.scrollTo(0,400)")
+    await driver.executeScript("window.scrollTo(0,1500)")
     await sleep(n);
     await driver.findElement(By.linkText("D65-D69:")).click()
     await sleep(n);
@@ -221,10 +223,6 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("A01.2:")).click()
     await sleep(n);
-    await driver.findElement(By.linkText("A01.3:")).click()
-    await sleep(n);
-    await driver.executeScript("window.scrollTo(0,0)")
-    await sleep(n);
     await driver.findElement(By.linkText("A00-A09")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A01:")).click()
@@ -235,7 +233,7 @@ describe('Default Suite', function() {
     await sleep(n);
     await driver.findElement(By.linkText("I")).click()
     await sleep(n);
-    await driver.executeScript("window.scrollTo(0,1000)")
+    await driver.executeScript("window.scrollTo(0,2*n)")
     await sleep(n);
     await driver.findElement(By.linkText("B00-B09:")).click()
     await sleep(n);
@@ -347,7 +345,7 @@ describe('Default Suite', function() {
   })
   it('testing breadcrumbs fr', async function() {
     await driver.get("http://localhost:3000/fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    await sleep(1000);
+    await sleep(2*n);
     await driver.findElement(By.linkText("I:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A00-A09:")).click()
@@ -482,7 +480,7 @@ describe('Default Suite', function() {
   })
   it('icd clicking from I to A00.0 (de, 2008)', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2008/icd_chapters/ICD10-GM-2008")
-    await sleep(1000);
+    await sleep(2*n);
     await driver.findElement(By.linkText("I:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A00-A09:")).click()
@@ -501,7 +499,7 @@ describe('Default Suite', function() {
   })
   it('icd clicking from I to A00.0 (de, 2022)', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(1000);
+    await sleep(2*n);
     await driver.findElement(By.linkText("I:")).click()
     await sleep(n);
     await driver.findElement(By.linkText("A00-A09:")).click()
@@ -521,7 +519,7 @@ describe('Default Suite', function() {
   it('Chop version newer to older and back (de)', async function() {
 
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(1000);
+    await sleep(2*n);
 
     await driver.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
     await sleep(n);
@@ -569,7 +567,7 @@ describe('Default Suite', function() {
     await driver.findElement(By.id("CHOP_2022")).click()
   })
   it('chop clicking from C0 to 00.0 (de)', async function() {
-    await sleep(1000);
+    await sleep(2*n);
     await driver.get("http://localhost:3000/de/CHOP/CHOP_2022/chop_chapters/CHOP_2022")
     await sleep(n);
     await driver.findElement(By.linkText("C0:")).click()
