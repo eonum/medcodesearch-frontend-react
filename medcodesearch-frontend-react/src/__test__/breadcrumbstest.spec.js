@@ -13,12 +13,16 @@ describe('Default Suite', function() {
   beforeEach(async function() {
     driver = await new Builder().forBrowser('firefox').build()
     await driver.manage().setTimeouts( { implicit: 10000 } );
+    await driver.manage().window().maximize();
+
   })
   afterEach(async function() {
     await sleep(250);
-    await driver.quit();
+    await driver.close();
     await sleep(250);
-
+  })
+  afterAll(async function() {
+    await driver.quit();
   })
 
   it('click through mobile buttons (de)', async function() {
@@ -41,7 +45,7 @@ describe('Default Suite', function() {
     await driver.findElement(By.id("CHOP_2018")).click()
     await sleep(n);
     await driver.findElement(By.id("mobilebutton catalog")).click()
-    await sleep(n);
+    await sleep(n); //
     await driver.findElement(By.id("SwissDRG 2")).click()
     await sleep(n);
     await driver.findElement(By.linkText("MDC 03:")).click()

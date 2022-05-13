@@ -18,13 +18,17 @@ describe('Default Suite', function() {
   beforeEach(async function() {
       driver = await new Builder().forBrowser('firefox').build()
       await driver.manage().setTimeouts( { implicit: 10000 } );
+      await driver.manage().window().maximize();
   })
 
   afterEach(async function() {
       await sleep(250);
-      await driver.quit();
+      await driver.close();
       await sleep(250);
   })
+    afterAll(async function() {
+        await driver.quit();
+    })
 
   it('clicking from one catalog to another (de)', async function() {
 

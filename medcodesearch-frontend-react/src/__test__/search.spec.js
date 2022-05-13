@@ -16,12 +16,18 @@ describe('search', function() {
   beforeEach(async function() {
     driver = await new Builder().forBrowser('firefox').build()
     await driver.manage().setTimeouts( { implicit: 10000 } );
+    await driver.manage().window().maximize();
+
   })
   afterEach(async function() {
     await sleep(250);
-    await driver.quit();
+    await driver.close();
     await sleep(250);
   })
+  afterAll(async function() {
+    await driver.quit();
+  })
+
   it('search de icd code (A15.3)', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);

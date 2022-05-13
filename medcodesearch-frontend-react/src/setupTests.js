@@ -8,6 +8,7 @@ jest.setTimeout(3600000) //ms --> 3600s -->60min
 
 const seleniumDrivers = require("selenium-drivers");
 const webDriver = require("selenium-webdriver");
+export const browser = 'firefox'
 
 seleniumDrivers.init({
 
