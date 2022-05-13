@@ -48,6 +48,7 @@ class App extends Component{
         this.reNavigateToHome = this.reNavigateToHome.bind(this)
         this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
         this.showHide = this.showHide.bind(this);
+        this.showSearchResults = this.showSearchResults.bind(this);
     }
 
     /**
@@ -85,6 +86,14 @@ class App extends Component{
             this.setState({
                 searchResults: [...this.state.searchResults, searchResult]
             });
+        }
+    }
+
+    isValidVersion(button, list, lang) {
+        if(button === 'MIGEL' || button === 'AL' || button === 'DRUG') {
+            return lang !== "en"
+        } else {
+            return this.state.currentVersions[button].includes(list)
         }
     }
 
@@ -127,7 +136,7 @@ class App extends Component{
             }else {
                 chapters =button.toLowerCase() + '_chapters';
             }
-            if((button === 'MIGEL' || button === 'AL' || button === 'DRUG') || this.state.currentVersions[button].includes(list)) {
+            if(this.isValidVersion(button, list, this.state.language)) {
                 navigate({
                     // falls liste leer --> de/button/chapters
                     // sonst --> de/button/list/chapters/list
@@ -228,11 +237,15 @@ class App extends Component{
     showHide(e) {
         if (window.innerWidth <= 991) {
             e.preventDefault();
-
             this.setState({
                 collapseMenu: !this.state.collapseMenu
             });
         }
+    }
+    showSearchResults() {
+        this.setState({
+            collapseMenu: false
+        })
     }
 
     reNavigateToHome(){
@@ -274,7 +287,7 @@ class App extends Component{
                   </div>
 
                   <div key={"app div 2"} className="container">
-                      <div key={"app searchbar div 0"} className="row" onClick={this.showHide}>
+                      <div key={"app searchbar div 0"} className="row" onClick={this.showSearchResults}>
                           <Searchbar
                               language={this.state.language}
                               selectedButton={this.state.selectedButton}

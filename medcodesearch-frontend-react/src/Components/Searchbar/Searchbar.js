@@ -23,7 +23,6 @@ class Searchbar extends Component {
             searchTerm: "",
             reSearch: false
         }
-        this.reSearch = this.reSearch.bind(this);
     }
 
     /**
@@ -93,10 +92,8 @@ class Searchbar extends Component {
         if(prevProps.language !== this.props.language
             || prevProps.selectedButton !== this.props.selectedButton
             || prevProps.version !== this.props.version
-            || prevProps.date !== this.props.date
-            || this.state.reSearch) {
+            || prevProps.date !== this.props.date) {
             await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
-            this.setState({reSearch: false})
         }
     }
 
@@ -130,10 +127,6 @@ class Searchbar extends Component {
                 }
             })
     }
-
-    reSearch(){
-        this.setState({reSearch: true});
-    }
     /**
      * renders the searchbar
      * @returns {JSX.Element}
@@ -155,7 +148,7 @@ class Searchbar extends Component {
                         value={this.state.searchTerm === "" ? "" : this.state.searchTerm.replaceAll("+", " ")}
                         className="me-2"
                         aria-label="Search"
-                    /><Button id="btn-go" onClick={this.reSearch}>
+                    /><Button id="btn-go">
                         <BsSearch/>
                     </Button>
                 </Form>

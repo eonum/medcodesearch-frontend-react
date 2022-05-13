@@ -4,10 +4,12 @@ import ConvertDate from "../../Services/ConvertDate";
 import "./DatePicker.css"
 
 class DatePicker extends React.Component{
-    called = false
+
+    called = false;
 
     constructor(props) {
         super(props);
+        this.called = false
         this.updateDate = this.updateDate.bind(this);
     }
 

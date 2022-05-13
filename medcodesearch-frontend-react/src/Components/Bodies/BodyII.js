@@ -142,7 +142,7 @@ class BodyII extends Component {
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state.categories[category].map((child, i) => (
-                                    <li><a key={"link to child: " + i} className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
+                                    <li key={i}><a key={"link to child: " + i} className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
                                         <span key={"child text"} dangerouslySetInnerHTML={{__html: child.text}}/></li>
                                 ))}
                             </ul>
@@ -157,7 +157,7 @@ class BodyII extends Component {
                     <h5>{translateJson["LBL_SIBLINGS"]}</h5>
                     <ul>
                         {this.state.siblings.map((child, i) => (
-                            <li><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
+                            <li key={i}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
                                 <span dangerouslySetInnerHTML={{__html: child.text}}/></li>
                         ))}
                     </ul>

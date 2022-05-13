@@ -81,20 +81,24 @@ class MobileButton extends Component{
             this.props.chooseC(version, btn)
         } else {
             this.setState({disabledCategory: findCategory(version)})
-            this.setState({disabledVersion: version})
             this.setState({showPopUp: true})
+            this.setState({disabledVersion: version})
         }
+
     }
 
     handleCategoryClick(category) {
-        console.log(this.state.allVersions)
         const cat = document.getElementById(category);
         if(!cat.classList.contains('disabled')) {
             this.props.chooseC('', category, false, "")
         } else {
             this.setState({disabledCategory: category})
-            this.setState({disabledVersion: this.getLastVersion(category)})
             this.setState({showPopUp: true})
+            if(category === "MiGeL" || category === "AL" || category === "DRUG") {
+                this.setState({disabledVersion: ""})
+            } else {
+                this.setState({disabledVersion: this.getLastVersion(category)})
+            }
         }
     }
 
@@ -174,14 +178,10 @@ class MobileButton extends Component{
      * @returns {*|string} currently used version
      */
     getVersion() {
-        let lastVersion = this.getLastVersion(this.props.category)
-        if(lastVersion === "") {
-            return lastVersion
-        }
-        if(this.props.version === this.props.selectedVersion) {
+        if(this.props.selectedVersion) {
             return convertCategory(this.props.category, this.props.selectedVersion)
         } else {
-            return convertCategory(this.props.category, this.getLastVersion(this.props.category))
+            return convertCategory(this.props.category, this.props.version)
         }
     }
 
