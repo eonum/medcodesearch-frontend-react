@@ -236,6 +236,14 @@ class MobileButton extends Component{
         }
     }
 
+    getClassName(category) {
+        let name = "dropdown-item"
+        if(this.props.language === "en" && category !== "ICD") {
+            name += " disabled"
+        }
+        return name
+    }
+
     /**
      * renders the mobile button
      * @returns {JSX.Element}
@@ -268,12 +276,12 @@ class MobileButton extends Component{
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
                         {this.state.buttons.map((category, index) => (
-                                <Dropdown.Item className="dropdown-item"
+                                <Dropdown.Item className={this.getClassName(category)}
                                                eventKey={category}
                                                key={"mobileButton dropdown catalog " + category}
-                                               id={category + " " + index}
+                                               id={category}
                                                onClick={() => {
-                                    this.props.chooseC('', category, false, "")
+                                    this.handleCategoryClick(category)
                                 }}>
                                     {this.extractLabels(category, index)}
                                 </Dropdown.Item>
