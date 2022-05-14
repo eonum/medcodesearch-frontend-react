@@ -160,12 +160,17 @@ class MobileButton extends Component{
      * looks for the last used version
      * @returns {*|string} last version if it is present
      */
-    getLastVersion() {
-        let lastVersion = this.state.currentVersions[this.state.currentVersions.length - 1];
-        if(lastVersion) {
-            return convertCategory(this.props.category, this.state.currentVersions[this.state.currentVersions.length - 1])
+    getLastVersion(category) {
+        switch (category) {
+            case "ICD":
+                return "ICD-GM-2022"
+            case "CHOP":
+                return "CHOP_2022"
+            case "TARMED":
+                return "TARMED_01.09"
+            case "SwissDRG":
+                return "V11.0"
         }
-        return ""
     }
 
     /**
@@ -194,11 +199,7 @@ class MobileButton extends Component{
      */
     isCalBut() {
         let category = this.props.category;
-        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG'){
-            return true;
-        }else {
-            return false;
-        }
+        return category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG';
     }
 
     /**

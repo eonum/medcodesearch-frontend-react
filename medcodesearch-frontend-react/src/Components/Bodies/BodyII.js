@@ -107,9 +107,8 @@ class BodyII extends Component {
 
 
     extractLabel(code){
-        console.log(this.props.label);
         let language = this.props.params.language;
-        if(code=="MIGEL"){
+        if(code==="MIGEL"){
             switch (language) {
                 case "fr":
                     return "LiMA"
@@ -118,7 +117,7 @@ class BodyII extends Component {
                 default: return "MiGeL";
             }
         }
-        else if(code=="AL"){
+        else if(code==="AL"){
             switch (language) {
                 case "fr":
                     return "LA"
@@ -127,7 +126,7 @@ class BodyII extends Component {
                 default: return code;
             }
         }
-        else if(code=="DRUG") {
+        else if(code==="DRUG") {
             return "Med";
         }
         else return code;
