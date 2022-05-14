@@ -174,13 +174,13 @@ class App extends Component{
      */
     getLabels(language){
         if(language === "fr"){
-            return['LiMA', 'LA', 'meds']
+            return['LiMA', 'LA', 'Med']
         }
         else if(language === "it"){
-            return ['EMAp', 'EA', 'meds']
+            return ['EMAp', 'EA', 'Med']
         }
         else{
-            return ['MiGeL', 'AL', 'DRUG']
+            return ['MiGeL', 'AL', 'Med']
         }
     }
 
@@ -189,7 +189,7 @@ class App extends Component{
             return['Liste des moyens et appareils', 'Liste des analyses', 'médicaments']
         }
         else if(language === "it"){
-           return ['Elenco dei mezzi e degli apparecchi', 'Elenco delle analisi', 'droga']
+           return ['Elenco dei mezzi e degli apparecchi', 'Insieme elenco delle analisi', 'droga']
         }
         else{
             return ['Mittel und Gegenständeliste', 'Analysenliste', 'Medikamente']
