@@ -2,11 +2,10 @@
 const { Builder, By, Key, until } = require('selenium-webdriver')
 const assert = require('assert')
 const {urlMatches} = require("selenium-webdriver/lib/until");
-const {browser, sleep} = require("../setupTests");
+const {browser, sleep, n} = require("../setupTests");
 
 describe('search', function() {
   let driver
-  let n = 1000;
 
   beforeEach(async function() {
     driver = await new Builder().forBrowser(browser).build()
@@ -16,12 +15,10 @@ describe('search', function() {
   })
   afterEach(async function() {
     await sleep(250);
-    await driver.close();
+    await driver.quit();
     await sleep(250);
   })
-  afterAll(async function() {
-    await driver.quit();
-  })
+
 
   it('search de icd code (A15.3)', async function() {
     await driver.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")

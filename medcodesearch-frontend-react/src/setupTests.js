@@ -3,12 +3,13 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-jest.setTimeout(3600000) //ms --> 3600s -->60min
+import {driver} from "selenium-drivers";
+jest.setTimeout(600000) //ms --> 600s -->10min
 
 
 const seleniumDrivers = require("selenium-drivers");
 const webDriver = require("selenium-webdriver");
-
+export const n = 1000;
 export const browser = 'firefox'
 export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -16,16 +17,7 @@ export function sleep(ms) {
 
 seleniumDrivers.init({
 
-    browserName: 'chrome',
+    browserName: browser,
     download: false
 
-})
-seleniumDrivers.init({
-    browserName: 'firefox',
-    download: false
-
-})
-seleniumDrivers.init({
-    browserName: 'safari',
-    download: false
 })

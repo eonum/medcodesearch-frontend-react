@@ -1,12 +1,9 @@
 const { Builder, By, Key, until } = require('selenium-webdriver')
 const assert = require('assert')
-
 const {urlMatches} = require("selenium-webdriver/lib/until");
-const {browser, sleep} = require("../setupTests");
-
+const {browser, sleep, n} = require("../setupTests");
 describe('Default Suite', function() {
     let driver;
-    let n = 1000;
 
     beforeEach(async function() {
       driver = await new Builder().forBrowser(browser).build()
@@ -15,12 +12,10 @@ describe('Default Suite', function() {
     })
     afterEach(async function() {
       await sleep(250);
-      await driver.close();
+      await driver.quit();
       await sleep(250);
     })
-    afterAll(async function() {
-        await driver.quit();
-    })
+
 
     it('clicking from one catalog to another (de)', async function() {
 
