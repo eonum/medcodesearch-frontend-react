@@ -7,15 +7,18 @@ const {browser, sleep, n} = require("../setupTests");
 describe('search', function() {
   let driver
 
+  beforeAll( async function() {
+    await sleep(n);
+  })
   beforeEach(async function() {
     driver = await new Builder().forBrowser(browser).build()
-    await driver.manage().setTimeouts( { implicit: 10000 } );
+    await driver.manage().setTimeouts( { implicit: 1000 } );
     await driver.manage().window().maximize();
 
   })
   afterEach(async function() {
     await sleep(250);
-    await driver.quit();
+    await driver.close();
     await sleep(250);
   })
 
@@ -26,8 +29,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("A15.3")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -37,8 +38,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("letters")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -48,8 +47,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("$$$")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -59,8 +56,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("letters")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -71,8 +66,6 @@ describe('search', function() {
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("letters")
     await sleep(2*n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
-    await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
   it('search de icd (letters)', async function() {
@@ -81,8 +74,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("letters")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -92,8 +83,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("$$$")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -103,8 +92,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("A15.3")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -114,8 +101,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("$$$")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -125,8 +110,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("A15.3")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -136,8 +119,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("$$$")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })
@@ -147,8 +128,6 @@ describe('search', function() {
     await driver.wait(until.elementLocated(By.css(".me-2"))).click()
     await sleep(n);
     await driver.wait(until.elementLocated(By.css(".me-2"))).sendKeys("A15.3")
-    await sleep(n);
-    await driver.wait(until.elementLocated(By.css(".searchResult:nth-child(1)"))).click()
     await sleep(2*n);
     assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
   })

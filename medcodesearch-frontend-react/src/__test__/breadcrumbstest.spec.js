@@ -4,15 +4,18 @@ const {browser, sleep, n} = require("../setupTests");
 
 describe('Default Suite', function() {
   let driver
+  beforeAll( async function() {
+    await sleep(n);
+  })
   beforeEach(async function() {
     driver = await new Builder().forBrowser(browser).build()
-    await driver.manage().setTimeouts( { implicit: 10000 } );
+    await driver.manage().setTimeouts( { implicit: 1000 } );
     await driver.manage().window().maximize();
 
   })
   afterEach(async function() {
     await sleep(250);
-    await driver.quit();
+    await driver.close();
     await sleep(250);
   })
 
@@ -432,7 +435,7 @@ describe('Default Suite', function() {
     await sleep(2*n);
     // 2 | setWindowSize | 400x800 |
     await driver.manage().window().setRect({ width: 400, height: 800 })
-    await sleep(n);
+    await sleep(2*n);
     await driver.executeScript("window.scrollTo(0,700)")
     await sleep(n);
     // 3 | click | linkText=14: |
@@ -466,7 +469,7 @@ describe('Default Suite', function() {
     await sleep(2*n);
     // 2 | setWindowSize | 400x800 |
     await driver.manage().window().setRect({ width: 400, height: 800 })
-    await sleep(n);
+    await sleep(2*n);
     await driver.executeScript("window.scrollTo(0,700)")
     await sleep(n);
     // 3 | click | linkText=14: |
@@ -530,7 +533,7 @@ describe('Default Suite', function() {
     await sleep(2*n);
     // 2 | setWindowSize | 400x800 |
     await driver.manage().window().setRect({ width: 400, height: 800 })
-    await sleep(n);
+    await sleep(2*n);
     await driver.executeScript("window.scrollTo(0,700)")
     await sleep(n);
     // 3 | click | linkText=14: |

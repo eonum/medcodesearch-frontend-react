@@ -2,18 +2,22 @@ const { Builder, By, Key, until } = require('selenium-webdriver')
 const assert = require('assert')
 const {urlMatches} = require("selenium-webdriver/lib/until");
 const {browser, sleep, n} = require("../setupTests");
+
 describe('Default Suite', function() {
     let driver;
 
+    beforeAll( async function() {
+        await sleep(n);
+    })
     beforeEach(async function() {
       driver = await new Builder().forBrowser(browser).build()
-      await driver.manage().setTimeouts( { implicit: 10000 } );
+      await driver.manage().setTimeouts( { implicit: 1000 } );
       await driver.manage().window().maximize();
     })
     afterEach(async function() {
-      await sleep(250);
-      await driver.quit();
-      await sleep(250);
+        await sleep(250);
+        await driver.close();
+        await sleep(250);
     })
 
 

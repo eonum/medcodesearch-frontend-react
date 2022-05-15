@@ -4,17 +4,21 @@ const { Builder, By, Key, until } = require('selenium-webdriver')
 const assert = require('assert')
 import {browser, n, sleep} from '../setupTests';
 
+
 describe('PopUp', function() {
   let driver
 
+  beforeAll( async function() {
+    await sleep(n);
+  })
   beforeEach(async function() {
     driver = await new Builder().forBrowser(browser).build()
-    await driver.manage().setTimeouts( { implicit: 10000 } );
+    //await driver.manage().setTimeouts( { implicit: 1000 } );
     await driver.manage().window().maximize();
   })
   afterEach(async function() {
     await sleep(250);
-    await driver.quit();
+    await driver.close();
     await sleep(250);
   })
 
