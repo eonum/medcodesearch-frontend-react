@@ -2,6 +2,9 @@ import React, {Component} from "react";
 import './Main.css';
 import {Outlet, useParams} from "react-router-dom";
 
+/**
+ * Sets the default page and is responsible for the background
+ */
 class Main extends Component {
 
     constructor(props) {
@@ -9,6 +12,10 @@ class Main extends Component {
         this.page = "I"
     }
 
+    /**
+     * Render the Main component
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <div key={"main div 0"} className="Wrapper">
