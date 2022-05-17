@@ -3,6 +3,9 @@ import { Form } from 'react-bootstrap';
 import ConvertDate from "../../Services/ConvertDate";
 import "./DatePicker.css"
 
+/**
+ * Creates the Datepicker for MIGEL, AL and Med
+ */
 class DatePicker extends React.Component{
 
     constructor(props) {
@@ -13,11 +16,19 @@ class DatePicker extends React.Component{
         }
     }
 
+    /**
+     * update the date saved in the state
+     * @param value
+     */
     updateDate(value) {
         this.setState({currentDate: value})
         this.props.setDate(ConvertDate(value));
     }
 
+    /**
+     * Returns the date in the correct format
+     * @returns {string}
+     */
     getDate() {
             const today = new Date();
             const dd = String(today.getDate()).padStart(2, '0');
@@ -26,8 +37,12 @@ class DatePicker extends React.Component{
             return yyyy + '-' + mm + '-' + dd;
     }
 
-render(){
-    return(
+    /**
+     * Render the DatePicker
+     * @returns {JSX.Element}
+     */
+    render() {
+        return (
             <div key={"datepicker div 0"} id={"text"}>
                 <div key={"datepicker div 1"} className="row">
                     <div key={"datepicker div 2"} className="col">

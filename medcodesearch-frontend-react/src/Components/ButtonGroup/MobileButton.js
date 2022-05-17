@@ -87,6 +87,10 @@ class MobileButton extends Component{
 
     }
 
+    /**
+     * If a category get clicked update the state
+     * @param category
+     */
     handleCategoryClick(category) {
         const cat = document.getElementById(category);
         if(!cat.classList.contains('disabled')) {
@@ -237,6 +241,11 @@ class MobileButton extends Component{
         }
     }
 
+    /**
+     * Returns the class name
+     * @param category
+     * @returns {string}
+     */
     getClassName(category) {
         let name = "dropdown-item"
         if(this.props.language === "en" && category !== "ICD") {
