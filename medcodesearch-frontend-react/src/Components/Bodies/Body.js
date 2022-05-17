@@ -17,9 +17,11 @@ class Body extends Component {
             tp_al: null,
             tp_tl: null,
             groups: null,
+            blocks: null,
             exclusions: null,
             inclusions: null,
-            note: null,
+            notes: null,
+            hints: null,
             coding_hint: null,
             synonyms: null,
             most_relevant_drgs: null,
@@ -52,9 +54,11 @@ class Body extends Component {
                 tp_al: null,
                 tp_tl: null,
                 groups: null,
+                blocks: null,
                 exclusions: null,
                 inclusions: null,
-                note: null,
+                hints: null,
+                notes: null,
                 coding_hint: null,
                 synonyms: null,
                 most_relevant_drgs: null,
@@ -214,7 +218,7 @@ class Body extends Component {
                             </ul>
                         </div>
                     )
-                } else if(this.state[category].length > 0 && category === "groups") {
+                } else if(this.state[category].length > 0 && (category === "groups" || category === "blocks")) {
                     categories.push(
                         <div key={"groups " + this.state[category].length * 19}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
@@ -226,7 +230,7 @@ class Body extends Component {
                         </div>
                     )
                 }
-                else if(this.state[category].length > 0 && (category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs" || category === "descriptions")) {
+                else if(this.state[category].length > 0 && (category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs" || category === "descriptions" || category === "notes")) {
                     categories.push(
                         <div key={"incl, syn, rel_drgs, descr " + this.state[category].length * 13}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
