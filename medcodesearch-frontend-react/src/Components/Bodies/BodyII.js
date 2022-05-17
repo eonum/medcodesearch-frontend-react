@@ -145,11 +145,12 @@ class BodyII extends Component {
                 >{this.extractLabel(this.state.parents[i].code)}</Breadcrumb.Item>)
             }
         }
+        let i = 1;
         for(let category in this.state.categories) {
             if(this.state.categories[category] !== null && this.state.categories[category] !== undefined) {
                 if(this.state.categories[category].length > 0 && category === "limitation") {
                     categories.push (
-                        <div>
+                        <div key={i}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <p dangerouslySetInnerHTML={{__html: this.state.categories[category]}}/>
                         </div>
@@ -158,28 +159,30 @@ class BodyII extends Component {
                     category !== "code" && category !== "version" && category !== "valid_to" && category !== "valid_from" && category !== "auth_holder_nr"
                     && category !== "atc_code" && category !== "pharma_form" && category !== "package_code" && category!=="auth_number") {
                     categories.push(
-                        <div>
+                        <div key={i}>
                             <p><span><strong>{translateJson["LBL_" + category.toUpperCase()]}: </strong> </span><span dangerouslySetInnerHTML={{__html: this.state.categories[category]}}/></p>
-                        </div>
-                    )
-                } else if((category === "children") && this.state.categories[category].length > 0) {
-                    categories.push(
-                        <div>
-                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
-                            <ul>
-                                {this.state.categories[category].map((child, i) => (
-                                    <li key={i}><a key={"link to child: " + i} className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
-                                        <span key={"child text"} dangerouslySetInnerHTML={{__html: child.text}}/></li>
-                                ))}
-                            </ul>
                         </div>
                     )
                 }
             }
+            i += 1
+        }
+        if(this.state.categories["children"] && this.state.categories["children"].length > 0) {
+            categories.push(
+                <div key={i}>
+                    <h5>{translateJson["LBL_CHILDREN"]}</h5>
+                    <ul>
+                        {this.state.categories["children"].map((child, i) => (
+                            <li key={i}><a key={"link to child: " + i} className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
+                                <span key={"child text"} dangerouslySetInnerHTML={{__html: child.text}}/></li>
+                        ))}
+                    </ul>
+                </div>
+            )
         }
         if(this.state.siblings.length > 0 && !this.state.categories["children"]) {
             categories.push(
-                <div>
+                <div key={4}>
                     <h5>{translateJson["LBL_SIBLINGS"]}</h5>
                     <ul>
                         {this.state.siblings.map((child, i) => (

@@ -5,28 +5,25 @@ import "./DatePicker.css"
 
 class DatePicker extends React.Component{
 
-    called = false;
-
     constructor(props) {
         super(props);
-        this.called = false
         this.updateDate = this.updateDate.bind(this);
+        this.state = {
+            currentDate: this.getDate()
+        }
     }
 
     updateDate(value) {
+        this.setState({currentDate: value})
         this.props.setDate(ConvertDate(value));
     }
 
     getDate() {
-        if (!this.called) {
             const today = new Date();
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
             const yyyy = today.getFullYear();
-
-            this.called = true
             return yyyy + '-' + mm + '-' + dd;
-        }
     }
 
 render(){
@@ -39,7 +36,7 @@ render(){
                                 className="datepicker"
                                 type="date"
                                 name="form"
-                                value={this.getDate()}
+                                value={this.state.currentDate}
                                 onChange={(change => {
                                     this.updateDate(change.target.value)
                                 })}
