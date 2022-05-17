@@ -8,32 +8,32 @@ import {browser, n, sleep} from '../setupTests';
 describe('PopUp', function() {
   let driverPopUp
 
-  beforeAll( async function() {
+  beforeAll(async function () {
     await sleep(n);
   })
-  beforeEach(async function() {
+  beforeEach(async function () {
     driverPopUp = await new Builder().forBrowser(browser).build()
     await sleep(n);
     //await driverPopUp.manage().setTimeouts( { implicit: 1000 } );
     //await driverPopUp.manage().window().maximize();
   })
-  afterEach(async function() {
+  afterEach(async function () {
     await sleep(250);
     await driverPopUp.close();
     await sleep(250);
   })
 
-  it('PopUp', async function() {
+  it('PopUp', async function () {
     // Test name: PopUp
     // Step # | name | target | value | comment
     // 1 | open | /de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022 |  | 
     await driverPopUp.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(2*n);
+    await sleep(2 * n);
 
     // 3 | mouseOver | css=.language-btn:nth-child(4) |  |
     {
       const element = await driverPopUp.wait(until.elementLocated(By.css(".language-btn:nth-child(4)")))
-      await driverPopUp.actions({ bridge: true }).move({origin:element}).perform()
+      await driverPopUp.actions({bridge: true}).move({origin: element}).perform()
     }
     await sleep(n);
     assert(urlContains('fr'), 'changed language correctly to french')
@@ -65,14 +65,14 @@ describe('PopUp', function() {
     assert(urlContains('2019') && urlContains('en'), 'changed language via pop up correctly to en 2019')
 
   })
-  it('PopUp mobile', async function() {
+  it('PopUp mobile', async function () {
     // Test name: PopUp mobile
     // Step # | name | target | value | comment
     // 1 | open | /de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022 |  | 
     await driverPopUp.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(2*n);
+    await sleep(2 * n);
     // 2 | setWindowSize | 400x800 |  |
-    await driverPopUp.manage().window().setRect({ width: 400, height: 800 })
+    await driverPopUp.manage().window().setRect({width: 400, height: 800})
     await sleep(n);
     // 3 | click | css=.language-btn:nth-child(2) |  |
     await driverPopUp.wait(until.elementLocated(By.css(".language-btn:nth-child(2)"))).click()
