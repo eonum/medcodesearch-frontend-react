@@ -3,9 +3,18 @@ import ICDSortService from "../../Services/ICDSortService";
 import RouterService from "../../Services/router.service";
 import {Breadcrumb} from "react-bootstrap";
 
+/**
+ * responsible fot he ICD component and the pathname
+ */
 class ICD extends Component {
 
-
+    /**
+     * navigate to the child component
+     * @param code
+     * @param navigate
+     * @param version
+     * @param language
+     */
     static goToChild(code, navigate, version, language) {
         if(code.match(/^ICD10-GM-[0-9][0-9][0-9][0-9]|[XVI]+$/)) {
             navigate({pathname: "/" + language + "/ICD/" + version + "/icd_chapters/" + code,
@@ -20,6 +29,15 @@ class ICD extends Component {
         }
     }
 
+    /**
+     *  Fetch the ICD in the correct language and version
+     * @param language
+     * @param catalog
+     * @param version
+     * @param code
+     * @param categories
+     * @returns {Promise<any>}
+     */
     static async fetchInformations(language, catalog, version, code, categories) {
         let newCategories = categories
         return await fetch('https://search.eonum.ch/' + language + "/" + catalog + "/" + version + "/" + code + "?show_detail=1")
@@ -35,7 +53,10 @@ class ICD extends Component {
             .then(() => {return newCategories})
     }
 
-
+    /**
+     * Render the CHOP component
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <div>

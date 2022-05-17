@@ -19,6 +19,10 @@ class ButtonWithCal extends Component{
         }
     }
 
+    /**
+     * If a category get clicked update the state
+     * @param category
+     */
     handleCategoryClick(category) {
         const button = document.getElementById(category);
         if(!button.classList.contains("disabled")) {
@@ -29,12 +33,21 @@ class ButtonWithCal extends Component{
         }
     }
 
+    /**
+     * update the tooltip
+     * @param props
+     * @returns {JSX.Element}
+     */
     renderTooltip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
             {this.props.fullLabel}
         </Tooltip>
     );
 
+    /**
+     * Returns the class name
+     * @returns {string}
+     */
     getClassName() {
         let classname = "customButton"
         if(this.props.name.toUpperCase() === this.props.active.toUpperCase()) {
@@ -46,6 +59,10 @@ class ButtonWithCal extends Component{
         return classname
     }
 
+    /**
+     * updates the showPopUp state
+     * @param value
+     */
     updatePopUp = (value) => {
         this.setState({showPopUp: value})
     }

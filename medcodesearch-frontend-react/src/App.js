@@ -89,6 +89,13 @@ class App extends Component{
         }
     }
 
+    /**
+     * check if the selected button has a valid version
+     * @param button
+     * @param list
+     * @param lang
+     * @returns {boolean|*}
+     */
     isValidVersion(button, list, lang) {
         if(button === 'MIGEL' || button === 'AL' || button === 'DRUG') {
             return lang !== "en"
@@ -155,6 +162,10 @@ class App extends Component{
         }
     }
 
+    /**
+     * If component mount set the states
+     * @returns {Promise<void>}
+     */
     async componentDidMount() {
         this.setState({initialVersions: await getVersionsByLanguage('de')})
         this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
@@ -184,6 +195,11 @@ class App extends Component{
         }
     }
 
+    /**
+     * change the full labels language
+     * @param language
+     * @returns {string[]}
+     */
     getFullLabels(language){
         if(language === "fr"){
             return['Liste des moyens et appareils', 'Liste des analyses', 'médicaments']
@@ -196,6 +212,10 @@ class App extends Component{
         }
     }
 
+    /**
+     * render the search result from the backend
+     * @returns {JSX.Element}
+     */
     searchResults() {
         let searchResults
         let translateJson = findJson(this.state.language)
@@ -234,6 +254,10 @@ class App extends Component{
         )
     }
 
+    /**
+     * hide the object if the window is too small
+     * @param e
+     */
     showHide(e) {
         if (window.innerWidth <= 991) {
             e.preventDefault();
@@ -242,12 +266,19 @@ class App extends Component{
             });
         }
     }
+
+    /**
+     * set the collapseMenu state to false and open it
+     */
     showSearchResults() {
         this.setState({
             collapseMenu: false
         })
     }
 
+    /**
+     * Reset everything back to the default
+     */
     reNavigateToHome(){
         this.setState({clickedOnLogo: true});
         this.props.navigation({search: ''});
@@ -259,6 +290,10 @@ class App extends Component{
             this.updateList('ICD10-GM-2020')
         }
     }
+
+    /**
+     * change the clickedOnLogo state
+     */
     reSetClickedOnLogo(){
         this.setState({clickedOnLogo: false})
     }

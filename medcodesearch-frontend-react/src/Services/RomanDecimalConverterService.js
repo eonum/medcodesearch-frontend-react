@@ -19,24 +19,21 @@ export const MAX_DECIMAL_VALUE = 3999;
 export const MIN_ROMAN_VALUE = toRoman(MIN_DECIMAL_VALUE);
 export const MAX_ROMAN_VALUE = toRoman(MAX_DECIMAL_VALUE);
 
-export function isRomanNumberValid(romanNumber) {
-    return /^(?=[MDCLXVI])(M{0,3})(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$/.test(
-        romanNumber
-    );
-}
-
-export function isDecimalNumberValid(decimalNumber) {
-    return (
-        /^\d+$/.test(decimalNumber) &&
-        decimalNumber >= MIN_DECIMAL_VALUE &&
-        decimalNumber <= MAX_DECIMAL_VALUE
-    );
-}
-
+/**
+ * Calls the recursion for calculating a roman number into a decimal
+ * @param romanNumber
+ * @returns {*}
+ */
 export function toDecimal(romanNumber) {
     return toDecimalRecursion(romanNumber, 0);
 }
 
+/**
+ * Calculate a roman number into a decimal
+ * @param romanNumber
+ * @param decimalValue
+ * @returns {*}
+ */
 export function toDecimalRecursion(romanNumber, decimalValue) {
     for (let key in lookup) {
         const value = lookup[key];
@@ -48,6 +45,11 @@ export function toDecimalRecursion(romanNumber, decimalValue) {
     return decimalValue;
 }
 
+/**
+ * Calculate a decimal number into a roman
+ * @param decimalValue
+ * @returns {string}
+ */
 export function toRoman(decimalValue) {
     let romanNumber = "";
     for (let i in lookup) {

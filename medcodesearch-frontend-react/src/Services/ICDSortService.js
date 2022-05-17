@@ -1,7 +1,12 @@
 import {toDecimal, toRoman} from "./RomanDecimalConverterService";
 
+/**
+ * Sort the ICD numeric while changing from roman to decimal and back
+ * @param array
+ * @returns {*}
+ * @constructor
+ */
 function ICDSortService(array){
-
     array.map((rom) => {
         rom.code = toDecimal(rom.code)
     })

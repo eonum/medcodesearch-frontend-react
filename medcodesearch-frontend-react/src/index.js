@@ -9,6 +9,9 @@ import Main from "./Components/Main/Main";
 import Body from "./Components/Bodies/Body";
 import BodyII from "./Components/Bodies/BodyII";
 
+/**
+ * Renders the whole application
+ */
 ReactDOM.render(
     <React.StrictMode>
         <Router>

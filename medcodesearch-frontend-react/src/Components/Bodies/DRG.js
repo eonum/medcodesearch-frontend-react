@@ -2,8 +2,20 @@ import React, {Component} from "react";
 import RouterService from "../../Services/router.service";
 import {Breadcrumb} from "react-bootstrap";
 
+/**
+ * responsible for the AL Component and the pathname
+ */
 class DRG extends Component {
 
+    /**
+     * etch the DRG in the correct language and version
+     * @param language
+     * @param catalog
+     * @param version
+     * @param code
+     * @param categories
+     * @returns {Promise<any>}
+     */
     static async fetchInformations(language, catalog, version, code, categories) {
         let codeForSearch;
         let cat = 'mdcs';
@@ -28,24 +40,13 @@ class DRG extends Component {
                 .then(() => {return newCategories})
     }
 
-    render() {
-        return (
-            <div>
-                <Breadcrumb>
-                    {this.props.parents}
-                    <Breadcrumb.Item active>{this.props.title.replace("_", " ")}</Breadcrumb.Item>
-                </Breadcrumb>
-                <h3>{this.props.title}</h3>
-                <p>{this.props.text}</p>
-                {this.props.categories}
-            </div>
-        )
-    }
-
- //   static goToParent(parent)
-    //
- //   }
-
+    /**
+     * navigate to the child component
+     * @param child
+     * @param navigate
+     * @param version
+     * @param language
+     */
     static goToChild(child, navigate, version, language) {
         if (child.code.match(/^[A-Z][A-Z][A-Z]\s\w+$/)){ // for example MDC 03 or MDC PRE or MDC a3
             let searchCode = child.code.split(' ');
@@ -67,6 +68,24 @@ class DRG extends Component {
             navigate({pathname: "/" + language + "/SwissDRG/" + version + "/drgs/" + child.code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
+    }
+
+    /**
+     * Render the DRG component
+     * @returns {JSX.Element}
+     */
+    render() {
+        return (
+            <div>
+                <Breadcrumb>
+                    {this.props.parents}
+                    <Breadcrumb.Item active>{this.props.title.replace("_", " ")}</Breadcrumb.Item>
+                </Breadcrumb>
+                <h3>{this.props.title}</h3>
+                <p>{this.props.text}</p>
+                {this.props.categories}
+            </div>
+        )
     }
 }
 export default DRG;

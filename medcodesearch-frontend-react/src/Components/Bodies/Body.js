@@ -7,6 +7,9 @@ import DRG from "./DRG";
 import {Breadcrumb} from "react-bootstrap";
 import findJson from "../../Services/findJson";
 
+/**
+ * Responsible for the body of the website
+ */
 class Body extends Component {
     constructor(props) {
         super(props);
@@ -38,11 +41,24 @@ class Body extends Component {
             siblings: []
         }
     }
+
+    /**
+     * Calls for the fetch, sibling and grandparents methods
+     * @returns {Promise<void>}
+     */
     async componentDidMount() {
         await this.fetchInformations()
         await this.fetchSiblings(this.state.parent)
         await this.fetchGrandparents(this.state.parent)
     }
+
+    /**
+     * Set the new state after every update and calls for the fetch, sibling and grandparents methods
+     * @param prevProps
+     * @param prevState
+     * @param snapshot
+     * @returns {Promise<void>}
+     */
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.params.language !== this.props.params.language ||
             prevProps.params.version !== this.props.params.version ||
@@ -80,6 +96,10 @@ class Body extends Component {
         }
     }
 
+    /**
+     * Fetch the information from the backend and does a case distinction for all the catalogs
+     * @returns {Promise<void>}
+     */
     async fetchInformations() {
         let newCategories;
         if (this.props.params.category === "ICD") {
@@ -94,6 +114,12 @@ class Body extends Component {
         this.setState(newCategories)
     }
 
+    /**
+     * Looks if the given string has a pattern which indicates a link
+     * @param aString
+     * @param index
+     * @returns {JSX.Element}
+     */
     lookingForLink(aString, index) {
         let results = []
         const regex = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
@@ -121,6 +147,10 @@ class Body extends Component {
         }
     }
 
+    /**
+     * navigates to the child component
+     * @param child
+     */
     goToChild(child) {
         let navigate = this.props.navigation
         if(this.props.params.category === "ICD") {
@@ -134,11 +164,20 @@ class Body extends Component {
         }
     }
 
+    /**
+     * looks in the given code for exclusions
+     * @param code
+     */
     searchExclusion(code) {
         let navigate = this.props.navigation
         navigate({search: "?query=" + code})
     }
 
+    /**
+     * fetch the sibling of the component
+     * @param parent
+     * @returns {Promise<void>}
+     */
     async fetchSiblings(parent) {
         if(this.state.children == null) {
             await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
@@ -157,6 +196,11 @@ class Body extends Component {
         }
     }
 
+    /**
+     * fetch the grandparent of the component
+     * @param parent
+     * @returns {Promise<void>}
+     */
     async fetchGrandparents(parent) {
         let parents = []
         while(parent) {
@@ -170,6 +214,10 @@ class Body extends Component {
         this.setState({parents: parents})
     }
 
+    /**
+     * Render the body component
+     * @returns {JSX.Element}
+     */
     render() {
         let translateJson = findJson(this.props.params.language)
         let categories = []

@@ -4,9 +4,10 @@ import {useNavigate, useLocation} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 
 /**
- *
+ * Handle the search result and check the text for any flags
  */
 class SearchResult extends Component {
+
     /**
      * looks for change in the button selection and update the fetchresult
      */

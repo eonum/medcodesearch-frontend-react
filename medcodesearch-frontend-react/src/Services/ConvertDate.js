@@ -1,3 +1,9 @@
+/**
+ * Convert the date from a text to a integer and gives it back as a date string
+ * @param value
+ * @returns {*}
+ * @constructor
+ */
 function ConvertDate(value) {
     if (!value.match(/^\d\d.\d\d.\d\d\d\d/)) {
         if (value.match(/^\d\d\d\d-\d\d-\d\d/)) {
