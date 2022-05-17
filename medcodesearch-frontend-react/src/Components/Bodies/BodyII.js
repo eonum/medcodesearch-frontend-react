@@ -164,7 +164,7 @@ class BodyII extends Component {
                     )
                 } else if((category === "children") && this.state.categories[category].length > 0) {
                     categories.push(
-                        <div>
+                        <div key={"children"}>
                             <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
                             <ul>
                                 {this.state.categories[category].map((child, i) => (
