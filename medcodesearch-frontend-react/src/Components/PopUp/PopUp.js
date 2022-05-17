@@ -6,6 +6,9 @@ import deJson from "../../assets/translations/de.json";
 import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
 import findJson from "../../Services/findJson";
 
+/**
+ * If a wrong date is selected this popup should point this out
+ */
 class PopUp extends Component{
     constructor() {
         super();
@@ -15,6 +18,11 @@ class PopUp extends Component{
             availableLanguages: ['de']
         }
     }
+
+    /**
+     * updates the value state
+     * @param value
+     */
     handleShow(value) {
         this.setState({
             show: value
@@ -22,10 +30,20 @@ class PopUp extends Component{
         this.props.updateValue(value)
     }
 
+    /**
+     * Responsible for initial state update
+     */
     componentDidMount() {
         this.handleShow(this.props.show)
     }
 
+    /**
+     * Looks for update and change the state if needed
+     * @param prevProps
+     * @param prevState
+     * @param snapshot
+     * @returns {Promise<void>}
+     */
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         if(prevProps.version !== this.props.version ||
             prevProps.category !== this.props.category) {
@@ -37,6 +55,10 @@ class PopUp extends Component{
         }
     }
 
+    /**
+     * Fetch the catalog and looks if there are languages for the selected version
+     * @returns {Promise<void>}
+     */
     async findAvailableLanguages() {
         if(this.props.category === "AL" || this.props.category === "DRUG" || this.props.category === "MiGeL") {
             this.setState({availableLanguages: ["de", "fr", "it"]})
@@ -56,7 +78,10 @@ class PopUp extends Component{
         }
     }
 
-
+    /**
+     * handle the action after click on a disabled language
+     * @param language
+     */
     handleLanguageClick(language) {
         this.handleShow(false)
         this.props.selectedLanguage(language)
@@ -64,6 +89,10 @@ class PopUp extends Component{
         this.props.selectedCategory(this.props.category)
     }
 
+    /**
+     * Render the PopUp component
+     * @returns {JSX.Element}
+     */
     render() {
         return (
             <>
