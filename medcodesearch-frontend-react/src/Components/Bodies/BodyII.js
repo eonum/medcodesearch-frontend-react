@@ -5,6 +5,9 @@ import AL from "./AL";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJson from "../../Services/findJson";
 
+/**
+ * Responsible for the body of the website, if Body doesn't fit
+ */
 class BodyII extends Component {
     constructor(props) {
         super(props);
@@ -15,12 +18,23 @@ class BodyII extends Component {
         }
     }
 
+    /**
+     * Calls for the fetch, sibling and grandparents methods
+     * @returns {Promise<void>}
+     */
     async componentDidMount() {
         await this.fetchInformations()
         await this.fetchSiblings(this.state.categories["parent"])
         await this.fetchGrandparents(this.state.categories["parent"])
     }
 
+    /**
+     * Set the new state after every update and calls for the fetch, sibling and grandparents methods
+     * @param prevProps
+     * @param prevState
+     * @param snapshot
+     * @returns {Promise<void>}
+     */
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
             if (prevProps.params.language !== this.props.params.language ||
                 prevProps.params.code !== this.props.params.code ||
@@ -35,6 +49,14 @@ class BodyII extends Component {
             }
     }
 
+    /**
+     * Does a case distinction for all the catalogs and set the string ready for fetching
+     * @param language
+     * @param catalog
+     * @param version
+     * @param code
+     * @returns {Promise<null|any>}
+     */
     async fetchHelper(language, catalog, version, code) {
         catalog = catalog.toUpperCase();
         if(code === "all") {
@@ -54,6 +76,10 @@ class BodyII extends Component {
         }
     }
 
+    /**
+     * Fetch the information from the backend and does a case distinction for all the catalogs
+     * @returns {Promise<void>}
+     */
     async fetchInformations() {
         let newCategories, versions;
         if (this.props.params.category === "MIGEL") {
@@ -69,6 +95,11 @@ class BodyII extends Component {
         }
     }
 
+    /**
+     * fetch the grandparent of the component
+     * @param parent
+     * @returns {Promise<void>}
+     */
     async fetchGrandparents(parent) {
         let parents = []
         while(parent) {
@@ -82,6 +113,11 @@ class BodyII extends Component {
         this.setState({parents: parents})
     }
 
+    /**
+     * fetch the sibling of the component
+     * @param parent
+     * @returns {Promise<void>}
+     */
     async fetchSiblings(parent) {
         if(this.state.children == null && parent) {
             await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
@@ -96,6 +132,10 @@ class BodyII extends Component {
         }
     }
 
+    /**
+     * navigates to the child component
+     * @param child
+     */
     goToChild(child) {
         let navigate = this.props.navigation
         if(this.props.params.category === "MIGEL") {
@@ -105,7 +145,11 @@ class BodyII extends Component {
         }
     }
 
-
+    /**
+     * Returns code in the correct language
+     * @param code
+     * @returns {string|*}
+     */
     extractLabel(code){
         let language = this.props.params.language;
         if(code==="MIGEL"){
@@ -132,6 +176,10 @@ class BodyII extends Component {
         else return code;
     }
 
+    /**
+     * Render the BodyII component
+     * @returns {JSX.Element}
+     */
     render() {
         let translateJson = findJson(this.props.params.language)
         let categories = []
