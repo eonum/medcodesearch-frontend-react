@@ -3,9 +3,22 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
-const {Builder} = require('selenium-webdriver');
-require('selenium-webdriver/chrome')
-require('selenium-webdriver/firefox')
-require('chromedriver')
-require('geckodriver')
-jest.setTimeout(100000)
+import emitter from "events";
+jest.setTimeout(450000) //ms --> 450s -->7.5min runningtime before tests are stopped
+
+emitter.setMaxListeners(6)
+const seleniumDrivers = require("selenium-drivers");
+
+export const n = 1000; // wait time between each step in on test
+export const browser = 'firefox' //bowser to test
+// sleep function for between each step
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// init method for downloading newest browser webdriver for testing
+seleniumDrivers.init({
+    browserName: browser,
+    download: false,
+    silent: true
+})
