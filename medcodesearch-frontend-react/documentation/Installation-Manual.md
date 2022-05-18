@@ -28,7 +28,7 @@ Für weitere Informationen zur installation von Selenium wenden Sie sich an die 
 ## 1.3 Testing
 
 ### 1.3.1 Testing mit Selenium IDE
-
+Ausserhalb der Ordner `src` und `documenation`, ist die Datei MedCodeSearch.side, welche mithilfe von der vorher heruntergeladenen Browser-Extension-IDE importiert werden kann. Dazu, folgen Sie bitte direkt den Instruktionen in der genannten IDE.
 ### 1.3.2 Testing direkt im Code
 Mit dem Befehl (innerhalb des richtigen Ordners) `npm install` lässt sich einen automatisierten Testdurchgang starten.
 Bevor dies allerdings gemacht wird, muss innerhalb der Datei ``setupTests.js`` der Browser zu dem bevorzugten WEBdriver gewechselt werden. Als Standart Browser ist "Firefox" eingetragen. Man kann auswählen zwischen Firefox, Chrome, Safari und MicrosoftEdge.
