@@ -4,7 +4,7 @@ import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
 import {convertCategory, findCategory} from "../../Services/category-version.service";
 import React, {Component} from "react";
-import CategorysSortService from "../../Services/CategorysSortService";
+import CategorySortService from "../../Services/category-sort.service";
 import DatePicker from "./DatePicker";
 
 /**
@@ -117,8 +117,8 @@ class MobileButton extends Component{
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({
-                            allVersions: CategorysSortService(json),
-                            currentVersions: CategorysSortService(json)
+                            allVersions: CategorySortService(json),
+                            currentVersions: CategorySortService(json)
                         })
                     })
             } else {
@@ -126,8 +126,8 @@ class MobileButton extends Component{
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({
-                            allVersions: CategorysSortService(json),
-                            currentVersions: CategorysSortService(json)
+                            allVersions: CategorySortService(json),
+                            currentVersions: CategorySortService(json)
                         })
                     })
             }
@@ -146,13 +146,13 @@ class MobileButton extends Component{
                 await fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
                     .then((res) => res.json())
                     .then((json) => {
-                        this.setState({currentVersions: CategorysSortService(json)})
+                        this.setState({currentVersions: CategorySortService(json)})
                     })
             } else {
                 await fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
                     .then((res) => res.json())
                     .then((json) => {
-                        this.setState({currentVersions: CategorysSortService(json)})
+                        this.setState({currentVersions: CategorySortService(json)})
                     })
             }
         }else {

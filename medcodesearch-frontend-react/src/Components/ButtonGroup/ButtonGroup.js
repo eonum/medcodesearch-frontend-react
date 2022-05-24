@@ -3,10 +3,10 @@ import ButtonVersion from "./ButtonVersion";
 import ButtonWithCal from "./ButtonWithCal";
 import "./ButtonGroup.css"
 import {useParams} from "react-router-dom";
-import convertDate from "../../Services/ConvertDate";
+import convertDate from "../../Services/convert-date.service";
 import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
-import ConvertDate from "../../Services/ConvertDate";
+import ConvertDateService from "../../Services/convert-date.service";
 
 /**
  * is responsible for all buttons to render
@@ -65,7 +65,7 @@ class ButtonGroup extends Component{
             version = ''
         }
         if (date === ''){
-            date = ConvertDate(new Date().toDateString())
+            date = ConvertDateService(new Date().toDateString())
         }
         this.updateDate(date);
         this.setState({selectedButton: btn, activeList: version});

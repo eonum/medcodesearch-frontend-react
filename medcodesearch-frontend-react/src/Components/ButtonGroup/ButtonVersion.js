@@ -1,6 +1,6 @@
 import React from "react";
 import {Dropdown} from "react-bootstrap";
-import CategorysSortService from "../../Services/CategorysSortService";
+import CategorySortService from "../../Services/category-sort.service";
 import PopUp from "../PopUp/PopUp";
 import {convertCategory, findCategory} from "../../Services/category-version.service";
 

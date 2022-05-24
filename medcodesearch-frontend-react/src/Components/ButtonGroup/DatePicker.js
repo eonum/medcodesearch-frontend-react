@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form } from 'react-bootstrap';
-import ConvertDate from "../../Services/ConvertDate";
+import ConvertDateService from "../../Services/convert-date.service";
 import "./DatePicker.css"
 
 /**
@@ -22,7 +22,7 @@ class DatePicker extends React.Component{
      */
     updateDate(value) {
         this.setState({currentDate: value})
-        this.props.setDate(ConvertDate(value));
+        this.props.setDate(ConvertDateService(value));
     }
 
     /**

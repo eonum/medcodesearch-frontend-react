@@ -10,12 +10,12 @@ import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
 import {Component} from "react";
-import convertDate from "./Services/ConvertDate";
+import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
 import {
     getVersionsByLanguage
 } from "./Services/category-version.service";
-import findJson from "./Services/findJson";
+import findJsonService from "./Services/find-json.service";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -218,7 +218,7 @@ class App extends Component{
      */
     searchResults() {
         let searchResults
-        let translateJson = findJson(this.state.language)
+        let translateJson = findJsonService(this.state.language)
         if(this.state.searchResults[0] === "empty") {
             searchResults = <div key={"searchResults array 0"} className="searchResult"><p key={"searchResults array 0 p"}>{translateJson["LBL_NO_RESULTS"]}</p></div>
         } else {

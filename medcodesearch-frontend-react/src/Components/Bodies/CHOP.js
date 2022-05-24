@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import RouterService from "../../Services/router.service";
-import CodeSortService from "../../Services/CodeSortService";
+import CodeSortService from "../../Services/code-sort.service";
 import {Breadcrumb} from "react-bootstrap";
 
 /**

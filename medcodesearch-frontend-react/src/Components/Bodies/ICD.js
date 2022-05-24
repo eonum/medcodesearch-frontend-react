@@ -1,5 +1,5 @@
 import {Component} from "react";
-import ICDSortService from "../../Services/ICDSortService";
+import IcdSortService from "../../Services/icd-sort.service";
 import RouterService from "../../Services/router.service";
 import {Breadcrumb} from "react-bootstrap";
 
@@ -47,7 +47,7 @@ class ICD extends Component {
                         newCategories[category] = json[category]
                     }
                     if(version === code) {
-                        newCategories["children"] = ICDSortService(json["children"])
+                        newCategories["children"] = IcdSortService(json["children"])
                     }
                 })
             .then(() => {return newCategories})

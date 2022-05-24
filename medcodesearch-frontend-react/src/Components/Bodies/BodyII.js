@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import MIGEL from "./MIGEL";
 import AL from "./AL";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
-import findJson from "../../Services/findJson";
+import findJsonService from "../../Services/find-json.service";
 
 /**
  * Responsible for the body of the website, if Body doesn't fit
@@ -181,7 +181,7 @@ class BodyII extends Component {
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = findJson(this.props.params.language)
+        let translateJson = findJsonService(this.props.params.language)
         let categories = []
         let parentBreadCrumbs = []
         if(this.state.parents && this.state.parents.length > 0){

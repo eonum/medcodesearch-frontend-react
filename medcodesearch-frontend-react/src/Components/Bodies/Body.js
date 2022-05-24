@@ -5,7 +5,7 @@ import CHOP from "./CHOP";
 import TARMED from "./TARMED";
 import DRG from "./DRG";
 import {Breadcrumb} from "react-bootstrap";
-import findJson from "../../Services/findJson";
+import findJsonService from "../../Services/find-json.service";
 
 /**
  * Responsible for the body of the website
@@ -219,7 +219,7 @@ class Body extends Component {
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = findJson(this.props.params.language)
+        let translateJson = findJsonService(this.props.params.language)
         let categories = []
         let parentBreadCrumbs = []
         if(this.state.parents && this.state.parents.length > 0){

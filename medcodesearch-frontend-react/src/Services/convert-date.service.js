@@ -4,7 +4,7 @@
  * @returns {*}
  * @constructor
  */
-function ConvertDate(value) {
+function ConvertDateService(value) {
     if (!value.match(/^\d\d.\d\d.\d\d\d\d/)) {
         if (value.match(/^\d\d\d\d-\d\d-\d\d/)) {
             let year = value.slice(0,4)
@@ -53,4 +53,4 @@ function ConvertDate(value) {
 }
 
 
-export default ConvertDate;
+export default ConvertDateService;

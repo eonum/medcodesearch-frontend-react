@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import convertDate from "../../Services/ConvertDate";
+import convertDate from "../../Services/convert-date.service";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import DatePicker from "./DatePicker";
 import PopUp from "../PopUp/PopUp";

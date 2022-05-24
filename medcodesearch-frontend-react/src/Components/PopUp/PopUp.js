@@ -4,7 +4,7 @@ import "./PopUp.css"
 import {Modal} from "react-bootstrap";
 import deJson from "../../assets/translations/de.json";
 import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
-import findJson from "../../Services/findJson";
+import findJsonService from "../../Services/find-json.service";
 
 /**
  * If a wrong date is selected this popup should point this out
@@ -98,12 +98,12 @@ class PopUp extends Component{
             <>
                 <Modal size="sm" show={this.state.show} onHide={() => this.handleShow(false)}>
                     <Modal.Header closeButton>
-                        <Modal.Title className="pull-left">{findJson(this.props.language)['LBL_SELECT_LANGUAGE']}</Modal.Title>
+                        <Modal.Title className="pull-left">{findJsonService(this.props.language)['LBL_SELECT_LANGUAGE']}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>{findJson(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
+                    <Modal.Body>{findJsonService(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
                     <Modal.Footer>
                             <button className="customButton" onClick={() => this.handleShow(false)}>
-                                {findJson(this.props.language)['LBL_BACK']}
+                                {findJsonService(this.props.language)['LBL_BACK']}
                             </button>
                         <div className="float-end">
                         {this.state.availableLanguages.map((language, i) => (

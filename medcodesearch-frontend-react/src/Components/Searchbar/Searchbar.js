@@ -4,8 +4,8 @@ import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useNavigate} from "react-router-dom";
 import RouterService from "../../Services/router.service";
-import ConvertDate from "../../Services/ConvertDate";
-import findJson from "../../Services/findJson";
+import ConvertDateService from "../../Services/convert-date.service";
+import findJsonService from "../../Services/find-json.service";
 
 /**
  * is the searchbar of the website, which is responsible to take a string and and hand it off to the correct component
@@ -47,7 +47,7 @@ class Searchbar extends Component {
         } else {
             if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
                 || this.props.selectedButton === 'DRUG') {
-                if (this.props.date !== ConvertDate(new Date().toDateString())) {
+                if (this.props.date !== ConvertDateService(new Date().toDateString())) {
                     date = 'date=' + this.props.date + '&'
                 }
             }
@@ -106,7 +106,7 @@ class Searchbar extends Component {
         this.setState({searchTerm: searchTerm})
         let date = '';
         if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'){
-            if(this.props.date !== ConvertDate(new Date().toDateString())){
+            if(this.props.date !== ConvertDateService(new Date().toDateString())){
                 date = 'date=' + this.props.date + '&'
             }
         }
@@ -132,7 +132,7 @@ class Searchbar extends Component {
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = findJson(this.props.language)
+        let translateJson = findJsonService(this.props.language)
         return (
             <div>
                 <Form className="d-flex search-center">
