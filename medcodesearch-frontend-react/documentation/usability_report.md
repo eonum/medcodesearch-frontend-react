@@ -5,7 +5,7 @@ Um die neuen Funktionen der Suchmaschine medcodesearch.ch zu testen, wurden mehr
 
 Die Testpersonen wurden gebeten elf Aufgaben zu lösen, sechs davon in der Desktop-Version, fünf in der mobilen Version. Während und nach dem Lösen bekamen wir Feedback zur Schwierigkeit der Aufgaben und generelle Anmerkungen zu dem Tool.
 
-Es nahmen fünf Testpersonen teil, welche teils mit der bisherigen Suchmaschine vertraut waren, bei allen handelt es sich um Personen aus einem medizinischen Umfeld oder mit entsprechendem Wissen.
+Es nahmen vier Testpersonen teil, welche teils mit der bisherigen Suchmaschine vertraut waren, bei allen handelt es sich um Personen aus einem medizinischen Umfeld oder mit entsprechendem Wissen.
 
 Insgesamt waren die Testpersonen zufrieden und konnten die Ihnen gestellten Aufgaben ohne Hilfestellungen lösen.
 
