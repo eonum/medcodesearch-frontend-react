@@ -97,7 +97,7 @@ class App extends Component{
      * @returns {boolean|*}
      */
     isValidVersion(button, list, lang) {
-        if(button === 'MIGEL' || button === 'AL' || button === 'DRUG') {
+        if(button.toUpperCase() === 'MIGEL' || button === 'AL' || button === 'DRUG') {
             return lang !== "en"
         } else {
             return this.state.currentVersions[button].includes(list)
@@ -120,20 +120,39 @@ class App extends Component{
      */
     async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
         let navigate = this.props.navigation;
-        let list = this.state.selectedList;
-        let button = this.state.selectedButton;
-        let i = this.state.selectedList === '' ? '' : '/';
-        let chapters;
-
         if(prevState.language !== this.state.language) {
+            let list = this.state.selectedList;
+            let button = this.state.selectedButton;
+            let code = RouterService.getCodeFromURL();
+            let chapters = RouterService.getChapterFromURL();
+            let i = this.state.selectedList === '' ? '' : '/';
             this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
+            if(this.isValidVersion(button, list, this.state.language)) {
+                navigate({
+                    // falls liste leer --> de/button/chapters
+                    // sonst --> de/button/list/chapters/list
+                    pathname: this.state.language + "/" + button + '/' + list + i + chapters + '/' + code,
+                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+                })
+            } else {
+                this.updateButton("ICD")
+                this.updateList("ICD10-GM-2022")
+                navigate({
+                    pathname: this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
+                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+                })
+            }
+            this.setState({reSetPath: false})
         }
 
-        if(prevState.language !== this.state.language ||
-            prevState.selectedButton !== this.state.selectedButton ||
+        if(prevState.selectedButton !== this.state.selectedButton ||
             prevState.selectedList !== this.state.selectedList ||
             prevState.selectedDate !== this.state.selectedDate ||
             this.state.reSetPath) {
+            let list = this.state.selectedList;
+            let button = this.state.selectedButton;
+            let i = this.state.selectedList === '' ? '' : '/';
+            let chapters;
             if (button === 'MiGeL' || button === 'AL' || button === 'DRUG' ){
                 button = button.toUpperCase();
                 chapters = this.state.selectedButton.toLowerCase() + 's/all'

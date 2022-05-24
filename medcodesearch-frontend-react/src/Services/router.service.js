@@ -50,9 +50,38 @@ class RouterService extends Component {
      */
     static getVersionFromURL() {
         if(window.location.pathname !== '/') {
-            return window.location.pathname.split("/")[3]
+            let arr = window.location.pathname.split("/")
+            if(arr.length === 6) {
+                return arr[3]
+            } else {
+                return ''
+            }
         }
         return 'ICD10-GM-2022'
     }
+
+    static getChapterFromURL() {
+        if(window.location.pathname !== '/') {
+            let arr = window.location.pathname.split("/")
+            if(arr.length === 6) {
+                return arr[4]
+            } else {
+                return arr[3]
+            }
+        }
+        return 'ICD10-GM-2022'
+    }
+    static getCodeFromURL() {
+        if(window.location.pathname !== '/') {
+            let arr = window.location.pathname.split("/")
+            if(arr.length === 6) {
+                return arr[5]
+            } else {
+                return arr[4]
+            }
+        }
+        return 'ICD10-GM-2022'
+    }
+
 }
 export default RouterService
