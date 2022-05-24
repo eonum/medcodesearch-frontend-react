@@ -38,8 +38,8 @@ class ButtonVersion extends React.Component{
      * @param btn
      */
     handleVersionClick(version) {
-        const dropdown = document.getElementById(version);
-        if(!dropdown.classList.contains('disabled')) {
+        const DROPDOWN = document.getElementById(version);
+        if(!DROPDOWN.classList.contains('disabled')) {
             this.props.chooseV(version)
         } else {
             this.setState({disabledCategory: findCategory(version)})
@@ -67,8 +67,8 @@ class ButtonVersion extends React.Component{
      * @param category
      */
     handleCategoryClick(category) {
-        const dropdown = document.getElementById(category);
-        if(!dropdown.classList.contains('disabled')) {
+        const DROPDOWN = document.getElementById(category);
+        if(!DROPDOWN.classList.contains('disabled')) {
             this.props.activate(category);
         } else {
             this.setState({showPopUp: true})

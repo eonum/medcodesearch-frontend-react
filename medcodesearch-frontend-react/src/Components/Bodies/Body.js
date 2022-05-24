@@ -122,8 +122,8 @@ class Body extends Component {
      */
     lookingForLink(aString, index) {
         let results = []
-        const regex = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
-        let matches = aString.match(regex)
+        const REGEX = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
+        let matches = aString.match(REGEX)
         if(matches) {
             let firstIndex = aString.indexOf(matches[0])
             for (let i = 0; i < matches.length; i++) {
@@ -322,7 +322,7 @@ class Body extends Component {
 }
 
 export default function(props) {
-    const navigation = useNavigate();
-    const location = useLocation();
-    return <Body {...props} navigation={navigation} location={location} params={useParams()} key={"bodyI"}/>
+    const NAVIGATION = useNavigate();
+    const LOCATION = useLocation();
+    return <Body {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()} key={"bodyI"}/>
 }

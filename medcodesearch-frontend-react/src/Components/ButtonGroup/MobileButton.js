@@ -76,8 +76,8 @@ class MobileButton extends Component{
      * @param btn
      */
     handleVersionClick(version, btn) {
-        const dropdown = document.getElementById(version);
-        if(!dropdown.classList.contains('disabled')) {
+        const DROPDOWN = document.getElementById(version);
+        if(!DROPDOWN.classList.contains('disabled')) {
             this.props.chooseC(version, btn)
         } else {
             this.setState({disabledCategory: findCategory(version)})
@@ -92,8 +92,8 @@ class MobileButton extends Component{
      * @param category
      */
     handleCategoryClick(category) {
-        const cat = document.getElementById(category);
-        if(!cat.classList.contains('disabled')) {
+        const CAT = document.getElementById(category);
+        if(!CAT.classList.contains('disabled')) {
             this.props.chooseC('', category, false, "")
         } else {
             this.setState({disabledCategory: category})

@@ -30,11 +30,11 @@ class DatePicker extends React.Component{
      * @returns {string}
      */
     getDate() {
-            const today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            const yyyy = today.getFullYear();
-            return yyyy + '-' + mm + '-' + dd;
+            const TODAY = new Date();
+            const DD = String(TODAY.getDate()).padStart(2, '0');
+            const MM = String(TODAY.getMonth() + 1).padStart(2, '0'); //January is 0!
+            const YYYY = TODAY.getFullYear();
+            return YYYY + '-' + MM + '-' + DD;
     }
 
     /**

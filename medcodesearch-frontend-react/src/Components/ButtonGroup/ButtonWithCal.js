@@ -24,8 +24,8 @@ class ButtonWithCal extends Component{
      * @param category
      */
     handleCategoryClick(category) {
-        const button = document.getElementById(category);
-        if(!button.classList.contains("disabled")) {
+        const BUTTON = document.getElementById(category);
+        if(!BUTTON.classList.contains("disabled")) {
             this.props.select(this.props.name, convertDate(new Date().toDateString()))
         } else {
             this.setState({showPopUp: true})

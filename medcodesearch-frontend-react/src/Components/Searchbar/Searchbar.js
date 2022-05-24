@@ -157,6 +157,6 @@ class Searchbar extends Component {
     }
 }
 export default function(props) {
-    const navigation = useNavigate();
-    return <Searchbar {...props} navigation={navigation}/>;
+    const NAVIGATION = useNavigate();
+    return <Searchbar {...props} navigation={NAVIGATION}/>;
 }

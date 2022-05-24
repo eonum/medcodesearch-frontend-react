@@ -6,7 +6,7 @@
 
 ## 1.1 Download von Jest und React Testing Library 
 Falls nach dem Installieren von *Node* mithilfe von `npm install` *Jest* und *React Testing Library* nicht mitinstalliert wurden,
-muss noch *Jest* mithilfe von `npm install --save-dev jest`  und noch *React Testing Library* mithilfe von `` installiert werden.
+muss noch *Jest* mithilfe von `npm install --save-dev jest`  und noch *React Testing Library* mithilfe von `npm install --save-dev @testing-library/react` installiert werden.
 
 ## 1.2 Download von Selenium
 Für das GUI-Testing wird Selenium verwendet.
@@ -30,6 +30,6 @@ Für weitere Informationen zur installation von Selenium wenden Sie sich an die 
 ### 1.3.1 Testing mit Selenium IDE
 Ausserhalb der Ordner `src` und `documenation`, ist die Datei MedCodeSearch.side, welche mithilfe von der vorher heruntergeladenen Browser-Extension-IDE importiert werden kann. Dazu, folgen Sie bitte direkt den Instruktionen in der genannten IDE.
 ### 1.3.2 Testing direkt im Code
-Mit dem Befehl (innerhalb des richtigen Ordners) `npm install` lässt sich einen automatisierten Testdurchgang starten.
-Bevor dies allerdings gemacht wird, muss innerhalb der Datei ``setupTests.js`` der Browser zu dem bevorzugten WEBdriver gewechselt werden. Als Standart Browser ist "Firefox" eingetragen. Man kann auswählen zwischen Firefox, Chrome, Safari und MicrosoftEdge.
+Mit dem Befehl (innerhalb des richtigen Ordners) `npm test` lässt sich einen automatisierten Testdurchgang starten.
+Bevor dies allerdings gemacht wird, muss innerhalb der Datei ``setupTests.js`` der Browser zu dem bevorzugten WEBdriver gewechselt werden. Als Standard Browser ist "Firefox" eingetragen. Man kann auswählen zwischen Firefox, Chrome, Safari und MicrosoftEdge.
 

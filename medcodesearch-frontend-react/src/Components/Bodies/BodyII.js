@@ -256,7 +256,7 @@ class BodyII extends Component {
 }
 
 export default function(props) {
-    const navigation = useNavigate();
-    const location = useLocation();
-    return <BodyII {...props} navigation={navigation} location={location} params={useParams()}/>
+    const NAVIGATION = useNavigate();
+    const LOCATION = useLocation();
+    return <BodyII {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()}/>
 }

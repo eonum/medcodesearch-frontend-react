@@ -90,7 +90,7 @@ class SearchResult extends Component {
 }
 
 export default function(props) {
-    const navigation = useNavigate();
-    const location = useLocation();
-    return <SearchResult {...props} navigation={navigation} location={location} key={"searchresults default"}/>;
+    const NAVIGATION = useNavigate();
+    const LOCATION = useLocation();
+    return <SearchResult {...props} navigation={NAVIGATION} location={LOCATION} key={"searchresults default"}/>;
 }

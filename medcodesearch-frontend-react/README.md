@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+# README MEDCODESEARCH
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Brief description
 
-## Available Scripts
+This React-App is used to represent the different catalogs which gets updated every year or two. This website helps to 
+find the catalog number easier and to look up the different versions or expiry dates. \
+Frontend from the website: [medcodesearch.ch](http://medcodesearch.ch) \
+Backend which is used is: [search.eonum.ch](https://search.eonum.ch/documentation) 
 
-In the project directory, you can run:
+### Installation instructions
 
-### `npm start`
+For the local installation go into the folder `medcodesearch-frontend-react` and run `npm install` \
+To start the local app run `npm start`. It will open at [http://localhost:3000](http://localhost:3000) in your browser.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Issues
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+There is one screen size in which the buttons don't line up perfectly, but we couldn't figure out which exactly.
 
-### `npm test`
+### Coding conventions
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Each class is defined in *its own file*. \
+Everything has been written in English (Comments included). \
+The first letter of a classname is in uppercase, the reminder is lowercase. \
+Method-names are always lowercase. \
+Variable-names are lowercase if only "oneword"-word, otherwise the first letter in between is capital. \
+Constants are always uppercase. \
+All components reside in their own subdirectory in `/src/Components`. \
+All services reside in their own subdirectory in `/src/Services`. \
+All test-suites reside in their own subdirectory in `/src/__test_`. \
+The installation guide resides in their own directory `/documentation`. \
+Every method has its own documentation written in Javadoc. 
 
-### `npm run build`
+###Testing
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This React-App may be tested with the automated testcases via the Script `npm test` or via import of the file "MedCodeSearch.side" into Selenium IDE. 
+For more information refer to the Installation-Manual. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Contact 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+For further question: 
+- +41 (0)31 311 17 06 -> eonum contact
+- [info@eonum.ch](info@eonum.ch) -> eonum contact
+- [jan.koch@students.unibe.ch](jan.koch@students.unibe.ch) -> university development team
+- [eonum.ch/de/kontakt/](https://eonum.ch/de/kontakt/) -> eonum website
 
-### `npm run eject`
+### Diagram
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![img.png](img.png)
