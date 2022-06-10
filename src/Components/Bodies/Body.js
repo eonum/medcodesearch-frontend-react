@@ -38,7 +38,8 @@ class Body extends Component {
             children: [],
             parent: null,
             parents: [],
-            siblings: []
+            siblings: [],
+            terminal: null
         }
     }
 
@@ -88,7 +89,8 @@ class Body extends Component {
                 children: [],
                 parent: null,
                 parents: [],
-                siblings: []
+                siblings: [],
+                terminal: null
             })
             await this.fetchInformations()
             await this.fetchSiblings(this.state.parent)
@@ -101,17 +103,17 @@ class Body extends Component {
      * @returns {Promise<void>}
      */
     async fetchInformations() {
-        let newCategories;
+        let detailedCode;
         if (this.props.params.category === "ICD") {
-            newCategories = await ICD.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await ICD.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
         } else if (this.props.params.category === "CHOP") {
-            newCategories = await CHOP.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await CHOP.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
         } else if (this.props.params.category === "TARMED") {
-            newCategories = await TARMED.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await TARMED.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
         } else {
-            newCategories = await DRG.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await DRG.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
         }
-        this.setState(newCategories)
+        this.setState(detailedCode)
     }
 
     /**
@@ -231,78 +233,78 @@ class Body extends Component {
                 >{this.state.parents[i].code}</Breadcrumb.Item>)
             }
         }
-        for(let category in this.state) {
-            if(this.state[category] !== null && this.state[category] !== undefined) {
-                if(category === "med_interpret" || category === "tech_interpret") {
+        for(let attribute in this.state) {
+            if(this.state[attribute] !== null && this.state[attribute] !== undefined) {
+                if(attribute === "med_interpret" || attribute === "tech_interpret") {
                     categories.push(
-                        <div key={"med/tech interpret" + this.state[category].length * 41}>
-                            <p>{this.state[category]}</p>
+                        <div key={"med/tech interpret" + this.state[attribute].length * 41}>
+                            <p>{this.state[attribute]}</p>
                         </div>
                     )
-                } else if(category === "tp_al" || category === "tp_tl") {
-                    if(this.state[category] !== 0) {
+                } else if(attribute === "tp_al" || attribute === "tp_tl") {
+                    if(this.state[attribute] !== 0) {
                         categories.push(
-                            <div key={"tp_al/tl" + this.state[category] * 37}>
-                                <p>{translateJson["LBL_" + category.toUpperCase()]}: {this.state[category]}</p>
+                            <div key={"tp_al/tl" + this.state[attribute] * 37}>
+                                <p>{translateJson["LBL_" + attribute.toUpperCase()]}: {this.state[attribute]}</p>
                             </div>
                         )
                     }
                 }
-                else if(category === "note" || category === "coding_hint" || category === "usage") {
+                else if(attribute === "note" || attribute === "coding_hint" || attribute === "usage") {
                     categories.push(
-                        <div key={"note coding_hint usage" + this.state[category].length * 31}>
-                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
-                            <p>{this.state[category]}</p>
+                        <div key={"note coding_hint usage" + this.state[attribute].length * 31}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                            <p>{this.state[attribute]}</p>
                         </div>
                     )
-                } else if(this.state[category].length > 0 && (category === "children" || category === "siblings")) {
+                } else if(this.state[attribute].length > 0 && (attribute === "children" || attribute === "siblings")) {
                     categories.push(
-                        <div key={"children siblings" + this.state[category] * 29}>
-                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
+                        <div key={"children siblings" + this.state[attribute] * 29}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[category].map((child, i) => (
+                                {this.state[attribute].map((child, i) => (
                                     <li key={child + " number " + (i * 23)}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
                     )
-                } else if(this.state[category].length > 0 && (category === "groups" || category === "blocks")) {
+                } else if(this.state[attribute].length > 0 && (attribute === "groups" || attribute === "blocks")) {
                     categories.push(
-                        <div key={"groups " + this.state[category].length * 19}>
-                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
+                        <div key={"groups " + this.state[attribute].length * 19}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[category].map((child, i) => (
+                                {this.state[attribute].map((child, i) => (
                                     <li key={child.code + "childcode " + (i * 17)}>{child.code}: {child.text}</li>
                                 ))}
                             </ul>
                         </div>
                     )
                 }
-                else if(this.state[category].length > 0 && (category === "inclusions" || category === "synonyms" || category === "most_relevant_drgs" || category === "descriptions" || category === "notes")) {
+                else if(this.state[attribute].length > 0 && (attribute === "inclusions" || attribute === "synonyms" || attribute === "most_relevant_drgs" || attribute === "descriptions" || attribute === "notes")) {
                     categories.push(
-                        <div key={"incl, syn, rel_drgs, descr " + this.state[category].length * 13}>
-                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
+                        <div key={"incl, syn, rel_drgs, descr " + this.state[attribute].length * 13}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[category].map((element, i) => (
+                                {this.state[attribute].map((element, i) => (
                                     <li key={"element nr " + i}>{element}</li>
                                 ))}
                             </ul>
                         </div>
                     )
-                } else if(this.state[category].length > 0 && (category === "exclusions" || category === "supplement_codes")) {
+                } else if(this.state[attribute].length > 0 && (attribute === "exclusions" || attribute === "supplement_codes")) {
                     categories.push(
-                        <div key={"exclusions supp_codes " + this.state[category].length * 11}>
-                            <h5>{translateJson["LBL_" + category.toUpperCase()]}</h5>
+                        <div key={"exclusions supp_codes " + this.state[attribute].length * 11}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[category].map((exclusion, i) => (
+                                {this.state[attribute].map((exclusion, i) => (
                                     this.lookingForLink(exclusion, i)
                                 ))}
                             </ul>
                         </div>
                     )
-                } else if(category === "predecessors" && this.state[category].length === 0) {
+                } else if(attribute === "predecessors" && this.state[attribute].length === 0 && this.state.terminal) {
                     categories.push(
-                        <div key={"predec " + this.state[category].length * 7}>
+                        <div key={"predec " + this.state[attribute].length * 7}>
                             <h5>{translateJson["LBL_NEW_CODE"]}</h5>
                         </div>
                     )
