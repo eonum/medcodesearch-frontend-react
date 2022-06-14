@@ -224,6 +224,27 @@ class Body extends Component {
         let translateJson = findJsonService(this.props.params.language)
         let categories = []
         let parentBreadCrumbs = []
+
+        var mappingFields = ['predecessors', 'successors'];
+        // Define div for predecessor code info
+        for(var j = 0; j < mappingFields.length; j++) {
+            var field = mappingFields[j];
+            if (this.state[field] != null) {
+                // is this a non-trivial mapping?
+                if(this.state[field].length > 1 || this.state[field].length == 1 && (this.state[field][0]['code'] != this.state['code'] || this.state[field][0]['text'] != this.state['text'])) {
+                    categories.push(
+                        <div key={"mapping_pre_succ" + j}>
+                            <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
+                            <ul>
+                                {this.state[field].map((child,i) => (
+                                    <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
+                                    ))}
+                            </ul>
+                        </div>)
+                }
+            }
+        }
+
         if(this.state.parents && this.state.parents.length > 0){
             for(let i=this.state.parents.length-1; i>=0; i--){
                 parentBreadCrumbs.push(<Breadcrumb.Item
@@ -302,7 +323,7 @@ class Body extends Component {
                             </ul>
                         </div>
                     )
-                } else if(attribute === "predecessors" && this.state[attribute].length === 0 && this.state.terminal) {
+                } else if(attribute === "predecessors" && this.state[attribute].length === 0 && this.state.children == null) {
                     categories.push(
                         <div key={"predec " + this.state[attribute].length * 7}>
                             <h5>{translateJson["LBL_NEW_CODE"]}</h5>
