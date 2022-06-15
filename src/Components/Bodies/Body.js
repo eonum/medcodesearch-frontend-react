@@ -104,14 +104,14 @@ class Body extends Component {
      */
     async fetchInformations() {
         let detailedCode;
-        if (this.props.params.category === "ICD") {
-            detailedCode = await ICD.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
-        } else if (this.props.params.category === "CHOP") {
-            detailedCode = await CHOP.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
-        } else if (this.props.params.category === "TARMED") {
-            detailedCode = await TARMED.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
+        if (this.props.params.catalog === "ICD") {
+            detailedCode = await ICD.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
+        } else if (this.props.params.catalog === "CHOP") {
+            detailedCode = await CHOP.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
+        } else if (this.props.params.catalog === "TARMED") {
+            detailedCode = await TARMED.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
         } else {
-            detailedCode = await DRG.fetchInformations(this.props.params.language, this.props.params.catalog, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await DRG.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
         }
         this.setState(detailedCode)
     }
@@ -155,11 +155,11 @@ class Body extends Component {
      */
     goToChild(child) {
         let navigate = this.props.navigation
-        if(this.props.params.category === "ICD") {
+        if(this.props.params.catalog === "ICD") {
             ICD.goToChild(child.code, navigate, this.props.params.version, this.props.params.language)
-        } else if(this.props.params.category === "CHOP") {
+        } else if(this.props.params.catalog === "CHOP") {
             CHOP.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
-        } else if(this.props.params.category === "TARMED") {
+        } else if(this.props.params.catalog === "TARMED") {
             TARMED.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
         } else {
             DRG.goToChild(child, navigate, this.props.params.version, this.props.params.language)
@@ -222,7 +222,7 @@ class Body extends Component {
      */
     render() {
         let translateJson = findJsonService(this.props.params.language)
-        let categories = []
+        let attributes_html = []
         let parentBreadCrumbs = []
 
         var mappingFields = ['predecessors', 'successors'];
@@ -232,7 +232,7 @@ class Body extends Component {
             if (this.state[field] != null) {
                 // is this a non-trivial mapping?
                 if(this.state[field].length > 1 || this.state[field].length == 1 && (this.state[field][0]['code'] != this.state['code'] || this.state[field][0]['text'] != this.state['text'])) {
-                    categories.push(
+                    attributes_html.push(
                         <div key={"mapping_pre_succ" + j}>
                             <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
                             <ul>
@@ -257,14 +257,14 @@ class Body extends Component {
         for(let attribute in this.state) {
             if(this.state[attribute] !== null && this.state[attribute] !== undefined) {
                 if(attribute === "med_interpret" || attribute === "tech_interpret") {
-                    categories.push(
+                    attributes_html.push(
                         <div key={"med/tech interpret" + this.state[attribute].length * 41}>
                             <p>{this.state[attribute]}</p>
                         </div>
                     )
                 } else if(attribute === "tp_al" || attribute === "tp_tl") {
                     if(this.state[attribute] !== 0) {
-                        categories.push(
+                        attributes_html.push(
                             <div key={"tp_al/tl" + this.state[attribute] * 37}>
                                 <p>{translateJson["LBL_" + attribute.toUpperCase()]}: {this.state[attribute]}</p>
                             </div>
@@ -272,14 +272,14 @@ class Body extends Component {
                     }
                 }
                 else if(attribute === "note" || attribute === "coding_hint" || attribute === "usage") {
-                    categories.push(
+                    attributes_html.push(
                         <div key={"note coding_hint usage" + this.state[attribute].length * 31}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <p>{this.state[attribute]}</p>
                         </div>
                     )
                 } else if(this.state[attribute].length > 0 && (attribute === "children" || attribute === "siblings")) {
-                    categories.push(
+                    attributes_html.push(
                         <div key={"children siblings" + this.state[attribute] * 29}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
@@ -290,7 +290,7 @@ class Body extends Component {
                         </div>
                     )
                 } else if(this.state[attribute].length > 0 && (attribute === "groups" || attribute === "blocks")) {
-                    categories.push(
+                    attributes_html.push(
                         <div key={"groups " + this.state[attribute].length * 19}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
@@ -302,7 +302,7 @@ class Body extends Component {
                     )
                 }
                 else if(this.state[attribute].length > 0 && (attribute === "inclusions" || attribute === "synonyms" || attribute === "most_relevant_drgs" || attribute === "descriptions" || attribute === "notes")) {
-                    categories.push(
+                    attributes_html.push(
                         <div key={"incl, syn, rel_drgs, descr " + this.state[attribute].length * 13}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
@@ -313,7 +313,7 @@ class Body extends Component {
                         </div>
                     )
                 } else if(this.state[attribute].length > 0 && (attribute === "exclusions" || attribute === "supplement_codes")) {
-                    categories.push(
+                    attributes_html.push(
                         <div key={"exclusions supp_codes " + this.state[attribute].length * 11}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
@@ -324,7 +324,7 @@ class Body extends Component {
                         </div>
                     )
                 } else if(attribute === "predecessors" && this.state[attribute].length === 0 && this.state.children == null) {
-                    categories.push(
+                    attributes_html.push(
                         <div key={"predec " + this.state[attribute].length * 7}>
                             <h5>{translateJson["LBL_NEW_CODE"]}</h5>
                         </div>
@@ -332,14 +332,14 @@ class Body extends Component {
                 }
             }
         }
-        if(this.props.params.category === "ICD") {
-            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
-        } else if(this.props.params.category === "CHOP") {
-            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
-        } else if(this.props.params.category === "TARMED") {
-            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
+        if(this.props.params.catalog === "ICD") {
+            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
+        } else if(this.props.params.catalog === "CHOP") {
+            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
+        } else if(this.props.params.catalog === "TARMED") {
+            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
         } else {
-            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} categories={categories} parents={parentBreadCrumbs}/>
+            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
         }
     }
 }

@@ -10,18 +10,18 @@ class DRG extends Component {
     /**
      * etch the DRG in the correct language and version
      * @param language
-     * @param catalog
+     * @param code_type
      * @param version
      * @param code
-     * @param categories
+     * @param attributes
      * @returns {Promise<any>}
      */
-    static async fetchInformations(language, catalog, version, code, categories) {
+    static async fetchInformations(language, code_type, version, code, attributes) {
         let codeForSearch;
         let cat = 'mdcs';
-        let newCategories = categories
-        if (catalog !==  'mdcs'){
-            cat = catalog;
+        let newAttributes = attributes
+        if (code_type !==  'mdcs'){
+            cat = code_type;
         }
         if (version === code){
             codeForSearch = '/ALL'
@@ -33,11 +33,11 @@ class DRG extends Component {
         return await fetch('https://search.eonum.ch/' + language + "/" + cat+ "/" + version + codeForSearch + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
-                        for (let category in categories) {
-                            newCategories[category] = json[category]
+                        for (let attribute in attributes) {
+                            newAttributes[attribute] = json[attribute]
                         }}
                     )
-                .then(() => {return newCategories})
+                .then(() => {return newAttributes})
     }
 
     /**
@@ -83,7 +83,7 @@ class DRG extends Component {
                 </Breadcrumb>
                 <h3>{this.props.title}</h3>
                 <p>{this.props.text}</p>
-                {this.props.categories}
+                {this.props.attributes}
             </div>
         )
     }

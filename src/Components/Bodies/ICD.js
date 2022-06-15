@@ -32,25 +32,26 @@ class ICD extends Component {
     /**
      *  Fetch the ICD in the correct language and version
      * @param language
-     * @param catalog
+     * @param code_type
      * @param version
      * @param code
-     * @param categories
+     * @param attributes
      * @returns {Promise<any>}
      */
-    static async fetchInformations(language, catalog, version, code, categories) {
-        let newCategories = categories
-        return await fetch('https://search.eonum.ch/' + language + "/" + catalog + "/" + version + "/" + code + "?show_detail=1")
+    static async fetchInformations(language, code_type, version, code, attributes) {
+        let newAttributes = attributes
+        console.log('https://search.eonum.ch/' + language + "/" + code_type + "/" + version + "/" + code + "?show_detail=1")
+        return await fetch('https://search.eonum.ch/' + language + "/" + code_type + "/" + version + "/" + code + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
-                    for(let category in categories) {
-                        newCategories[category] = json[category]
+                    for(let attribute in attributes) {
+                        newAttributes[attribute] = json[attribute]
                     }
                     if(version === code) {
-                        newCategories["children"] = IcdSortService(json["children"])
+                        newAttributes["children"] = IcdSortService(json["children"])
                     }
                 })
-            .then(() => {return newCategories})
+            .then(() => {return newAttributes})
     }
 
     /**
@@ -66,7 +67,7 @@ class ICD extends Component {
                 </Breadcrumb>
                 <h3>{this.props.title}</h3>
                 <p>{this.props.text}</p>
-                {this.props.categories}
+                {this.props.attributes}
             </div>
         )
     }
