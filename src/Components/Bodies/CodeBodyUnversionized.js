@@ -6,9 +6,9 @@ import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 
 /**
- * Responsible for the body of the website, if Body doesn't fit
+ * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED)
  */
-class BodyII extends Component {
+class CodeBodyUnversionized extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -177,7 +177,7 @@ class BodyII extends Component {
     }
 
     /**
-     * Render the BodyII component
+     * Render the CodeBodyUnversionized component
      * @returns {JSX.Element}
      */
     render() {
@@ -258,5 +258,5 @@ class BodyII extends Component {
 export default function(props) {
     const NAVIGATION = useNavigate();
     const LOCATION = useLocation();
-    return <BodyII {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()}/>
+    return <CodeBodyUnversionized {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()}/>
 }

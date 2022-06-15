@@ -8,9 +8,9 @@ import {Breadcrumb} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 
 /**
- * Responsible for the body of the website
+ * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED).
  */
-class Body extends Component {
+class CodeBodyVersionized extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -347,5 +347,5 @@ class Body extends Component {
 export default function(props) {
     const NAVIGATION = useNavigate();
     const LOCATION = useLocation();
-    return <Body {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()} key={"bodyI"}/>
+    return <CodeBodyVersionized {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()} key={"bodyI"}/>
 }

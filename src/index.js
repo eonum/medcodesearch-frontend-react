@@ -6,8 +6,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from "./Components/Main/Main";
-import Body from "./Components/Bodies/Body";
-import BodyII from "./Components/Bodies/BodyII";
+import Body from "./Components/Bodies/CodeBodyVersionized";
+import BodyII from "./Components/Bodies/CodeBodyUnversionized";
 
 /**
  * Renders the whole application
