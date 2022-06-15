@@ -4,6 +4,7 @@ import MIGEL from "./MIGEL";
 import AL from "./AL";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
+import {fetchUnversionizedCodeInformations} from "../../Utils";
 
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED)
@@ -50,48 +51,16 @@ class CodeBodyUnversionized extends Component {
     }
 
     /**
-     * Does a case distinction for all the catalogs and set the string ready for fetching
-     * @param language
-     * @param code_type
-     * @param version
-     * @param code
-     * @returns {Promise<null|any>}
-     */
-    async fetchHelper(language, code_type, version, code) {
-        code_type = code_type.toUpperCase();
-        if(code === "all") {
-            code = code_type
-        }
-        if (code === "all" && code !== 'AL') {
-            return null
-        } else {
-            if (version === 'AL'){
-                code_type = code_type + "/" + code_type;
-                code = '?show_detail=1'
-            }
-            return await fetch('https://search.eonum.ch/' + language + "/" + version + "/" + code_type + "/" + code + "?show_detail=1")
-                .then((res) => {
-                    return res.json()
-                })
-        }
-    }
-
-    /**
      * Fetch the information from the backend and does a case distinction for all the catalogs
      * @returns {Promise<void>}
      */
     async fetchInformations() {
-        let newAttributes, versions;
-        if (this.props.params.catalog === "MIGEL") {
-            versions = 'migels'
-        }else if (this.props.params.catalog === "AL") {
-            versions = 'laboratory_analyses';
-        }else if (this.props.params.catalog === "DRUG") {
-            versions = 'drugs'
-        }
-        newAttributes = await this.fetchHelper(this.props.params.language, this.props.params.catalog, versions, this.props.params.code)
-        if (newAttributes !== null) {
-            this.setState({attributes: newAttributes})
+        const {language, code, catalog} = this.props.params;
+        let detailedCode, versions;
+        versions = {"MIGEL": "migels", "AL": "laboratory_analyses", "DRUG": "drugs"};
+        detailedCode = await fetchUnversionizedCodeInformations(language, catalog, versions[catalog], code);
+        if (detailedCode !== null) {
+            this.setState({attributes: detailedCode})
         }
     }
 

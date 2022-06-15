@@ -30,30 +30,6 @@ class ICD extends Component {
     }
 
     /**
-     *  Fetch the ICD in the correct language and version
-     * @param language
-     * @param code_type
-     * @param version
-     * @param code
-     * @param attributes
-     * @returns {Promise<any>}
-     */
-    static async fetchInformations(language, code_type, version, code, attributes) {
-        let newAttributes = attributes
-        return await fetch('https://search.eonum.ch/' + language + "/" + code_type + "/" + version + "/" + code + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    for(let attribute in attributes) {
-                        newAttributes[attribute] = json[attribute]
-                    }
-                    if(version === code) {
-                        newAttributes["children"] = IcdSortService(json["children"])
-                    }
-                })
-            .then(() => {return newAttributes})
-    }
-
-    /**
      * Render the CHOP component
      * @returns {JSX.Element}
      */

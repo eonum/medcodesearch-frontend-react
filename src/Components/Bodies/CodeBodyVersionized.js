@@ -6,6 +6,7 @@ import TARMED from "./TARMED";
 import DRG from "./DRG";
 import {Breadcrumb} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
+import {fetchVersionizedCodeInformations} from '../../Utils';
 
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED).
@@ -104,15 +105,8 @@ class CodeBodyVersionized extends Component {
      */
     async fetchInformations() {
         let detailedCode;
-        if (this.props.params.catalog === "ICD") {
-            detailedCode = await ICD.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
-        } else if (this.props.params.catalog === "CHOP") {
-            detailedCode = await CHOP.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
-        } else if (this.props.params.catalog === "TARMED") {
-            detailedCode = await TARMED.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
-        } else {
-            detailedCode = await DRG.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
-        }
+        const {language, code_type, version, code, catalog} = this.props.params;
+        detailedCode = await fetchVersionizedCodeInformations(language, code_type, version, code, catalog, this.state);
         this.setState(detailedCode)
     }
 
