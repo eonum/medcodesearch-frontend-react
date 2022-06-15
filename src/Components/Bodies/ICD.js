@@ -40,7 +40,6 @@ class ICD extends Component {
      */
     static async fetchInformations(language, code_type, version, code, attributes) {
         let newAttributes = attributes
-        console.log('https://search.eonum.ch/' + language + "/" + code_type + "/" + version + "/" + code + "?show_detail=1")
         return await fetch('https://search.eonum.ch/' + language + "/" + code_type + "/" + version + "/" + code + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
