@@ -1,11 +1,11 @@
-interface IShortEntry {
+export interface IShortEntry {
     code: string,
     text: string,
     url: string,
     terminal?: true
 }
 
-interface ICode {
+export interface ICode {
     code: string,
     med_interpret: string,
     tech_interpret: string,

@@ -6,8 +6,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Main from "./Components/Main/Main";
-import Body from "./Components/Bodies/CodeBodyVersionized";
-import BodyII from "./Components/Bodies/CodeBodyUnversionized";
+import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
+import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
 
 /**
  * Renders the whole application
@@ -16,11 +16,11 @@ ReactDOM.render(
     <React.StrictMode>
         <Router>
             <Routes>
-                <Route path="/" element={<App />}>
+                <Route path="/" element={<App/>}>
                     <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
                     <Route path="/" element={<Main/>}>
-                        <Route path="/:language/:catalog/:code_type/:code" element={<BodyII/>}/>
-                        <Route path="/:language/:catalog/:version/:code_type/:code" element={<Body/>}/>
+                        <Route path="/:language/:catalog/:resource_type/:code" element={<CodeBodyUnversionized/>}/>
+                        <Route path="/:language/:catalog/:version/:resource_type/:code" element={<CodeBodyVersionized/>}/>
                     </Route>
                 </Route>
             </Routes>

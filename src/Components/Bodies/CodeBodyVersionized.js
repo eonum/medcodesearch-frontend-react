@@ -7,11 +7,18 @@ import DRG from "./DRG";
 import {Breadcrumb} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {fetchVersionizedCodeInformations} from '../../Utils';
+import {ICode} from '../../interfaces';
 
+interface Props {
+    params: any,
+    navigation: any,
+    location: any,
+    key: string
+}
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED).
  */
-class CodeBodyVersionized extends Component {
+class CodeBodyVersionized extends Component<Props, ICode> {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,7 +32,6 @@ class CodeBodyVersionized extends Component {
             exclusions: null,
             inclusions: null,
             notes: null,
-            hints: null,
             coding_hint: null,
             synonyms: null,
             most_relevant_drgs: null,
@@ -75,7 +81,6 @@ class CodeBodyVersionized extends Component {
                 blocks: null,
                 exclusions: null,
                 inclusions: null,
-                hints: null,
                 notes: null,
                 coding_hint: null,
                 synonyms: null,
@@ -105,8 +110,8 @@ class CodeBodyVersionized extends Component {
      */
     async fetchInformations() {
         let detailedCode;
-        const {language, code_type, version, code, catalog} = this.props.params;
-        detailedCode = await fetchVersionizedCodeInformations(language, code_type, version, code, catalog, this.state);
+        const {language, resource_type, version, code, catalog} = this.props.params;
+        detailedCode = await fetchVersionizedCodeInformations(language, resource_type, version, code, catalog, this.state);
         this.setState(detailedCode)
     }
 
@@ -215,6 +220,7 @@ class CodeBodyVersionized extends Component {
      * @returns {JSX.Element}
      */
     render() {
+        console.log(this.props.params)
         let translateJson = findJsonService(this.props.params.language)
         let attributes_html = []
         let parentBreadCrumbs = []
@@ -274,7 +280,7 @@ class CodeBodyVersionized extends Component {
                     )
                 } else if(this.state[attribute].length > 0 && (attribute === "children" || attribute === "siblings")) {
                     attributes_html.push(
-                        <div key={"children siblings" + this.state[attribute] * 29}>
+                        <div key={"children_siblings" + this.state[attribute].length * 29}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[attribute].map((child, i) => (

@@ -12,9 +12,7 @@ import RouterService from "./Services/router.service";
 import {Component} from "react";
 import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
-import {
-    getVersionsByLanguage
-} from "./Services/category-version.service";
+import {getVersionsByLanguage} from "./Services/category-version.service";
 import findJsonService from "./Services/find-json.service";
 
 /**
@@ -76,7 +74,7 @@ class App extends Component{
     }
 
     /**
-     * takes a searchResult and resets is or add it to the current seachResults state
+     * takes a searchResult and resets or add it to the current seachResults state
      * @param searchResult
      */
     updateSearchResults = (searchResult) => {
