@@ -2,7 +2,7 @@ import './App.css';
 import './index.css';
 import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';
-import Searchbar from './Components/Searchbar/Searchbar.js'
+import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import { ReactComponent as Arrow } from './assets/arrow-up.svg';
