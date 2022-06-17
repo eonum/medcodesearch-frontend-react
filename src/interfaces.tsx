@@ -1,3 +1,6 @@
+import RouterService from "./Services/router.service";
+import convertDate from "./Services/convert-date.service";
+
 export interface IShortEntry {
     code: string,
     text: string,
@@ -31,4 +34,25 @@ export interface ICode {
     parents: IShortEntry[][],
     siblings: IShortEntry[][],
     terminal: boolean
+}
+
+// TODO: Better interface name, no any.
+export interface IApp {
+    language: string,
+    selectedButton: any,
+    selectedList: any,
+    selectedDate: any,
+    searchResults: any,
+    clickedOnLogo: boolean,
+    reSetPath: boolean,
+    collapseMenu: boolean,
+    initialVersions: IVersions,
+    currentVersions: IVersions}
+}
+
+export interface IVersions {
+    'ICD': string[],
+    'CHOP:': string[],
+    'TARMED': string[],
+    'SwissDRG': string[]
 }

@@ -4,8 +4,8 @@ import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';
 import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
-import logo from "./assets/medcodesearch_big.png";
-import { ReactComponent as Arrow } from './assets/arrow-up.svg';
+import * as logo from "./assets/medcodesearch_big.png";
+import * as Arrow from './assets/arrow-up.svg';
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
@@ -14,13 +14,18 @@ import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/category-version.service";
 import findJsonService from "./Services/find-json.service";
+import {IApp} from "./interfaces";
+
+interface Props {
+    params: any,
+    navigation: any,
+}
 
 /**
  * App.js calls all the component to combine them and render the website
  * @component
  */
-class App extends Component{
-
+class App extends Component <Props, IApp>{
     /**
      * gets the language, selected button, selected list, selected date and search results and bind them
      * @param props
