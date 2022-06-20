@@ -4,7 +4,7 @@ import ICD from "./ICD"
 import CHOP from "./CHOP";
 import TARMED from "./TARMED";
 import DRG from "./DRG";
-import {Breadcrumb} from "react-bootstrap";
+import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {fetchVersionizedCodeInformations} from '../../Utils';
 import {ICode} from '../../interfaces';
@@ -15,6 +15,7 @@ interface Props {
     location: any,
     key: string
 }
+
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED).
  */
@@ -67,7 +68,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param snapshot
      * @returns {Promise<void>}
      */
-    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.params.language !== this.props.params.language ||
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {
@@ -332,15 +333,17 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                 }
             }
         }
-        if(this.props.params.catalog === "ICD") {
-            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
-        } else if(this.props.params.catalog === "CHOP") {
-            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
-        } else if(this.props.params.catalog === "TARMED") {
-            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
-        } else {
-            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
-        }
+        return (
+            <div>
+                <Breadcrumb>
+                    {parentBreadCrumbs}
+                    <Breadcrumb.Item active>{this.state.code.replace("_", " ")}</Breadcrumb.Item>
+                </Breadcrumb>
+                <h3>{this.state.code.replace("_", " ")}</h3>
+                <p>{this.state.text}</p>
+                {attributes_html}
+            </div>
+        )
     }
 }
 

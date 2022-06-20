@@ -1,13 +1,19 @@
-import {Component} from "react";
-import IcdSortService from "../../Services/icd-sort.service";
+import React, {Component} from "react";
 import RouterService from "../../Services/router.service";
 import {Breadcrumb} from "react-bootstrap";
 
 /**
  * responsible fot he ICD component and the pathname
  */
-class ICD extends Component {
 
+interface Props {
+    attributes: any,
+    text: any,
+    title: any,
+    parents: string
+}
+
+class ICD extends Component<Props> {
     /**
      * navigate to the child component
      * @param code
@@ -27,24 +33,6 @@ class ICD extends Component {
             navigate({pathname: "/" + language + "/ICD/" + version + "/icd_groups/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
-    }
-
-    /**
-     * Render the CHOP component
-     * @returns {JSX.Element}
-     */
-    render() {
-        return (
-            <div>
-                <Breadcrumb>
-                    {this.props.parents}
-                    <Breadcrumb.Item active>{this.props.title.replace("_", " ")}</Breadcrumb.Item>
-                </Breadcrumb>
-                <h3>{this.props.title}</h3>
-                <p>{this.props.text}</p>
-                {this.props.attributes}
-            </div>
-        )
     }
 }
 export default ICD;
