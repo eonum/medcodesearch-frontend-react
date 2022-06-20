@@ -2,11 +2,17 @@ import React from 'react'
 import { Form } from 'react-bootstrap';
 import ConvertDateService from "../../Services/convert-date.service";
 import "./DatePicker.css"
+import {IDatePicker} from "../../interfaces";
+
+interface Props {
+    activeDate: string,
+    setDate: any
+}
 
 /**
  * Creates the Datepicker for MIGEL, AL and Med
  */
-class DatePicker extends React.Component{
+class DatePicker extends React.Component<Props, IDatePicker>{
 
     constructor(props) {
         super(props);

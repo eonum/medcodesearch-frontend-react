@@ -17,7 +17,7 @@ ReactDOM.render(
         <Router>
             <Routes>
                 <Route path="/" element={<App/>}>
-                    <Route exact path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
+                    <Route path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
                     <Route path="/" element={<Main/>}>
                         <Route path="/:language/:catalog/:resource_type/:code" element={<CodeBodyUnversionized/>}/>
                         <Route path="/:language/:catalog/:version/:resource_type/:code" element={<CodeBodyVersionized/>}/>
@@ -32,4 +32,4 @@ ReactDOM.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+reportWebVitals(console.log);

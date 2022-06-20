@@ -1,17 +1,29 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {Component} from "react";
+import React, {Component} from "react";
 import "./PopUp.css"
 import {Modal} from "react-bootstrap";
 import deJson from "../../assets/translations/de.json";
 import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
 import findJsonService from "../../Services/find-json.service";
+import {IPopUp} from "../../interfaces";
+
+interface Props {
+    language: string,
+    selectedLanguage: any,
+    selectedVersion: any,
+    selectedCategory: any,
+    show: boolean
+    updateValue: any,
+    version: string,
+    category: string
+}
 
 /**
  * If a wrong date is selected this popup should point this out
  */
-class PopUp extends Component{
-    constructor() {
-        super();
+class PopUp extends Component<Props, IPopUp>{
+    constructor(props) {
+        super(props);
         this.state = {
             show: false,
             translateJson: deJson,
@@ -44,7 +56,7 @@ class PopUp extends Component{
      * @param snapshot
      * @returns {Promise<void>}
      */
-    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.version !== this.props.version ||
             prevProps.category !== this.props.category) {
             this.setState({availableLanguages: ['de']})

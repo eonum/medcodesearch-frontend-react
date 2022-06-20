@@ -9,7 +9,7 @@ import * as Arrow from './assets/arrow-up.svg';
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
-import {Component} from "react";
+import React, {Component} from "react";
 import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/category-version.service";
@@ -26,6 +26,10 @@ interface Props {
  * @component
  */
 class App extends Component <Props, IApp>{
+    // Set readonly property on prevProps and prevState.
+    readonly prevProps: object;
+    readonly prevState: object;
+
     /**
      * gets the language, selected button, selected list, selected date and search results and bind them
      * @param props
@@ -48,8 +52,8 @@ class App extends Component <Props, IApp>{
         this.updateDate = this.updateDate.bind(this);
         this.updateList = this.updateList.bind(this);
         this.reRenderButton = this.reRenderButton.bind(this);
-        this.reNavigateToHome = this.reNavigateToHome.bind(this)
-        this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
+        this.reNavigateToHome = this.reNavigateToHome.bind(this);
+        this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this);
         this.showHide = this.showHide.bind(this);
         this.showSearchResults = this.showSearchResults.bind(this);
     }
@@ -121,7 +125,7 @@ class App extends Component <Props, IApp>{
      * @param prevState
      * @param snapshot
      */
-    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps, prevState, snapshot) {
         let navigate = this.props.navigation;
         if(prevState.language !== this.state.language) {
             let list = this.state.selectedList;
@@ -267,7 +271,7 @@ class App extends Component <Props, IApp>{
                     </button>
                 </p>
                 
-                <Collapse in={!this.state.collapseMenu} onClick={this.showHide}>
+                <Collapse in={!this.state.collapseMenu}>
                     <div>
                         {searchResults}
                     </div>
@@ -328,7 +332,6 @@ class App extends Component <Props, IApp>{
         let searchResults = this.searchResults()
 
           return (
-
               <div key={"app div 0"}>
                   <div key={"app div 1"} className="container">
                       <div key={"app header div 0"} className="row">

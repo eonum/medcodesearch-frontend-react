@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import './header.css'
+import {IHeader} from "../../interfaces";
+
+interface Props {
+    language: any,
+    activeLanguage: string
+}
 
 /**
  * is the header of the website, which is responsible for language changes
  * @component
  */
-class Header extends Component {
+class Header extends Component<Props, IHeader> {
 
     buttons = ['de', 'fr', 'it', 'en']
 

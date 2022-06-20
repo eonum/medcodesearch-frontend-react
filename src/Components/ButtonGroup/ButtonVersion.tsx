@@ -1,14 +1,31 @@
 import React from "react";
 import {Dropdown} from "react-bootstrap";
-import CategorySortService from "../../Services/category-sort.service";
 import PopUp from "../PopUp/PopUp";
 import {convertCategory, findCategory} from "../../Services/category-version.service";
+import {IButtonVersion} from "../../interfaces";
+
+interface Props {
+    key: string,
+    index: number,
+    activate: any,
+    category: string
+    initialVersions: string[],
+    currentVersions:  string[],
+    language: string,
+    version: string,
+    selectedLanguage: any,
+    updateVersion: any,
+    updateCategory: any,
+    selectedVersion: string,
+    selectedCategory: string,
+    chooseV: any
+}
 
 /**
  * is responsible for the buttons with versions
  * @component
  */
-class ButtonVersion extends React.Component{
+class ButtonVersion extends React.Component<Props, IButtonVersion>{
 
     /**
      *  sets the default state values and bind the popup
