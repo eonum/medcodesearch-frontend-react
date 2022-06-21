@@ -5,7 +5,7 @@ import AL from "./AL";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {fetchUnversionizedCodeInformations} from "../../Utils";
-import {ICode, IShortEntry} from "../../interfaces";
+import {ICode} from "../../interfaces";
 
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED)
