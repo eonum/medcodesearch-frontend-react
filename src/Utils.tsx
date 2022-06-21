@@ -67,3 +67,31 @@ export function fetchUnversionizedCodeInformations(language, resource_type, vers
             })
     }
 }
+
+export const initialCodeState = {
+    code: "",
+    med_interpret: null,
+    tech_interpret: null,
+    tp_al: null,
+    tp_tl: null,
+    groups: null,
+    blocks: null,
+    exclusions: null,
+    inclusions: null,
+    notes: null,
+    coding_hint: null,
+    synonyms: null,
+    most_relevant_drgs: null,
+    analogous_code_text: null,
+    descriptions: null,
+    successors: null,
+    predecessors: null,
+    supplement_codes: null,
+    usage: "",
+    text: "",
+    children: [],
+    parent: null,
+    parents: [],
+    siblings: [],
+    terminal: null
+}

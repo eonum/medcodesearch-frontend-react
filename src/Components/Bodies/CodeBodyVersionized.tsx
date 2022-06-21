@@ -6,11 +6,11 @@ import TARMED from "./TARMED";
 import DRG from "./DRG";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
-import {fetchVersionizedCodeInformations} from '../../Utils';
-import {ICode} from '../../interfaces';
+import {fetchVersionizedCodeInformations, initialCodeState} from '../../Utils';
+import {ICode, IParamTypesVersionized} from '../../interfaces';
 
 interface Props {
-    params: any,
+    params: IParamTypesVersionized,
     navigation: any,
     location: any,
     key: string
@@ -22,33 +22,7 @@ interface Props {
 class CodeBodyVersionized extends Component<Props, ICode> {
     constructor(props) {
         super(props);
-        this.state = {
-            code: "",
-            med_interpret: null,
-            tech_interpret: null,
-            tp_al: null,
-            tp_tl: null,
-            groups: null,
-            blocks: null,
-            exclusions: null,
-            inclusions: null,
-            notes: null,
-            coding_hint: null,
-            synonyms: null,
-            most_relevant_drgs: null,
-            analogous_code_text: null,
-            descriptions: null,
-            successors: null,
-            predecessors: null,
-            supplement_codes: null,
-            usage: "",
-            text: "",
-            children: [],
-            parent: null,
-            parents: [],
-            siblings: [],
-            terminal: null
-        }
+        this.state = initialCodeState
     }
 
     /**
@@ -72,33 +46,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         if(prevProps.params.language !== this.props.params.language ||
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {
-            this.setState({
-                code: "",
-                med_interpret: null,
-                tech_interpret: null,
-                tp_al: null,
-                tp_tl: null,
-                groups: null,
-                blocks: null,
-                exclusions: null,
-                inclusions: null,
-                notes: null,
-                coding_hint: null,
-                synonyms: null,
-                most_relevant_drgs: null,
-                analogous_code_text: null,
-                descriptions: null,
-                successors: null,
-                predecessors: null,
-                supplement_codes: null,
-                usage: "",
-                text: "",
-                children: [],
-                parent: null,
-                parents: [],
-                siblings: [],
-                terminal: null
-            })
+            this.setState(initialCodeState)
             await this.fetchInformations()
             await this.fetchSiblings(this.state.parent)
             await this.fetchGrandparents(this.state.parent)

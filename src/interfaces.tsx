@@ -133,3 +133,14 @@ export interface IHighlight {
     synonyms: string[],
     inclusions: string[]
 }
+
+export interface IParamTypes {
+    language: string,
+    catalog: string,
+    resource_type: string,
+    code: string
+}
+
+export interface IParamTypesVersionized extends IParamTypes {
+    version: string
+}
