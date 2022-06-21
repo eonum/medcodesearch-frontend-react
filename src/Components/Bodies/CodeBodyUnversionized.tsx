@@ -6,6 +6,10 @@ import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {fetchUnversionizedCodeInformations, initialCodeState} from "../../Utils";
 import {ICode, IParamTypes} from "../../interfaces";
+import DRG from "./DRG";
+import CHOP from "./CHOP";
+import ICD from "./ICD";
+import TARMED from "./TARMED";
 
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED)
@@ -108,11 +112,13 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      */
     goToChild(child) {
         let navigate = this.props.navigation
-        if(this.props.params.catalog === "MIGEL") {
-            MIGEL.goToChild(child.code, navigate, this.props.params.language)
-        } else if(this.props.params.catalog === "AL") {
-            AL.goToChild(child.code, navigate, this.props.params.language)
-        }
+        let componentByCatalog = {
+            'MIGEL': MIGEL,
+            'AL': AL
+        };
+        let catalog = this.props.params.catalog;
+        let language = this.props.params.language
+        if(!(catalog === 'DRUG')) { componentByCatalog[catalog].goToChild(child.code, navigate, language )}
     }
 
     /**
