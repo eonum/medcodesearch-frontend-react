@@ -102,16 +102,19 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param child
      */
     goToChild(child) {
-        let navigate = this.props.navigation
-        if(this.props.params.catalog === "ICD") {
-            ICD.goToChild(child.code, navigate, this.props.params.version, this.props.params.language)
-        } else if(this.props.params.catalog === "CHOP") {
-            CHOP.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
-        } else if(this.props.params.catalog === "TARMED") {
-            TARMED.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
-        } else {
-            DRG.goToChild(child, navigate, this.props.params.version, this.props.params.language)
-        }
+        let navigate = this.props.navigation;
+        let catalog = this.props.params.catalog;
+        let url_code = child.code.replace(" ", "_");
+        let url = catalog === 'DRG' ? child.url : null;
+        let version = this.props.params.version;
+        let language = this.props.params.language;
+        let componentByCatalog = {
+            'DRG': DRG,
+            'CHOP': CHOP,
+            'ICD': ICD,
+            'TARMED': TARMED
+        };
+        componentByCatalog[catalog].goToChild(url_code, navigate, version, language, url)
     }
 
     /**

@@ -19,8 +19,9 @@ class ICD extends Component<Props> {
      * @param navigate
      * @param version
      * @param language
+     * @param url
      */
-    static goToChild(code, navigate, version, language) {
+    static goToChild(code, navigate, version, language, url = null) {
         if(code.match(/^ICD10-GM-[0-9][0-9][0-9][0-9]|[XVI]+$/)) {
             navigate({pathname: "/" + language + "/ICD/" + version + "/icd_chapters/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
