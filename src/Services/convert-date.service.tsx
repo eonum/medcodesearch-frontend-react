@@ -12,8 +12,6 @@ function ConvertDateService(value) {
             let day = value.slice(8,12)
             value = day + '.' + month + '.' + year;
         } else {
-            this.getMonth()
-
             let day = value.slice(8, 10);
             let month = getMonth(value.slice(4, 7).toLowerCase());
             let year = value.slice(11, 15);
