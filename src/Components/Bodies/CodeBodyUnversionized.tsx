@@ -73,7 +73,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         let parents = []
         while(parent) {
             parents = [...parents, parent]
-            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+            fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
                     parent = json["parent"]
@@ -89,7 +89,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      */
     async fetchSiblings(parent) {
         if(this.state.children == null && parent) {
-            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+            fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
                     for(let i = 0; i < json.children.length; i++) {
@@ -126,28 +126,20 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      */
     extractLabel(code){
         let language = this.props.params.language;
-        if(code==="MIGEL"){
-            switch (language) {
-                case "fr":
-                    return "LiMA"
-                case "it":
-                    return "EMAp"
-                default: return "MiGeL";
-            }
+        let default_labels = {"MIGEL": "MiGeL", "AL": "AL", "DRUG": "Med"};
+        let default_value = code in ["MIGEL", "AL", "DRUG"] ? default_labels[code] : code;
+        switch (true) {
+            case ((code === "MIGEL") && (language == "fr")):
+                return "LiMA"
+            case ((code === "MIGEL") && (language == "it")):
+                return "EMAp"
+            case ((code === "AL") && (language == "fr")):
+                return "LA"
+            case ((code === "AL") && (language == "it")):
+                return "EA"
+            default:
+                return default_value
         }
-        else if(code==="AL"){
-            switch (language) {
-                case "fr":
-                    return "LA"
-                case "it":
-                    return "EA"
-                default: return code;
-            }
-        }
-        else if(code==="DRUG") {
-            return "Med";
-        }
-        else return code;
     }
 
     /**
