@@ -24,7 +24,7 @@ export async function fetchVersionizedCodeInformations(language, resource_type, 
                 for (let attribute in attributes) {
                     newAttributes[attribute] = json[attribute]
                 }
-                if (catalog == "ICD") {
+                if (catalog === "ICD") {
                     if (version === code) {
                         newAttributes["children"] = IcdSortService(json["children"])
                     }

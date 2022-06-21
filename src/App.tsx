@@ -26,10 +26,6 @@ interface Props {
  * @component
  */
 class App extends Component <Props, IApp>{
-    // Set readonly property on prevProps and prevState.
-    readonly prevProps: object;
-    readonly prevState: object;
-
     /**
      * gets the language, selected button, selected list, selected date and search results and bind them
      * @param props

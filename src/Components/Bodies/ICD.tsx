@@ -1,6 +1,5 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import RouterService from "../../Services/router.service";
-import {Breadcrumb} from "react-bootstrap";
 
 /**
  * responsible fot he ICD component and the pathname
