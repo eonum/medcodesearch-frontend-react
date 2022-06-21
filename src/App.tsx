@@ -6,7 +6,7 @@ import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import { ReactComponent as Arrow } from './assets/arrow-up.svg';
-import {Outlet, useNavigate, useParams} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
 import React, {Component} from "react";
@@ -17,7 +17,6 @@ import findJsonService from "./Services/find-json.service";
 import {IApp} from "./interfaces";
 
 interface Props {
-    params: any,
     navigation: any,
 }
 
@@ -121,7 +120,7 @@ class App extends Component <Props, IApp>{
      * @param prevState
      * @param snapshot
      */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
+    async componentDidUpdate(prevProps: Props, prevState: IApp, snapshot) {
         let navigate = this.props.navigation;
         if(prevState.language !== this.state.language) {
             let list = this.state.selectedList;
@@ -395,5 +394,5 @@ class App extends Component <Props, IApp>{
 
 export default function(props) {
     const navigation = useNavigate();
-    return <App {...props} params={useParams} navigation={navigation}/>;
+    return <App {...props} navigation={navigation}/>;
 }
