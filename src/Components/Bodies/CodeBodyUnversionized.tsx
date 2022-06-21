@@ -1,15 +1,10 @@
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
-import MIGEL from "./MIGEL";
-import AL from "./AL";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {fetchUnversionizedCodeInformations, initialCodeState} from "../../Utils";
 import {ICode, IParamTypes} from "../../interfaces";
-import DRG from "./DRG";
-import CHOP from "./CHOP";
-import ICD from "./ICD";
-import TARMED from "./TARMED";
+import RouterService from "../../Services/router.service";
 
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED)
@@ -112,13 +107,16 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      */
     goToChild(child) {
         let navigate = this.props.navigation
-        let componentByCatalog = {
-            'MIGEL': MIGEL,
-            'AL': AL
+        let pathPartialByCatalog = {
+            'MIGEL': "/MIGEL/migels/",
+            'AL': "/AL/als/"
         };
         let catalog = this.props.params.catalog;
         let language = this.props.params.language
-        if(!(catalog === 'DRUG')) { componentByCatalog[catalog].goToChild(child.code, navigate, language )}
+        if(!(catalog === 'DRUG')) {
+            navigate({pathname: "/" + language + pathPartialByCatalog[catalog] + child.code,
+                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
+        }
     }
 
     /**
