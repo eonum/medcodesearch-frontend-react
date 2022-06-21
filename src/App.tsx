@@ -5,7 +5,7 @@ import Header from './Components/Header/header';
 import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
-import Arrow from './assets/arrow-up.svg';
+import { ReactComponent as Arrow } from './assets/arrow-up.svg';
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
