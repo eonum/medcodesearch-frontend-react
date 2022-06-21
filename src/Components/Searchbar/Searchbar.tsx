@@ -95,7 +95,7 @@ class Searchbar extends Component<Props, ISearchbar> {
      * @param prevState
      * @param snapshot
      */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
+    async componentDidUpdate(prevProps: Props, prevState: ISearchbar, snapshot) {
         if(this.state.searchTerm !== RouterService.getQueryVariable('query')) {
             await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
         }

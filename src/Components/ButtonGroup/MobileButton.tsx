@@ -71,7 +71,7 @@ class MobileButton extends Component<Props, IMobileButton>{
      * @param snapshot
      * @returns {Promise<void>}
      */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
+    async componentDidUpdate(prevProps: Props, prevState: IMobileButton, snapshot) {
         if(prevProps.language !== this.props.language || prevProps.category !== this.props.category
             || this.props.reRender) {
             await this.fetchInitialVersions()

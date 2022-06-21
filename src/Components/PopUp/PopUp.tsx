@@ -56,7 +56,7 @@ class PopUp extends Component<Props, IPopUp>{
      * @param snapshot
      * @returns {Promise<void>}
      */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
+    async componentDidUpdate(prevProps: Props, prevState: IPopUp, snapshot) {
         if(prevProps.version !== this.props.version ||
             prevProps.category !== this.props.category) {
             this.setState({availableLanguages: ['de']})

@@ -42,7 +42,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param snapshot
      * @returns {Promise<void>}
      */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
+    async componentDidUpdate(prevProps: Props, prevState: ICode, snapshot) {
         if(prevProps.params.language !== this.props.params.language ||
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {

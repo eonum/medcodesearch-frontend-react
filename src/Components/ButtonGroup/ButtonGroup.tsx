@@ -151,7 +151,7 @@ class ButtonGroup extends Component<Props, IButtonGroup>{
      * @param prevState
      * @param snapshot
      */
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Props, prevState: IButtonGroup, snapshot) {
         if(prevProps.version !== this.props.version) {
             this.getVersionCategory()
         }
