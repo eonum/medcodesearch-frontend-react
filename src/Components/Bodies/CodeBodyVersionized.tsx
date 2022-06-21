@@ -221,7 +221,6 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @returns {JSX.Element}
      */
     render() {
-        console.log(this.props.params)
         let translateJson = findJsonService(this.props.params.language)
         let attributes_html = []
         let parentBreadCrumbs = []
