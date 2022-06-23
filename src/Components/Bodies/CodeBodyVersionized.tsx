@@ -6,14 +6,19 @@ import TARMED from "./TARMED";
 import DRG from "./DRG";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
-import {fetchVersionizedCodeInformations, initialCodeState} from '../../Utils';
+import {
+    collectBreadcrumbs,
+    fetchGrandparents,
+    fetchSiblings,
+    fetchVersionizedCodeInformations,
+    initialCodeState
+} from '../../Utils';
 import {ICode, IParamTypesVersionized} from '../../interfaces';
 
 interface Props {
     params: IParamTypesVersionized,
     navigation: any,
     location: any,
-    key: string
 }
 
 /**
@@ -31,8 +36,8 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      */
     async componentDidMount() {
         await this.fetchInformations()
-        await this.fetchSiblings(this.state.parent)
-        await this.fetchGrandparents(this.state.parent)
+        await this.fetchSiblings()
+        await this.fetchGrandparents();
     }
 
     /**
@@ -48,8 +53,8 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             prevProps.params.code !== this.props.params.code) {
             this.setState(initialCodeState)
             await this.fetchInformations()
-            await this.fetchSiblings(this.state.parent)
-            await this.fetchGrandparents(this.state.parent)
+            await this.fetchSiblings()
+            await this.fetchGrandparents();
         }
     }
 
@@ -58,10 +63,34 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @returns {Promise<void>}
      */
     async fetchInformations() {
-        let detailedCode;
         const {language, resource_type, version, code, catalog} = this.props.params;
-        detailedCode = await fetchVersionizedCodeInformations(language, resource_type, version, code, catalog, this.state);
-        this.setState(detailedCode)
+        const codeAttributes = await fetchVersionizedCodeInformations(language, resource_type, version, code, catalog,
+            this.state.attributes)
+        this.setState({attributes: codeAttributes})
+    }
+
+    /**
+     * Fetch siblings of the code.
+     * @param parent
+     * @returns {Promise<void>}
+     */
+    async fetchSiblings() {
+        const children = this.state.attributes.children;
+        const parent = this.state.attributes.parent;
+        const siblings = this.state.siblings;
+        const code = this.props.params.code;
+        let fetchedSiblings = await fetchSiblings(children, parent, siblings, code)
+        this.setState({siblings: fetchedSiblings})
+    }
+
+    /**
+     * Fetch grandparents of the code.
+     * @param parent
+     * @returns {Promise<void>}
+     */
+    async fetchGrandparents() {
+        let fetchedGrandParents = await fetchGrandparents(this.state.attributes.parent)
+        this.setState({parents: fetchedGrandParents})
     }
 
     /**
@@ -127,67 +156,27 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 
     /**
-     * fetch the sibling of the component
-     * @param parent
-     * @returns {Promise<void>}
-     */
-    async fetchSiblings(parent) {
-        if(this.state.children == null) {
-            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    for(let i = 0; i < json.children.length; i++) {
-                        if(json.children[i].code !== this.props.params.code) {
-                            if(!this.state.siblings) {
-                                this.setState({siblings: [json.children[i]]})
-                            } else {
-                                this.setState({siblings: [...this.state.siblings, json.children[i]]})
-                            }
-                        }
-                    }
-                })
-        }
-    }
-
-    /**
-     * fetch the grandparent of the component
-     * @param parent
-     * @returns {Promise<void>}
-     */
-    async fetchGrandparents(parent) {
-        let parents = []
-        while(parent) {
-            parents = [...parents, parent]
-            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    parent = json["parent"]
-                })
-        }
-        this.setState({parents: parents})
-    }
-
-    /**
      * Render the body component
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = findJsonService(this.props.params.language)
-        let attributes_html = []
-        let parentBreadCrumbs = []
+        let translateJson = findJsonService(this.props.params.language);
+        let attributes_html = [];
+        let parentBreadCrumbs = [];
+        let code_attributes = this.state.attributes;
 
         var mappingFields = ['predecessors', 'successors'];
         // Define div for predecessor code info
         for(var j = 0; j < mappingFields.length; j++) {
             var field = mappingFields[j];
-            if (this.state[field] != null) {
+            if (code_attributes[field] != null) {
                 // is this a non-trivial mapping?
-                if(this.state[field].length > 1 || this.state[field].length == 1 && (this.state[field][0]['code'] != this.state['code'] || this.state[field][0]['text'] != this.state['text'])) {
+                if(code_attributes[field].length > 1 || code_attributes[field].length == 1 && (code_attributes[field][0]['code'] != code_attributes['code'] || code_attributes[field][0]['text'] != code_attributes['text'])) {
                     attributes_html.push(
                         <div key={"mapping_pre_succ" + j}>
                             <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[field].map((child,i) => (
+                                {code_attributes[field].map((child,i) => (
                                     <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
                                     ))}
                             </ul>
@@ -196,87 +185,84 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             }
         }
 
+        // Collect parent breadcrumbs.
         if(this.state.parents && this.state.parents.length > 0){
-            for(let i=this.state.parents.length-1; i>=0; i--){
-                parentBreadCrumbs.push(<Breadcrumb.Item
-                    key={i}
-                    onClick={() => this.goToChild(this.state.parents[i])}
-                    className="breadLink"
-                >{this.state.parents[i].code}</Breadcrumb.Item>)
-            }
+            parentBreadCrumbs = collectBreadcrumbs(this.state.parents);
         }
-        for(let attribute in this.state) {
-            if(this.state[attribute] !== null && this.state[attribute] !== undefined) {
+
+        // Collect attributes as html elements.
+        for(let attribute in code_attributes) {
+            if(code_attributes[attribute] !== null && code_attributes[attribute] !== undefined) {
                 if(attribute === "med_interpret" || attribute === "tech_interpret") {
                     attributes_html.push(
-                        <div key={"med/tech interpret" + this.state[attribute].length * 41}>
-                            <p>{this.state[attribute]}</p>
+                        <div key={"med/tech interpret" + code_attributes[attribute].length * 41}>
+                            <p>{code_attributes[attribute]}</p>
                         </div>
                     )
                 } else if(attribute === "tp_al" || attribute === "tp_tl") {
-                    if(this.state[attribute] !== 0) {
+                    if(code_attributes[attribute] !== 0) {
                         attributes_html.push(
-                            <div key={"tp_al/tl" + this.state[attribute] * 37}>
-                                <p>{translateJson["LBL_" + attribute.toUpperCase()]}: {this.state[attribute]}</p>
+                            <div key={"tp_al/tl" + code_attributes[attribute] * 37}>
+                                <p>{translateJson["LBL_" + attribute.toUpperCase()]}: {code_attributes[attribute]}</p>
                             </div>
                         )
                     }
                 }
                 else if(attribute === "note" || attribute === "coding_hint" || attribute === "usage") {
                     attributes_html.push(
-                        <div key={"note coding_hint usage" + this.state[attribute].length * 31}>
+                        <div key={"note coding_hint usage" + code_attributes[attribute].length * 31}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <p>{this.state[attribute]}</p>
+                            <p>{code_attributes[attribute]}</p>
                         </div>
                     )
-                } else if(this.state[attribute].length > 0 && (attribute === "children" || attribute === "siblings")) {
+                } else if(code_attributes[attribute].length > 0 && (attribute === "children" || attribute === "siblings")) {
                     attributes_html.push(
-                        <div key={"children_siblings" + this.state[attribute].length * 29}>
+                        <div key={"children_siblings" + code_attributes[attribute].length * 29}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[attribute].map((child, i) => (
+                                {code_attributes[attribute].map((child, i) => (
                                     <li key={child + " number " + (i * 23)}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
                     )
-                } else if(this.state[attribute].length > 0 && (attribute === "groups" || attribute === "blocks")) {
+                } else if(code_attributes[attribute].length > 0 && (attribute === "groups" || attribute === "blocks")) {
                     attributes_html.push(
-                        <div key={"groups " + this.state[attribute].length * 19}>
+                        <div key={"groups " + code_attributes[attribute].length * 19}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[attribute].map((child, i) => (
+                                {code_attributes[attribute].map((child, i) => (
                                     <li key={child.code + "childcode " + (i * 17)}>{child.code}: {child.text}</li>
                                 ))}
                             </ul>
                         </div>
                     )
                 }
-                else if(this.state[attribute].length > 0 && (attribute === "inclusions" || attribute === "synonyms" || attribute === "most_relevant_drgs" || attribute === "descriptions" || attribute === "notes")) {
+                else if(code_attributes[attribute].length > 0 && (attribute === "inclusions" || attribute === "synonyms" || attribute === "most_relevant_drgs" || attribute === "descriptions" || attribute === "notes")) {
                     attributes_html.push(
-                        <div key={"incl, syn, rel_drgs, descr " + this.state[attribute].length * 13}>
+                        <div key={"incl, syn, rel_drgs, descr " + code_attributes[attribute].length * 13}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[attribute].map((element, i) => (
+                                {code_attributes[attribute].map((element, i) => (
                                     <li key={"element nr " + i}>{element}</li>
                                 ))}
                             </ul>
                         </div>
                     )
-                } else if(this.state[attribute].length > 0 && (attribute === "exclusions" || attribute === "supplement_codes")) {
+                } else if(code_attributes[attribute].length > 0 && (attribute === "exclusions" || attribute === "supplement_codes")) {
                     attributes_html.push(
-                        <div key={"exclusions supp_codes " + this.state[attribute].length * 11}>
+                        <div key={"exclusions supp_codes " + code_attributes[attribute].length * 11}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[attribute].map((exclusion, i) => (
+                                {code_attributes[attribute].map((exclusion, i) => (
                                     this.lookingForLink(exclusion, i)
                                 ))}
                             </ul>
                         </div>
                     )
-                } else if(attribute === "predecessors" && this.state[attribute].length === 0 && this.state.children == null) {
+                } else if(attribute === "predecessors" && code_attributes[attribute].length === 0 && code_attributes.children == null) {
                     attributes_html.push(
-                        <div key={"predec " + this.state[attribute].length * 7}>
+                        <div key={"predec " + code_attributes[attribute].length * 7}>
                             <h5>{translateJson["LBL_NEW_CODE"]}</h5>
                         </div>
                     )
@@ -287,10 +273,10 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             <div>
                 <Breadcrumb>
                     {parentBreadCrumbs}
-                    <Breadcrumb.Item active>{this.state.code.replace("_", " ")}</Breadcrumb.Item>
+                    <Breadcrumb.Item active>{code_attributes.code.replace("_", " ")}</Breadcrumb.Item>
                 </Breadcrumb>
-                <h3>{this.state.code.replace("_", " ")}</h3>
-                <p>{this.state.text}</p>
+                <h3>{code_attributes.code.replace("_", " ")}</h3>
+                <p>{code_attributes.text}</p>
                 {attributes_html}
             </div>
         )
@@ -300,5 +286,5 @@ class CodeBodyVersionized extends Component<Props, ICode> {
 export default function(props) {
     const NAVIGATION = useNavigate();
     const LOCATION = useLocation();
-    return <CodeBodyVersionized {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()} key={"bodyI"}/>
+    return <CodeBodyVersionized {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()}/>
 }

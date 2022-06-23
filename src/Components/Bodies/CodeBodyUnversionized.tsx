@@ -2,7 +2,14 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
-import {fetchUnversionizedCodeInformations, initialCodeState} from "../../Utils";
+import {
+    collectBreadcrumbs,
+    extractLabel,
+    fetchGrandparents,
+    fetchSiblings,
+    fetchUnversionizedCodeInformations,
+    initialCodeState
+} from "../../Utils";
 import {ICode, IParamTypes} from "../../interfaces";
 import RouterService from "../../Services/router.service";
 
@@ -28,8 +35,8 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      */
     async componentDidMount() {
         await this.fetchInformations()
-        await this.fetchSiblings(this.state.parent)
-        await this.fetchGrandparents(this.state.parent)
+        await this.fetchSiblings()
+        await this.fetchGrandparents()
     }
 
     /**
@@ -45,8 +52,8 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                 prevProps.params.catalog !== this.props.params.catalog) {
                 this.setState(initialCodeState)
                 await this.fetchInformations()
-                await this.fetchSiblings(this.state.parent)
-                await this.fetchGrandparents(this.state.parent)
+                await this.fetchSiblings()
+                await this.fetchGrandparents()
             }
     }
 
@@ -55,50 +62,33 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @returns {Promise<void>}
      */
     async fetchInformations() {
-        const {language, code, catalog} = this.props.params;
-        let detailedCode, versions;
-        versions = {"MIGEL": "migels", "AL": "laboratory_analyses", "DRUG": "drugs"};
-        detailedCode = await fetchUnversionizedCodeInformations(language, catalog, versions[catalog], code);
-        if (detailedCode !== null) {
-            this.setState(detailedCode)
-        }
+        const {language, resource_type, code, catalog} = this.props.params;
+        const codeAttributes = await fetchUnversionizedCodeInformations(language, resource_type, code, catalog)
+        this.setState({attributes: codeAttributes})
     }
 
     /**
-     * fetch the grandparent of the component
+     * Fetch siblings of the code.
      * @param parent
      * @returns {Promise<void>}
      */
-    async fetchGrandparents(parent) {
-        let parents = []
-        while(parent) {
-            parents = [...parents, parent]
-            fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    parent = json["parent"]
-                })
-        }
-        this.setState({parents: parents})
+    async fetchSiblings() {
+        const children = this.state.attributes.children;
+        const parent = this.state.attributes.parent;
+        const siblings = this.state.siblings;
+        const code = this.props.params.code;
+        let fetchedSiblings = await fetchSiblings(children, parent, siblings, code)
+        this.setState({siblings: fetchedSiblings})
     }
 
     /**
-     * fetch the sibling of the component
+     * Fetch grandparents of the code.
      * @param parent
      * @returns {Promise<void>}
      */
-    async fetchSiblings(parent) {
-        if(this.state.children == null && parent) {
-            fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    for(let i = 0; i < json.children.length; i++) {
-                        if(json.children[i].code !== this.props.params.code) {
-                            this.setState({siblings: [...this.state.siblings, json.children[i]]})
-                        }
-                    }
-                })
-        }
+    async fetchGrandparents() {
+        let fetchedGrandParents = await fetchGrandparents(this.state.attributes.parent)
+        this.setState({parents: fetchedGrandParents})
     }
 
     /**
@@ -119,28 +109,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         }
     }
 
-    /**
-     * Returns code in the correct language
-     * @param code
-     * @returns {string|*}
-     */
-    extractLabel(code){
-        let language = this.props.params.language;
-        let default_labels = {"MIGEL": "MiGeL", "AL": "AL", "DRUG": "Med"};
-        let default_value = code in ["MIGEL", "AL", "DRUG"] ? default_labels[code] : code;
-        switch (true) {
-            case ((code === "MIGEL") && (language == "fr")):
-                return "LiMA"
-            case ((code === "MIGEL") && (language == "it")):
-                return "EMAp"
-            case ((code === "AL") && (language == "fr")):
-                return "LA"
-            case ((code === "AL") && (language == "it")):
-                return "EA"
-            default:
-                return default_value
-        }
-    }
+
 
     /**
      * Render the CodeBodyUnversionized component
@@ -150,43 +119,40 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         let translateJson = findJsonService(this.props.params.language)
         let attributes_html = []
         let parentBreadCrumbs = []
-        if(this.state.parents && this.state.parents.length > 0){
-            for(let i=this.state.parents.length-1; i>=0; i--){
-                parentBreadCrumbs.push(<Breadcrumb.Item
-                    key={i}
-                    onClick={() => this.goToChild(this.state.parents[i])}
-                    className="breadLink"
-                >{this.extractLabel(this.state.parents[i].code)}</Breadcrumb.Item>)
-            }
-        }
         let i = 1;
-        for(let attribute in this.state) {
-            if(this.state[attribute] !== null && this.state[attribute] !== undefined) {
-                if(this.state[attribute].length > 0 && attribute === "limitation") {
+        let code_attributes = this.state.attributes;
+
+        // Collect parent breadcrumbs.
+        if(this.state.parents && this.state.parents.length > 0){
+            parentBreadCrumbs = collectBreadcrumbs(this.state.parents);
+        }
+
+        // Collect attributes as html elements.
+        for(let attribute in this.state.attributes) {
+            if(code_attributes[attribute] !== null && code_attributes[attribute] !== undefined) {
+                if(code_attributes[attribute].length > 0 && attribute === "limitation") {
                     attributes_html.push (
                         <div key={i}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <p dangerouslySetInnerHTML={{__html: this.state[attribute]}}/>
+                            <p dangerouslySetInnerHTML={{__html: code_attributes[attribute]}}/>
                         </div>
                     )
-                } else if(this.state[attribute].length > 0 && attribute !== "children" && attribute !== "text" && attribute !== "rev" &&
-                    attribute !== "code" && attribute !== "version" && attribute !== "valid_to" && attribute !== "valid_from" && attribute !== "auth_holder_nr"
-                    && attribute !== "atc_code" && attribute !== "pharma_form" && attribute !== "package_code" && attribute!=="auth_number") {
+                } else if(code_attributes[attribute].length > 0 && !["children", "text", "rev", "code", "version", "valid_to", "valid_from", "auth_holder_nr", "atc_code", "pharma_form", "package_code", "auth_number"].includes(attribute)) {
                     attributes_html.push(
                         <div key={i}>
-                            <p><span><strong>{translateJson["LBL_" + attribute.toUpperCase()]}: </strong> </span><span dangerouslySetInnerHTML={{__html: this.state[attribute]}}/></p>
+                            <p><span><strong>{translateJson["LBL_" + attribute.toUpperCase()]}: </strong> </span><span dangerouslySetInnerHTML={{__html: code_attributes[attribute]}}/></p>
                         </div>
                     )
                 }
             }
             i += 1
         }
-        if(this.state["children"] && this.state["children"].length > 0) {
+        if(code_attributes["children"] && code_attributes["children"].length > 0) {
             attributes_html.push(
                 <div key={i}>
                     <h5>{translateJson["LBL_CHILDREN"]}</h5>
                     <ul>
-                        {this.state["children"].map((child, i) => (
+                        {code_attributes["children"].map((child, i) => (
                             <li key={i}><a key={"link to child: " + i} className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
                                 <span key={"child text"} dangerouslySetInnerHTML={{__html: child.text}}/></li>
                         ))}
@@ -194,7 +160,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                 </div>
             )
         }
-        if(this.state.siblings.length > 0 && !this.state["children"]) {
+        if(this.state.siblings.length > 0 && !code_attributes["children"]) {
             attributes_html.push(
                 <div key={4}>
                     <h5>{translateJson["LBL_SIBLINGS"]}</h5>
@@ -211,10 +177,11 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
             <div>
                 <Breadcrumb>
                     {parentBreadCrumbs}
-                    <BreadcrumbItem active>{this.extractLabel(this.state["code"])}</BreadcrumbItem>
+                    <BreadcrumbItem active>{extractLabel(code_attributes["code"], this.props.params.language)}
+                    </BreadcrumbItem>
                 </Breadcrumb>
-                <h3>{this.extractLabel(this.state["code"])}</h3>
-                <p dangerouslySetInnerHTML={{__html: this.state["text"]}} />
+                <h3>{extractLabel(code_attributes["code"], this.props.params.language)}</h3>
+                <p dangerouslySetInnerHTML={{__html: code_attributes["text"]}} />
                 {attributes_html}
             </div>
         )
