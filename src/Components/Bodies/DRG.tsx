@@ -1,11 +1,12 @@
 import React, {Component} from "react";
 import RouterService from "../../Services/router.service";
 import {Breadcrumb} from "react-bootstrap";
+import {IVersionizedCode} from "../../interfaces";
 
 /**
  * responsible for the AL Component and the pathname
  */
-class DRG extends Component {
+class DRG extends Component<IVersionizedCode> {
 
     /**
      * etch the DRG in the correct language and version

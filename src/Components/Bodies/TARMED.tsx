@@ -2,11 +2,12 @@ import React, {Component} from "react";
 import RouterService from "../../Services/router.service";
 import CodeSortService from "../../Services/code-sort.service";
 import {Breadcrumb} from "react-bootstrap";
+import {IVersionizedCode} from "../../interfaces";
 
 /**
  * responsible for the TARMED component and the pathname
  */
-class TARMED extends Component {
+class TARMED extends Component<IVersionizedCode> {
 
     /**
      * Fetch the TARMED in the correct language and version

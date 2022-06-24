@@ -2,11 +2,13 @@ import React, {Component} from "react";
 import RouterService from "../../Services/router.service";
 import CodeSortService from "../../Services/code-sort.service";
 import {Breadcrumb} from "react-bootstrap";
+import {IVersionizedCode} from "../../interfaces";
+
 
 /**
  * responsible for the AL component and the pathname
  */
-class CHOP extends Component {
+class CHOP extends Component<IVersionizedCode> {
 
     /**
      * Fetch the CHOP in the correct language and version

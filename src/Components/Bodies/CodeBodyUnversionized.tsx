@@ -4,17 +4,47 @@ import MIGEL from "./MIGEL";
 import AL from "./AL";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
+import {ICode, IParamTypes} from "../../interfaces";
+
+interface Props {
+    params: IParamTypes,
+    navigation: any,
+    location: any,
+}
 
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED)
  */
-class CodeBodyUnversionized extends Component {
+class CodeBodyUnversionized extends Component<Props, ICode> {
     constructor(props) {
         super(props);
         this.state = {
-            attributes: {},
+            code: "",
+            med_interpret: null,
+            tech_interpret: null,
+            tp_al: null,
+            tp_tl: null,
+            groups: null,
+            blocks: null,
+            exclusions: null,
+            inclusions: null,
+            notes: null,
+            hints: null,
+            coding_hint: null,
+            synonyms: null,
+            most_relevant_drgs: null,
+            analogous_code_text: null,
+            descriptions: null,
+            successors: null,
+            predecessors: null,
+            supplement_codes: null,
+            usage: "",
+            text: "",
+            children: [],
+            parent: null,
+            parents: [],
             siblings: [],
-            parents: []
+            terminal: null
         }
     }
 
@@ -24,8 +54,8 @@ class CodeBodyUnversionized extends Component {
      */
     async componentDidMount() {
         await this.fetchInformations()
-        await this.fetchSiblings(this.state.attributes["parent"])
-        await this.fetchGrandparents(this.state.attributes["parent"])
+        await this.fetchSiblings(this.state["parent"])
+        await this.fetchGrandparents(this.state["parent"])
     }
 
     /**
@@ -35,17 +65,41 @@ class CodeBodyUnversionized extends Component {
      * @param snapshot
      * @returns {Promise<void>}
      */
-    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps, prevState, snapshot) {
             if (prevProps.params.language !== this.props.params.language ||
                 prevProps.params.code !== this.props.params.code ||
                 prevProps.params.catalog !== this.props.params.catalog) {
                 this.setState({
-                    attributes: {},
-                    siblings: []
+                    code: "",
+                    med_interpret: null,
+                    tech_interpret: null,
+                    tp_al: null,
+                    tp_tl: null,
+                    groups: null,
+                    blocks: null,
+                    exclusions: null,
+                    inclusions: null,
+                    notes: null,
+                    hints: null,
+                    coding_hint: null,
+                    synonyms: null,
+                    most_relevant_drgs: null,
+                    analogous_code_text: null,
+                    descriptions: null,
+                    successors: null,
+                    predecessors: null,
+                    supplement_codes: null,
+                    usage: "",
+                    text: "",
+                    children: [],
+                    parent: null,
+                    parents: [],
+                    siblings: [],
+                    terminal: null
                 })
                 await this.fetchInformations()
-                await this.fetchSiblings(this.state.attributes["parent"])
-                await this.fetchGrandparents(this.state.attributes["parent"])
+                await this.fetchSiblings(this.state["parent"])
+                await this.fetchGrandparents(this.state["parent"])
             }
     }
 
@@ -91,7 +145,7 @@ class CodeBodyUnversionized extends Component {
         }
         newAttributes = await this.fetchHelper(this.props.params.language, this.props.params.catalog, versions, this.props.params.code)
         if (newAttributes !== null) {
-            this.setState({attributes: newAttributes})
+            this.setState(newAttributes)
         }
     }
 
@@ -194,33 +248,33 @@ class CodeBodyUnversionized extends Component {
             }
         }
         let i = 1;
-        for(let attribute in this.state.attributes) {
-            if(this.state.attributes[attribute] !== null && this.state.attributes[attribute] !== undefined) {
-                if(this.state.attributes[attribute].length > 0 && attribute === "limitation") {
+        for(let attribute in this.state) {
+            if(this.state[attribute] !== null && this.state[attribute] !== undefined) {
+                if(this.state[attribute].length > 0 && attribute === "limitation") {
                     attributes_html.push (
                         <div key={i}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
+                            <p dangerouslySetInnerHTML={{__html: this.state[attribute]}}/>
                         </div>
                     )
-                } else if(this.state.attributes[attribute].length > 0 && attribute !== "children" && attribute !== "text" && attribute !== "rev" &&
+                } else if(this.state[attribute].length > 0 && attribute !== "children" && attribute !== "text" && attribute !== "rev" &&
                     attribute !== "code" && attribute !== "version" && attribute !== "valid_to" && attribute !== "valid_from" && attribute !== "auth_holder_nr"
                     && attribute !== "atc_code" && attribute !== "pharma_form" && attribute !== "package_code" && attribute!=="auth_number") {
                     attributes_html.push(
                         <div key={i}>
-                            <p><span><strong>{translateJson["LBL_" + attribute.toUpperCase()]}: </strong> </span><span dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/></p>
+                            <p><span><strong>{translateJson["LBL_" + attribute.toUpperCase()]}: </strong> </span><span dangerouslySetInnerHTML={{__html: this.state[attribute]}}/></p>
                         </div>
                     )
                 }
             }
             i += 1
         }
-        if(this.state.attributes["children"] && this.state.attributes["children"].length > 0) {
+        if(this.state["children"] && this.state["children"].length > 0) {
             attributes_html.push(
                 <div key={i}>
                     <h5>{translateJson["LBL_CHILDREN"]}</h5>
                     <ul>
-                        {this.state.attributes["children"].map((child, i) => (
+                        {this.state["children"].map((child, i) => (
                             <li key={i}><a key={"link to child: " + i} className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
                                 <span key={"child text"} dangerouslySetInnerHTML={{__html: child.text}}/></li>
                         ))}
@@ -228,7 +282,7 @@ class CodeBodyUnversionized extends Component {
                 </div>
             )
         }
-        if(this.state.siblings.length > 0 && !this.state.attributes["children"]) {
+        if(this.state.siblings.length > 0 && !this.state["children"]) {
             attributes_html.push(
                 <div key={4}>
                     <h5>{translateJson["LBL_SIBLINGS"]}</h5>
@@ -245,10 +299,10 @@ class CodeBodyUnversionized extends Component {
             <div>
                 <Breadcrumb>
                     {parentBreadCrumbs}
-                    <BreadcrumbItem active>{this.extractLabel(this.state.attributes["code"])}</BreadcrumbItem>
+                    <BreadcrumbItem active>{this.extractLabel(this.state["code"])}</BreadcrumbItem>
                 </Breadcrumb>
-                <h3>{this.extractLabel(this.state.attributes["code"])}</h3>
-                <p dangerouslySetInnerHTML={{__html: this.state.attributes["text"]}} />
+                <h3>{this.extractLabel(this.state["code"])}</h3>
+                <p dangerouslySetInnerHTML={{__html: this.state["text"]}} />
                 {attributes_html}
             </div>
         )

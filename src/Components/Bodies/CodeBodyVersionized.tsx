@@ -6,11 +6,18 @@ import TARMED from "./TARMED";
 import DRG from "./DRG";
 import {Breadcrumb} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
+import {ICode, IParamTypes, IParamTypesVersionized} from "../../interfaces";
+
+interface Props {
+    params: IParamTypesVersionized,
+    navigation: any,
+    location: any,
+}
 
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED).
  */
-class CodeBodyVersionized extends Component {
+class CodeBodyVersionized extends Component<Props, ICode> {
     constructor(props) {
         super(props);
         this.state = {
@@ -60,7 +67,7 @@ class CodeBodyVersionized extends Component {
      * @param snapshot
      * @returns {Promise<void>}
      */
-    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.params.language !== this.props.params.language ||
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {
@@ -280,7 +287,7 @@ class CodeBodyVersionized extends Component {
                     )
                 } else if(this.state[attribute].length > 0 && (attribute === "children" || attribute === "siblings")) {
                     attributes_html.push(
-                        <div key={"children siblings" + this.state[attribute] * 29}>
+                        <div key={"children siblings" + this.state[attribute].length * 29}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
                                 {this.state[attribute].map((child, i) => (

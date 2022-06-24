@@ -1,12 +1,13 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import IcdSortService from "../../Services/icd-sort.service";
 import RouterService from "../../Services/router.service";
 import {Breadcrumb} from "react-bootstrap";
+import {IVersionizedCode} from "../../interfaces";
 
 /**
  * responsible fot he ICD component and the pathname
  */
-class ICD extends Component {
+class ICD extends Component<IVersionizedCode> {
 
     /**
      * navigate to the child component
