@@ -57,6 +57,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @returns {Promise<void>}
      */
     // TODO: I will refactor below code into Utils with fetchInformation shared between all versionized codes.
+    //   No need to implement it in each CHOP, ICD, DRG and TARMED class.
     async fetchInformations() {
         let detailedCode;
         if (this.props.params.catalog === "ICD") {
