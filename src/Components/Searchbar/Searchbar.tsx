@@ -1,4 +1,4 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
@@ -6,12 +6,22 @@ import {createSearchParams, useNavigate} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 import ConvertDateService from "../../Services/convert-date.service";
 import findJsonService from "../../Services/find-json.service";
+import {ISearchbar} from "../../interfaces";
+
+interface Props {
+    language: string,
+    selectedButton: string,
+    version: string,
+    date: string,
+    searchResults: any,
+    navigation: any
+}
 
 /**
  * is the searchbar of the website, which is responsible to take a string and and hand it off to the correct component
  * @component
  */
-class Searchbar extends Component {
+class Searchbar extends Component<Props,ISearchbar> {
 
     /**
      * set the state searchTerm to null
@@ -145,7 +155,7 @@ class Searchbar extends Component {
                         onChange={this.updateSearch}
                         type="search"
                         placeholder={translateJson["LBL_SEARCH_PLACEHOLDER"]}
-                        value={this.state.searchTerm === "" ? "" : this.state.searchTerm.replaceAll("+", " ")}
+                        value={this.state.searchTerm === "" ? "" : this.state.searchTerm.replace(/\+/g, ' ')}
                         className="me-2"
                         aria-label="Search"
                     /><Button id="btn-go">

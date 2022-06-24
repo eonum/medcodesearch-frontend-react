@@ -1,15 +1,20 @@
 import React, {Component} from "react";
 import './Main.css';
 import {Outlet, useParams} from "react-router-dom";
+import {IMain} from "../../interfaces";
+
+interface Props{
+    params: any
+}
 
 /**
  * Sets the default page and is responsible for the background
  */
-class Main extends Component {
+class Main extends Component<Props, IMain> {
 
     constructor(props) {
         super(props);
-        this.page = "I"
+        this.state = {page: "I"}
     }
 
     /**
