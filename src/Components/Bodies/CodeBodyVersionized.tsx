@@ -7,6 +7,7 @@ import DRG from "./DRG";
 import {Breadcrumb} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {ICode, IParamTypes, IParamTypesVersionized} from "../../interfaces";
+import {initialCodeState} from "../../Utils";
 
 interface Props {
     params: IParamTypesVersionized,
@@ -20,34 +21,7 @@ interface Props {
 class CodeBodyVersionized extends Component<Props, ICode> {
     constructor(props) {
         super(props);
-        this.state = {
-            code: "",
-            med_interpret: null,
-            tech_interpret: null,
-            tp_al: null,
-            tp_tl: null,
-            groups: null,
-            blocks: null,
-            exclusions: null,
-            inclusions: null,
-            notes: null,
-            hints: null,
-            coding_hint: null,
-            synonyms: null,
-            most_relevant_drgs: null,
-            analogous_code_text: null,
-            descriptions: null,
-            successors: null,
-            predecessors: null,
-            supplement_codes: null,
-            usage: "",
-            text: "",
-            children: [],
-            parent: null,
-            parents: [],
-            siblings: [],
-            terminal: null
-        }
+        this.state = initialCodeState
     }
 
     /**
@@ -56,8 +30,8 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      */
     async componentDidMount() {
         await this.fetchInformations()
-        await this.fetchSiblings(this.state.parent)
-        await this.fetchGrandparents(this.state.parent)
+        await this.fetchSiblings(this.state.attributes.parent)
+        await this.fetchGrandparents(this.state.attributes.parent)
     }
 
     /**
@@ -71,37 +45,10 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         if(prevProps.params.language !== this.props.params.language ||
             prevProps.params.version !== this.props.params.version ||
             prevProps.params.code !== this.props.params.code) {
-            this.setState({
-                code: "",
-                med_interpret: null,
-                tech_interpret: null,
-                tp_al: null,
-                tp_tl: null,
-                groups: null,
-                blocks: null,
-                exclusions: null,
-                inclusions: null,
-                hints: null,
-                notes: null,
-                coding_hint: null,
-                synonyms: null,
-                most_relevant_drgs: null,
-                analogous_code_text: null,
-                descriptions: null,
-                successors: null,
-                predecessors: null,
-                supplement_codes: null,
-                usage: "",
-                text: "",
-                children: [],
-                parent: null,
-                parents: [],
-                siblings: [],
-                terminal: null
-            })
+            this.setState(initialCodeState)
             await this.fetchInformations()
-            await this.fetchSiblings(this.state.parent)
-            await this.fetchGrandparents(this.state.parent)
+            await this.fetchSiblings(this.state.attributes.parent)
+            await this.fetchGrandparents(this.state.attributes.parent)
         }
     }
 
@@ -112,15 +59,17 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     async fetchInformations() {
         let detailedCode;
         if (this.props.params.catalog === "ICD") {
-            detailedCode = await ICD.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await ICD.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state.attributes)
         } else if (this.props.params.catalog === "CHOP") {
-            detailedCode = await CHOP.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await CHOP.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state.attributes)
         } else if (this.props.params.catalog === "TARMED") {
-            detailedCode = await TARMED.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await TARMED.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state.attributes)
         } else {
-            detailedCode = await DRG.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await DRG.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state.attributes)
         }
-        this.setState(detailedCode)
+        if (detailedCode !== null) {
+            this.setState({attributes: detailedCode})
+        }
     }
 
     /**
@@ -188,7 +137,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @returns {Promise<void>}
      */
     async fetchSiblings(parent) {
-        if(this.state.children == null) {
+        if(this.state.attributes.children == null) {
             await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
@@ -236,14 +185,14 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         // Define div for predecessor code info
         for(var j = 0; j < mappingFields.length; j++) {
             var field = mappingFields[j];
-            if (this.state[field] != null) {
+            if (this.state.attributes[field] != null) {
                 // is this a non-trivial mapping?
-                if(this.state[field].length > 1 || this.state[field].length == 1 && (this.state[field][0]['code'] != this.state['code'] || this.state[field][0]['text'] != this.state['text'])) {
+                if(this.state.attributes[field].length > 1 || this.state.attributes[field].length == 1 && (this.state.attributes[field][0]['code'] != this.state.attributes['code'] || this.state.attributes[field][0]['text'] != this.state.attributes['text'])) {
                     attributes_html.push(
                         <div key={"mapping_pre_succ" + j}>
                             <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[field].map((child,i) => (
+                                {this.state.attributes[field].map((child,i) => (
                                     <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
                                     ))}
                             </ul>
@@ -261,92 +210,106 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                 >{this.state.parents[i].code}</Breadcrumb.Item>)
             }
         }
-        for(let attribute in this.state) {
-            if(this.state[attribute] !== null && this.state[attribute] !== undefined) {
+        for(let attribute in this.state.attributes) {
+            if(this.state.attributes[attribute] !== null && this.state.attributes[attribute] !== undefined) {
                 if(attribute === "med_interpret" || attribute === "tech_interpret") {
                     attributes_html.push(
-                        <div key={"med/tech interpret" + this.state[attribute].length * 41}>
-                            <p>{this.state[attribute]}</p>
+                        <div key={"med/tech interpret" + this.state.attributes[attribute].length * 41}>
+                            <p>{this.state.attributes[attribute]}</p>
                         </div>
                     )
                 } else if(attribute === "tp_al" || attribute === "tp_tl") {
-                    if(this.state[attribute] !== 0) {
+                    if(this.state.attributes[attribute] !== 0) {
                         attributes_html.push(
-                            <div key={"tp_al/tl" + this.state[attribute] * 37}>
-                                <p>{translateJson["LBL_" + attribute.toUpperCase()]}: {this.state[attribute]}</p>
+                            <div key={"tp_al/tl" + this.state.attributes[attribute] * 37}>
+                                <p>{translateJson["LBL_" + attribute.toUpperCase()]}: {this.state.attributes[attribute]}</p>
                             </div>
                         )
                     }
                 }
                 else if(attribute === "note" || attribute === "coding_hint" || attribute === "usage") {
                     attributes_html.push(
-                        <div key={"note coding_hint usage" + this.state[attribute].length * 31}>
+                        <div key={"note coding_hint usage" + this.state.attributes[attribute].length * 31}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <p>{this.state[attribute]}</p>
+                            <p>{this.state.attributes[attribute]}</p>
                         </div>
                     )
-                } else if(this.state[attribute].length > 0 && (attribute === "children" || attribute === "siblings")) {
+                } else if(this.state.attributes[attribute].length > 0 && (attribute === "groups" || attribute === "blocks")) {
                     attributes_html.push(
-                        <div key={"children siblings" + this.state[attribute].length * 29}>
+                        <div key={"groups " + this.state.attributes[attribute].length * 19}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[attribute].map((child, i) => (
-                                    <li key={child + " number " + (i * 23)}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    )
-                } else if(this.state[attribute].length > 0 && (attribute === "groups" || attribute === "blocks")) {
-                    attributes_html.push(
-                        <div key={"groups " + this.state[attribute].length * 19}>
-                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <ul>
-                                {this.state[attribute].map((child, i) => (
+                                {this.state.attributes[attribute].map((child, i) => (
                                     <li key={child.code + "childcode " + (i * 17)}>{child.code}: {child.text}</li>
                                 ))}
                             </ul>
                         </div>
                     )
                 }
-                else if(this.state[attribute].length > 0 && (attribute === "inclusions" || attribute === "synonyms" || attribute === "most_relevant_drgs" || attribute === "descriptions" || attribute === "notes")) {
+                else if(this.state.attributes[attribute].length > 0 && (attribute === "inclusions" || attribute === "synonyms" || attribute === "most_relevant_drgs" || attribute === "descriptions" || attribute === "notes")) {
                     attributes_html.push(
-                        <div key={"incl, syn, rel_drgs, descr " + this.state[attribute].length * 13}>
+                        <div key={"incl, syn, rel_drgs, descr " + this.state.attributes[attribute].length * 13}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[attribute].map((element, i) => (
+                                {this.state.attributes[attribute].map((element, i) => (
                                     <li key={"element nr " + i}>{element}</li>
                                 ))}
                             </ul>
                         </div>
                     )
-                } else if(this.state[attribute].length > 0 && (attribute === "exclusions" || attribute === "supplement_codes")) {
+                } else if(this.state.attributes[attribute].length > 0 && (attribute === "exclusions" || attribute === "supplement_codes")) {
                     attributes_html.push(
-                        <div key={"exclusions supp_codes " + this.state[attribute].length * 11}>
+                        <div key={"exclusions supp_codes " + this.state.attributes[attribute].length * 11}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
-                                {this.state[attribute].map((exclusion, i) => (
+                                {this.state.attributes[attribute].map((exclusion, i) => (
                                     this.lookingForLink(exclusion, i)
                                 ))}
                             </ul>
                         </div>
                     )
-                } else if(attribute === "predecessors" && this.state[attribute].length === 0 && this.state.children == null) {
+                } else if(attribute === "predecessors" && this.state.attributes[attribute].length === 0 && this.state.attributes.children == null) {
                     attributes_html.push(
-                        <div key={"predec " + this.state[attribute].length * 7}>
+                        <div key={"predec " + this.state.attributes[attribute].length * 7}>
                             <h5>{translateJson["LBL_NEW_CODE"]}</h5>
+                        </div>
+                    )
+                }
+                else if(this.state.attributes[attribute].length > 0 && attribute === "children") {
+                    attributes_html.push(
+                        <div key={"children" + this.state.attributes[attribute].length * 29}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                            <ul>
+                                {this.state.attributes[attribute].map((child, i) => (
+                                    <li key={child + " number " + (i * 23)}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
+                                ))}
+                            </ul>
                         </div>
                     )
                 }
             }
         }
+        if(this.state.siblings.length > 0 && !this.state.attributes["children"]) {
+            attributes_html.push(
+                <div key={4}>
+                    <h5>{translateJson["LBL_SIBLINGS"]}</h5>
+                    <ul>
+                        {this.state.siblings.map((child, i) => (
+                            <li key={i}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
+                                <span dangerouslySetInnerHTML={{__html: child.text}}/></li>
+                        ))}
+                    </ul>
+                </div>
+            )
+        }
         if(this.props.params.catalog === "ICD") {
-            return <ICD key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
+            return <ICD key={this.state.attributes.code} title={this.state.attributes.code} text={this.state.attributes.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
         } else if(this.props.params.catalog === "CHOP") {
-            return <CHOP key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
+            return <CHOP key={this.state.attributes.code} title={this.state.attributes.code} text={this.state.attributes.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
         } else if(this.props.params.catalog === "TARMED") {
-            return <TARMED key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
+            return <TARMED key={this.state.attributes.code} title={this.state.attributes.code} text={this.state.attributes.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
         } else {
-            return <DRG key={this.state.code} title={this.state.code} text={this.state.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
+            return <DRG key={this.state.attributes.code} title={this.state.attributes.code} text={this.state.attributes.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
         }
     }
 }
