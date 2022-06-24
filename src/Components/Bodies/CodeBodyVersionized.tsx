@@ -56,6 +56,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * Fetch the information from the backend and does a case distinction for all the catalogs
      * @returns {Promise<void>}
      */
+    // TODO: I will refactor below code into Utils with fetchInformation shared between all versionized codes.
     async fetchInformations() {
         let detailedCode;
         if (this.props.params.catalog === "ICD") {
@@ -136,6 +137,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param parent
      * @returns {Promise<void>}
      */
+    // TODO: I will refactor below code into Utils since we can use this for versionized and unversionized codes.
     async fetchSiblings(parent) {
         if(this.state.attributes.children == null) {
             await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
@@ -159,6 +161,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param parent
      * @returns {Promise<void>}
      */
+    // TODO: I will refactor below code into Utils since we can use this for versionized and unversionized codes.
     async fetchGrandparents(parent) {
         let parents = []
         while(parent) {
@@ -181,6 +184,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         let attributes_html = []
         let parentBreadCrumbs = []
 
+        // TODO: below if else will be refactored into more compact code
         var mappingFields = ['predecessors', 'successors'];
         // Define div for predecessor code info
         for(var j = 0; j < mappingFields.length; j++) {
@@ -201,6 +205,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             }
         }
 
+        // TODO: Collecting Breadcrumbs will be refactored into Utils since we can use it for both un- & versionized codes.
         if(this.state.parents && this.state.parents.length > 0){
             for(let i=this.state.parents.length-1; i>=0; i--){
                 parentBreadCrumbs.push(<Breadcrumb.Item

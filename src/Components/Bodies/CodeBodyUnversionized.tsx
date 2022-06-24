@@ -185,6 +185,9 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         let translateJson = findJsonService(this.props.params.language)
         let attributes_html = []
         let parentBreadCrumbs = []
+
+        // TODO: below if else will be refactored into more compact code
+        // TODO: Collecting Breadcrumbs will be refactored into Utils since we can use it for both un- & versionized codes.
         if(this.state.parents && this.state.parents.length > 0){
             for(let i=this.state.parents.length-1; i>=0; i--){
                 parentBreadCrumbs.push(<Breadcrumb.Item
