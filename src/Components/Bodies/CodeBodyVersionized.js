@@ -105,13 +105,13 @@ class CodeBodyVersionized extends Component {
     async fetchInformations() {
         let detailedCode;
         if (this.props.params.catalog === "ICD") {
-            detailedCode = await ICD.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await ICD.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state)
         } else if (this.props.params.catalog === "CHOP") {
-            detailedCode = await CHOP.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await CHOP.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state)
         } else if (this.props.params.catalog === "TARMED") {
-            detailedCode = await TARMED.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await TARMED.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state)
         } else {
-            detailedCode = await DRG.fetchInformations(this.props.params.language, this.props.params.code_type, this.props.params.version, this.props.params.code, this.state)
+            detailedCode = await DRG.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state)
         }
         this.setState(detailedCode)
     }

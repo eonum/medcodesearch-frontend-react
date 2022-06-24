@@ -52,24 +52,24 @@ class CodeBodyUnversionized extends Component {
     /**
      * Does a case distinction for all the catalogs and set the string ready for fetching
      * @param language
-     * @param code_type
+     * @param resource_type
      * @param version
      * @param code
      * @returns {Promise<null|any>}
      */
-    async fetchHelper(language, code_type, version, code) {
-        code_type = code_type.toUpperCase();
+    async fetchHelper(language, resource_type, version, code) {
+        resource_type = resource_type.toUpperCase();
         if(code === "all") {
-            code = code_type
+            code = resource_type
         }
         if (code === "all" && code !== 'AL') {
             return null
         } else {
             if (version === 'AL'){
-                code_type = code_type + "/" + code_type;
+                resource_type = resource_type + "/" + resource_type;
                 code = '?show_detail=1'
             }
-            return await fetch('https://search.eonum.ch/' + language + "/" + version + "/" + code_type + "/" + code + "?show_detail=1")
+            return await fetch('https://search.eonum.ch/' + language + "/" + version + "/" + resource_type + "/" + code + "?show_detail=1")
                 .then((res) => {
                     return res.json()
                 })

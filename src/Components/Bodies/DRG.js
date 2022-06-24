@@ -10,18 +10,18 @@ class DRG extends Component {
     /**
      * etch the DRG in the correct language and version
      * @param language
-     * @param code_type
+     * @param resource_type
      * @param version
      * @param code
      * @param attributes
      * @returns {Promise<any>}
      */
-    static async fetchInformations(language, code_type, version, code, attributes) {
+    static async fetchInformations(language, resource_type, version, code, attributes) {
         let codeForSearch;
         let cat = 'mdcs';
         let newAttributes = attributes
-        if (code_type !==  'mdcs'){
-            cat = code_type;
+        if (resource_type !==  'mdcs'){
+            cat = resource_type;
         }
         if (version === code){
             codeForSearch = '/ALL'
