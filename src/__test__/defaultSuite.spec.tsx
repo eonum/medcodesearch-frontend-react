@@ -1,15 +1,16 @@
-const { Builder, By, Key, until } = require('selenium-webdriver')
-const assert = require('assert')
-const {urlMatches} = require("selenium-webdriver/lib/until");
-const {browser, sleep, n, options} = require("../setupTests");
-
 describe('Default Suite', function() {
     let driverDef;
+    var webdriver = require("selenium-webdriver");
+    var By = webdriver.By;
+    var {browser, sleep, n, options} = require("../setupTests");
+    var {urlMatches} = require("selenium-webdriver/lib/until");
+    var assert = require('assert');
+
     beforeAll( async function() {
         await sleep(n);
     })
     beforeEach(async function() {
-        driverDef = await new Builder().forBrowser(browser).setFirefoxOptions(options).build();
+        driverDef = new webdriver.Builder().forBrowser(browser).setFirefoxOptions(options).build()
         await driverDef.manage().setTimeouts( { implicit: 1000 } );
         await driverDef.manage().window().maximize();
     })

@@ -1,15 +1,17 @@
-const { Builder, By, Key, until } = require('selenium-webdriver')
-const assert = require('assert')
-const {urlMatches} = require("selenium-webdriver/lib/until");
-const {browser, sleep, n, options} = require("../setupTests");
-
 describe('search', function() {
   let driverSearch;
+  var webdriver = require("selenium-webdriver");
+  var By = webdriver.By;
+  var until = webdriver.until;
+  var assert = require('assert');
+  var {urlMatches} = require("selenium-webdriver/lib/until");
+  var {browser, sleep, n, options} = require("../setupTests");
+
   beforeAll( async function() {
     await sleep(n);
   })
   beforeEach(async function() {
-    driverSearch = await new Builder().forBrowser(browser).setFirefoxOptions(options).build();
+    driverSearch = await new webdriver.Builder().forBrowser(browser).setFirefoxOptions(options).build()
     await driverSearch.manage().setTimeouts( { implicit: 1000 } );
     await driverSearch.manage().window().maximize();
   })
@@ -18,6 +20,7 @@ describe('search', function() {
     await driverSearch.quit();
     await sleep(250);
   })
+
 
   it('search de icd code (A15.3)', async function() {
     await driverSearch.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")

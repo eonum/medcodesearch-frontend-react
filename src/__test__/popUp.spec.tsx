@@ -1,16 +1,18 @@
 import {urlContains} from "selenium-webdriver/lib/until";
-import {browser, n, sleep, options} from '../setupTests';
-const { Builder, By, Key, until } = require('selenium-webdriver')
-const assert = require('assert')
-
 
 describe('PopUp', function() {
   let driverPopUp;
+  var webdriver = require("selenium-webdriver");
+  var By = webdriver.By;
+  var until = webdriver.until;
+  var assert = require('assert');
+  var {browser, sleep, n, options} = require("../setupTests");
+
   beforeAll(async function () {
     await sleep(n);
   })
   beforeEach(async function () {
-    driverPopUp = await new Builder().forBrowser(browser).setFirefoxOptions(options).build();
+    driverPopUp = await new webdriver.Builder().forBrowser(browser).setFirefoxOptions(options).build();
     await sleep(n);
     //await driverPopUp.manage().setTimeouts( { implicit: 1000 } );
     //await driverPopUp.manage().window().maximize();

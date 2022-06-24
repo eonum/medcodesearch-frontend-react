@@ -1,13 +1,14 @@
-const { Builder, By} = require('selenium-webdriver')
-const {browser, sleep, n, options} = require("../setupTests");
-
 describe('Default Suite', function() {
   let driverCrumbs
+  var webdriver = require("selenium-webdriver");
+  var By = webdriver.By;
+  var {browser, sleep, n, options} = require("../setupTests");
+
   beforeAll( async function() {
     await sleep(n);
   })
   beforeEach(async function() {
-    driverCrumbs = await new Builder().forBrowser(browser).setFirefoxOptions(options).build();
+    driverCrumbs = new webdriver.Builder().forBrowser(browser).setFirefoxOptions(options).build()
     await driverCrumbs.manage().setTimeouts( { implicit: 1000 } );
     await driverCrumbs.manage().window().maximize();
 
