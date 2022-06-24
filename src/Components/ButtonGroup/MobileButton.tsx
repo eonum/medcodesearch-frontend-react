@@ -6,12 +6,30 @@ import {convertCategory, findCategory} from "../../Services/category-version.ser
 import React, {Component} from "react";
 import CategorySortService from "../../Services/category-sort.service";
 import DatePicker from "./DatePicker";
+import {IVersions, IButtonLabels, IMobileButton} from "../../interfaces";
+
+interface Props {
+    initialVersions: IVersions,
+    currentVersions: IVersions,
+    date: string,
+    version: string,
+    selectedVersion: string,
+    reRender: boolean,
+    category: string,
+    language: string,
+    selectedLanguage: any,
+    updateVersion: any,
+    updateCategory: any,
+    buttons: IButtonLabels,
+    labels: string[],
+    chooseC: any
+}
 
 /**
  * creates the button for the mobile version
  * @component
  */
-class MobileButton extends Component{
+class MobileButton extends Component<Props,IMobileButton>{
 
     /**
      * sets the default state values and bind the popup
@@ -53,7 +71,7 @@ class MobileButton extends Component{
      * @param snapshot
      * @returns {Promise<void>}
      */
-    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.language !== this.props.language || prevProps.category !== this.props.category
             || this.props.reRender) {
             await this.fetchInitialVersions()

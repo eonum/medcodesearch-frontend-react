@@ -1,15 +1,29 @@
 import React, {Component} from "react";
-
 import convertDate from "../../Services/convert-date.service";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import DatePicker from "./DatePicker";
 import PopUp from "../PopUp/PopUp";
+import {IButtonWithCal} from "../../interfaces";
+
+interface Props {
+    updateCategory: any,
+    updateVersion: any,
+    selectedLanguage: any,
+    language: string,
+    showHideCal: boolean,
+    date : string,
+    name: string,
+    label: string,
+    fullLabel: string,
+    select: any,
+    active: string
+}
 
 /**
  * creates a button with a calender
  * @component
  */
-class ButtonWithCal extends Component{
+class ButtonWithCal extends Component<Props,IButtonWithCal>{
 
     constructor(props) {
         super(props);

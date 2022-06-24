@@ -7,12 +7,32 @@ import convertDate from "../../Services/convert-date.service";
 import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
 import ConvertDateService from "../../Services/convert-date.service";
+import {IVersions, IButtonLabels, IButtonGroup} from "../../interfaces";
+
+interface Props {
+    params: any,
+    initialVersions: IVersions,
+    currentVersions: IVersions,
+    clickedOnLogo: boolean,
+    category: string,
+    version: string,
+    reSetClickOnLogo: any,
+    reSetButton: any,
+    selectedLanguage: any,
+    language: string,
+    selectedButton: any,
+    selectedList: any,
+    selectedDate: any,
+    labels: string[],
+    fullLabels: string[],
+    buttons: IButtonLabels
+}
 
 /**
  * is responsible for all buttons to render
  * @component
  */
-class ButtonGroup extends Component{
+class ButtonGroup extends Component<Props,IButtonGroup>{
 
     /**
      * sets the default state values and bind the buttons
@@ -131,7 +151,7 @@ class ButtonGroup extends Component{
      * @param prevState
      * @param snapshot
      */
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.version !== this.props.version) {
             this.getVersionCategory()
         }
