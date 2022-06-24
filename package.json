@@ -27,10 +27,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-headless": "export PORT=8080 && BROWSER=none react-scripts start",
+    "test-headless": "start-server-and-test start-headless http://localhost:8080 test"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +57,7 @@
     "geckodriver": "^3.0.1",
     "jest": "^27.5.1",
     "react-string-replace": "^1.0.0",
-    "selenium-webdriver": "^4.0.0"
+    "selenium-webdriver": "^4.0.0",
+    "start-server-and-test": "^1.14.0"
   }
 }
