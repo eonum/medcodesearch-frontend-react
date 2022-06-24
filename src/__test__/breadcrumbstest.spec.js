@@ -1,6 +1,5 @@
-const { Builder, By, Key, until } = require('selenium-webdriver')
-const assert = require('assert')
-const {browser, sleep, n} = require("../setupTests");
+const { Builder, By} = require('selenium-webdriver')
+const {browser, sleep, n, options} = require("../setupTests");
 
 describe('Default Suite', function() {
   let driverCrumbs
@@ -8,7 +7,7 @@ describe('Default Suite', function() {
     await sleep(n);
   })
   beforeEach(async function() {
-    driverCrumbs = await new Builder().forBrowser(browser).build()
+    driverCrumbs = await new Builder().forBrowser(browser).setFirefoxOptions(options).build();
     await driverCrumbs.manage().setTimeouts( { implicit: 1000 } );
     await driverCrumbs.manage().window().maximize();
 
@@ -20,8 +19,7 @@ describe('Default Suite', function() {
   })
 
   it('click through mobile buttons (de)', async function() {
-
-    await driverCrumbs.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
     await driverCrumbs.manage().window().setRect({ width: 400, height: 800 })
     await sleep(n);
@@ -54,7 +52,7 @@ describe('Default Suite', function() {
   })
 
   it('icd clicking from I to A00.0 (de, 2008)', async function() {
-    await driverCrumbs.get("http://localhost:3000/de/ICD/ICD10-GM-2008/icd_chapters/ICD10-GM-2008")
+    await driverCrumbs.get("http://localhost:8080/de/ICD/ICD10-GM-2008/icd_chapters/ICD10-GM-2008")
     await sleep(2*n);
     await driverCrumbs.findElement(By.linkText("I:")).click()
     await sleep(n);
@@ -73,7 +71,7 @@ describe('Default Suite', function() {
     await driverCrumbs.findElement(By.linkText("ICD10-GM-2008")).click()
   })
   it('icd clicking from I to A00.0 (fr, 2022)', async function() {
-    await driverCrumbs.get("http://localhost:3000/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
     await driverCrumbs.findElement(By.linkText("I:")).click()
     await sleep(n);
@@ -92,7 +90,7 @@ describe('Default Suite', function() {
     await driverCrumbs.findElement(By.linkText("ICD10-GM-2022")).click()
   })
   it('icd clicking from I to A00.0 (de, 2022)', async function() {
-    await driverCrumbs.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
     await driverCrumbs.findElement(By.linkText("I:")).click()
     await sleep(n);
@@ -111,7 +109,7 @@ describe('Default Suite', function() {
     await driverCrumbs.findElement(By.linkText("ICD10-GM-2022")).click()
   })
   it('icd clicking from I to A00.0 (en, 2022)', async function() {
-    await driverCrumbs.get("http://localhost:3000/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
     await driverCrumbs.findElement(By.linkText("I:")).click()
     await sleep(n);
@@ -130,7 +128,7 @@ describe('Default Suite', function() {
     await driverCrumbs.findElement(By.linkText("ICD10-GM-2022")).click()
   })
   it('icd clicking from I to A00.0 (it, 2022)', async function() {
-    await driverCrumbs.get("http://localhost:3000/it/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/it/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
     await driverCrumbs.findElement(By.linkText("I:")).click()
     await sleep(n);
@@ -150,7 +148,7 @@ describe('Default Suite', function() {
   })
 
   it('icd clicking from I to A00.0 (de, 2022) mobil', async function() {
-    await driverCrumbs.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
     await driverCrumbs.manage().window().setRect({ width: 400, height: 800 })
     await sleep(n);
@@ -177,7 +175,7 @@ describe('Default Suite', function() {
     await driverCrumbs.findElement(By.linkText("ICD10-GM-2022")).click()
   })
   it('icd clicking from I to A00.0 (fr, 2022) mobil', async function() {
-    await driverCrumbs.get("http://localhost:3000/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
     await driverCrumbs.manage().window().setRect({ width: 400, height: 800 })
     await sleep(n);
@@ -198,7 +196,7 @@ describe('Default Suite', function() {
     await driverCrumbs.findElement(By.linkText("ICD10-GM-2022")).click()
   })
   it('icd clicking from I to A00.0 (it, 2022) mobil', async function() {
-    await driverCrumbs.get("http://localhost:3000/it/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/it/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
     await driverCrumbs.manage().window().setRect({ width: 400, height: 800 })
     await sleep(n);
@@ -219,7 +217,7 @@ describe('Default Suite', function() {
     await driverCrumbs.findElement(By.linkText("ICD10-GM-2022")).click()
   })
   it('icd clicking from I to A00.0 (en, 2022) mobil', async function() {
-    await driverCrumbs.get("http://localhost:3000/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
     await driverCrumbs.manage().window().setRect({ width: 400, height: 800 })
     await sleep(n);
@@ -243,7 +241,7 @@ describe('Default Suite', function() {
 
   it('Chop version newer to older and back (de)', async function() {
 
-    await driverCrumbs.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+    await driverCrumbs.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
     await sleep(2*n);
 
     await driverCrumbs.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
@@ -292,7 +290,7 @@ describe('Default Suite', function() {
     await driverCrumbs.findElement(By.id("CHOP_2022")).click()
   })
   it('chop clicking from C0 to 00.0 (de)', async function() {
-    await driverCrumbs.get("http://localhost:3000/de/CHOP/CHOP_2022/chop_chapters/CHOP_2022")
+    await driverCrumbs.get("http://localhost:8080/de/CHOP/CHOP_2022/chop_chapters/CHOP_2022")
     await sleep(2*n);
     await driverCrumbs.findElement(By.linkText("C0:")).click()
     await sleep(n);
@@ -310,7 +308,7 @@ describe('Default Suite', function() {
   it('breadcrumbs desktop migel de', async function() {
     // Step # | name | target | value
     // 1 | open | /de/MIGEL/migels/all |
-    await driverCrumbs.get("http://localhost:3000/de/MIGEL/migels/all")
+    await driverCrumbs.get("http://localhost:8080/de/MIGEL/migels/all")
     await sleep(2*n);
     // 2 | click | linkText=14: |
     await driverCrumbs.findElement(By.linkText("14:")).click()
@@ -340,7 +338,7 @@ describe('Default Suite', function() {
   it('breadcrumbs desktop migel fr', async function() {
     // Step # | name | target | value
     // 1 | open | /de/MIGEL/migels/all |
-    await driverCrumbs.get("http://localhost:3000/fr/MIGEL/migels/all")
+    await driverCrumbs.get("http://localhost:8080/fr/MIGEL/migels/all")
     await sleep(2*n);
     // 2 | click | linkText=14: |
     await driverCrumbs.findElement(By.linkText("14:")).click()
@@ -370,7 +368,7 @@ describe('Default Suite', function() {
   it('breadcrumbs desktop migel it', async function() {
     // Step # | name | target | value
     // 1 | open | /de/MIGEL/migels/all |
-    await driverCrumbs.get("http://localhost:3000/it/MIGEL/migels/all")
+    await driverCrumbs.get("http://localhost:8080/it/MIGEL/migels/all")
     await sleep(2*n);
     // 2 | click | linkText=14: |
     await driverCrumbs.findElement(By.linkText("14:")).click()
@@ -400,7 +398,7 @@ describe('Default Suite', function() {
   it('breadcrumbs desktop migel en', async function() {
     // Step # | name | target | value
     // 1 | open | /de/MIGEL/migels/all |
-    await driverCrumbs.get("http://localhost:3000/en/MIGEL/migels/all")
+    await driverCrumbs.get("http://localhost:8080/en/MIGEL/migels/all")
     await sleep(2*n);
     // 2 | click | linkText=14: |
     await driverCrumbs.findElement(By.linkText("14:")).click()
@@ -431,7 +429,7 @@ describe('Default Suite', function() {
   it('breadcrumbs mobil migel de', async function() {
     // Step # | name | target | value
     // 1 | open | /de/MIGEL/migels/all |
-    await driverCrumbs.get("http://localhost:3000/de/MIGEL/migels/all")
+    await driverCrumbs.get("http://localhost:8080/de/MIGEL/migels/all")
     await sleep(2*n);
     // 2 | setWindowSize | 400x800 |
     await driverCrumbs.manage().window().setRect({ width: 400, height: 800 })
@@ -465,7 +463,7 @@ describe('Default Suite', function() {
   it('breadcrumbs mobil migel fr', async function() {
     // Step # | name | target | value
     // 1 | open | /de/MIGEL/migels/all |
-    await driverCrumbs.get("http://localhost:3000/fr/MIGEL/migels/all")
+    await driverCrumbs.get("http://localhost:8080/fr/MIGEL/migels/all")
     await sleep(2*n);
     // 2 | setWindowSize | 400x800 |
     await driverCrumbs.manage().window().setRect({ width: 400, height: 800 })
@@ -499,7 +497,7 @@ describe('Default Suite', function() {
   it('breadcrumbs mobil migel en', async function() {
     // Step # | name | target | value
     // 1 | open | /de/MIGEL/migels/all |
-    await driverCrumbs.get("http://localhost:3000/en/MIGEL/migels/all")
+    await driverCrumbs.get("http://localhost:8080/en/MIGEL/migels/all")
     await sleep(2*n);
     // 2 | setWindowSize | 400x800 |
     await driverCrumbs.manage().window().setRect({ width: 400, height: 800 })
@@ -529,7 +527,7 @@ describe('Default Suite', function() {
   it('breadcrumbs mobil migel it', async function() {
     // Step # | name | target | value
     // 1 | open | /de/MIGEL/migels/all |
-    await driverCrumbs.get("http://localhost:3000/it/MIGEL/migels/all")
+    await driverCrumbs.get("http://localhost:8080/it/MIGEL/migels/all")
     await sleep(2*n);
     // 2 | setWindowSize | 400x800 |
     await driverCrumbs.manage().window().setRect({ width: 400, height: 800 })

@@ -1,16 +1,15 @@
 const { Builder, By, Key, until } = require('selenium-webdriver')
 const assert = require('assert')
 const {urlMatches} = require("selenium-webdriver/lib/until");
-const {browser, sleep, n} = require("../setupTests");
+const {browser, sleep, n, options} = require("../setupTests");
 
 describe('Default Suite', function() {
     let driverDef;
-
     beforeAll( async function() {
         await sleep(n);
     })
     beforeEach(async function() {
-        driverDef = await new Builder().forBrowser(browser).build()
+        driverDef = await new Builder().forBrowser(browser).setFirefoxOptions(options).build();
         await driverDef.manage().setTimeouts( { implicit: 1000 } );
         await driverDef.manage().window().maximize();
     })
@@ -20,10 +19,9 @@ describe('Default Suite', function() {
         await sleep(250);
     })
 
-
     it('clicking from one catalog to another (de)', async function() {
 
-        await driverDef.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await sleep(2 * n);
         await driverDef.findElement(By.css("div:nth-child(3) .customButton:nth-child(1)")).click()
         assert(urlMatches(/\\de\\SwissDRG\\V11.0\\mdcs\\V11.0/), "matches the url for drg")
@@ -56,7 +54,7 @@ describe('Default Suite', function() {
         await driverDef.findElement(By.name("DRUG")).click()
     })
     it('icd version newer to older and back (de)', async function() {
-        await driverDef.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await sleep(2 * n);
         await driverDef.findElement(By.id("buttonversion")).click()
         await sleep(n);
@@ -106,7 +104,7 @@ describe('Default Suite', function() {
     })
     it('changing languages', async function() {
 
-        await driverDef.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await sleep(2 * n);
         await driverDef.findElement(By.css(".language-btn:nth-child(2)")).click()
         await sleep(n);
@@ -159,7 +157,7 @@ describe('Default Suite', function() {
 
     })
     it('click from button to other buttons version', async function() {
-        await driverDef.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await sleep(2 * n);
         await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
         await sleep(n);
@@ -182,7 +180,7 @@ describe('Default Suite', function() {
         await driverDef.findElement(By.id("CHOP")).click()
     })
     it('hover over buttons', async function() {
-        await driverDef.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await sleep(2 * n);
         await driverDef.findElement(By.id("buttonversion")).click()
         await sleep(n);
@@ -209,7 +207,7 @@ describe('Default Suite', function() {
         await driverDef.findElement(By.id("buttonversion")).click()
     })
     it('clicking a version from a different catalog', async function() {
-        await driverDef.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await sleep(2*n);
         await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
         await sleep(n);
@@ -281,7 +279,7 @@ describe('Default Suite', function() {
         await driverDef.findElement(By.id("V10.0")).click()
     })
     it('click on logo desktop', async function() {
-        await driverDef.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await sleep(2*n);
         await driverDef.findElement(By.id("SwissDRG")).click()
         await sleep(n);
@@ -297,7 +295,7 @@ describe('Default Suite', function() {
         await sleep(n);
     })
     it('click on logo mobile', async function() {
-        await driverDef.get("http://localhost:3000/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
+        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await sleep(2*n);
         await driverDef.manage().window().setRect({ width: 400, height: 800 })
         await sleep(n);
