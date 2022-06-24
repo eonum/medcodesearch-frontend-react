@@ -53,7 +53,7 @@ interface IAttributes {
 }
 
 export interface ICode {
-    attributes: IAttributes,
+    attributes: IAttributes
     parents: IShortEntry[],
     siblings: IShortEntry[],
 }
@@ -159,4 +159,12 @@ export interface IParamTypes {
 
 export interface IParamTypesVersionized extends IParamTypes {
     version: string
+}
+
+export interface IVersionizedCode {
+    key: string,
+    title: string,
+    text: string,
+    attributes: string[],
+    parents: string[]
 }
