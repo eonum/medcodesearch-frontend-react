@@ -10,7 +10,8 @@ Backend which is used is: [search.eonum.ch](https://search.eonum.ch/documentatio
 ### Installation instructions
 
 For the local installation go into the folder `medcodesearch-frontend-react` and run `npm install` \
-To start the local app run `npm start`. It will open at [http://localhost:3000](http://localhost:3000) in your browser.
+To start the local app run `npm start`. 
+It will open at [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Issues
 
