@@ -2,26 +2,31 @@ import './App.css';
 import './index.css';
 import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';
-import Searchbar from './Components/Searchbar/Searchbar.js'
+import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import { ReactComponent as Arrow } from './assets/arrow-up.svg';
 import {Outlet, useNavigate, useParams} from "react-router-dom";
 import ButtonGroup from "./Components/ButtonGroup/ButtonGroup";
 import RouterService from "./Services/router.service";
-import {Component} from "react";
+import React, {Component} from "react";
 import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
-import {
-    getVersionsByLanguage
-} from "./Services/category-version.service";
+import {getVersionsByLanguage} from "./Services/category-version.service";
 import findJsonService from "./Services/find-json.service";
+import {IApp} from "./interfaces";
 
 /**
  * App.js calls all the component to combine them and render the website
  * @component
  */
-class App extends Component{
+
+interface Props {
+    navigation: any,
+    params: any
+}
+
+class App extends Component<Props, IApp>{
 
     /**
      * gets the language, selected button, selected list, selected date and search results and bind them
@@ -118,7 +123,7 @@ class App extends Component{
      * @param prevState
      * @param snapshot
      */
-    async componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    async componentDidUpdate(prevProps, prevState, snapshot) {
         let navigate = this.props.navigation;
         if(prevState.language !== this.state.language) {
             let list = this.state.selectedList;
@@ -248,6 +253,8 @@ class App extends Component{
                     })}
                 </div>
         }
+        // TODO: using onClick in Collapse causes error: Property 'onClick' does not exist on type 'IntrinsicAttributes & CollapseProps & RefAttributes<Transition<any>>'
+        //  Removed it but not sure if correct.
         return(
             <div className="container" id="searchResults">
                 <p className="text-center mt-3">
@@ -263,8 +270,7 @@ class App extends Component{
                         <Arrow />
                     </button>
                 </p>
-                
-                <Collapse in={!this.state.collapseMenu} onClick={this.showHide}>
+                <Collapse in={!this.state.collapseMenu}>
                     <div>
                         {searchResults}
                     </div>
