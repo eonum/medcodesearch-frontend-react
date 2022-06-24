@@ -30,10 +30,17 @@ All test-suites reside in their own subdirectory in `/src/__test_`. \
 The installation guide resides in their own directory `/documentation`. \
 Every method has its own documentation written in Javadoc. 
 
-###Testing
+### Testing
+#### Prerequisites
+If not already installed from  `npm install` use `npm install --save-dev jest`, 
+`npm install --save-dev @testing-library/react` and `npm install --save-dev start-server-and-test` to install jest,
+react testing library and start-server-and-test which enables starting a server, then run test command. When you stop
+the tests, the server is automatically shut down.
 
-This React-App may be tested with the automated testcases via the Script `npm test` or via import of the file "MedCodeSearch.side" into Selenium IDE. 
-For more information refer to the Installation-Manual. 
+#### Run tests
+Pay attention that using `npm test` will run tests in browser. As we want to run our tests headless, use 
+`npm run test-headless` which is configured via scripts in `package.json`. There you can also adapt port for test 
+server which is currently set to `localhost:8080`.
 
 ### Contact 
 
