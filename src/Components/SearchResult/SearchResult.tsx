@@ -1,12 +1,20 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
 import RouterService from "../../Services/router.service";
+import {ISearchbar, ISearchResult} from "../../interfaces";
+
+interface Props {
+    navigation: any,
+    location: any,
+    key: string,
+    result: ISearchResult
+}
 
 /**
  * Handle the search result and check the text for any flags
  */
-class SearchResult extends Component {
+class SearchResult extends Component<Props, ISearchResult> {
 
     /**
      * looks for change in the button selection and update the fetchresult
