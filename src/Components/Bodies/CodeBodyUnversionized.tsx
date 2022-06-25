@@ -134,15 +134,15 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 
     /**
-     * navigates to the child component
-     * @param child
+     * navigates to the specified code component
+     * @param code
      */
-    goToChild(child) {
+    goToCode(code) {
         let navigate = this.props.navigation
         if(this.props.params.catalog === "MIGEL") {
-            MIGEL.goToChild(child.code, navigate, this.props.params.language)
+            MIGEL.goToCode(code.code, navigate, this.props.params.language)
         } else if(this.props.params.catalog === "AL") {
-            AL.goToChild(child.code, navigate, this.props.params.language)
+            AL.goToCode(code.code, navigate, this.props.params.language)
         }
     }
 
@@ -178,72 +178,82 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 
     /**
+     * Returns code in the correct language
+     * @param code
+     * @returns {string|*}
+     */
+    clickableListElement(translateJson, ind, attribute, attribute_value, attributes_html) {
+        attributes_html.push(
+            <div key={ind}>
+                <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                <ul>
+                    {attribute_value.map((val, j) => (
+                        <li key={j}><a key={"related_code_" + j} className="link" onClick={() => {this.goToCode(val)}}>{val.code}: </a>
+                            <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
+                    ))}
+                </ul>
+            </div>
+    )
+    }
+
+
+    /**
      * Render the CodeBodyUnversionized component
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = findJsonService(this.props.params.language)
-        let attributes_html = []
-        let parentBreadCrumbs = []
-
-        // TODO: below if else will be refactored into more compact code
+        let parentBreadCrumbs = [];
         // TODO: Collecting Breadcrumbs will be refactored into Utils since we can use it for both un- & versionized codes.
-        if(this.state.parents && this.state.parents.length > 0){
+        if(this.state.parents){
             for(let i=this.state.parents.length-1; i>=0; i--){
                 parentBreadCrumbs.push(<Breadcrumb.Item
                     key={i}
-                    onClick={() => this.goToChild(this.state.parents[i])}
+                    onClick={() => this.goToCode(this.state.parents[i])}
                     className="breadLink"
                 >{this.extractLabel(this.state.parents[i].code)}</Breadcrumb.Item>)
             }
         }
+
+        let translateJson = findJsonService(this.props.params.language);
+        let attributes_html = [];
+        let all_attributes = this.state.attributes;
         let i = 1;
-        for(let attribute in this.state.attributes) {
-            if(this.state.attributes[attribute] !== null && this.state.attributes[attribute] !== undefined) {
-                if(this.state.attributes[attribute].length > 0 && attribute === "limitation") {
-                    attributes_html.push (
-                        <div key={i}>
-                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
-                        </div>
-                    )
-                } else if(this.state.attributes[attribute].length > 0 && attribute !== "children" && attribute !== "text" && attribute !== "rev" &&
-                    attribute !== "code" && attribute !== "version" && attribute !== "valid_to" && attribute !== "valid_from" && attribute !== "auth_holder_nr"
-                    && attribute !== "atc_code" && attribute !== "pharma_form" && attribute !== "package_code" && attribute!=="auth_number") {
-                    attributes_html.push(
-                        <div key={i}>
-                            <p><span><strong>{translateJson["LBL_" + attribute.toUpperCase()]}: </strong> </span><span dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/></p>
-                        </div>
-                    )
+        let skippable_attributes = ["code", "text", "parent", "groups", "blocks", "terminal", "active", "version"];
+        // TODO: below if else will be refactored into more compact code
+        for(let attribute in all_attributes) {
+            if (skippable_attributes.includes(attribute)) { continue; }
+            let attribute_value = all_attributes[attribute];
+            // Only show attribute if defined, not null or not empty.
+            if(attribute_value || attribute_value === 0.0){
+                if (attribute !== 'children') {
+                    switch(attribute_value) {
+                        case typeof attribute_value === 'object':
+                            attributes_html.push(
+                                <div key={i}>
+                                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                                    <ul>
+                                        {attribute_value.map((val, j) => (
+                                            <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )
+                            i += 1
+                        default:
+                            attributes_html.unshift (
+                                <div key={i}>
+                                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                                    <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
+                                </div>
+                            )
+                            i += 1
+                    }
                 }
+                else { this.clickableListElement(translateJson, i, attribute, attribute_value, attributes_html) }
             }
-            i += 1
         }
-        if(this.state.attributes["children"] && this.state.attributes["children"].length > 0) {
-            attributes_html.push(
-                <div key={i}>
-                    <h5>{translateJson["LBL_CHILDREN"]}</h5>
-                    <ul>
-                        {this.state.attributes["children"].map((child, i) => (
-                            <li key={i}><a key={"link to child: " + i} className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
-                                <span key={"child text"} dangerouslySetInnerHTML={{__html: child.text}}/></li>
-                        ))}
-                    </ul>
-                </div>
-            )
-        }
-        if(this.state.siblings.length > 0 && !this.state.attributes["children"]) {
-            attributes_html.push(
-                <div key={4}>
-                    <h5>{translateJson["LBL_SIBLINGS"]}</h5>
-                    <ul>
-                        {this.state.siblings.map((child, i) => (
-                            <li key={i}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
-                                <span dangerouslySetInnerHTML={{__html: child.text}}/></li>
-                        ))}
-                    </ul>
-                </div>
-            )
+        if(this.state.siblings && !this.state.attributes["children"]) {
+            this.clickableListElement(translateJson, i, "siblings", this.state.siblings, attributes_html);
         }
         return (
             <div>

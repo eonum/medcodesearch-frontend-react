@@ -6,12 +6,12 @@ import RouterService from "../../Services/router.service";
  */
 class AL extends Component {
     /**
-     * navigate to the child component
+     * navigate to the specified code component
      * @param code
      * @param navigate
      * @param language
      */
-    static goToChild(code, navigate, language) {
+    static goToCode(code, navigate, language) {
         navigate({pathname: "/" + language + "/AL/als/" + code,
             search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
     }
