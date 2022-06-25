@@ -68,6 +68,10 @@
   "LBL_ACTIVE_SUBSTANCES": "Wirkstoff",
   "LBL_LIST_OF_ANALYSES": "AL",
   "LBL_MIGEL": "MiGeL",
-  "LBL_AL": "Analysenliste"
+  "LBL_AL": "Analysenliste",
+  "LBL_TP_AL": "Taxpunkte AL",
+  "LBL_TP_AL": "Taxpunkte TL",
+  "LBL_VALID_TO": "Gültig bis",
+  "LBL_VALID_FROM": "Gültig ab"
 }
 
