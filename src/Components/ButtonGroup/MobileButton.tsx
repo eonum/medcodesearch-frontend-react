@@ -6,7 +6,7 @@ import {convertCategory, findCategory} from "../../Services/category-version.ser
 import React, {Component} from "react";
 import CategorySortService from "../../Services/category-sort.service";
 import DatePicker from "./DatePicker";
-import {IVersions, IButtonLabels, IMobileButton} from "../../interfaces";
+import {IVersions, IButtonLabels} from "../../interfaces";
 
 interface Props {
     initialVersions: IVersions,
@@ -23,6 +23,16 @@ interface Props {
     buttons: IButtonLabels,
     labels: string[],
     chooseC: any
+}
+
+export interface IMobileButton {
+    showPopUp: boolean,
+    disabledVersion: string,
+    disabledCategory: string,
+    allVersions: any,
+    currentVersions: any,
+    buttons: string[],
+    selectedButton: string
 }
 
 /**

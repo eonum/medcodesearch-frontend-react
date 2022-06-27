@@ -7,7 +7,7 @@ import convertDate from "../../Services/convert-date.service";
 import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
 import ConvertDateService from "../../Services/convert-date.service";
-import {IVersions, IButtonLabels, IButtonGroup} from "../../interfaces";
+import {IVersions, IButtonLabels} from "../../interfaces";
 
 interface Props {
     params: any,
@@ -26,6 +26,18 @@ interface Props {
     labels: string[],
     fullLabels: string[],
     buttons: IButtonLabels
+}
+
+interface IButtonGroup {
+    selectedButton: string,
+    activeList: string,
+    lastICD: string,
+    lastDRG: string,
+    lastCHOP: string,
+    lastTARMED: string,
+    selectedDate: string,
+    showHideCal: false,
+    buttons: IButtonLabels,
 }
 
 /**

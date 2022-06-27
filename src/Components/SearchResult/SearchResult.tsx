@@ -2,13 +2,24 @@ import React, {Component} from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
 import RouterService from "../../Services/router.service";
-import {ISearchbar, ISearchResult} from "../../interfaces";
 
 interface Props {
     navigation: any,
     location: any,
     key: string,
     result: ISearchResult
+}
+
+interface ISearchResult {
+    code: string
+    highlight: IHighlight,
+    text: string
+}
+
+interface IHighlight {
+    text: string,
+    synonyms: string[],
+    inclusions: string[]
 }
 
 /**

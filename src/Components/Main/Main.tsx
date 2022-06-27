@@ -1,10 +1,13 @@
 import React, {Component} from "react";
 import './Main.css';
 import {Outlet, useParams} from "react-router-dom";
-import {IMain} from "../../interfaces";
 
 interface Props{
     params: any
+}
+
+interface IMain {
+    page: string
 }
 
 /**

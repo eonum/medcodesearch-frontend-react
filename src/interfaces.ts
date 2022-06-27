@@ -1,4 +1,3 @@
-
 export interface IShortEntry {
     code: string,
     text: string,
@@ -58,96 +57,12 @@ export interface ICode {
     siblings: IShortEntry[],
 }
 
-// TODO: Better interface name, no any.
-export interface IApp {
-    language: string,
-    selectedButton: string,
-    selectedList: string,
-    selectedDate: string,
-    searchResults: string[],
-    clickedOnLogo: boolean,
-    reSetPath: boolean,
-    collapseMenu: boolean,
-    initialVersions: IVersions,
-    currentVersions: IVersions
-}
-
-// Declare types of key value pairs for versions interface.
 export interface IVersions {
     [index: string]: string[];
 }
 
-export interface IButtonGroup {
-    selectedButton: string,
-    activeList: string,
-    lastICD: string,
-    lastDRG: string,
-    lastCHOP: string,
-    lastTARMED: string,
-    selectedDate: string,
-    showHideCal: false,
-    buttons: IButtonLabels,
-}
-
 export interface IButtonLabels {
     [index: number]: string[];
-}
-
-export interface IButtonVersion {
-    showPopUp: boolean,
-    disabledVersion: string,
-    disabledCategory: string,
-}
-
-export interface IButtonWithCal {
-    disabledCategory: string,
-    showPopUp: boolean
-}
-
-export interface IMobileButton {
-    showPopUp: boolean,
-    disabledVersion: string,
-    disabledCategory: string,
-    allVersions: any,
-    currentVersions: any,
-    buttons: string[],
-    selectedButton: string
-}
-
-export interface IHeader {
-    languagePrev: string,
-    language: string
-}
-
-export interface IDatePicker {
-    currentDate: string
-}
-
-export interface IMain {
-    page: string
-}
-
-export interface IPopUp {
-    show: boolean,
-    translateJson: object,
-    availableLanguages: string[]
-}
-
-export interface ISearchbar  {
-    searchTerm: string,
-    reSearch: boolean
-}
-
-export interface ISearchResult {
-    code: string
-    highlight: IHighlight,
-    text: string
-}
-
-export interface IHighlight {
-    text: string,
-    synonyms: string[],
-    inclusions: string[]
 }
 
 export interface IParamTypes {

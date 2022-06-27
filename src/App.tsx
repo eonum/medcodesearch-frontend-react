@@ -14,7 +14,7 @@ import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/category-version.service";
 import findJsonService from "./Services/find-json.service";
-import {IApp} from "./interfaces";
+import {IVersions} from "./interfaces";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -24,6 +24,20 @@ import {IApp} from "./interfaces";
 interface Props {
     navigation: any,
     params: any
+}
+
+// TODO: Better interface name, no any.
+interface IApp {
+    language: string,
+    selectedButton: string,
+    selectedList: string,
+    selectedDate: string,
+    searchResults: string[],
+    clickedOnLogo: boolean,
+    reSetPath: boolean,
+    collapseMenu: boolean,
+    initialVersions: IVersions,
+    currentVersions: IVersions
 }
 
 class App extends Component<Props, IApp>{
