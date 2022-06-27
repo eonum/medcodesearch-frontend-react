@@ -6,10 +6,10 @@ export interface IShortEntry {
 }
 
 interface IAttributes {
-    code?: string,
-    text?: string,
-    parent?: IShortEntry,
-    children?: IShortEntry[],
+    code: string,
+    text: string,
+    parent: IShortEntry,
+    children: IShortEntry[],
     med_interpret?: string,
     tech_interpret?: string,
     tp_al?: number,
