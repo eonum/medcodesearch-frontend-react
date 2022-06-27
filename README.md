@@ -36,7 +36,7 @@ Every method has its own documentation written in Javadoc.
 If not already installed from  `npm install` use `npm install --save-dev jest`, 
 `npm install --save-dev @testing-library/react` and `npm install --save-dev start-server-and-test` to install jest,
 react testing library and start-server-and-test which enables starting a server, then run test command. When you stop
-the tests, the server is automatically shut down.
+the tests, the server is automatically shut down. Also install puppeteer via `npm install jest-puppeteer`.
 
 #### Run tests
 Pay attention that using `npm test` will run tests in browser. As we want to run our tests headless, use 
