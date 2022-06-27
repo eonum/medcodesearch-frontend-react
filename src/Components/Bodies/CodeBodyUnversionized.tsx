@@ -14,7 +14,7 @@ interface Props {
 }
 
 /**
- * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED)
+ * Responsible for the body of the website, for catalogs without versions (i.e. MIGEL, AL, DRUG)
  */
 class CodeBodyUnversionized extends Component<Props, ICode> {
     constructor(props) {
