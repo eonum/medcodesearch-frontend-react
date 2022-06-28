@@ -1,133 +1,108 @@
-describe('search', function() {
-  let driverSearch;
-  var webdriver = require("selenium-webdriver");
-  var By = webdriver.By;
-  var until = webdriver.until;
-  var assert = require('assert');
-  var {urlMatches} = require("selenium-webdriver/lib/until");
-  var {browser, sleep, n, options} = require("../setupTests");
+import puppeteer from "puppeteer";
+import {n, sleep} from "../setupTests";
+import packageJson from "../../package.json"
 
-  beforeAll( async function() {
-    await sleep(n);
-  })
-  beforeEach(async function() {
-    driverSearch = await new webdriver.Builder().forBrowser(browser).setFirefoxOptions(options).build()
-    await driverSearch.manage().setTimeouts( { implicit: 1000 } );
-    await driverSearch.manage().window().maximize();
-  })
-  afterEach(async function() {
-    await sleep(250);
-    await driverSearch.quit();
-    await sleep(250);
+// TODO: We use 4 seconds sleep after await page.goto(baseUrl) since we didn't integrate waiting for page to load all
+//  catalogs before clicking is allowed.
+// TODO: Maybe better use toMatch instead of toBe for search result testing.
+describe('search', function () {
+  let browser;
+  let page;
+  let baseUrl = packageJson.config.testURL;
+
+  // TODO: Viewport should be set via config
+  beforeAll(async function () {
+    browser = await puppeteer.launch({headless: false});
+    page = await browser.newPage();
+    await page.setViewport({width: 1366, height: 768})
   })
 
+  afterAll(() => browser.close());
 
   it('search de icd code (A15.3)', async function() {
-    await driverSearch.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
+    await page.goto(baseUrl);
+    await sleep(4*n);
+    // Click into search field.
+    await page.type(".me-2.form-control", "A15.3");
+    await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15.3')
     await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("A15.3")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
+    let search_element = await page.$(".searchResult:nth-child(1)");
+    let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
+    await sleep(n);
+    expect(search_result).toMatch("A15")
   })
-  it('search it icd (letters)', async function() {
-    await driverSearch.get("http://localhost:8080/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
+
+  it('search it icd text (stomaco)', async function() {
+    await page.goto(baseUrl + '/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020');
+    await sleep(4*n);
+    // Click into search field.
+    await page.type(".me-2.form-control", "stomaco");
+    await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=stomaco')
     await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("letters")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
+    let search_element = await page.$(".searchResult:nth-child(1)");
+    let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
+    expect(search_result).toMatch("stomaco")
   })
-  it('search de icd ($$$)', async function() {
-    await driverSearch.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
+
+  it('search non existing text / code', async function() {
+    await page.goto(baseUrl + '/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020');
+    await sleep(4*n);
+    // Click into search field.
+    await page.type(".me-2.form-control", "$$$");
+    await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=%24%24%24');
     await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("$$$")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
+    let search_element = await page.$(".searchResult:nth-child(1)");
+    let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
+    expect(search_result).toBe("Die Suche erzielte keinen Treffer.");
   })
-  it('search en icd (letters)', async function() {
-    await driverSearch.get("http://localhost:8080/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
+
+  it('search fr chop text (robot)', async function() {
+    await page.goto(baseUrl + "/fr/CHOP/CHOP_2022/chop_chapters/CHOP_2022");
+    await sleep(4*n);
+    // Click into search field.
+    await page.type(".me-2.form-control", "robot");
+    await expect(page.url()).toBe(baseUrl + '/fr/CHOP/CHOP_2022/chop_chapters/CHOP_2022?query=robot');
     await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("letters")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
+    let search_element = await page.$(".searchResult:nth-child(1)");
+    let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
+    expect(search_result).toBe("00.99.50Utilisation dun robot opératoire");
   })
-  it('search fr icd (letters)', async function() {
-    await driverSearch.get("http://localhost:8080/fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
+
+  it('search it tarmed code (12.0010)', async function() {
+    await page.goto(baseUrl + "/it/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09");
+    await sleep(4*n);
+    // Click into search field.
+    await page.type(".me-2.form-control", "12.0010");
+    await expect(page.url()).toBe(baseUrl + '/it/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09?query=12.0010');
     await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("letters")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
+    let search_element = await page.$(".searchResult:nth-child(1)");
+    let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
+    await sleep(n);
+    expect(search_result).toMatch("12.00");
   })
-  it('search de icd (letters)', async function() {
-    await driverSearch.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
+
+  it('search de drug text (aspir)', async function() {
+    await page.goto(baseUrl + "/de/DRUG/drugs/all");
+    await sleep(4*n);
+    // Click into search field.
+    await page.type(".me-2.form-control", "aspir");
+    await expect(page.url()).toBe(baseUrl + '/de/DRUG/drugs/all?query=aspir');
     await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("letters")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
+    let search_element = await page.$(".searchResult:nth-child(1)");
+    let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
+    expect(search_result).toBe("7680576730063ASPIRIN Gran 500 mg Btl 20 Stk");
   })
-  it('search en icd ($$$)', async function() {
-    await driverSearch.get("http://localhost:8080/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
+
+  it('search result is clickable', async function() {
+    await page.goto(baseUrl);
+    await sleep(4*n);
+    // Click into search field.
+    await page.type(".me-2.form-control", "A15.2");
+    await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15.2')
     await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("$$$")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
-  })
-  it('search en icd code (A15.3)', async function() {
-    await driverSearch.get("http://localhost:8080/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
+    await page.click(".searchResult:nth-child(1)");
     await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("A15.3")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
-  })
-  it('search fr icd ($$$)', async function() {
-    await driverSearch.get("http://localhost:8080/fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
-    await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("$$$")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
-  })
-  it('search fr icd code (A15.3)', async function() {
-    await driverSearch.get("http://localhost:8080/fr/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
-    await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("A15.3")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
-  })
-  it('search it icd ($$$)', async function() {
-    await driverSearch.get("http://localhost:8080/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
-    await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("$$$")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
-  })
-  it('search it icd code (A15.3)', async function() {
-    await driverSearch.get("http://localhost:8080/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020")
-    await sleep(2*n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).click()
-    await sleep(n);
-    await driverSearch.wait(until.elementLocated(By.css(".me-2"))).sendKeys("A15.3")
-    await sleep(2*n);
-    assert(urlMatches(/^ICD\\ICD-GM-202\d\\icd_chapters\\ICD10-GM-202\d\\?query=/))
+    // TODO: fix this test
+    expect(page).toMatch("Histologisch gesicherte Lungentuberkulose")
   })
 })
