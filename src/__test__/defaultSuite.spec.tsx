@@ -1,320 +1,141 @@
-describe('Default Suite', function() {
-    let driverDef;
-    var webdriver = require("selenium-webdriver");
-    var By = webdriver.By;
-    var {browser, sleep, n, options} = require("../setupTests");
-    var {urlMatches} = require("selenium-webdriver/lib/until");
-    var assert = require('assert');
+import puppeteer from "puppeteer";
+import {n, sleep} from "../setupTests";
+import packageJson from "../../package.json"
 
-    beforeAll( async function() {
-        await sleep(n);
-    })
-    beforeEach(async function() {
-        driverDef = new webdriver.Builder().forBrowser(browser).setFirefoxOptions(options).build()
-        await driverDef.manage().setTimeouts( { implicit: 1000 } );
-        await driverDef.manage().window().maximize();
-    })
-    afterEach(async function() {
-        await sleep(250);
-        await driverDef.quit();
-        await sleep(250);
+// TODO: We use 4 seconds sleep after await page.goto(baseUrl) since we didn't integrate waiting for page to load all
+//  catalogs before clicking is allowed.
+describe('Default Suite', function () {
+    let browser;
+    let page;
+    let baseUrl = packageJson.config.testURL;
+
+    // TODO: Viewport should be set via config
+    beforeAll(async function () {
+        browser = await puppeteer.launch();
+        page = await browser.newPage();
+        await page.setViewport({width: 1366, height: 768})
     })
 
-    it('clicking from one catalog to another (de)', async function() {
+    afterAll(() => browser.close());
 
-        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(2 * n);
-        await driverDef.findElement(By.css("div:nth-child(3) .customButton:nth-child(1)")).click()
-        assert(urlMatches(/\\de\\SwissDRG\\V11.0\\mdcs\\V11.0/), "matches the url for drg")
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(4) > div > .catalogButtons > .customButton:nth-child(1)")).click()
-        assert(urlMatches(/de\\TARMED\\TARMED_01.09\\tarmed_chapters\\TARMED_01.09/), "matches the url for tarmed")
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > .customButton:nth-child(1)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(1) > div > .catalogButtons > .customButton:nth-child(1)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(4) > div > .catalogButtons > .customButton:nth-child(1)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.name("MiGeL")).click()
-        await sleep(n);
-        await driverDef.findElement(By.name("AL")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(4) > div > .catalogButtons > .customButton:nth-child(1)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.name("DRUG")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > .customButton:nth-child(1)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(1) > div > .catalogButtons > .customButton:nth-child(1)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(3) .customButton:nth-child(1)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(4) > div > .catalogButtons > .customButton:nth-child(1)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.name("DRUG")).click()
+    it('clicking from one catalog to another (de)', async function () {
+        await page.goto(baseUrl);
+        await sleep(4 * n);
+        await page.click('#ICD');
+        await expect(page.url()).toMatch(baseUrl + "/de/ICD/ICD10-GM-2022/icd_chapters/")
+        await expect(page).toMatch('ICD10-GM')
+        await expect(page).toMatch('IX: Krankheiten des Kreislaufsystems')
+        await expect(page).toMatch('Untergeordnete Codes')
+        await page.click('#CHOP');
+        await expect(page.url()).toMatch(baseUrl + "/de/CHOP/CHOP_2022/chop_chapters/")
+        await expect(page).toMatch('CHOP')
+        await expect(page).toMatch('C14: Operationen an den Bewegungsorganen (76–84)')
+        await expect(page).toMatch('Untergeordnete Codes')
+        await page.click('#SwissDRG');
+        await expect(page.url()).toMatch(baseUrl + "/de/SwissDRG/V11.0/mdcs/")
+        await expect(page).toMatch('SwissDRG')
+        await expect(page).toMatch('MDC 22:')
+        await expect(page).toMatch('Verbrennungen')
+        await expect(page).toMatch('Untergeordnete Codes')
+        await page.click("#TARMED");
+        await expect(page).toMatch('TARMED')
+        await expect(page).toMatch('24: Diagnostik und Therapie des Bewegungsapparates')
+        await expect(page).toMatch('Untergeordnete Codes')
+        await expect(page.url()).toMatch(baseUrl + "/de/TARMED/TARMED_01.09/tarmed_chapters/")
+        await page.click('#MiGeL');
+        await expect(page.url()).toMatch(baseUrl + "/de/MIGEL/migels/all")
+        await expect(page).toMatch('MiGeL')
+        await expect(page).toMatch('13: HOERHILFEN')
+        await expect(page).toMatch('Untergeordnete Codes')
+        var element = await page.$("#cal #text");
+        // If "#cal #text" not existing, element would be null.
+        await expect(element).toBeTruthy()
+        await page.click('#AL');
+        await expect(page.url()).toMatch(baseUrl + "/de/AL/als/all")
+        await expect(page).toMatch('AL')
+        await expect(page).toMatch('C: Mikrobiologie')
+        await expect(page).toMatch('Untergeordnete Codes')
+        var element = await page.$("#cal #text");
+        // If "#cal #text" not existing, element would be null.
+        await expect(element).toBeTruthy()
     })
-    it('icd version newer to older and back (de)', async function() {
-        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(2 * n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        {
-            const element = await driverDef.findElement(By.id("buttonversion"))
-            await driverDef.actions({bridge: true}).move({origin: element}).perform()
-        }
-        await sleep(n);
-        {
-            const element = await driverDef.findElement(By.id("main"))
-            await driverDef.actions({bridge: true}).move({origin: element}).perform()
-        }
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2021")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2020")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2018")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2015")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2013")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2011")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2008")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2019")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2021")).click()
-    })
-    it('changing languages', async function() {
 
-        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(2 * n);
-        await driverDef.findElement(By.css(".language-btn:nth-child(2)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css(".language-btn:nth-child(3)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css(".language-btn:nth-child(4)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(3) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(4) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2020")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css(".language-btn:nth-child(3)")).click()
-        await sleep(n);
-        {
-            const element = await driverDef.findElement(By.css(".language-btn:nth-child(2)"))
-            await driverDef.actions({bridge: true}).move({origin: element}).perform()
-        }
-        await sleep(n);
-        {
-            const element = await driverDef.findElement(By.id("main"))
-            await driverDef.actions({bridge: true}).move({origin: element}).perform()
-        }
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css(".language-btn:nth-child(2)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(3) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("V8.0")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2021")).click()
-        await sleep(n);
+    it('switch ICD versions (de)', async function () {
+        await page.goto(baseUrl);
+        await sleep(4 * n);
+        // Catalogs other than the selected one shouldn't be visible if not clicked on versions button.
+        var element = await page.$("#ICD10-GM-2018");
+        await expect(element).toBeNull();
+        await page.click("#buttonversion");
+        await page.click("#ICD10-GM-2018")
+        await expect(page).toMatch('ICD10-GM-2018')
+        await expect(page).toMatch('XV: Schwangerschaft, Geburt und Wochenbett')
+        await expect(element).toBeNull();
+        await page.click("#buttonversion");
+        await page.click("#ICD10-GM-2022");
+        await expect(page).toMatch('ICD10-GM-2022')
+        await expect(page).toMatch('XXII: Schlüsselnummern für besondere Zwecke')
+    })
 
+    it('changing languages', async function () {
+        await page.goto(baseUrl);
+        await sleep(4 * n);
+        await page.click(".language-btn:nth-child(2)")
+        await expect(page).toMatch('Eléments subordonnés')
+        await expect(page).toMatch('XIX: Lésions traumatiques, empoisonnements et certaines autres conséquences de causes externes')
+        await page.click(".language-btn:nth-child(3)")
+        await expect(page).toMatch('Elementi subordinati')
+        await expect(page).toMatch('XVIII: Sintomi, segni e risultati anormali di esami clinici e di laboratorio, non classificati altrove')
+        await page.click(".language-btn:nth-child(4)")
+        await expect(page).toMatch('Subordinate codes')
+        await expect(page).toMatch('VII: Diseases of the eye and adnexa')
+        // Clicks on first ICD Chapter
+        await page.click(".link")
+        await expect(page).toMatch('Certain infectious and parasitic diseases')
+        await expect(page).toMatch('A50-A64: Infections with a predominantly sexual mode of transmission')
+        // Click on french button
+        await page.click(".language-btn:nth-child(2)")
+        await expect(page).toMatch('Certaines maladies infectieuses et parasitaires')
     })
-    it('click from button to other buttons version', async function() {
-        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(2 * n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("CHOP_2020")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(3) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("V8.0")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(4) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("TARMED_01.09")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2019")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("CHOP")).click()
+
+    it('moving from a specific catalog version to other versions of other catalogs', async function() {
+        await page.goto(baseUrl);
+        await sleep(4 * n);
+        // Move from ICD 2022 to CHOP 2020
+        await page.click("div:nth-child(2)>div>.catalogButtons>#buttonversion");
+        await page.click("#CHOP_2020");
+        await expect(page).toMatch("CHOP 2020")
+        // Move to DRG V8.0
+        await page.click("div:nth-child(3) #buttonversion")
+        await sleep(2*n)
+        // TODO: better use ID that are without "." --> stick to best practices!
+        await page.click("#V8\\.0")
+        await expect(page).toMatch("SwissDRG 8.0")
+        // Move to AL
+        await page.click("#AL")
+        await expect(page).toMatch("A: Chemie/Hämatologie/Immunologie")
+        // Move to ICD 2016
+        await page.click("div:nth-child(1)>div>.catalogButtons>#buttonversion");
+        await page.click("#ICD10-GM-2016");
+        await page.click("#buttonversion");
+        await expect(page).toMatch("ICD10-GM-2016")
     })
-    it('hover over buttons', async function() {
-        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(2 * n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("CHOP")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("SwissDRG")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(3) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("TARMED")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(4) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.name("MiGeL")).click()
-        await sleep(n);
-        await driverDef.findElement(By.name("AL")).click()
-        await sleep(n);
-        await driverDef.findElement(By.name("DRUG")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
+
+    it('go to base url when clicking on logo', async function() {
+        await page.goto(baseUrl + '/de/SwissDRG/V4.0/mdcs/V4.0');
+        await expect(page).toMatch("SwissDRG 4.0");
+        await sleep(4*n);
+        await page.click("#logo");
+        await expect(page).toMatch("ICD10-GM-");
     })
-    it('clicking a version from a different catalog', async function() {
-        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(2*n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("CHOP_2020")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(3) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("V10.0")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(4) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("TARMED_01.09")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2017")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css(".language-btn:nth-child(2)")).click()
-        await sleep(n);
-        {
-            const element = await driverDef.findElement(By.css(".language-btn:nth-child(1)"))
-            await driverDef.actions({bridge: true}).move({origin: element}).perform()
-        }
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2020")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("CHOP_2020")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(3) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("V10.0")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(4) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("TARMED_01.09")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(2) > div > .catalogButtons > #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("CHOP_2020")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css(".language-btn:nth-child(4)")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2020")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("ICD10-GM-2022")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css(".language-btn:nth-child(3)")).click()
-        await sleep(n);
-        {
-            const element = await driverDef.findElement(By.id("SwissDRG"))
-            await driverDef.actions({bridge: true}).move({origin: element}).perform()
-        }
-        await sleep(n);
-        {
-            const element = await driverDef.findElement(By.id("main"))
-            await driverDef.actions({bridge: true}).move({origin: element}).perform()
-        }
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(3) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("V10.0")).click()
-    })
-    it('click on logo desktop', async function() {
-        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(2*n);
-        await driverDef.findElement(By.id("SwissDRG")).click()
-        await sleep(n);
-        await driverDef.findElement(By.css("div:nth-child(3) #buttonversion")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("V7.0")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("logo")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("MiGeL")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("logo")).click()
-        await sleep(n);
-    })
+
     it('click on logo mobile', async function() {
-        await driverDef.get("http://localhost:8080/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(2*n);
-        await driverDef.manage().window().setRect({ width: 400, height: 800 })
-        await sleep(n);
-        await driverDef.findElement(By.id("mobilebutton catalog")).click()
-        await sleep(n);
-        await driverDef.findElement(By.linkText("SwissDRG")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("mobilebutton version")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("V9.0")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("logo")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("mobilebutton catalog")).click()
-        await sleep(n);
-        await driverDef.findElement(By.linkText("MiGeL")).click()
-        await sleep(n);
-        await driverDef.findElement(By.id("logo")).click()
-        await sleep(n);
+        await page.setViewport({ width: 400, height: 800 });
+        await page.goto(baseUrl + '/de/SwissDRG/V4.0/mdcs/V4.0');
+        // Set window to mobile size
+        await sleep(4*n);
+        await expect(page).toMatch("SwissDRG 4.0");
+        await page.click("#logo");
+        await expect(page).toMatch("ICD10-GM-");
     })
 })
