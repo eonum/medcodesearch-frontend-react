@@ -32,19 +32,24 @@ The installation guide resides in their own directory `/documentation`. \
 Every method has its own documentation written in Javadoc. 
 
 ### Testing
+We use jest and puppeteer for our tests. Since we use typescript, we also need babel.
 #### Prerequisites
-If not already installed from  `npm install` use `npm install --save-dev jest`, 
-`npm install --save-dev @testing-library/react` and `npm install --save-dev start-server-and-test` to install jest,
-react testing library and start-server-and-test which enables starting a server, then run test command. When you stop
-the tests, the server is automatically shut down. Also install puppeteer via `npm install jest-puppeteer`.
+If not already installed from  `npm install` execute <br />
+`npm install --save-dev jest puppeteer jest-puppeteer` <br />
+`npm install --save-dev @testing-library/react`<br />
+`npm install --save-dev start-server-and-test`<br />
+`npm install --save-dev @babel/preset-typescript`<br />
+Then add config files for jest (jest.config.js), jest-puppeteer (jest-puppeteer.config.tsx) and babel (babel.config.js)
+to your root folder. Adapt scripts in package.json: <br />
+`"test": "jest"` <br />
+`"test-headless": "BROWSER=none PORT=$npm_package_config_testPort start-server-and-test start $npm_package_config_testURL test"`
 
 #### Run tests
-Pay attention that using `npm test` will run tests in browser. As we want to run our tests headless, use 
-`npm run test-headless` which is configured via scripts in `package.json`. There you can also adapt port for test 
+Use vcommand `npm run test-headless` which is configured via scripts in `package.json` (see above Prerequisites. 
+There you can also adapt port for test 
 server which is currently set to `localhost:8080`.
 
-### Contact 
-
+### Contact
 For further question: 
 - +41 (0)31 311 17 06 -> eonum contact
 - [info@eonum.ch](info@eonum.ch) -> eonum contact
@@ -52,5 +57,4 @@ For further question:
 - [eonum.ch/de/kontakt/](https://eonum.ch/de/kontakt/) -> eonum website
 
 ### Diagram
-
 ![img.png](img.png)
