@@ -4,12 +4,12 @@ import packageJson from "../../package.json"
 
 // TODO: We use 4 seconds sleep after await page.goto(baseUrl) since we didn't integrate waiting for page to load all
 //  catalogs before clicking is allowed.
+// TODO: Viewport should be set via config
 describe('PopUp', function () {
   let browser;
   let page;
   let baseUrl = packageJson.config.testURL;
 
-  // TODO: Viewport should be set via config
   beforeAll(async function () {
     browser = await puppeteer.launch();
     page = await browser.newPage();
