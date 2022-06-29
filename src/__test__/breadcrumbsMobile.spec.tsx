@@ -108,7 +108,7 @@ describe('Breadcrumb test suite for mobile version', function () {
         // Move one level up via breadcrumb.
         await page.click("ol>li.breadcrumb-item:nth-child(2)")
         await sleep(2 * n)
-        await expect(page.url()).toBe(baseUrl + 'de/MIGEL/migels/13')
+        await expect(page.url()).toBe(baseUrl + '/de/MIGEL/migels/13')
         await expect(page).toMatch("HOERHILFEN")
         // Move one level up via breadcrumb.
         await page.click("ol>li.breadcrumb-item:nth-child(1)")
