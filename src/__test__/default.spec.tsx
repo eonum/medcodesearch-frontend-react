@@ -11,7 +11,7 @@ describe('Default test suite, testing general navigation via clicks', function (
     let baseUrl = packageJson.config.testURL;
 
     beforeAll(async function () {
-        browser = await puppeteer.launch({headless: false});
+        browser = await puppeteer.launch();
         page = await browser.newPage();
         await page.setViewport({width: 1366, height: 768})
     })
