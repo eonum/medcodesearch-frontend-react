@@ -11,7 +11,7 @@ describe('Default test suite for mobile version, testing general navigation via 
     let baseUrl = packageJson.config.testURL;
 
     beforeAll(async function () {
-        browser = await puppeteer.launch({headless: false});
+        browser = await puppeteer.launch();
         page = await browser.newPage();
         await page.setViewport({width: 400, height: 800})
     })
@@ -32,35 +32,35 @@ describe('Default test suite for mobile version, testing general navigation via 
         await sleep(4*n);
         // Click on catalog button and select CHOP from dropdown.
         await page.click("#mobilebutton\\ catalog")
-        await page.click("#CHOP");
+        await page.click(".dropdown.dropdown-menu.show>a#CHOP");
         await sleep(n);
         // Click on version button and select 2016 from dropdown.
         await page.click("#mobilebutton\\ version");
         await page.click("#CHOP_2016");
         await sleep(2*n);
-        await expect(page.url()).to_be(baseUrl + '/de/CHOP/CHOP_2016/chop_chapters/CHOP_2016')
+        await expect(page.url()).toBe(baseUrl + '/de/CHOP/CHOP_2016/chop_chapters/CHOP_2016')
         await expect(page).toMatch("CHOP 2016")
         // Click on version button and select 2020 from dropdown.
         await page.click("#mobilebutton\\ version")
         await page.click("#CHOP_2020")
         await sleep(2*n);
-        await expect(page.url()).to_be(baseUrl + '/de/CHOP/CHOP_2016/chop_chapters/CHOP_2016')
-        await expect(page).toMatch("CHOP 2016")
-        // Change to Swissdrg V7.0
-        await page.click("mobilebutton catalog")
-        await page.click("#SwissDRG")
+        await expect(page.url()).toBe(baseUrl + '/de/CHOP/CHOP_2020/chop_chapters/CHOP_2020')
+        await expect(page).toMatch("CHOP 2020")
+        // Change to Swissdrg V7.0.
+        await page.click("#mobilebutton\\ catalog")
+        await page.click(".dropdown.dropdown-menu.show>a#SwissDRG")
         await sleep(n);
         // Click on version button and select V7.0 from dropdown.
         await page.click("#mobilebutton\\ version")
         await page.click("#V7\\.0")
         await sleep(n);
-        await expect(page.url()).to_be(baseUrl + '/de/SwissDRG/V7.0/mdcs/V7.0')
+        await expect(page.url()).toBe(baseUrl + '/de/SwissDRG/V7.0/mdcs/V7.0')
         await expect(page).toMatch("SwissDRG 7.0")
         // Click on version button and select V7.0 from dropdown.
         await page.click("#mobilebutton\\ catalog")
-        await page.click("#TARMED")
+        await page.click(".dropdown.dropdown-menu.show>a#TARMED")
         await sleep(n);
-        await expect(page.url()).to_be(baseUrl + '/de/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09')
+        await expect(page.url()).toBe(baseUrl + '/de/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09')
         await expect(page).toMatch("TARMED")
     })
 
