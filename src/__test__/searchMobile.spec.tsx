@@ -77,12 +77,12 @@ describe('Search test suite for mobile version', function () {
     // Click into search field.
     await page.type(".me-2.form-control", "12.0010");
     await expect(page.url()).toBe(baseUrl + '/it/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09?query=12.0010');
-    await sleep(n);
+    await sleep(2*n);
     await page.waitForSelector(".searchResult:nth-child(1)", {visible: true})
     let search_element = await page.$(".searchResult:nth-child(1)");
     let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
     await sleep(n);
-    expect(search_result).toMatch("12.00");
+    expect(search_result).toMatch("12.");
   })
 
   it('search de drug text (aspir)', async function() {
