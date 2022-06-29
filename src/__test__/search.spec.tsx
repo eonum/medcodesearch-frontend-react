@@ -4,15 +4,14 @@ import packageJson from "../../package.json"
 
 // TODO: We use 4 seconds sleep after await page.goto(baseUrl) since we didn't integrate waiting for page to load all
 //  catalogs before clicking is allowed.
-// TODO: Maybe better use toMatch instead of toBe for search result testing.
+// TODO: Viewport should be set via config
 describe('search', function () {
   let browser;
   let page;
   let baseUrl = packageJson.config.testURL;
 
-  // TODO: Viewport should be set via config
   beforeAll(async function () {
-    browser = await puppeteer.launch({headless: false});
+    browser = await puppeteer.launch();
     page = await browser.newPage();
     await page.setViewport({width: 1366, height: 768})
   })
@@ -65,7 +64,7 @@ describe('search', function () {
     await sleep(n);
     let search_element = await page.$(".searchResult:nth-child(1)");
     let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
-    expect(search_result).toBe("00.99.50Utilisation dun robot opératoire");
+    expect(search_result).toMatch("robot opératoire");
   })
 
   it('search it tarmed code (12.0010)', async function() {
@@ -90,7 +89,7 @@ describe('search', function () {
     await sleep(n);
     let search_element = await page.$(".searchResult:nth-child(1)");
     let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
-    expect(search_result).toBe("7680576730063ASPIRIN Gran 500 mg Btl 20 Stk");
+    expect(search_result).toMatch("ASPIRIN");
   })
 
   it('search result is clickable', async function() {
@@ -99,10 +98,11 @@ describe('search', function () {
     // Click into search field.
     await page.type(".me-2.form-control", "A15.2");
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15.2')
-    await sleep(n);
+    await page.waitForSelector('.searchResult:nth-child(1)')
     await page.click(".searchResult:nth-child(1)");
     await sleep(n);
-    // TODO: fix this test
-    expect(page).toMatch("Histologisch gesicherte Lungentuberkulose")
+    let element = await page.$('.text-start.ms-3')
+    let value = await page.evaluate(el => el.textContent, element)
+    await expect(value).toMatch("Lungentuberkulose")
   })
 })
