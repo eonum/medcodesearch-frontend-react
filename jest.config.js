@@ -1,6 +1,9 @@
 module.exports = {
-    preset: "jest-puppeteer",
+    testTimeout: 30000,
+    testMatch: ['**/?(*.)+(spec|test).[t]s[x]'],
+    preset: 'jest-puppeteer',
     transform: {
-        "^.+\\.tsx?$": "babel-jest"
-    }
-}
+        '^.+\\.tsx$': 'babel-jest',
+    },
+    testPathIgnorePatterns: ['/node_modules/'],
+};

@@ -106,7 +106,7 @@ describe('Search test suite', function () {
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15.2')
     await page.waitForSelector(".searchResult:nth-child(1)", {visible: true})
     await page.click(".searchResult:nth-child(1)");
-    await sleep(n);
+    await sleep(2*n);
     let element = await page.$('.text-start.ms-3')
     let value = await page.evaluate(el => el.textContent, element)
     await expect(value).toMatch("Lungentuberkulose")
