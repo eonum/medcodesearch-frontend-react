@@ -1,10 +1,7 @@
 import puppeteer from "puppeteer";
-import {n, sleep} from "../setupTests";
+import {n} from "../setupTests";
 import packageJson from "../../package.json"
 
-// TODO: We use 4 seconds sleep after await page.goto(baseUrl) since we didn't integrate waiting for page to load all
-//  catalogs before clicking is allowed.
-// TODO: Viewport should be set via config
 describe('PopUp test suite', function () {
   let browser;
   let page;
@@ -19,18 +16,15 @@ describe('PopUp test suite', function () {
   afterAll(() => browser.close());
 
   it('PopUp for versions not available in language', async function () {
-    await page.goto(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022');
-    await sleep(4 * n);
+    await page.goto(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022', {waitUntil: 'networkidle0'});
     // Change language to 'fr'.
+    await page.waitForSelector(".language-btn:nth-child(3)", {visible: true});
     await page.click(".language-btn:nth-child(2)");
-    await sleep(3*n)
+    await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022');
     // Click on versions button for icds.
     await page.waitForSelector("#buttonversion", {visible: true})
     await page.click("#buttonversion")
-    await sleep(n);
-    // Version stays the same when clicking on versions button.
-    await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022');
     // Select ICD 2021 (which is not available in 'fr').
     await page.waitForSelector("#ICD10-GM-2021", {visible: true})
     await page.click("#ICD10-GM-2021");
@@ -51,7 +45,7 @@ describe('PopUp test suite', function () {
     await page.waitForSelector(".modal-footer>button", {visible: true})
     // 'de' should be first button.
     await page.click(".modal-footer>div>.customButton.langBtn:nth-child(1)");
-    await sleep(2*n);
+    await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2021/icd_chapters/ICD10-GM-2021');
   })
 })

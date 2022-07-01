@@ -19,8 +19,7 @@ describe('Default test suite, testing general navigation via clicks', function (
     afterAll(() => browser.close());
 
     it('clicking from one catalog to another (de)', async function () {
-        await page.goto(baseUrl);
-        await sleep(4 * n);
+        await page.goto(baseUrl, {waitUntil: 'networkidle0'});
         await page.click('#ICD');
         await expect(page.url()).toMatch(baseUrl + "/de/ICD/ICD10-GM-2022/icd_chapters/")
         await expect(page).toMatch('ICD10-GM')
@@ -61,8 +60,7 @@ describe('Default test suite, testing general navigation via clicks', function (
     })
 
     it('switch ICD versions (de)', async function () {
-        await page.goto(baseUrl);
-        await sleep(4 * n);
+        await page.goto(baseUrl, {waitUntil: 'networkidle0'});
         // Catalogs other than the selected one shouldn't be visible if not clicked on versions button.
         var element = await page.$("#ICD10-GM-2018");
         await expect(element).toBeNull();
@@ -78,8 +76,7 @@ describe('Default test suite, testing general navigation via clicks', function (
     })
 
     it('changing languages', async function () {
-        await page.goto(baseUrl);
-        await sleep(4 * n);
+        await page.goto(baseUrl, {waitUntil: 'networkidle0'});
         await page.click(".language-btn:nth-child(2)")
         await expect(page).toMatch('Eléments subordonnés')
         await expect(page).toMatch('XIX: Lésions traumatiques, empoisonnements et certaines autres conséquences de causes externes')
@@ -99,15 +96,14 @@ describe('Default test suite, testing general navigation via clicks', function (
     })
 
     it('moving from a specific catalog version to other versions of other catalogs', async function() {
-        await page.goto(baseUrl);
-        await sleep(4 * n);
+        await page.goto(baseUrl, {waitUntil: 'networkidle0'});
         // Move from ICD 2022 to CHOP 2020
         await page.click("div:nth-child(2)>div>.catalogButtons>#buttonversion");
         await page.click("#CHOP_2020");
         await expect(page).toMatch("CHOP 2020")
         // Move to DRG V8.0
         await page.click("div:nth-child(3) #buttonversion")
-        await sleep(2*n)
+        await page.waitForTimeout(n);
         // TODO: better use ID that are without "." --> stick to best practices!
         await page.click("#V8\\.0")
         await expect(page).toMatch("SwissDRG 8.0")
@@ -122,130 +118,125 @@ describe('Default test suite, testing general navigation via clicks', function (
     })
 
     it('go to base url when clicking on logo', async function() {
-        await page.goto(baseUrl + '/de/SwissDRG/V4.0/mdcs/V4.0');
+        await page.goto(baseUrl + '/de/SwissDRG/V4.0/mdcs/V4.0', {waitUntil: 'networkidle0'});
         await expect(page).toMatch("SwissDRG 4.0");
-        await sleep(4*n);
         await page.click("#logo");
         await expect(page).toMatch("ICD10-GM-");
     })
 
     it('icd clicking from I to A00.0 (de, 2022)', async function() {
-        await page.goto(baseUrl + "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(4*n);
+        await page.goto(baseUrl + "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022", {waitUntil: 'networkidle0'})
         // Click on I (first ICD chapter).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/I')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Bestimmte infektiöse und parasitäre Krankheiten")
+        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_groups/A00-A09')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Infektiöse Darmkrankheiten")
+        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_groups/A00-A09')
         // Click on A00 (first nonterminal of icd group A00-A09).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A00')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Cholera")
+        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A00')
         // Click on A00.0 (first code of ICD nonterminal A00).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A00.0')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Cholera durch Vibrio cholerae O:1, Biovar cholerae")
+        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A00.0')
         // Click on A00.1 (first sibling).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A00.1')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Cholera durch Vibrio cholerae O:1, Biovar eltor")
+        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A00.1')
     })
 
     it('icd clicking from I to A00.0 (fr, 2022)', async function() {
-        await page.goto(baseUrl + "/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(4*n);
+        await page.goto(baseUrl + "/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022", {waitUntil: 'networkidle0'})
         // Click on I (first ICD chapter).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_chapters/I')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Certaines maladies infectieuses et parasitaires")
+        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_groups/A00-A09')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Maladies intestinales infectieuses")
+        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_groups/A00-A09')
         // Click on A00 (first nonterminal of icd group A00-A09).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icds/A00')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Choléra")
+        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icds/A00')
         // Click on A00.0 (first code of ICD nonterminal A00).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icds/A00.0')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("A Vibrio cholerae 01, biovar cholerae")
+        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icds/A00.0')
         // Click on A00.1 (first sibling).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icds/A00.1')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("A Vibrio cholerae 01, biovar El Tor")
+        await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icds/A00.1')
     })
 
     it('icd clicking from I to A00.0 (it, 2022)', async function() {
-        await page.goto(baseUrl + "/it/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(4*n);
+        await page.goto(baseUrl + "/it/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022", {waitUntil: 'networkidle0'})
         // Click on I (first ICD chapter).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icd_chapters/I')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Alcune malattie infettive e parassitarie")
+        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icd_groups/A00-A09')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Malattie infettive intestinali")
+        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icd_groups/A00-A09')
         // Click on A00 (first nonterminal of icd group A00-A09).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icds/A00')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Colera")
+        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icds/A00')
         // Click on A00.0 (first code of ICD nonterminal A00).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icds/A00.0')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Colera da Vibrio cholerae O:1, biotipo del colera")
+        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icds/A00.0')
         // Click on A00.1 (first sibling).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icds/A00.1')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Colera da Vibrio cholerae O:1, biotipo El Tor")
+        await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icds/A00.1')
     })
 
     it('icd clicking from I to A00.0 (en, 2022)', async function() {
-        await page.goto(baseUrl + "/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await sleep(4*n);
+        await page.goto(baseUrl + "/en/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022", {waitUntil: 'networkidle0'})
         // Click on I (first ICD chapter).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icd_chapters/I')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Certain infectious and parasitic diseases")
+        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icd_groups/A00-A09')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Intestinal infectious diseases")
+        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icd_groups/A00-A09')
         // Click on A00 (first nonterminal of icd group A00-A09).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icds/A00')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Cholera")
+        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icds/A00')
         // Click on A00.0 (first code of ICD nonterminal A00).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icds/A00.0')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Cholera due to Vibrio cholerae 01, biovar cholerae")
+        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icds/A00.0')
         // Click on A00.1 (first sibling).
         await page.click("ul>li:first-child>a")
-        await sleep(2*n)
-        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icds/A00.1')
+        await page.waitForTimeout(n);
         await expect(page).toMatch("Cholera due to Vibrio cholerae 01, biovar eltor")
+        await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icds/A00.1')
     })
 })
