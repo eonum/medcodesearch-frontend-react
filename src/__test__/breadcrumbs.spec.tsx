@@ -1,5 +1,4 @@
 import puppeteer from "puppeteer";
-import {n, sleep} from "../setupTests";
 import packageJson from "../../package.json"
 
 // TODO: We use 4 seconds sleep after await page.goto(baseUrl) since we didn't integrate waiting for page to load all
@@ -9,6 +8,7 @@ describe('Breadcrumb test suite', function () {
     let browser;
     let page;
     let baseUrl = packageJson.config.testURL;
+    let n = 1000;
 
     beforeAll(async function () {
         browser = await puppeteer.launch();

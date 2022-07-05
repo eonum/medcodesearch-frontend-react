@@ -1,11 +1,11 @@
 import puppeteer from "puppeteer";
-import {n} from "../setupTests";
 import packageJson from "../../package.json"
 
 describe('Search test suite', function () {
   let browser;
   let page;
   let baseUrl = packageJson.config.testURL;
+  let n = 1000;
 
   beforeAll(async function () {
     browser = await puppeteer.launch();
@@ -19,7 +19,7 @@ describe('Search test suite', function () {
     await page.goto(baseUrl, {waitUntil: 'networkidle0'});
     // Click into search field.
     await page.type(".me-2.form-control", "A15.3");
-    await page.waitForTimeout(n);
+    await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15.3')
     let search_element = await page.$(".searchResult:nth-child(1)");
     let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
@@ -30,7 +30,7 @@ describe('Search test suite', function () {
     await page.goto(baseUrl + '/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020', {waitUntil: 'networkidle0'});
     // Click into search field.
     await page.type(".me-2.form-control", "stomaco");
-    await page.waitForTimeout(n);
+    await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=stomaco')
     let search_element = await page.$(".searchResult:nth-child(1)");
     let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
@@ -41,7 +41,7 @@ describe('Search test suite', function () {
     await page.goto(baseUrl + '/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020', {waitUntil: 'networkidle0'});
     // Click into search field.
     await page.type(".me-2.form-control", "$$$");
-    await page.waitForTimeout(n);
+    await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=%24%24%24');
     let search_element = await page.$(".searchResult:nth-child(1)");
     let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
@@ -52,7 +52,7 @@ describe('Search test suite', function () {
     await page.goto(baseUrl + "/fr/CHOP/CHOP_2022/chop_chapters/CHOP_2022", {waitUntil: 'networkidle0'});
     // Click into search field.
     await page.type(".me-2.form-control", "robot");
-    await page.waitForTimeout(n);
+    await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/fr/CHOP/CHOP_2022/chop_chapters/CHOP_2022?query=robot');
     let search_element = await page.$(".searchResult:nth-child(1)");
     let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
@@ -74,7 +74,7 @@ describe('Search test suite', function () {
     await page.goto(baseUrl + "/de/DRUG/drugs/all", {waitUntil: 'networkidle0'});
     // Click into search field.
     await page.type(".me-2.form-control", "aspir");
-    await page.waitForTimeout(n);
+    await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/de/DRUG/drugs/all?query=aspir');
     let search_element = await page.$(".searchResult:nth-child(1)");
     let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
@@ -85,7 +85,7 @@ describe('Search test suite', function () {
     await page.goto(baseUrl, {waitUntil: 'networkidle0'});
     // Click into search field.
     await page.type(".me-2.form-control", "A15");
-    await page.waitForTimeout(n);
+    await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15')
     await page.click(".searchResult:nth-child(1)");
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A15?query=A15')

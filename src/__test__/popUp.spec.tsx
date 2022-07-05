@@ -1,11 +1,11 @@
 import puppeteer from "puppeteer";
-import {n} from "../setupTests";
 import packageJson from "../../package.json"
 
 describe('PopUp test suite', function () {
   let browser;
   let page;
   let baseUrl = packageJson.config.testURL;
+  let n = 1000;
 
   beforeAll(async function () {
     browser = await puppeteer.launch();
