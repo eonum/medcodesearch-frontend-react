@@ -3,7 +3,6 @@ import convertDate from "../../Services/convert-date.service";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import DatePicker from "./DatePicker";
 import PopUp from "../PopUp/PopUp";
-import {IButtonWithCal} from "../../interfaces";
 
 interface Props {
     updateCategory: any,
@@ -17,6 +16,11 @@ interface Props {
     fullLabel: string,
     select: any,
     active: string
+}
+
+interface IButtonWithCal {
+    disabledCategory: string,
+    showPopUp: boolean
 }
 
 /**

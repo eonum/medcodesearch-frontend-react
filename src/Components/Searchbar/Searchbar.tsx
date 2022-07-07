@@ -6,7 +6,6 @@ import {createSearchParams, useNavigate} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 import ConvertDateService from "../../Services/convert-date.service";
 import findJsonService from "../../Services/find-json.service";
-import {ISearchbar} from "../../interfaces";
 
 interface Props {
     language: string,
@@ -15,6 +14,11 @@ interface Props {
     date: string,
     searchResults: any,
     navigation: any
+}
+
+interface ISearchbar  {
+    searchTerm: string,
+    reSearch: boolean
 }
 
 /**

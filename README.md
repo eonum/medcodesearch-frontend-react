@@ -9,8 +9,7 @@ Backend which is used is: [search.eonum.ch](https://search.eonum.ch/documentatio
 
 ### Installation instructions
 
-For the local installation go into the folder `medcodesearch-frontend-react` and run `npm install` \
-To start the local app run `npm start`. 
+For the local installation go into the folder `medcodesearch-frontend-react` and run `npm install`. To start the local app run `npm start`. 
 It will open at [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Issues
@@ -28,23 +27,27 @@ Constants are always uppercase. \
 All components reside in their own subdirectory in `/src/Components`. \
 All services reside in their own subdirectory in `/src/Services`. \
 All test-suites reside in their own subdirectory in `/src/__test_`. \
-The installation guide resides in their own directory `/documentation`. \
 Every method has its own documentation written in Javadoc. 
 
 ### Testing
+We use jest and puppeteer for our tests. Since we use typescript, we also need babel for transformation.
 #### Prerequisites
-If not already installed from  `npm install` use `npm install --save-dev jest`, 
-`npm install --save-dev @testing-library/react` and `npm install --save-dev start-server-and-test` to install jest,
-react testing library and start-server-and-test which enables starting a server, then run test command. When you stop
-the tests, the server is automatically shut down.
-
+If not already installed from  `npm install` execute <br />
+`npm install --save-dev jest puppeteer jest-puppeteer` <br />
+`npm install --save-dev @testing-library/react`<br />
+`npm install --save-dev start-server-and-test`<br />
+`npm install --save-dev @babel/preset-typescript`<br />
+#### Config
+All the configuration for jest, puppeteer and babel are specified in the  files jest.config.js, jest-puppeteer.config.js 
+and babel.config.js in the root folder and can be adapted to your needs. Since we do UI tests, we need a running server.
+This is implemented via jest-puppeteer config file server block `server: { command: "npm run startHeadlessTestPort"}` and 
+corresponding scripts in package.json
+`"test": "jest --runInBand"` and `"startHeadlessOnTestPort": "BROWSER=none PORT=$npm_package_config_testPort npm start"`.
 #### Run tests
-Pay attention that using `npm test` will run tests in browser. As we want to run our tests headless, use 
-`npm run test-headless` which is configured via scripts in `package.json`. There you can also adapt port for test 
-server which is currently set to `localhost:8080`.
+Use `npm test` to start headless server and tests. You can also just test single suites using 
+`npm test /path/to/test/file`. Currently the port is set to `localhost:8080` in package.json.
 
-### Contact 
-
+### Contact
 For further question: 
 - +41 (0)31 311 17 06 -> eonum contact
 - [info@eonum.ch](info@eonum.ch) -> eonum contact
@@ -52,5 +55,4 @@ For further question:
 - [eonum.ch/de/kontakt/](https://eonum.ch/de/kontakt/) -> eonum website
 
 ### Diagram
-
 ![img.png](img.png)

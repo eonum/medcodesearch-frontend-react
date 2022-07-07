@@ -5,7 +5,6 @@ import {Modal} from "react-bootstrap";
 import deJson from "../../assets/translations/de.json";
 import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
 import findJsonService from "../../Services/find-json.service";
-import {IPopUp} from "../../interfaces";
 
 interface Props {
     language: string,
@@ -16,6 +15,12 @@ interface Props {
     updateValue: any,
     version: string,
     category: string
+}
+
+interface IPopUp {
+    show: boolean,
+    translateJson: object,
+    availableLanguages: string[]
 }
 
 /**

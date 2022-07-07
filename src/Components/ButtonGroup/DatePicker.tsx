@@ -2,13 +2,15 @@ import React from 'react'
 import { Form } from 'react-bootstrap';
 import ConvertDateService from "../../Services/convert-date.service";
 import "./DatePicker.css"
-import {IDatePicker} from "../../interfaces";
 
 interface Props {
     activeDate: string,
     setDate: any
 }
 
+interface IDatePicker {
+    currentDate: string
+}
 
 /**
  * Creates the Datepicker for MIGEL, AL and Med

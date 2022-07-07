@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 import packageJson from "../../package.json"
 
-describe('Search test suite', function () {
+describe('Search test suite for mobile version', function () {
   let browser;
   let page;
   let baseUrl = packageJson.config.testURL;
@@ -10,14 +10,15 @@ describe('Search test suite', function () {
   beforeAll(async function () {
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    await page.setViewport({width: 1366, height: 768})
+    await page.setViewport({width: 400, height: 800})
   })
 
   afterAll(() => browser.close());
 
   it('search de icd code (A15.3)', async function() {
-    await page.goto(baseUrl, {waitUntil: 'networkidle0'});
+    await page.goto(baseUrl);
     // Click into search field.
+    await page.waitForSelector(".me-2.form-control", {visible: true});
     await page.type(".me-2.form-control", "A15.3");
     await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15.3')
@@ -27,8 +28,9 @@ describe('Search test suite', function () {
   })
 
   it('search it icd text (stomaco)', async function() {
-    await page.goto(baseUrl + '/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020', {waitUntil: 'networkidle0'});
+    await page.goto(baseUrl + '/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020');
     // Click into search field.
+    await page.waitForSelector(".me-2.form-control", {visible: true});
     await page.type(".me-2.form-control", "stomaco");
     await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=stomaco')
@@ -38,8 +40,9 @@ describe('Search test suite', function () {
   })
 
   it('search non existing text / code', async function() {
-    await page.goto(baseUrl + '/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020', {waitUntil: 'networkidle0'});
+    await page.goto(baseUrl + '/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020');
     // Click into search field.
+    await page.waitForSelector(".me-2.form-control", {visible: true});
     await page.type(".me-2.form-control", "$$$");
     await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=%24%24%24');
@@ -49,8 +52,9 @@ describe('Search test suite', function () {
   })
 
   it('search fr chop text (robot)', async function() {
-    await page.goto(baseUrl + "/fr/CHOP/CHOP_2022/chop_chapters/CHOP_2022", {waitUntil: 'networkidle0'});
+    await page.goto(baseUrl + "/fr/CHOP/CHOP_2022/chop_chapters/CHOP_2022");
     // Click into search field.
+    await page.waitForSelector(".me-2.form-control", {visible: true});
     await page.type(".me-2.form-control", "robot");
     await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/fr/CHOP/CHOP_2022/chop_chapters/CHOP_2022?query=robot');
@@ -60,10 +64,11 @@ describe('Search test suite', function () {
   })
 
   it('search it tarmed code (12.0010)', async function() {
-    await page.goto(baseUrl + "/it/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09", {waitUntil: 'networkidle0'});
+    await page.goto(baseUrl + "/it/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09");
     // Click into search field.
+    await page.waitForSelector(".me-2.form-control", {visible: true});
     await page.type(".me-2.form-control", "12.0010");
-    await page.waitForTimeout(n);
+    await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/it/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09?query=12.0010');
     let search_element = await page.$(".searchResult:nth-child(1)");
     let search_result = await page.evaluate( search_element => search_element.textContent, search_element);
@@ -71,8 +76,9 @@ describe('Search test suite', function () {
   })
 
   it('search de drug text (aspir)', async function() {
-    await page.goto(baseUrl + "/de/DRUG/drugs/all", {waitUntil: 'networkidle0'});
+    await page.goto(baseUrl + "/de/DRUG/drugs/all");
     // Click into search field.
+    await page.waitForSelector(".me-2.form-control", {visible: true});
     await page.type(".me-2.form-control", "aspir");
     await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/de/DRUG/drugs/all?query=aspir');
@@ -82,8 +88,9 @@ describe('Search test suite', function () {
   })
 
   it('search result is clickable', async function() {
-    await page.goto(baseUrl, {waitUntil: 'networkidle0'});
+    await page.goto(baseUrl);
     // Click into search field.
+    await page.waitForSelector(".me-2.form-control", {visible: true});
     await page.type(".me-2.form-control", "A15");
     await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15')

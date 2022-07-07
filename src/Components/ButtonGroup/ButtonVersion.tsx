@@ -2,7 +2,6 @@ import React from "react";
 import {Dropdown} from "react-bootstrap";
 import PopUp from "../PopUp/PopUp";
 import {convertCategory, findCategory} from "../../Services/category-version.service";
-import {IButtonVersion} from "../../interfaces";
 
 interface Props {
     key: string,
@@ -19,6 +18,12 @@ interface Props {
     selectedVersion: string,
     selectedCategory: string,
     chooseV: any
+}
+
+export interface IButtonVersion {
+    showPopUp: boolean,
+    disabledVersion: string,
+    disabledCategory: string,
 }
 
 /**

@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import './header.css'
-import {IHeader} from "../../interfaces";
 
 interface Props {
     language: any,
     activeLanguage: string
+}
+
+interface IHeader {
+    languagePrev: string,
+    language: string
 }
 
 /**
