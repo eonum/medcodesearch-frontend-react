@@ -8,3 +8,18 @@ export const initialCodeState = {
     parents: [],
     siblings: [],
 }
+
+export const skippableAttributes = [
+    "code",
+    "text",
+    "parent",
+    "groups",
+    "blocks",
+    "terminal",
+    "active",
+    "version",
+    "valid_from",
+    "valid_to",
+    "children",
+    "is_limited"
+]

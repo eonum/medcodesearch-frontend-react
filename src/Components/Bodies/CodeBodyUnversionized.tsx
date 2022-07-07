@@ -5,7 +5,7 @@ import AL from "./AL";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {ICode, IParamTypes} from "../../interfaces";
-import {initialCodeState} from "../../Utils";
+import {initialCodeState, skippableAttributes} from "../../Utils";
 
 interface Props {
     params: IParamTypes,
@@ -53,28 +53,21 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     /**
      * Does a case distinction for all the catalogs and set the string ready for fetching
      * @param language
-     * @param resource_type
-     * @param version
-     * @param code
+     * @param resourceType ('migels', 'als', 'drugs')
+     * @param code ('all' if base code, (non-)terminal code else)
+     * @param catalog ('MIGEL', 'AL', 'DRUG')
      * @returns {Promise<null|any>}
      */
-    async fetchHelper(language, resource_type, version, code) {
-        resource_type = resource_type.toUpperCase();
-        if(code === "all") {
-            code = resource_type
-        }
-        if (code === "all" && code !== 'AL') {
-            return null
-        } else {
-            if (version === 'AL'){
-                resource_type = resource_type + "/" + resource_type;
-                code = '?show_detail=1'
-            }
-            return await fetch('https://search.eonum.ch/' + language + "/" + version + "/" + resource_type + "/" + code + "?show_detail=1")
-                .then((res) => {
-                    return res.json()
-                })
-        }
+    async fetchHelper(language, resourceType, code, catalog) {
+        let codeForFetch = code === 'all' ? catalog : code;
+        // // Set base code for mdcs, since this is not equal to version but equal to 'ALL'.
+        // if (resourceType === 'mdcs' && code === version) {
+        //     codeForFetch = 'ALL'
+        // }
+        return await fetch('https://search.eonum.ch/' + language + "/" + resourceType + "/" + catalog + "/" + codeForFetch + "?show_detail=1")
+            .then((res) => {
+                return res.json()
+            })
     }
 
     /**
@@ -82,15 +75,10 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @returns {Promise<void>}
      */
     async fetchInformations() {
-        let newAttributes, versions;
-        if (this.props.params.catalog === "MIGEL") {
-            versions = 'migels'
-        }else if (this.props.params.catalog === "AL") {
-            versions = 'laboratory_analyses';
-        }else if (this.props.params.catalog === "DRUG") {
-            versions = 'drugs'
-        }
-        newAttributes = await this.fetchHelper(this.props.params.language, this.props.params.catalog, versions, this.props.params.code)
+        let newAttributes;
+        const {language, code, catalog} = this.props.params;
+        let resourceType = catalog === 'AL' ? 'laboratory_analyses' : this.props.params.resource_type;
+        newAttributes = await this.fetchHelper(language, resourceType, code, catalog)
         if (newAttributes !== null) {
             this.setState({attributes: newAttributes})
         }
@@ -134,7 +122,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 
     /**
-     * navigates to the specified code component
+     * Navigates to the specified code component.
      * @param code
      */
     goToCode(code) {
@@ -147,114 +135,127 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 
     /**
-     * Returns code in the correct language
+     * If input is a base code ('MIGEL', 'AL', 'DRUG'), the method returns the base code in the given language,
+     *  otherwise just returns input.
      * @param code
      * @returns {string|*}
      */
     extractLabel(code){
         let language = this.props.params.language;
-        if(code==="MIGEL"){
-            switch (language) {
-                case "fr":
-                    return "LiMA"
-                case "it":
-                    return "EMAp"
-                default: return "MiGeL";
-            }
+        switch (true) {
+            case ((code === "MIGEL") && (language === "de")):
+                return "MiGeL"
+            case ((code === "MIGEL") && (language === "fr")):
+                return "LiMA"
+            case ((code === "MIGEL") && (language === "it")):
+                return "EMAp"
+            case ((code === "AL") && (language === "de")):
+                return code
+            case ((code === "AL") && (language === "fr")):
+                return "LA"
+            case ((code === "AL") && (language === "it")):
+                return "EA"
+            case (code === "DRUG"):
+                return "Med"
+            default:
+                return code
         }
-        else if(code==="AL"){
-            switch (language) {
-                case "fr":
-                    return "LA"
-                case "it":
-                    return "EA"
-                default: return code;
-            }
-        }
-        else if(code==="DRUG") {
-            return "Med";
-        }
-        else return code;
     }
 
     /**
-     * Returns code in the correct language
-     * @param code
-     * @returns {string|*}
+     * Updates list of html elements with a clickable code attribute (used for subordinate or similar codes).
      */
-    clickableListElement(translateJson, ind, attribute, attribute_value, attributes_html) {
-        attributes_html.push(
-            <div key={ind}>
-                <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                <ul>
-                    {attribute_value.map((val, j) => (
-                        <li key={j}><a key={"related_code_" + j} className="link" onClick={() => {this.goToCode(val)}}>{val.code}: </a>
-                            <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
-                    ))}
-                </ul>
-            </div>
-    )
+    addClickableElement(translateJson, ind, attribute, attributeValue, attributesHtml) {
+        if (attributeValue.length) {
+            attributesHtml.push(
+                <div key={ind}>
+                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                    <ul>
+                        {attributeValue.map((val, j) => (
+                            <li key={j}><a key={"related_code_" + j} className="link" onClick={() => {
+                                this.goToCode(val)
+                            }}>{val.code}: </a>
+                                <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
+                        ))}
+                    </ul>
+                </div>
+            )
+        }
     }
 
+    /**
+     * Updates attributes_html with attribute of non clickable object type.
+     */
+    addObjectElement(translateJson, attribute, ind, attributeValue, attributesHtml) {
+        if (attributeValue.length) {
+            attributesHtml.push(
+                <div key={ind}>
+                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                    <ul>
+                        {attributeValue.map((val, j) => (
+                            <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
+                        ))}
+                    </ul>
+                </div>
+            )
+        }
+    }
 
     /**
      * Render the CodeBodyUnversionized component
      * @returns {JSX.Element}
      */
     render() {
+        // Generate BreadCrumbs.
         let parentBreadCrumbs = [];
-        // TODO: Collecting Breadcrumbs will be refactored into Utils since we can use it for both un- & versionized codes.
-        if(this.state.parents){
-            for(let i=this.state.parents.length-1; i>=0; i--){
-                parentBreadCrumbs.push(<Breadcrumb.Item
-                    key={i}
-                    onClick={() => this.goToCode(this.state.parents[i])}
-                    className="breadLink"
-                >{this.extractLabel(this.state.parents[i].code)}</Breadcrumb.Item>)
+        if (this.state.parents) {
+            for (let i = this.state.parents.length - 1; i >= 0; i--) {
+                parentBreadCrumbs.push(
+                    <Breadcrumb.Item
+                        key={i}
+                        onClick={() => this.goToCode(this.state.parents[i])}
+                        className="breadLink"
+                    >{this.extractLabel(this.state.parents[i].code)}</Breadcrumb.Item>)
             }
         }
 
         let translateJson = findJsonService(this.props.params.language);
-        let attributes_html = [];
-        let all_attributes = this.state.attributes;
+        let attributesHtml = [];
         let i = 1;
-        let skippable_attributes = ["code", "text", "parent", "groups", "blocks", "terminal", "active", "version"];
-        // TODO: below if else will be refactored into more compact code
-        for(let attribute in all_attributes) {
-            if (skippable_attributes.includes(attribute)) { continue; }
-            let attribute_value = all_attributes[attribute];
+
+        // Add all non null/empty/undefined code attributes to attributesHtml.
+        for (let attribute in this.state.attributes) {
+            // Skip attributes we do not want to show, like terminal, version, ... or add later (siblings and children).
+            if (skippableAttributes.includes(attribute)) { continue; }
+            // Get value of current attribute.
+            let attributeValue = this.state.attributes[attribute];
             // Only show attribute if defined, not null or not empty.
-            if(attribute_value || attribute_value === 0.0){
-                if (attribute !== 'children') {
-                    switch(attribute_value) {
-                        case typeof attribute_value === 'object':
-                            attributes_html.push(
-                                <div key={i}>
-                                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                                    <ul>
-                                        {attribute_value.map((val, j) => (
-                                            <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )
-                            i += 1
-                        default:
-                            attributes_html.unshift (
-                                <div key={i}>
-                                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                                    <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
-                                </div>
-                            )
-                            i += 1
-                    }
+            if (attributeValue != null || attributeValue != undefined) {
+                if (typeof attributeValue === 'object') {
+                    this.addObjectElement(translateJson, attribute, i, attributeValue, attributesHtml)
+                    i += 1
+                } else {
+                    attributesHtml.push(
+                        <div key={i}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                            <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
+                        </div>
+                    )
+                    i += 1
                 }
-                else { this.clickableListElement(translateJson, i, attribute, attribute_value, attributes_html) }
             }
         }
-        if(this.state.siblings && !this.state.attributes["children"]) {
-            this.clickableListElement(translateJson, i, "siblings", this.state.siblings, attributes_html);
+
+        // Add children (subordinate codes).
+        if (this.state.attributes.children) {
+            this.addClickableElement(translateJson, i, 'children', this.state.attributes.children, attributesHtml)
         }
+
+        // Add siblings (similar codes).
+        if(this.state.siblings && !this.state.attributes["children"]) {
+            this.addClickableElement(translateJson, i, "siblings", this.state.siblings, attributesHtml);
+        }
+
         return (
             <div>
                 <Breadcrumb>
@@ -263,7 +264,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                 </Breadcrumb>
                 <h3>{this.extractLabel(this.state.attributes["code"])}</h3>
                 <p dangerouslySetInnerHTML={{__html: this.state.attributes["text"]}} />
-                {attributes_html}
+                {attributesHtml}
             </div>
         )
     }
