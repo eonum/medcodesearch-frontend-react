@@ -44,10 +44,6 @@
   "LBL_ATC_CODE": "ATC code",
   "LBL_UNIT": "Einheit",
   "LBL_COMMENT": "Kommentar",
-  "LBL_PHARMA_FORM": "Pharmazeutische Form",
-  "LBL_EXCIPIENTS": "Hilfsstoffe",
-  "LBL_AUTH_NUMBER": "Autorisierungsnummer",
-  "LBL_PACKAGE_CODE": "Paketcode",
   "LBL_MED_INTERPRET": "Medizinische Interpretation",
   "LBL_TECH_INTERPRET": "Technische Interpretation",
   "LBL_LIMITATION": "Limitation",
@@ -69,9 +65,9 @@
   "LBL_LIST_OF_ANALYSES": "AL",
   "LBL_MIGEL": "MiGeL",
   "LBL_AL": "Analysenliste",
-  "LBL_TP_AL": "Taxpunkte AL",
-  "LBL_TP_AL": "Taxpunkte TL",
-  "LBL_VALID_TO": "Gültig bis",
-  "LBL_VALID_FROM": "Gültig ab"
+  "LBL_PHARMA_FORM": "Pharmazeutische Form",
+  "LBL_EXCIPIENTS": "Hilfsstoffe",
+  "LBL_AUTH_NUMBER": "Autorisierungsnummer",
+  "LBL_PACKAGE_CODE": "Paketcode"
 }
 

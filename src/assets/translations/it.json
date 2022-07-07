@@ -30,6 +30,10 @@
   "LBL_PREDECESSORS": "Vorgängercodes in Vorversion",
   "LBL_SUCCESSORS": "Nachfolgercodes in Nachversion",
   "LBL_NEW_CODE": "Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat.",
+  "LBL_TP_AL": "Punti tariffali della prestazione medica",
+  "LBL_TP_TL": "Punti tariffali della prestazione technica",
+  "LBL_GROUPS": "Gruppi TARMED",
+  "LBL_BLOCKS": "Blocchi TARMED",
   "LBL_KLV1_col1": "Misurare",
   "LBL_KLV1_col2": "Rimuneand razione obbligatoria",
   "LBL_KLV1_col3": "Condizioni",
@@ -40,10 +44,6 @@
   "LBL_ATC_CODE": "ATC code",
   "LBL_UNIT": "Unità",
   "LBL_COMMENT": "Commento",
-  "LBL_GROUPS": "Gruppi TARMED",
-  "LBL_BLOCKS": "Blocchi TARMED",
-  "LBL_TP_AL": "Punti tariffali della prestazione medica",
-  "LBL_TP_TL": "Punti tariffali della prestazione technica",
   "LBL_MED_INTERPRET": "Interpretazione medica",
   "LBL_TECH_INTERPRET": "Interpretazione tecnica",
   "LBL_LIMITATION": "Limitazione",
@@ -65,5 +65,4 @@
   "LBL_LIST_OF_ANALYSES": "EA",
   "LBL_MIGEL": "EMAp",
   "LBL_AL": "Insieme elenco delle analisi"
-
 }
