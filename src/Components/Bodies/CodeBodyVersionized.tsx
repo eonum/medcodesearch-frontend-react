@@ -8,6 +8,8 @@ import {Breadcrumb} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {ICode, IParamTypes, IParamTypesVersionized} from "../../interfaces";
 import {initialCodeState} from "../../Utils";
+import IcdSortService from "../../Services/icd-sort.service";
+import CodeSortService from "../../Services/code-sort.service";
 
 interface Props {
     params: IParamTypesVersionized,
@@ -53,22 +55,44 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 
     /**
+     * Does a case distinction for all the catalogs and set the string ready for fetching
+     * @param language
+     * @param resourceType ('icd_chapters', 'icd_groups', 'icds', 'chop_chapters', ...)
+     * @param code (equal to version if base code, (non-)terminal code else)
+     * @param catalog ('ICD', 'CHOP', 'DRG', 'TARMED')
+     * @param version ('ICD10-GM-2022', 'ICD10-GM-2021', ...)
+     * @returns {Promise<null|any>}
+     */
+    async fetchHelper(language, resourceType, code, catalog, version, attributes) {
+        let newAttributes = attributes;
+        let codeForFetch = code;
+        // Set base code for mdcs, since this is not equal to version but equal to 'ALL'.
+        if (resourceType === 'mdcs' && code === version) {
+            codeForFetch = 'ALL'
+        }
+        let sortService = catalog === 'ICD' ? IcdSortService : CodeSortService;
+        let fetchString = ['https://search.eonum.ch', language, resourceType, version, codeForFetch, "?show_detail=1"].join("/");
+        return await fetch(fetchString)
+            .then((res) => res.json())
+            .then((json) => {
+                for(let attribute in attributes) {
+                    newAttributes[attribute] = json[attribute]
+                }
+                if(version === code && ["ICD", "CHOP", "DRG"].includes(catalog)) {
+                    newAttributes["children"] = sortService(json["children"])
+                }
+            })
+            .then(() => {return newAttributes})
+    }
+
+    /**
      * Fetch the information from the backend and does a case distinction for all the catalogs
      * @returns {Promise<void>}
      */
-    // TODO: I will refactor below code into Utils with fetchInformation shared between all versionized codes.
-    //   No need to implement it in each CHOP, ICD, DRG and TARMED class.
     async fetchInformations() {
         let detailedCode;
-        if (this.props.params.catalog === "ICD") {
-            detailedCode = await ICD.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state.attributes)
-        } else if (this.props.params.catalog === "CHOP") {
-            detailedCode = await CHOP.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state.attributes)
-        } else if (this.props.params.catalog === "TARMED") {
-            detailedCode = await TARMED.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state.attributes)
-        } else {
-            detailedCode = await DRG.fetchInformations(this.props.params.language, this.props.params.resource_type, this.props.params.version, this.props.params.code, this.state.attributes)
-        }
+        let {language, catalog, resource_type, code, version} = this.props.params;
+        detailedCode = await this.fetchHelper(language, resource_type, code, catalog, version, this.state.attributes)
         if (detailedCode !== null) {
             this.setState({attributes: detailedCode})
         }
@@ -108,19 +132,19 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 
     /**
-     * navigates to the child component
-     * @param child
+     * Navigates to the specified code.
+     * @param code
      */
-    goToChild(child) {
+    goToCode(code) {
         let navigate = this.props.navigation
         if(this.props.params.catalog === "ICD") {
-            ICD.goToChild(child.code, navigate, this.props.params.version, this.props.params.language)
+            ICD.goToChild(code.code, navigate, this.props.params.version, this.props.params.language)
         } else if(this.props.params.catalog === "CHOP") {
-            CHOP.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
+            CHOP.goToChild(code.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
         } else if(this.props.params.catalog === "TARMED") {
-            TARMED.goToChild(child.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
+            TARMED.goToChild(code.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
         } else {
-            DRG.goToChild(child, navigate, this.props.params.version, this.props.params.language)
+            DRG.goToChild(code, navigate, this.props.params.version, this.props.params.language)
         }
     }
 
@@ -206,12 +230,11 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             }
         }
 
-        // TODO: Collecting Breadcrumbs will be refactored into Utils since we can use it for both un- & versionized codes.
         if(this.state.parents && this.state.parents.length > 0){
             for(let i=this.state.parents.length-1; i>=0; i--){
                 parentBreadCrumbs.push(<Breadcrumb.Item
                     key={i}
-                    onClick={() => this.goToChild(this.state.parents[i])}
+                    onClick={() => this.goToCode(this.state.parents[i])}
                     className="breadLink"
                 >{this.state.parents[i].code}</Breadcrumb.Item>)
             }
@@ -287,7 +310,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <ul>
                                 {this.state.attributes[attribute].map((child, i) => (
-                                    <li key={child + " number " + (i * 23)}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}:</a> {child.text}</li>
+                                    <li key={child + " number " + (i * 23)}><a className="link" onClick={() => {this.goToCode(child)}}>{child.code}:</a> {child.text}</li>
                                 ))}
                             </ul>
                         </div>
@@ -301,7 +324,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                     <h5>{translateJson["LBL_SIBLINGS"]}</h5>
                     <ul>
                         {this.state.siblings.map((child, i) => (
-                            <li key={i}><a className="link" onClick={() => {this.goToChild(child)}}>{child.code}: </a>
+                            <li key={i}><a className="link" onClick={() => {this.goToCode(child)}}>{child.code}: </a>
                                 <span dangerouslySetInnerHTML={{__html: child.text}}/></li>
                         ))}
                     </ul>

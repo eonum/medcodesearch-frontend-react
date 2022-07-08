@@ -8,30 +8,6 @@ import {IVersionizedCode} from "../../interfaces";
  * responsible for the TARMED component and the pathname
  */
 class TARMED extends Component<IVersionizedCode> {
-
-    /**
-     * Fetch the TARMED in the correct language and version
-     * @param language
-     * @param resource_type
-     * @param version
-     * @param code
-     * @param attributes
-     * @returns {Promise<any>}
-     */
-    static async fetchInformations(language, resource_type, version, code, attributes) {
-        let newAttributes = attributes
-        return await fetch('https://search.eonum.ch/' + language + "/" + resource_type + "/" + version + "/" + code + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    for(let attribute in attributes) {
-                        newAttributes[attribute] = json[attribute]
-                    }
-                    if(version === code) {
-                        newAttributes["children"] = CodeSortService(json["children"])
-                    }})
-            .then(() => {return newAttributes})
-    }
-
     /**
      * navigate to the child component
      * @param code

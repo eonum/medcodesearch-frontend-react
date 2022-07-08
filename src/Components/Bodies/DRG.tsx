@@ -7,40 +7,6 @@ import {IVersionizedCode} from "../../interfaces";
  * responsible for the AL Component and the pathname
  */
 class DRG extends Component<IVersionizedCode> {
-
-    /**
-     * etch the DRG in the correct language and version
-     * @param language
-     * @param resource_type
-     * @param version
-     * @param code
-     * @param attributes
-     * @returns {Promise<any>}
-     */
-    static async fetchInformations(language, resource_type, version, code, attributes) {
-        let codeForSearch;
-        let cat = 'mdcs';
-        let newAttributes = attributes
-        if (resource_type !==  'mdcs'){
-            cat = resource_type;
-        }
-        if (version === code){
-            codeForSearch = '/ALL'
-        }
-        else {
-            codeForSearch = '/' + code;
-        }
-
-        return await fetch('https://search.eonum.ch/' + language + "/" + cat+ "/" + version + codeForSearch + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                        for (let attribute in attributes) {
-                            newAttributes[attribute] = json[attribute]
-                        }}
-                    )
-                .then(() => {return newAttributes})
-    }
-
     /**
      * navigate to the child component
      * @param child

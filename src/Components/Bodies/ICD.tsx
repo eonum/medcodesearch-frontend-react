@@ -8,7 +8,6 @@ import {IVersionizedCode} from "../../interfaces";
  * responsible fot he ICD component and the pathname
  */
 class ICD extends Component<IVersionizedCode> {
-
     /**
      * navigate to the child component
      * @param code
@@ -28,30 +27,6 @@ class ICD extends Component<IVersionizedCode> {
             navigate({pathname: "/" + language + "/ICD/" + version + "/icd_groups/" + code,
                 search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
         }
-    }
-
-    /**
-     *  Fetch the ICD in the correct language and version
-     * @param language
-     * @param resource_type
-     * @param version
-     * @param code
-     * @param attributes
-     * @returns {Promise<any>}
-     */
-    static async fetchInformations(language, resource_type, version, code, attributes) {
-        let newAttributes = attributes
-        return await fetch('https://search.eonum.ch/' + language + "/" + resource_type + "/" + version + "/" + code + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    for(let attribute in attributes) {
-                        newAttributes[attribute] = json[attribute]
-                    }
-                    if(version === code) {
-                        newAttributes["children"] = IcdSortService(json["children"])
-                    }
-                })
-            .then(() => {return newAttributes})
     }
 
     /**
