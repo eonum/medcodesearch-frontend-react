@@ -13,6 +13,7 @@ import BodyII from "./Components/Bodies/CodeBodyUnversionized";
  * Renders the whole application
  */
 ReactDOM.render(
+    // StrictMode renders components twice (on dev but not production), detecting problems / deprecations / warnings.
     <React.StrictMode>
         <Router>
             <Routes>
