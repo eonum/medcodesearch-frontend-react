@@ -1,7 +1,5 @@
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
-import MIGEL from "./MIGEL";
-import AL from "./AL";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {ICode, IParamTypes} from "../../interfaces";
