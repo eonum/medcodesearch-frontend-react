@@ -10,6 +10,7 @@ import {ICode, IParamTypes, IParamTypesVersionized} from "../../interfaces";
 import {initialCodeState} from "../../Utils";
 import IcdSortService from "../../Services/icd-sort.service";
 import CodeSortService from "../../Services/code-sort.service";
+import RouterService from "../../Services/router.service";
 
 interface Props {
     params: IParamTypesVersionized,
@@ -136,16 +137,23 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param code
      */
     goToCode(code) {
+        let catalog = this.props.params.catalog;
+        // Transform backend of code to frontend url for navigation
+        // TODO: This split and assignment feels kinda error prone or unstylish but saves a ton of distinctions that
+        //  where made via regexes. Any style suggestions?
+        let backend_url_components = code.url.split("/").filter(e => e);
+        let language = backend_url_components[0];
+        let resourceType = backend_url_components[1];
+        let version = backend_url_components[2];
+        let codeFromBackend = backend_url_components[3];
+        // Convert base code 'ALL' from SwissDrg to version.
+        let codeToNavigate = codeFromBackend === 'ALL' ? version : codeFromBackend;
         let navigate = this.props.navigation
-        if(this.props.params.catalog === "ICD") {
-            ICD.goToChild(code.code, navigate, this.props.params.version, this.props.params.language)
-        } else if(this.props.params.catalog === "CHOP") {
-            CHOP.goToChild(code.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
-        } else if(this.props.params.catalog === "TARMED") {
-            TARMED.goToChild(code.code.replace(" ", "_"), navigate, this.props.params.version, this.props.params.language)
-        } else {
-            DRG.goToChild(code, navigate, this.props.params.version, this.props.params.language)
-        }
+        let queryString = "?query=" + RouterService.getQueryVariable('query');
+        navigate({
+            pathname: "/" + language + "/" + catalog + "/" + version + "/" + resourceType + "/" + codeToNavigate,
+            search: RouterService.getQueryVariable('query') === "" ? "" : queryString
+        })
     }
 
     /**

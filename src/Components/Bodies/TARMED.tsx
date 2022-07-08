@@ -9,23 +9,6 @@ import {IVersionizedCode} from "../../interfaces";
  */
 class TARMED extends Component<IVersionizedCode> {
     /**
-     * navigate to the child component
-     * @param code
-     * @param navigate
-     * @param version
-     * @param language
-     */
-    static goToChild(code, navigate, version, language) {
-        if(code.match(/^TARMED_[0-9][0-9].[0-9][0-9]$|^[0-9][0-9]$/)) {
-            navigate({pathname: "/" + language + "/TARMED/" + version + "/tarmed_chapters/" + code,
-                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-        } else {
-            navigate({pathname: "/" + language + "/TARMED/" + version + "/tarmeds/" + code,
-                search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')})
-        }
-    }
-
-    /**
      * Render the TARMED component
      * @returns {JSX.Element}
      */
