@@ -6,6 +6,7 @@ import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {ICode, IParamTypes} from "../../interfaces";
 import {initialCodeState, skippableAttributes} from "../../Utils";
+import RouterService from "../../Services/router.service";
 
 interface Props {
     params: IParamTypes,
@@ -58,12 +59,9 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @param catalog ('MIGEL', 'AL', 'DRUG')
      * @returns {Promise<null|any>}
      */
-    async fetchHelper(language, resourceType, code, catalog) {
+    async fetchHelper(language, resource_type, code, catalog) {
         let codeForFetch = code === 'all' ? catalog : code;
-        // // Set base code for mdcs, since this is not equal to version but equal to 'ALL'.
-        // if (resourceType === 'mdcs' && code === version) {
-        //     codeForFetch = 'ALL'
-        // }
+        let resourceType = catalog === 'AL' ? 'laboratory_analyses' : resource_type;
         return await fetch('https://search.eonum.ch/' + language + "/" + resourceType + "/" + catalog + "/" + codeForFetch + "?show_detail=1")
             .then((res) => {
                 return res.json()
@@ -76,9 +74,8 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      */
     async fetchInformations() {
         let newAttributes;
-        const {language, code, catalog} = this.props.params;
-        let resourceType = catalog === 'AL' ? 'laboratory_analyses' : this.props.params.resource_type;
-        newAttributes = await this.fetchHelper(language, resourceType, code, catalog)
+        const {language, code, resource_type, catalog} = this.props.params;
+        newAttributes = await this.fetchHelper(language, resource_type, code, catalog)
         if (newAttributes !== null) {
             this.setState({attributes: newAttributes})
         }
@@ -122,15 +119,21 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 
     /**
-     * Navigates to the specified code component.
+     * Navigates to the specified AL or MIGEL code. Used for clickable codes and breadcrumbs, i.e. parents, children
+     * and siblings and thus not needed for drugs.
      * @param code
      */
     goToCode(code) {
-        let navigate = this.props.navigation
-        if(this.props.params.catalog === "MIGEL") {
-            MIGEL.goToCode(code.code, navigate, this.props.params.language)
-        } else if(this.props.params.catalog === "AL") {
-            AL.goToCode(code.code, navigate, this.props.params.language)
+        let navigate = this.props.navigation;
+        let language = this.props.params.language;
+        let catalog = this.props.params.catalog;
+        let resourceType = catalog === 'AL' ? 'laboratory_analyses' : this.props.params.resource_type;
+        let queryString = "?query=" + RouterService.getQueryVariable('query');
+        if (["MIGEL", "AL"].includes(catalog)) {
+            navigate({
+                pathname: "/" + language + "/" + catalog + "/" + resourceType + "/" + code.code,
+                search: RouterService.getQueryVariable('query') === "" ? "" : queryString
+            })
         }
     }
 
