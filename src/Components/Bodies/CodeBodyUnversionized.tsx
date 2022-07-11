@@ -52,13 +52,13 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     /**
      * Does a case distinction for all the catalogs and set the string ready for fetching
      * @param language
-     * @param resourceType ('migels', 'als', 'drugs')
+     * @param resource_type ('migels', 'als', 'drugs')
      * @param code ('all' if base code, (non-)terminal code else)
      * @param catalog ('MIGEL', 'AL', 'DRUG')
      * @returns {Promise<null|any>}
      */
-    async fetchHelper(language, resourceType, code, catalog) {
-        let fetchString = ['https://search.eonum.ch', language, resourceType, catalog, code, "?show_detail=1"].join("/")
+    async fetchHelper(language, resource_type, code, catalog) {
+        let fetchString = ['https://search.eonum.ch', language, resource_type, catalog, code, "?show_detail=1"].join("/")
         return await fetch(fetchString)
             .then((res) => {
                 return res.json()
@@ -73,8 +73,11 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         let newAttributes;
         const {language, code, resource_type, catalog} = this.props.params;
         let codeForFetch = code === 'all' ? catalog : code;
-        let resourceType = catalog === 'AL' ? 'laboratory_analyses' : resource_type;
-        newAttributes = await this.fetchHelper(language, resourceType, codeForFetch, catalog)
+        newAttributes = await this.fetchHelper(
+            language,
+            catalog === 'AL' ? 'laboratory_analyses' : resource_type,
+            codeForFetch,
+            catalog)
         if (newAttributes !== null) {
             this.setState({attributes: newAttributes})
         }
@@ -126,11 +129,11 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         let navigate = this.props.navigation;
         let language = this.props.params.language;
         let catalog = this.props.params.catalog;
-        let resourceType = catalog === 'AL' ? 'laboratory_analyses' : this.props.params.resource_type;
+        let pathname = [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : this.props.params.resource_type, code.code].join("/")
         let queryString = "?query=" + RouterService.getQueryVariable('query');
         if (["MIGEL", "AL"].includes(catalog)) {
             navigate({
-                pathname: "/" + language + "/" + catalog + "/" + resourceType + "/" + code.code,
+                pathname: "/" + pathname,
                 search: RouterService.getQueryVariable('query') === "" ? "" : queryString
             })
         }

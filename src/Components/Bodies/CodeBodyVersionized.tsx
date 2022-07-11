@@ -54,14 +54,14 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     /**
      * Does a case distinction for all the catalogs and set the string ready for fetching
      * @param language
-     * @param resourceType ('icd_chapters', 'icd_groups', 'icds', 'chop_chapters', ...)
+     * @param resource_type ('icd_chapters', 'icd_groups', 'icds', 'chop_chapters', ...)
      * @param code (equal to version if base code, (non-)terminal code else)
      * @param catalog ('ICD', 'CHOP', 'DRG', 'TARMED')
      * @param version ('ICD10-GM-2022', 'ICD10-GM-2021', ...)
      * @returns {Promise<null|any>}
      */
-    async fetchHelper(language, resourceType, code, catalog, version) {
-        let fetchString = ['https://search.eonum.ch', language, resourceType, version, code, "?show_detail=1"].join("/");
+    async fetchHelper(language, resource_type, code, catalog, version) {
+        let fetchString = ['https://search.eonum.ch', language, resource_type, version, code, "?show_detail=1"].join("/");
         return await fetch(fetchString)
             .then((res) => {
                 return res.json()
@@ -128,21 +128,19 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param code
      */
     goToCode(code) {
-        let catalog = this.props.params.catalog;
+        let {language, catalog, version, resource_type} = this.props.params;
         // Transform backend of code to frontend url for navigation
         // TODO: This split and assignment feels kinda error prone or unstylish but saves a ton of distinctions that
         //  where made via regexes. Any style suggestions?
         let backend_url_components = code.url.split("/").filter(e => e);
-        let language = backend_url_components[0];
-        let resourceType = backend_url_components[1];
-        let version = backend_url_components[2];
         let codeFromBackend = backend_url_components[3];
         // Convert base code 'ALL' from SwissDrg to version.
         let codeToNavigate = codeFromBackend === 'ALL' ? version : codeFromBackend;
         let navigate = this.props.navigation
         let queryString = "?query=" + RouterService.getQueryVariable('query');
+        let pathname = [language, catalog, version, resource_type, codeToNavigate].join("/")
         navigate({
-            pathname: "/" + language + "/" + catalog + "/" + version + "/" + resourceType + "/" + codeToNavigate,
+            pathname: "/" + pathname,
             search: RouterService.getQueryVariable('query') === "" ? "" : queryString
         })
     }
