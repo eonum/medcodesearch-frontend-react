@@ -200,7 +200,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     /**
      * Updates list of html elements with a clickable code attribute (used for subordinate or similar codes).
      */
-    addClickableElement(translateJson, ind, attribute, attributeValue, attributesHtml) {
+    addClickableCodeAttribute(translateJson, ind, attribute, attributeValue, attributesHtml) {
         if (attributeValue.length) {
             attributesHtml.push(
                 <div key={ind}>
@@ -221,7 +221,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     /**
      * Updates attributes_html with attribute of non clickable object type.
      */
-    addObjectElement(translateJson, attribute, ind, attributeValue, attributesHtml) {
+    addObjectTypeCodeAttribute(translateJson, attribute, ind, attributeValue, attributesHtml) {
         if (attributeValue.length) {
             attributesHtml.push(
                 <div key={ind}>
@@ -299,7 +299,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             // Only show attribute if defined, not null or not empty.
             if (!["", null, undefined].includes(attributeValue)) {
                 if (typeof attributeValue === 'object') {
-                    this.addObjectElement(translateJson, attribute, i, attributeValue, attributesHtml)
+                    this.addObjectTypeCodeAttribute(translateJson, attribute, i, attributeValue, attributesHtml)
                     i += 1
                 } else {
                     attributesHtml.push(
@@ -315,12 +315,12 @@ class CodeBodyVersionized extends Component<Props, ICode> {
 
         // Add children (subordinate codes).
         if (this.state.attributes.children) {
-            this.addClickableElement(translateJson, i, 'children', this.state.attributes.children, attributesHtml)
+            this.addClickableCodeAttribute(translateJson, i, 'children', this.state.attributes.children, attributesHtml)
         }
 
         // Add siblings (similar codes).
         if(this.state.siblings && !this.state.attributes["children"]) {
-            this.addClickableElement(translateJson, i, "siblings", this.state.siblings, attributesHtml);
+            this.addClickableCodeAttribute(translateJson, i, "siblings", this.state.siblings, attributesHtml);
         }
 
         let title = this.state.attributes.code.replace("_", " ");
