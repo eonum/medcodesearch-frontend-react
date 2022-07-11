@@ -65,12 +65,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @returns {Promise<null|any>}
      */
     async fetchHelper(language, resourceType, code, catalog, version) {
-        let codeForFetch = code;
-        // Set base code for mdcs, since this is not equal to version but equal to 'ALL'.
-        if (resourceType === 'mdcs' && code === version) {
-            codeForFetch = 'ALL'
-        }
-        let fetchString = ['https://search.eonum.ch', language, resourceType, version, codeForFetch, "?show_detail=1"].join("/");
+        let fetchString = ['https://search.eonum.ch', language, resourceType, version, code, "?show_detail=1"].join("/");
         return await fetch(fetchString)
             .then((res) => {
                 return res.json()
@@ -85,7 +80,12 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         let detailedCode;
         let {language, catalog, resource_type, code, version} = this.props.params;
         let sortService = catalog === 'ICD' ? IcdSortService : CodeSortService;
-        detailedCode = await this.fetchHelper(language, resource_type, code, catalog, version)
+        let codeForFetch = code;
+        // Set base code for mdcs, since this is not equal to version but equal to 'ALL'.
+        if (resource_type === 'mdcs' && code === version) {
+            codeForFetch = 'ALL'
+        }
+        detailedCode = await this.fetchHelper(language, resource_type, codeForFetch, catalog, version)
         if (version === code) {
             detailedCode["children"] = sortService(detailedCode["children"])
         }

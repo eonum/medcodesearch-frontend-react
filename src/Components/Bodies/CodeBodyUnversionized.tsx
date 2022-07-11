@@ -57,10 +57,8 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @param catalog ('MIGEL', 'AL', 'DRUG')
      * @returns {Promise<null|any>}
      */
-    async fetchHelper(language, resource_type, code, catalog) {
-        let codeForFetch = code === 'all' ? catalog : code;
-        let resourceType = catalog === 'AL' ? 'laboratory_analyses' : resource_type;
-        let fetchString = ['https://search.eonum.ch', language, resourceType, catalog, codeForFetch, "?show_detail=1"].join("/")
+    async fetchHelper(language, resourceType, code, catalog) {
+        let fetchString = ['https://search.eonum.ch', language, resourceType, catalog, code, "?show_detail=1"].join("/")
         return await fetch(fetchString)
             .then((res) => {
                 return res.json()
@@ -74,7 +72,9 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     async fetchInformations() {
         let newAttributes;
         const {language, code, resource_type, catalog} = this.props.params;
-        newAttributes = await this.fetchHelper(language, resource_type, code, catalog)
+        let codeForFetch = code === 'all' ? catalog : code;
+        let resourceType = catalog === 'AL' ? 'laboratory_analyses' : resource_type;
+        newAttributes = await this.fetchHelper(language, resourceType, codeForFetch, catalog)
         if (newAttributes !== null) {
             this.setState({attributes: newAttributes})
         }
