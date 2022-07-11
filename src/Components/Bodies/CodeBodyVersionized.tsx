@@ -64,26 +64,17 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param version ('ICD10-GM-2022', 'ICD10-GM-2021', ...)
      * @returns {Promise<null|any>}
      */
-    async fetchHelper(language, resourceType, code, catalog, version, attributes) {
-        let newAttributes = attributes;
+    async fetchHelper(language, resourceType, code, catalog, version) {
         let codeForFetch = code;
         // Set base code for mdcs, since this is not equal to version but equal to 'ALL'.
         if (resourceType === 'mdcs' && code === version) {
             codeForFetch = 'ALL'
         }
-        let sortService = catalog === 'ICD' ? IcdSortService : CodeSortService;
         let fetchString = ['https://search.eonum.ch', language, resourceType, version, codeForFetch, "?show_detail=1"].join("/");
         return await fetch(fetchString)
-            .then((res) => res.json())
-            .then((json) => {
-                for(let attribute in attributes) {
-                    newAttributes[attribute] = json[attribute]
-                }
-                if(version === code && ["ICD", "CHOP", "DRG"].includes(catalog)) {
-                    newAttributes["children"] = sortService(json["children"])
-                }
+            .then((res) => {
+                return res.json()
             })
-            .then(() => {return newAttributes})
     }
 
     /**
@@ -93,7 +84,11 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     async fetchInformations() {
         let detailedCode;
         let {language, catalog, resource_type, code, version} = this.props.params;
-        detailedCode = await this.fetchHelper(language, resource_type, code, catalog, version, this.state.attributes)
+        let sortService = catalog === 'ICD' ? IcdSortService : CodeSortService;
+        detailedCode = await this.fetchHelper(language, resource_type, code, catalog, version)
+        if (version === code) {
+            detailedCode["children"] = sortService(detailedCode["children"])
+        }
         if (detailedCode !== null) {
             this.setState({attributes: detailedCode})
         }
