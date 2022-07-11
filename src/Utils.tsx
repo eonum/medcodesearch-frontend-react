@@ -26,5 +26,6 @@ export const skippableAttributes = [
     "is_limited",
     "base_analyis",
     "special_analysis",
-    "auth_holder_nr"
+    "auth_holder_nr",
+    "prefix"
 ]

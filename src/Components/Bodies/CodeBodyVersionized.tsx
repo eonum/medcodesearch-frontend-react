@@ -1,13 +1,9 @@
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
-import ICD from "./ICD"
-import CHOP from "./CHOP";
-import TARMED from "./TARMED";
-import DRG from "./DRG";
 import {Breadcrumb} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
-import {ICode, IParamTypes, IParamTypesVersionized} from "../../interfaces";
-import {initialCodeState} from "../../Utils";
+import {ICode, IParamTypesVersionized} from "../../interfaces";
+import {initialCodeState, skippableAttributes} from "../../Utils";
 import IcdSortService from "../../Services/icd-sort.service";
 import CodeSortService from "../../Services/code-sort.service";
 import RouterService from "../../Services/router.service";
@@ -165,9 +161,10 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param parent
      * @returns {Promise<void>}
      */
-    // TODO: I will refactor below code into Utils since we can use this for versionized and unversionized codes.
+    // TODO: Does it make sense to refactor grandparents and siblings fetching into utils to share between un- and
+    //  versionized bodies (maybe not since we're setting state)?
     async fetchSiblings(parent) {
-        if(this.state.attributes.children == null) {
+        if(this.state.attributes.children == null && this.props.params.resource_type != "partitions") {
             await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
@@ -189,7 +186,6 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param parent
      * @returns {Promise<void>}
      */
-    // TODO: I will refactor below code into Utils since we can use this for versionized and unversionized codes.
     async fetchGrandparents(parent) {
         let parents = []
         while(parent) {
@@ -204,36 +200,61 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 
     /**
+     * Updates list of html elements with a clickable code attribute (used for subordinate or similar codes).
+     */
+    addClickableElement(translateJson, ind, attribute, attributeValue, attributesHtml) {
+        if (attributeValue.length) {
+            attributesHtml.push(
+                <div key={ind}>
+                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                    <ul>
+                        {attributeValue.map((val, j) => (
+                            <li key={j}><a key={"related_code_" + j} className="link" onClick={() => {
+                                this.goToCode(val)
+                            }}>{val.code}: </a>
+                                <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
+                        ))}
+                    </ul>
+                </div>
+            )
+        }
+    }
+
+    /**
+     * Updates attributes_html with attribute of non clickable object type.
+     */
+    addObjectElement(translateJson, attribute, ind, attributeValue, attributesHtml) {
+        if (attributeValue.length) {
+            attributesHtml.push(
+                <div key={ind}>
+                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                    <ul>
+                        {attributeValue.map((val, j) => (
+                            this.objectListElement(attribute, val, j)
+                        ))}
+                    </ul>
+                </div>
+            )
+        }
+    }
+
+    objectListElement(attribute, val, j) {
+        if (["exclusions", "supplement_codes"].includes(attribute)) {
+            return this.lookingForLink(val, j)
+        }
+        else {
+            return <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
+        }
+    }
+
+    /**
      * Render the body component
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = findJsonService(this.props.params.language)
-        let attributes_html = []
-        let parentBreadCrumbs = []
-
-        // TODO: below if else will be refactored into more compact code
-        var mappingFields = ['predecessors', 'successors'];
-        // Define div for predecessor code info
-        for(var j = 0; j < mappingFields.length; j++) {
-            var field = mappingFields[j];
-            if (this.state.attributes[field] != null) {
-                // is this a non-trivial mapping?
-                if(this.state.attributes[field].length > 1 || this.state.attributes[field].length == 1 && (this.state.attributes[field][0]['code'] != this.state.attributes['code'] || this.state.attributes[field][0]['text'] != this.state.attributes['text'])) {
-                    attributes_html.push(
-                        <div key={"mapping_pre_succ" + j}>
-                            <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
-                            <ul>
-                                {this.state.attributes[field].map((child,i) => (
-                                    <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
-                                    ))}
-                            </ul>
-                        </div>)
-                }
-            }
-        }
-
-        if(this.state.parents && this.state.parents.length > 0){
+        // Generate BreadCrumbs.
+        let parentBreadCrumbs = [];
+        if (this.state.parents) {
             for(let i=this.state.parents.length-1; i>=0; i--){
                 parentBreadCrumbs.push(<Breadcrumb.Item
                     key={i}
@@ -242,107 +263,80 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                 >{this.state.parents[i].code}</Breadcrumb.Item>)
             }
         }
-        for(let attribute in this.state.attributes) {
-            if(this.state.attributes[attribute] !== null && this.state.attributes[attribute] !== undefined) {
-                if(attribute === "med_interpret" || attribute === "tech_interpret") {
-                    attributes_html.push(
-                        <div key={"med/tech interpret" + this.state.attributes[attribute].length * 41}>
-                            <p>{this.state.attributes[attribute]}</p>
-                        </div>
-                    )
-                } else if(attribute === "tp_al" || attribute === "tp_tl") {
-                    if(this.state.attributes[attribute] !== 0) {
-                        attributes_html.push(
-                            <div key={"tp_al/tl" + this.state.attributes[attribute] * 37}>
-                                <p>{translateJson["LBL_" + attribute.toUpperCase()]}: {this.state.attributes[attribute]}</p>
-                            </div>
-                        )
-                    }
-                }
-                else if(attribute === "note" || attribute === "coding_hint" || attribute === "usage") {
-                    attributes_html.push(
-                        <div key={"note coding_hint usage" + this.state.attributes[attribute].length * 31}>
-                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <p>{this.state.attributes[attribute]}</p>
-                        </div>
-                    )
-                } else if(this.state.attributes[attribute].length > 0 && (attribute === "groups" || attribute === "blocks")) {
-                    attributes_html.push(
-                        <div key={"groups " + this.state.attributes[attribute].length * 19}>
-                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+
+        let translateJson = findJsonService(this.props.params.language);
+        let mappingFields = ['predecessors', 'successors'];
+        let attributesHtml = [];
+        let i = 1;
+
+        // TODO: below if else will be refactored into more compact code
+        // Define div for predecessor code info
+        for(var j = 0; j < mappingFields.length; j++) {
+            var field = mappingFields[j];
+            if (this.state.attributes[field] != null) {
+                // is this a non-trivial mapping?
+                if(this.state.attributes[field].length > 1 ||
+                    this.state.attributes[field].length == 1 &&
+                    (this.state.attributes[field][0]['code'] != this.state.attributes['code'] ||
+                        this.state.attributes[field][0]['text'] != this.state.attributes['text'])) {
+                    attributesHtml.push(
+                        <div key={"mapping_pre_succ" + j}>
+                            <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
                             <ul>
-                                {this.state.attributes[attribute].map((child, i) => (
-                                    <li key={child.code + "childcode " + (i * 17)}>{child.code}: {child.text}</li>
+                                {this.state.attributes[field].map((child,i) => (
+                                    <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
                                 ))}
                             </ul>
-                        </div>
-                    )
-                }
-                else if(this.state.attributes[attribute].length > 0 && (attribute === "inclusions" || attribute === "synonyms" || attribute === "most_relevant_drgs" || attribute === "descriptions" || attribute === "notes")) {
-                    attributes_html.push(
-                        <div key={"incl, syn, rel_drgs, descr " + this.state.attributes[attribute].length * 13}>
-                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <ul>
-                                {this.state.attributes[attribute].map((element, i) => (
-                                    <li key={"element nr " + i}>{element}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    )
-                } else if(this.state.attributes[attribute].length > 0 && (attribute === "exclusions" || attribute === "supplement_codes")) {
-                    attributes_html.push(
-                        <div key={"exclusions supp_codes " + this.state.attributes[attribute].length * 11}>
-                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <ul>
-                                {this.state.attributes[attribute].map((exclusion, i) => (
-                                    this.lookingForLink(exclusion, i)
-                                ))}
-                            </ul>
-                        </div>
-                    )
-                } else if(attribute === "predecessors" && this.state.attributes[attribute].length === 0 && this.state.attributes.children == null) {
-                    attributes_html.push(
-                        <div key={"predec " + this.state.attributes[attribute].length * 7}>
-                            <h5>{translateJson["LBL_NEW_CODE"]}</h5>
-                        </div>
-                    )
-                }
-                else if(this.state.attributes[attribute].length > 0 && attribute === "children") {
-                    attributes_html.push(
-                        <div key={"children" + this.state.attributes[attribute].length * 29}>
-                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <ul>
-                                {this.state.attributes[attribute].map((child, i) => (
-                                    <li key={child + " number " + (i * 23)}><a className="link" onClick={() => {this.goToCode(child)}}>{child.code}:</a> {child.text}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    )
+                        </div>)
                 }
             }
         }
-        if(this.state.siblings.length > 0 && !this.state.attributes["children"]) {
-            attributes_html.push(
-                <div key={4}>
-                    <h5>{translateJson["LBL_SIBLINGS"]}</h5>
-                    <ul>
-                        {this.state.siblings.map((child, i) => (
-                            <li key={i}><a className="link" onClick={() => {this.goToCode(child)}}>{child.code}: </a>
-                                <span dangerouslySetInnerHTML={{__html: child.text}}/></li>
-                        ))}
-                    </ul>
-                </div>
-            )
+
+        // Add all non null/empty/undefined code attributes to attributesHtml.
+        for (let attribute in this.state.attributes) {
+            // Skip attributes we do not want to show, like terminal, version, ... or add later (siblings and children).
+            if (skippableAttributes.includes(attribute)) { continue; }
+            // Get value of current attribute.
+            let attributeValue = this.state.attributes[attribute];
+            // Only show attribute if defined, not null or not empty.
+            if (!["", null, undefined].includes(attributeValue)) {
+                if (typeof attributeValue === 'object') {
+                    this.addObjectElement(translateJson, attribute, i, attributeValue, attributesHtml)
+                    i += 1
+                } else {
+                    attributesHtml.push(
+                        <div key={i}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                            <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
+                        </div>
+                    )
+                    i += 1
+                }
+            }
         }
-        if(this.props.params.catalog === "ICD") {
-            return <ICD key={this.state.attributes.code} title={this.state.attributes.code} text={this.state.attributes.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
-        } else if(this.props.params.catalog === "CHOP") {
-            return <CHOP key={this.state.attributes.code} title={this.state.attributes.code} text={this.state.attributes.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
-        } else if(this.props.params.catalog === "TARMED") {
-            return <TARMED key={this.state.attributes.code} title={this.state.attributes.code} text={this.state.attributes.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
-        } else {
-            return <DRG key={this.state.attributes.code} title={this.state.attributes.code} text={this.state.attributes.text} attributes={attributes_html} parents={parentBreadCrumbs}/>
+
+        // Add children (subordinate codes).
+        if (this.state.attributes.children) {
+            this.addClickableElement(translateJson, i, 'children', this.state.attributes.children, attributesHtml)
         }
+
+        // Add siblings (similar codes).
+        if(this.state.siblings && !this.state.attributes["children"]) {
+            this.addClickableElement(translateJson, i, "siblings", this.state.siblings, attributesHtml);
+        }
+
+        let title = this.state.attributes.code.replace("_", " ");
+        return (
+            <div>
+                <Breadcrumb>
+                    {parentBreadCrumbs}
+                    <Breadcrumb.Item active>{title}</Breadcrumb.Item>
+                </Breadcrumb>
+                <h3>{title}</h3>
+                <p>{this.state.attributes.text}</p>
+                {attributesHtml}
+            </div>
+        )
     }
 }
 
