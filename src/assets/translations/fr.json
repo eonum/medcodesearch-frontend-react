@@ -64,5 +64,6 @@
   "LBL_ACTIVE_SUBSTANCES": "Substance active",
   "LBL_LIST_OF_ANALYSES": "LA",
   "LBL_MIGEL": "LiMA",
-  "LBL_AL": "Liste des analyses"
+  "LBL_AL": "Liste des analyses",
+  "LBL_TP_ASSI": "Points tarifaires de l'assistance"
 }
