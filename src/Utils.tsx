@@ -21,5 +21,10 @@ export const skippableAttributes = [
     "valid_from",
     "valid_to",
     "children",
-    "is_limited"
+    "is_limited",
+    "rev",
+    "is_limited",
+    "base_analyis",
+    "special_analysis",
+    "auth_holder_nr"
 ]

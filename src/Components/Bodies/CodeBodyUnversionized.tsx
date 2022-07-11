@@ -232,7 +232,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
             // Get value of current attribute.
             let attributeValue = this.state.attributes[attribute];
             // Only show attribute if defined, not null or not empty.
-            if (attributeValue != null || attributeValue != undefined) {
+            if (!["", null, undefined].includes(attributeValue)) {
                 if (typeof attributeValue === 'object') {
                     this.addObjectElement(translateJson, attribute, i, attributeValue, attributesHtml)
                     i += 1
