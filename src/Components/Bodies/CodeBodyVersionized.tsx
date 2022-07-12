@@ -217,20 +217,20 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 
     /**
-     * Updates attributes_html with attribute of non clickable object type.
+     * Returns a unordered list of object type code attributes (used for limitations, exclusions, ...).
      */
-    objectTypeCodeAttribute(translateJson, attribute, ind, attributeValue) {
+    objectTypeCodeAttributes(translateJson, attribute, ind, attributeValue) {
         return <div key={ind}>
             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
             <ul>
                 {attributeValue.map((val, j) => (
-                    this.objectListElement(attribute, val, j)
+                    this.htmlListItem(attribute, val, j)
                 ))}
             </ul>
         </div>
     }
 
-    objectListElement(attribute, val, j) {
+    htmlListItem(attribute, val, j) {
         if (["exclusions", "supplement_codes"].includes(attribute)) {
             return this.lookingForLink(val, j)
         }
@@ -270,7 +270,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         let attributesHtml = Object.keys(codeAttributes).map((attribute, i) => {
             let attributeValue = codeAttributes[attribute];
             if (typeof attributeValue === 'object') {
-                return this.objectTypeCodeAttribute(translateJson, attribute, i, attributeValue)
+                return this.objectTypeCodeAttributes(translateJson, attribute, i, attributeValue)
             } else {
                 return <div key={i}>
                     <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
