@@ -61,7 +61,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @returns {Promise<null|any>}
      */
     async fetchHelper(language, resource_type, code, catalog, version) {
-        let fetchString = ['https://search.eonum.ch', language, resource_type, version, code, "?show_detail=1"].join("/");
+        let fetchString = ['https://search.eonum.ch', language, resource_type, version, code].join("/") + "?show_detail=1";
         return await fetch(fetchString)
             .then((res) => {
                 return res.json()
@@ -128,17 +128,19 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param code
      */
     goToCode(code) {
-        let {language, catalog, version, resource_type} = this.props.params;
+        let {language, catalog} = this.props.params;
         // Transform backend of code to frontend url for navigation
         // TODO: This split and assignment feels kinda error prone or unstylish but saves a ton of distinctions that
         //  where made via regexes. Any style suggestions?
-        let backend_url_components = code.url.split("/").filter(e => e);
-        let codeFromBackend = backend_url_components[3];
+        let backendUrlComponents = code.url.split("/").filter(e => e);
+        let backendCode = backendUrlComponents[3];
+        let backendResourceType = backendUrlComponents[1];
+        let backendVersion = backendUrlComponents[2];
         // Convert base code 'ALL' from SwissDrg to version.
-        let codeToNavigate = codeFromBackend === 'ALL' ? version : codeFromBackend;
+        let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
         let navigate = this.props.navigation
         let queryString = "?query=" + RouterService.getQueryVariable('query');
-        let pathname = [language, catalog, version, resource_type, codeToNavigate].join("/")
+        let pathname = [language, catalog, backendVersion, backendResourceType, codeToNavigate].join("/")
         navigate({
             pathname: "/" + pathname,
             search: RouterService.getQueryVariable('query') === "" ? "" : queryString

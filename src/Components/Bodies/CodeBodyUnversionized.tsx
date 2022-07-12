@@ -58,7 +58,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @returns {Promise<null|any>}
      */
     async fetchHelper(language, resource_type, code, catalog) {
-        let fetchString = ['https://search.eonum.ch', language, resource_type, catalog, code, "?show_detail=1"].join("/")
+        let fetchString = ['https://search.eonum.ch', language, resource_type, catalog, code].join("/") + "?show_detail=1"
         return await fetch(fetchString)
             .then((res) => {
                 return res.json()
