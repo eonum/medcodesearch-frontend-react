@@ -7,6 +7,7 @@ import React, {Component} from "react";
 import CategorySortService from "../../Services/category-sort.service";
 import DatePicker from "./DatePicker";
 import {IVersions, IButtonLabels} from "../../interfaces";
+import {fetchURL} from "../../Utils";
 
 interface Props {
     initialVersions: IVersions,
@@ -141,7 +142,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     async fetchInitialVersions() {
         if (!this.isCalBut()) {
             if (this.props.category === "SwissDRG") {
-                await fetch(`https://search.eonum.ch/de/drgs/versions`)
+                await fetch([fetchURL, '/de/drgs/versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({
@@ -150,7 +151,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                         })
                     })
             } else {
-                await fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)
+                await fetch([fetchURL, 'de', this.props.category.toLowerCase() + 's' ,'versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({
@@ -171,13 +172,13 @@ class MobileButton extends Component<Props,IMobileButton>{
     async fetchCurrentVersions() {
         if (!this.isCalBut()) {
             if (this.props.category === "SwissDRG") {
-                await fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
+                await fetch([fetchURL, this.props.language, 'drgs/versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({currentVersions: CategorySortService(json)})
                     })
             } else {
-                await fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
+                await fetch([fetchURL, this.props.language, this.props.category.toLowerCase() + 's', 'versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({currentVersions: CategorySortService(json)})

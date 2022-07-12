@@ -31,3 +31,5 @@ export const skippableAttributes = [
     "predecessors",
     "successors"
 ]
+
+export const fetchURL = 'https://search.eonum.ch'

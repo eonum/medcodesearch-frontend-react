@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {ICode, IParamTypes} from "../../interfaces";
-import {initialCodeState, skippableAttributes} from "../../Utils";
+import {fetchURL, initialCodeState, skippableAttributes} from "../../Utils";
 import RouterService from "../../Services/router.service";
 
 interface Props {
@@ -58,7 +58,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @returns {Promise<null|any>}
      */
     async fetchHelper(language, resource_type, code, catalog) {
-        let fetchString = ['https://search.eonum.ch', language, resource_type, catalog, code].join("/") + "?show_detail=1"
+        let fetchString = [fetchURL, language, resource_type, catalog, code].join("/") + "?show_detail=1"
         return await fetch(fetchString)
             .then((res) => {
                 return res.json()
@@ -92,7 +92,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         let parents = []
         while(parent) {
             parents = [...parents, parent]
-            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+            await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
                     parent = json["parent"]
@@ -108,7 +108,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      */
     async fetchSiblings(parent) {
         if(this.state.attributes.children == null && parent) {
-            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+            await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
                     for(let i = 0; i < json.children.length; i++) {

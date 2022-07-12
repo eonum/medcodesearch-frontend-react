@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import {Breadcrumb} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
 import {ICode, IParamTypesVersionized} from "../../interfaces";
-import {initialCodeState, skippableAttributes} from "../../Utils";
+import {fetchURL, initialCodeState, skippableAttributes} from "../../Utils";
 import IcdSortService from "../../Services/icd-sort.service";
 import CodeSortService from "../../Services/code-sort.service";
 import RouterService from "../../Services/router.service";
@@ -61,7 +61,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @returns {Promise<null|any>}
      */
     async fetchHelper(language, resource_type, code, catalog, version) {
-        let fetchString = ['https://search.eonum.ch', language, resource_type, version, code].join("/") + "?show_detail=1";
+        let fetchString = [fetchURL, language, resource_type, version, code].join("/") + "?show_detail=1";
         return await fetch(fetchString)
             .then((res) => {
                 return res.json()
@@ -165,7 +165,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     //  versionized bodies (maybe not since we're setting state)?
     async fetchSiblings(parent) {
         if(this.state.attributes.children == null && this.props.params.resource_type != "partitions") {
-            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+            await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
                     for(let i = 0; i < json.children.length; i++) {
@@ -190,7 +190,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         let parents = []
         while(parent) {
             parents = [...parents, parent]
-            await fetch('https://search.eonum.ch/' + parent.url + "?show_detail=1")
+            await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
                     parent = json["parent"]
