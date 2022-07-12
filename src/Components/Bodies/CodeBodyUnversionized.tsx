@@ -231,6 +231,16 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
             }
         })
 
+        // Add swissmedic number for drugs.
+        if (this.props.params.catalog === "DRUG" && this.props.params.code != 'all') {
+            attributesHtml.push(
+                <div key={attributesHtml.length}>
+                    <h5>{translateJson["LBL_SWISSMEDIC_NR"]}</h5>
+                    <p> {this.state.attributes.auth_number + this.state.attributes.package_code} </p>
+                </div>
+            )
+        }
+
         // Add children (subordinate codes).
         let children = this.state.attributes.children;
         if (children) {
@@ -239,7 +249,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
 
         // Add siblings (similar codes).
         let siblings = this.state.siblings;
-        if(siblings && !children) {
+        if(siblings.length && !children) {
             attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, "siblings", siblings))
         }
 

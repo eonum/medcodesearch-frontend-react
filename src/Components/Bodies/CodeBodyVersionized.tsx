@@ -303,13 +303,15 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         }
         
         // Add children (subordinate codes).
-        if (this.state.attributes.children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, 'children', this.state.attributes.children))
+        let children = this.state.attributes.children;
+        if (children) {
+            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, 'children', children))
         }
 
         // Add siblings (similar codes).
-        if(this.state.siblings && !this.state.attributes["children"]) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, "siblings", this.state.siblings))
+        let siblings = this.state.siblings;
+        if(siblings.length && !children) {
+            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, "siblings", siblings))
         }
 
         let title = this.state.attributes.code.replace("_", " ");
