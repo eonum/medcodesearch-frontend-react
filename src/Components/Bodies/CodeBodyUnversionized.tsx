@@ -168,42 +168,20 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 
     /**
-     * Updates list of html elements with a clickable code attribute (used for subordinate or similar codes).
+     * Returns a unordered list of clickable codes (used for subordinate or similar codes).
      */
-    addClickableCodeAttribute(translateJson, ind, attribute, attributeValue, attributesHtml) {
-        if (attributeValue.length) {
-            attributesHtml.push(
-                <div key={ind}>
-                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                    <ul>
-                        {attributeValue.map((val, j) => (
-                            <li key={j}><a key={"related_code_" + j} className="link" onClick={() => {
-                                this.goToCode(val)
-                            }}>{val.code}: </a>
-                                <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
-                        ))}
-                    </ul>
-                </div>
-            )
-        }
-    }
-
-    /**
-     * Updates attributes_html with attribute of non clickable object type.
-     */
-    addObjectTypeCodeAttribute(translateJson, attribute, ind, attributeValue, attributesHtml) {
-        if (attributeValue.length) {
-            attributesHtml.push(
-                <div key={ind}>
-                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                    <ul>
-                        {attributeValue.map((val, j) => (
-                            <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
-                        ))}
-                    </ul>
-                </div>
-            )
-        }
+    clickableCode(translateJson, ind, attribute, attributeValue) {
+        return <div key={ind}>
+            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+            <ul>
+                {attributeValue.map((val, j) => (
+                    <li key={j}><a key={"related_code_" + j} className="link" onClick={() => {
+                        this.goToCode(val)
+                    }}>{val.code}: </a>
+                        <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
+                ))}
+            </ul>
+        </div>
     }
 
     /**
@@ -221,40 +199,48 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         })
 
         let translateJson = findJsonService(this.props.params.language);
-        let attributesHtml = [];
-        let i = 1;
 
-        // Add all non null/empty/undefined code attributes to attributesHtml.
-        for (let attribute in this.state.attributes) {
-            // Skip attributes we do not want to show, like terminal, version, ... or add later (siblings and children).
-            if (skippableAttributes.includes(attribute)) { continue; }
-            // Get value of current attribute.
-            let attributeValue = this.state.attributes[attribute];
-            // Only show attribute if defined, not null or not empty.
-            if (!["", null, undefined].includes(attributeValue)) {
-                if (typeof attributeValue === 'object') {
-                    this.addObjectTypeCodeAttribute(translateJson, attribute, i, attributeValue, attributesHtml)
-                    i += 1
-                } else {
-                    attributesHtml.push(
-                        <div key={i}>
-                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                            <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
-                        </div>
-                    )
-                    i += 1
-                }
+        // Use filter to only select attributes we want to display (not in skippable attributes and value not null,
+        // undefined or empty.
+        let codeAttributes = Object.keys(this.state.attributes)
+            .filter((key) => !skippableAttributes.includes(key))
+            .filter((key) => !["", null, undefined].includes(this.state.attributes[key]))
+            .filter((key) => this.state.attributes[key].length)
+            .reduce((obj, key) => {
+                return Object.assign(obj, {
+                    [key]: this.state.attributes[key]
+                });
+            }, {});
+
+        let attributesHtml = Object.keys(codeAttributes).map((attribute, i) => {
+            let attributeValue = codeAttributes[attribute];
+            if (typeof attributeValue === 'object') {
+                return <div key={i}>
+                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                    <ul>
+                        {attributeValue.map((val, j) => (
+                            <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
+                        ))}
+                    </ul>
+                </div>
+            } else {
+                return <div key={i}>
+                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                    <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
+                </div>
             }
-        }
+        })
 
         // Add children (subordinate codes).
-        if (this.state.attributes.children) {
-            this.addClickableCodeAttribute(translateJson, i, 'children', this.state.attributes.children, attributesHtml)
+        let children = this.state.attributes.children;
+        if (children) {
+            attributesHtml.push(this.clickableCode(translateJson, attributesHtml.length, 'children', children))
         }
 
         // Add siblings (similar codes).
-        if(this.state.siblings && !this.state.attributes["children"]) {
-            this.addClickableCodeAttribute(translateJson, i, "siblings", this.state.siblings, attributesHtml);
+        let siblings = this.state.siblings;
+        if(siblings && !children) {
+            attributesHtml.push(this.clickableCode(translateJson, attributesHtml.length, "siblings", siblings))
         }
 
         return (
