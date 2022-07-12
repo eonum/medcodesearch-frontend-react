@@ -170,7 +170,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     /**
      * Returns a unordered list of clickable codes (used for subordinate or similar codes).
      */
-    clickableCode(translateJson, ind, attribute, attributeValue) {
+    clickableCodesArray(translateJson, ind, attribute, attributeValue) {
         return <div key={ind}>
             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
             <ul>
@@ -234,13 +234,13 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         // Add children (subordinate codes).
         let children = this.state.attributes.children;
         if (children) {
-            attributesHtml.push(this.clickableCode(translateJson, attributesHtml.length, 'children', children))
+            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, 'children', children))
         }
 
         // Add siblings (similar codes).
         let siblings = this.state.siblings;
         if(siblings && !children) {
-            attributesHtml.push(this.clickableCode(translateJson, attributesHtml.length, "siblings", siblings))
+            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, "siblings", siblings))
         }
 
         return (

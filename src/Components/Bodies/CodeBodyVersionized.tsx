@@ -202,7 +202,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     /**
      * Returns a unordered list of clickable codes (used for subordinate or similar codes).
      */
-    clickableCode(translateJson, ind, attribute, attributeValue) {
+    clickableCodesArray(translateJson, ind, attribute, attributeValue) {
         return <div key={ind}>
             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
             <ul>
@@ -304,12 +304,12 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         
         // Add children (subordinate codes).
         if (this.state.attributes.children) {
-            attributesHtml.push(this.clickableCode(translateJson, attributesHtml.length, 'children', this.state.attributes.children))
+            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, 'children', this.state.attributes.children))
         }
 
         // Add siblings (similar codes).
         if(this.state.siblings && !this.state.attributes["children"]) {
-            attributesHtml.push(this.clickableCode(translateJson, attributesHtml.length, "siblings", this.state.siblings))
+            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, "siblings", this.state.siblings))
         }
 
         let title = this.state.attributes.code.replace("_", " ");
