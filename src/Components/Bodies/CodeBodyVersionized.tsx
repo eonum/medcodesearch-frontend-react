@@ -253,16 +253,13 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      */
     render() {
         // Generate BreadCrumbs.
-        let parentBreadCrumbs = [];
-        if (this.state.parents) {
-            for(let i=this.state.parents.length-1; i>=0; i--){
-                parentBreadCrumbs.push(<Breadcrumb.Item
-                    key={i}
-                    onClick={() => this.goToCode(this.state.parents[i])}
-                    className="breadLink"
-                >{this.state.parents[i].code}</Breadcrumb.Item>)
-            }
-        }
+        let parentBreadCrumbs = this.state.parents.reverse().map((currElement, i) => {
+            let breadcrumbItem =
+                <Breadcrumb.Item key={i} onClick={() => this.goToCode(currElement)} className="breadLink">
+                    {currElement.code}
+                </Breadcrumb.Item>
+            return breadcrumbItem;
+        })
 
         let translateJson = findJsonService(this.props.params.language);
         let mappingFields = ['predecessors', 'successors'];
