@@ -299,9 +299,17 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                             </ul>
                         </div>)
                 }
+                // Add New Code information.
+                if (field === 'predecessors' && this.state.attributes[field].length === 0 && this.state.attributes.children === null) {
+                    attributesHtml.push(
+                        <div key={"new_code"}>
+                            <h5>{translateJson["LBL_NEW_CODE"]}</h5>
+                        </div>
+                    )
+                }
             }
         }
-        
+
         // Add children (subordinate codes).
         let children = this.state.attributes.children;
         if (children) {
