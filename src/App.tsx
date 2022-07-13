@@ -21,12 +21,12 @@ import {IVersions} from "./interfaces";
  * @component
  */
 
+// TODO: don't use any
 interface Props {
     navigation: any,
     params: any
 }
 
-// TODO: Better interface name, no any.
 interface IApp {
     language: string,
     selectedButton: string,
@@ -258,12 +258,12 @@ class App extends Component<Props, IApp>{
         let searchResults
         let translateJson = findJsonService(this.state.language)
         if(this.state.searchResults[0] === "empty") {
-            searchResults = <div key={"searchResults array 0"} className="searchResult"><p key={"searchResults array 0 p"}>{translateJson["LBL_NO_RESULTS"]}</p></div>
+            searchResults = <div key={"search_results_div"} className="searchResult"><p key={"search_results_p"}>{translateJson["LBL_NO_RESULTS"]}</p></div>
         } else {
             searchResults =
-                <div key={"searchResults array 1"}>
+                <div key={"search_results_div"}>
                     {this.state.searchResults.map(function(searchResult, i){
-                        return <SearchResult result = {searchResult} key={"searchResults " + i}/>
+                        return <SearchResult result = {searchResult} key={"search_results_" + i}/>
                     })}
                 </div>
         }
@@ -346,22 +346,22 @@ class App extends Component<Props, IApp>{
 
           return (
 
-              <div key={"app div 0"}>
-                  <div key={"app div 1"} className="container">
-                      <div key={"app header div 0"} className="row">
-                          <div key={"app header div 1"} className="col-sm-12">
+              <div key={"app"}>
+                  <div key={"app_container_0"} className="container">
+                      <div key={"app_header"} className="row">
+                          <div key={"app_header_0"} className="col-sm-12">
                               <Header language={this.updateLanguage} activeLanguage={this.state.language}/>
                           </div>
                       </div>
-                      <div key={"app img div 0"} className="row">
-                          <div key={"app img div 1"} className="col-sm-12">
+                      <div key={"app_img"} className="row">
+                          <div key={"app_img_0"} className="col-sm-12">
                               <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
                           </div>
                       </div>
                   </div>
 
-                  <div key={"app div 2"} className="container">
-                      <div key={"app searchbar div 0"} className="row" onClick={this.showSearchResults}>
+                  <div key={"app_container_1"} className="container">
+                      <div key={"app_searchbar"} className="row" onClick={this.showSearchResults}>
                           <Searchbar
                               language={this.state.language}
                               selectedButton={this.state.selectedButton}
@@ -369,7 +369,7 @@ class App extends Component<Props, IApp>{
                               date={this.state.selectedDate}
                               searchResults={this.updateSearchResults}/>
                       </div>
-                      <div key={"app buttongroup div 0"} className="row">
+                      <div key={"app_catalog_buttons"} className="row">
                           <CatalogButtons
                               initialVersions={this.state.initialVersions}
                               currentVersions={this.state.currentVersions}
@@ -388,19 +388,19 @@ class App extends Component<Props, IApp>{
                               buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
                           />
                       </div>
-                         <div key={"app main div 0"} className="row">
+                         <div key={"app_main"} className="row">
                           {this.state.searchResults.length > 0 &&
-                          <div key={"app searchresults div 0"} className="col-12 col-lg">
+                          <div key={"app_searchresults"} className="col-12 col-lg">
                               {searchResults}
                           </div>}
 
-                          <div key={"app outlet div 0"} className="col" id="main">
+                          <div key={"app_outlet"} className="col" id="main">
                               <Outlet />
                           </div>
                       </div>
 
-                      <div key={"app footer div 0"}className="navbar row">
-                          <div key={"app footer div 1"} className="col">
+                      <div key={"app_footer"}className="navbar row">
+                          <div key={"app_footer_0"} className="col">
                               <Footer/>
                           </div>
                       </div>
