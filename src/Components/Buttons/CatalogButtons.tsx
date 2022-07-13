@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import ButtonVersion from "./ButtonVersion";
-import ButtonWithCal from "./ButtonWithCal";
-import "./ButtonGroup.css"
+import ButtonVersionized from "./ButtonVersionized";
+import ButtonUnversionized from "./ButtonUnversionized";
+import "./CatalogButtons.css"
 import {useParams} from "react-router-dom";
 import convertDate from "../../Services/convert-date.service";
 import RouterService from "../../Services/router.service";
@@ -28,7 +28,7 @@ interface Props {
     buttons: IButtonLabels
 }
 
-interface IButtonGroup {
+interface ICatalogButtons {
     selectedButton: string,
     activeList: string,
     lastICD: string,
@@ -41,13 +41,13 @@ interface IButtonGroup {
 }
 
 /**
- * is responsible for all buttons to render
+ * Responsible for all buttons to render
  * @component
  */
-class ButtonGroup extends Component<Props,IButtonGroup>{
+class CatalogButtons extends Component<Props,ICatalogButtons>{
 
     /**
-     * sets the default state values and bind the buttons
+     * Sets the default state values and binds the buttons.
      * @param props
      */
     constructor(props) {
@@ -61,6 +61,7 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
             lastTARMED: 'TARMED_01.09',
             selectedDate: convertDate(new Date().toDateString()),
             showHideCal: false,
+            //TODO: i don't think this is good practice...
             buttons: this.props.buttons,
         }
         this.updateButton = this.updateButton.bind(this);
@@ -68,7 +69,7 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
     }
 
     /**
-     * updates the button with the new params
+     * Updates the button with the new params.
      * @param version
      * @param btn
      * @param isCalendarType
@@ -106,7 +107,7 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
     }
 
     /**
-     * takes a button name and compares it to the selected button to reset the button
+     * Takes a button name and compares it to the selected button to reset the button.
      * @param btn
      */
     reRender(btn) {
@@ -116,7 +117,7 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
     }
 
     /**
-     * take a button name and return the version of the button
+     * Take a button name and return the version of the button.
      * @param btn
      * @returns {string|string|*}
      */
@@ -136,7 +137,7 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
     }
 
     /**
-     * sets the category of the state
+     * Sets the category of the state.
      */
     getVersionCategory() {
         if(this.props.category === "CHOP") {
@@ -151,14 +152,14 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
     }
 
     /**
-     * calls, if successful mounted, getVersionCategory()
+     * Calls getVersionCategory(), if successful mounted.
      */
     componentDidMount() {
         this.getVersionCategory()
     }
 
     /**
-     * calls getVersionCategory() if the version has changed
+     * Calls getVersionCategory() if version has changed.
      * @param prevProps
      * @param prevState
      * @param snapshot
@@ -174,16 +175,17 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
     }
 
     /**
-     * set the date of the state
+     * Set selected date in state.
      * @param date
      */
     updateDate = (date) => {
         this.setState({selectedDate: date});
+        // TODO: What is this call doing?
         this.props.selectedDate(date);
     }
 
     /**
-     * sets the state of the calendar visibility
+     * Sets the state of the calendar visibility to 'false' or 'true'.
      * @param state
      */
     showHideCal = (state) => {
@@ -191,57 +193,63 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
     }
 
     /**
-     * renders the ButtonGroup
+     * Render the button group.
      * @returns {JSX.Element}
      */
     render() {
         return (
-            <div key={"buttongroup div 0"}>
-                <div key={"buttongroup div 1"} className="d-none d-lg-block">
-                    <div key={"ButtonGroup div 2"} className={"alignButtons"}>
-                        {this.state.buttons[0].map((btn, index) => (
-                            <div key={"buttongroup VersionButton " + btn + " div " + index}>
-                                <ButtonVersion
-                                    key={btn + " " + index}
-                                    index={index}
-                                    activate = {(button) => {
-                                        this.updateButton('', button, false, '');
-                                        this.showHideCal(false);
-                                        this.reRender(button)
-                                    }}
-                                    category={btn}
-                                    initialVersions={this.props.initialVersions[btn]}
-                                    currentVersions={this.props.currentVersions[btn]}
-                                    language={this.props.language}
-                                    version={this.getVersion(btn)}
-                                    selectedLanguage={this.props.selectedLanguage}
-                                    updateVersion={this.props.selectedList}
-                                    updateCategory={this.props.selectedButton}
-                                    selectedVersion={this.props.params.version}
-                                    selectedCategory={this.props.category}
-                                    chooseV={(version) => {
-                                        this.updateButton(version, btn, false, '');
-                                    }}
-                                />
-                            </div>
-                        ),this)}
+            <div key={"catalog_buttons"}>
+                <div key={"catalog_buttons_desktop"} className="d-none d-lg-block">
+                    <div key={"catalog_buttons_desktop_1"} className={"alignButtons"}>
                         {
-                            this.state.buttons[1].map((button, index) => (
-                                <div key={"buttongroup CalendarButton div " + index}>
-                                    <ButtonWithCal
+                            // Map versionized buttons, this.state.buttons[0] is the array of versionized buttons,
+                            // i.e. ["ICD", "CHOP", "SwissDRG", "TARMED"].
+                            this.state.buttons[0].map((btn, index) => (
+                                <div key={"catalog_button_" + btn}>
+                                    <ButtonVersionized
+                                        key={btn}
+                                        index={index}
+                                        activate={(button) => {
+                                            this.updateButton('', button, false, '');
+                                            this.showHideCal(false);
+                                            this.reRender(button)
+                                        }}
+                                        category={btn}
+                                        initialVersions={this.props.initialVersions[btn]}
+                                        currentVersions={this.props.currentVersions[btn]}
+                                        language={this.props.language}
+                                        version={this.getVersion(btn)}
+                                        selectedLanguage={this.props.selectedLanguage}
+                                        updateVersion={this.props.selectedList}
+                                        updateCategory={this.props.selectedButton}
+                                        selectedVersion={this.props.params.version}
+                                        selectedCategory={this.props.category}
+                                        chooseV={(version) => {
+                                            this.updateButton(version, btn, false, '');
+                                        }}
+                                    />
+                                </div>
+                            ), this)}
+                        {
+                            // Map unversionized buttons, this.state.buttons[1] is the array of unversionized buttons,
+                            // i.e. ["MIGEL", "AL", "DRUG"].
+                            this.state.buttons[1].map((btn, index) => (
+                                <div key={"catalog_button_" + btn}>
+                                    <ButtonUnversionized
+                                        selectedCatalog={this.props.params.catalog}
                                         updateCategory={this.props.selectedButton}
                                         updateVersion={this.props.selectedList}
                                         selectedLanguage={this.props.selectedLanguage}
                                         language={this.props.language}
                                         showHideCal={this.state.showHideCal}
-                                        date ={this.state.selectedDate}
-                                        name={button}
+                                        date={this.state.selectedDate}
+                                        name={btn}
                                         label={this.props.labels[index]}
                                         fullLabel={this.props.fullLabels[index]}
                                         select={(btn, date) => {
                                             this.updateButton('', btn, true, date);
                                             this.showHideCal(true);
-                                            this.reRender(button)
+                                            this.reRender(btn)
                                         }}
                                         active={this.props.category}
                                     />
@@ -249,8 +257,9 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
                             ))}
                     </div>
                 </div>
-                <div key={"buttongroup MobileButton div 0"} className="d-lg-none">
+                <div key={"catalog_buttons_mobile"} className="d-lg-none">
                     <MobileButton
+                        selectedCatalog={this.props.params.catalog}
                         initialVersions={this.props.initialVersions}
                         currentVersions={this.props.currentVersions}
                         date ={this.state.selectedDate}
@@ -275,6 +284,6 @@ class ButtonGroup extends Component<Props,IButtonGroup>{
 
 }
 export default (props) => (
-    <ButtonGroup {...props} params={useParams()} />
+    <CatalogButtons {...props} params={useParams()} />
 )
 

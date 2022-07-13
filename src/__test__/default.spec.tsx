@@ -11,7 +11,7 @@ describe('Default test suite, testing general navigation via clicks', function (
     let n = 1000;
 
     beforeAll(async function () {
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({headless: false});
         page = await browser.newPage();
         await page.setViewport({width: 1366, height: 768})
     })
@@ -46,16 +46,16 @@ describe('Default test suite, testing general navigation via clicks', function (
         await expect(page).toMatch('MiGeL')
         await expect(page).toMatch('13: HOERHILFEN')
         await expect(page).toMatch('Untergeordnete Codes')
-        var element = await page.$("#cal #text");
-        // If "#cal #text" not existing, element would be null.
+        var element = await page.$("#datepicker_MIGEL_desktop");
+        // If "#datepicker_MIGEL_desktop" not existing, element would be null.
         await expect(element).toBeTruthy()
         await page.click('#AL');
         await expect(page.url()).toMatch(baseUrl + "/de/AL/als/all")
         await expect(page).toMatch('AL')
         await expect(page).toMatch('C: Mikrobiologie')
         await expect(page).toMatch('Untergeordnete Codes')
-        var element = await page.$("#cal #text");
-        // If "#cal #text" not existing, element would be null.
+        var element = await page.$("#datepicker_AL_desktop");
+        // If "#datepicker_AL_desktop" not existing, element would be null.
         await expect(element).toBeTruthy()
     })
 
@@ -64,12 +64,12 @@ describe('Default test suite, testing general navigation via clicks', function (
         // Catalogs other than the selected one shouldn't be visible if not clicked on versions button.
         var element = await page.$("#ICD10-GM-2018");
         await expect(element).toBeNull();
-        await page.click("#buttonversion");
+        await page.click("#button_versionized");
         await page.click("#ICD10-GM-2018")
         await expect(page).toMatch('ICD10-GM-2018')
         await expect(page).toMatch('XV: Schwangerschaft, Geburt und Wochenbett')
         await expect(element).toBeNull();
-        await page.click("#buttonversion");
+        await page.click("#button_versionized");
         await page.click("#ICD10-GM-2022");
         await expect(page).toMatch('ICD10-GM-2022')
         await expect(page).toMatch('XXII: Schlüsselnummern für besondere Zwecke')
@@ -98,11 +98,11 @@ describe('Default test suite, testing general navigation via clicks', function (
     it('moving from a specific catalog version to other versions of other catalogs', async function() {
         await page.goto(baseUrl, {waitUntil: 'networkidle0'});
         // Move from ICD 2022 to CHOP 2020
-        await page.click("div:nth-child(2)>div>.catalogButtons>#buttonversion");
+        await page.click("div:nth-child(2)>div>.catalogButtons>#button_versionized");
         await page.click("#CHOP_2020");
         await expect(page).toMatch("CHOP 2020")
         // Move to DRG V8.0
-        await page.click("div:nth-child(3) #buttonversion")
+        await page.click("div:nth-child(3) #button_versionized")
         await page.waitForTimeout(n);
         // TODO: better use ID that are without "." --> stick to best practices!
         await page.click("#V8\\.0")
@@ -111,9 +111,9 @@ describe('Default test suite, testing general navigation via clicks', function (
         await page.click("#AL")
         await expect(page).toMatch("A: Chemie/Hämatologie/Immunologie")
         // Move to ICD 2016
-        await page.click("div:nth-child(1)>div>.catalogButtons>#buttonversion");
+        await page.click("div:nth-child(1)>div>.catalogButtons>#button_versionized");
         await page.click("#ICD10-GM-2016");
-        await page.click("#buttonversion");
+        await page.click("#button_versionized");
         await expect(page).toMatch("ICD10-GM-2016")
     })
 

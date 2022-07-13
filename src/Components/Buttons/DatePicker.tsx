@@ -4,6 +4,8 @@ import ConvertDateService from "../../Services/convert-date.service";
 import "./DatePicker.css"
 
 interface Props {
+    isMobile: boolean,
+    selectedCatalog: string,
     activeDate: string,
     setDate: any
 }
@@ -13,7 +15,7 @@ interface IDatePicker {
 }
 
 /**
- * Creates the Datepicker for MIGEL, AL and Med
+ * Creates the Datepicker for MIGEL, AL and Med.
  */
 class DatePicker extends React.Component<Props,IDatePicker>{
 
@@ -26,7 +28,7 @@ class DatePicker extends React.Component<Props,IDatePicker>{
     }
 
     /**
-     * update the date saved in the state
+     * Update the date saved in the state.
      * @param value
      */
     updateDate(value) {
@@ -35,7 +37,7 @@ class DatePicker extends React.Component<Props,IDatePicker>{
     }
 
     /**
-     * Returns the date in the correct format
+     * Returns the date in the correct format.
      * @returns {string}
      */
     getDate() {
@@ -47,14 +49,15 @@ class DatePicker extends React.Component<Props,IDatePicker>{
     }
 
     /**
-     * Render the DatePicker
+     * Render the DatePicker.
      * @returns {JSX.Element}
      */
     render() {
+        let view = this.props.isMobile ? '_mobile' : '_desktop';
         return (
-            <div key={"datepicker div 0"} id={"text"}>
-                <div key={"datepicker div 1"} className="row">
-                    <div key={"datepicker div 2"} className="col">
+            <div key={"datepicker_0"} id={"datepicker_" + this.props.selectedCatalog + view}>
+                <div key={"datepicker_1"} className="row">
+                    <div key={"datepicker_2"} className="col">
                         <Form.Group controlId="form">
                             <Form.Control
                                 className="datepicker"

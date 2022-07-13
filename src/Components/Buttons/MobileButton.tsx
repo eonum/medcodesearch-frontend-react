@@ -10,6 +10,7 @@ import {IVersions, IButtonLabels} from "../../interfaces";
 import {fetchURL} from "../../Utils";
 
 interface Props {
+    selectedCatalog: string
     initialVersions: IVersions,
     currentVersions: IVersions,
     date: string,
@@ -30,7 +31,7 @@ export interface IMobileButton {
     showPopUp: boolean,
     disabledVersion: string,
     disabledCategory: string,
-    allVersions: any,
+    allVersions: string[], // all versions of one catalog in an array, f.e. ["CHOP_2011", "CHOP_2012", ...]
     currentVersions: any,
     buttons: string[],
     selectedButton: string
@@ -290,8 +291,8 @@ class MobileButton extends Component<Props,IMobileButton>{
     render(){
         let renderCal = this.isCalBut()
         return(
-        <div key={"mobileButton div 0"} className="d-lg-none text-center">
-            <div key={"mobileButton div 1"} className="btn-group">
+        <div key={"mobile_button_0"} className="d-lg-none text-center">
+            <div key={"mobile_button_1"} className="btn-group">
                 {
                     <PopUp
                         language={this.props.language}
@@ -304,38 +305,38 @@ class MobileButton extends Component<Props,IMobileButton>{
                         category={this.state.disabledCategory}
                     />
                 }
-                <Dropdown key={"mobileButton dropdown catalog"} className="catalogButtons">
+                <Dropdown key={"mobile_button_dropdown_catalog"} className="catalogButtons">
                     <DropdownToggle
-                        key={"mobileButton dropdown catalog toggle"}
+                        key={"mobile_button_dropdown_catalog_toggle"}
                         className="customButton"
                         variant=""
                         type="button"
-                        id={"mobilebutton catalog"}>
+                        id={"mobile_button_catalog"}>
                         {this.convertToLabel()}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
-                        {this.state.buttons.map((category, index) => (
-                                <Dropdown.Item className={this.getClassName(category)}
-                                               eventKey={category}
-                                               key={"mobileButton dropdown catalog " + category}
-                                               id={category}
+                        {this.state.buttons.map((btn, index) => (
+                                <Dropdown.Item className={this.getClassName(btn)}
+                                               eventKey={btn}
+                                               key={"mobile_button_dropdown_catalog_" + btn}
+                                               id={btn}
                                                onClick={() => {
-                                    this.handleCategoryClick(category)
+                                    this.handleCategoryClick(btn)
                                 }}>
-                                    {this.extractLabels(category, index)}
+                                    {this.extractLabels(btn, index)}
                                 </Dropdown.Item>
                             )
                         )}
                     </DropdownMenu>
                 </Dropdown>
                 {!renderCal &&
-                <Dropdown key={"mobileButton dropdown versions"} className="catalogButtons">
+                <Dropdown key={"mobile_button_dropdown_versions"} className="catalogButtons">
                     <Dropdown.Toggle
-                        key={"mobileButton dropdown versions toggle"}
+                        key={"mobile_button_dropdown_versions_toggle"}
                         className="customButton"
                         variant=""
                         type="button"
-                        id={"mobilebutton version"}>
+                        id={"mobile_button_version"}>
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
@@ -344,7 +345,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                                 <Dropdown.Item
                                     className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                                     eventKey={versions}
-                                    key={"mobileButton dropdown versions " + versions}
+                                    key={"mobile_button_dropdown_versions_" + versions}
                                     id={versions}
                                     onClick={() => {
                                         this.handleVersionClick(versions, this.props.category)
@@ -357,6 +358,8 @@ class MobileButton extends Component<Props,IMobileButton>{
                 }
                 {renderCal &&
                 <DatePicker
+                    isMobile={true}
+                    selectedCatalog={this.props.selectedCatalog}
                     activeDate = {this.props.date}
                     setDate={(date) => {
                         this.props.chooseC('',this.props.category, true, date)

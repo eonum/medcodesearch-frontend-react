@@ -20,17 +20,17 @@ interface Props {
     chooseV: any
 }
 
-export interface IButtonVersion {
+export interface IButtonVersionized {
     showPopUp: boolean,
     disabledVersion: string,
     disabledCategory: string,
 }
 
 /**
- * is responsible for the buttons with versions
+ * Responsible for the buttons with versions.
  * @component
  */
-class ButtonVersion extends React.Component<Props,IButtonVersion>{
+class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
 
     /**
      *  sets the default state values and bind the popup
@@ -143,7 +143,7 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
                         <Dropdown.Item
                             className={this.props.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                             eventKey={versions}
-                            key={"buttonversion " + this.props.category + " DropDown " + versions}
+                            key={"button_versionized_" + this.props.category + "_drop_down_" + versions}
                             id={versions}
                             onClick={() => {
                                 this.handleVersionClick(versions)
@@ -154,7 +154,7 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
             </Dropdown.Menu>
         }
         return (
-            <div key={"buttonVersion div 0"}>
+            <div key={"button_versionized"}>
                 {<PopUp
                     language={this.props.language}
                     selectedLanguage={this.props.selectedLanguage}
@@ -169,7 +169,7 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
                     <button 
                         type="button"
                         id={this.props.category}
-                        key={"buttonversion " + this.props.category + "-button"}
+                        key={"button_versionized_" + this.props.category + "_button"}
                         title={this.props.category}
                         onClick={(e) => {
                             this.handleCategoryClick(this.props.category)
@@ -180,10 +180,10 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
                     </button>
                     <Dropdown.Toggle
                         className="customButton"
-                        id={"buttonversion"}
+                        id={"button_versionized"}
                         type="button"
                         variant=""
-                        key={"buttonversion " + this.props.category + " DropDown"
+                        key={"button_versionized_" + this.props.category + "_drop_down"
                     }>
                         {this.getVersion()}
                     </Dropdown.Toggle>
@@ -194,4 +194,4 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
     }
 }
 
-export default ButtonVersion
+export default ButtonVersionized
