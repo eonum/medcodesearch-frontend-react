@@ -65,7 +65,7 @@ class SearchResult extends Component<Props, ISearchResult> {
         } else {
             synonyms = <div className="small">Synonyme<ul>
                 {this.props.result.highlight.synonyms.map(function(synonym, i) {
-                    return <li key={"synonym" + i} dangerouslySetInnerHTML={{__html: synonym.replace(/(<em>)/g, "<strong>").replace(/(<\/em>)/g, "</strong>")}}/>
+                    return <li key={"synonym_" + i} dangerouslySetInnerHTML={{__html: synonym.replace(/(<em>)/g, "<strong>").replace(/(<\/em>)/g, "</strong>")}}/>
                 })}
             </ul></div>
         }
@@ -83,7 +83,7 @@ class SearchResult extends Component<Props, ISearchResult> {
         } else {
             inclusions = <div className="small">Inklusionen<ul>
                 {this.props.result.highlight.inclusions.map(function(inclusion, i) {
-                    return <li key={"inclusion" + i} dangerouslySetInnerHTML={{__html: inclusion.replace(/(<em>)/g, "<strong>").replace(/(<\/em>)/g, "</strong>")}}/>
+                    return <li key={"inclusion_" + i} dangerouslySetInnerHTML={{__html: inclusion.replace(/(<em>)/g, "<strong>").replace(/(<\/em>)/g, "</strong>")}}/>
                 })}
             </ul></div>
         }
@@ -111,5 +111,5 @@ class SearchResult extends Component<Props, ISearchResult> {
 export default function(props) {
     const NAVIGATION = useNavigate();
     const LOCATION = useLocation();
-    return <SearchResult {...props} navigation={NAVIGATION} location={LOCATION} key={"searchresults default"}/>;
+    return <SearchResult {...props} navigation={NAVIGATION} location={LOCATION} key={"searchresults_default"}/>;
 }

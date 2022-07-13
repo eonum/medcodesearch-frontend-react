@@ -26,11 +26,11 @@ class Main extends Component<Props, IMain> {
      */
     render() {
         return (
-            <div key={"main div 0"} className="Wrapper">
-                <div key={"main div 1"} className="row">
-                    <div key={"main div 2"} className="col">
-                        <div key={"main div 3"} id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
-                            <div key={"main div 4"} className="text-start ms-3">
+            <div key={"main"} className="Wrapper">
+                <div key={"main_0"} className="row">
+                    <div key={"main_0_0"} className="col">
+                        <div key={"main_0_0_0"} id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
+                            <div key={"main_0_0_0_0"} className="text-start ms-3">
                                 <Outlet/>
                             </div>
                         </div>

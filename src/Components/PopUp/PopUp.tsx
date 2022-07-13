@@ -25,7 +25,8 @@ interface IPopUp {
 }
 
 /**
- * If a wrong date is selected this popup should point this out
+ * Pop Up appearing if a non available version selected.
+ * Points you out to go back or switch language where the version is available.
  */
 class PopUp extends Component<Props, IPopUp>{
     constructor(props) {
