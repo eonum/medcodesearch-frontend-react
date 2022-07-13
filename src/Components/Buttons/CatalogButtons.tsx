@@ -200,7 +200,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
         return (
             <div key={"catalog_buttons"}>
                 <div key={"catalog_buttons_desktop"} className="d-none d-lg-block">
-                    <div key={"catalog_buttons_desktop_1"} className={"alignButtons"}>
+                    <div key={"catalog_buttons_desktop_0"} className={"alignButtons"}>
                         {
                             // Map versionized buttons, this.state.buttons[0] is the array of versionized buttons,
                             // i.e. ["ICD", "CHOP", "SwissDRG", "TARMED"].

@@ -291,8 +291,8 @@ class MobileButton extends Component<Props,IMobileButton>{
     render(){
         let renderCal = this.isCalBut()
         return(
-        <div key={"mobile_button_0"} className="d-lg-none text-center">
-            <div key={"mobile_button_1"} className="btn-group">
+        <div key={"mobile_button"} className="d-lg-none text-center">
+            <div key={"mobile_button_0"} className="btn-group">
                 {
                     <PopUp
                         language={this.props.language}

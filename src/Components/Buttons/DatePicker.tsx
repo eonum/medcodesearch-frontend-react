@@ -55,9 +55,9 @@ class DatePicker extends React.Component<Props,IDatePicker>{
     render() {
         let view = this.props.isMobile ? '_mobile' : '_desktop';
         return (
-            <div key={"datepicker_0"} id={"datepicker_" + this.props.selectedCatalog + view}>
-                <div key={"datepicker_1"} className="row">
-                    <div key={"datepicker_2"} className="col">
+            <div key={"datepicker"} id={"datepicker_" + this.props.selectedCatalog + view}>
+                <div key={"datepicker_row"} className="row">
+                    <div key={"datepicker_col"} className="col">
                         <Form.Group controlId="form">
                             <Form.Control
                                 className="datepicker"
