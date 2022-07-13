@@ -96,7 +96,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param index
      * @returns {JSX.Element}
      */
-    lookingForLink(aString, index) {
+    lookingForLink(aString, index, attribute) {
         let results = []
         const REGEX = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
         let matches = aString.match(REGEX)
@@ -106,20 +106,20 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                 matches[i] = matches[i].substring(1, matches[i].length - 1);
                 let arr = matches[i].split("-")
                 if(arr.length > 1 && arr[1] !== "") {
-                    results.push(<span key={(index + 7)*3}>(<a onClick={() => {
+                    results.push(<span key={attribute + "_" + index}>(<a onClick={() => {
                         this.searchExclusion(arr[0].replace(/\.$/, ''))
                     }} className="link">{arr[0].replace(/\.$/, '')}</a>-<a onClick={() => {
                         this.searchExclusion(arr[1].replace(/\.$/, ''))
                     }} className="link">{arr[1].replace(/\.$/, '')}</a>) </span>)
                 } else {
-                    results.push(<span key={(index + 11)*3}>(<a onClick={() => {
+                    results.push(<span key={attribute + "_" + index}>(<a onClick={() => {
                         this.searchExclusion(arr[0].replace(/\.$/, ''))
                     }} className="link">{arr[0].replace(/\.$/, '')}</a>) </span>)
                 }
             }
-            return <li key={"link" + index}>{aString.substring(0, firstIndex)} {results}</li>
+            return <li key={attribute + "_" + "link" + "_" + index}>{aString.substring(0, firstIndex)} {results}</li>
         } else {
-            return <li key={"link" + index} >{aString}</li>
+            return <li key={attribute + "_" + "link" + "_" + index}>{aString}</li>
         }
     }
 
@@ -202,12 +202,12 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     /**
      * Returns a unordered list of clickable codes (used for subordinate or similar codes).
      */
-    clickableCodesArray(translateJson, ind, attribute, attributeValue) {
-        return <div key={ind}>
+    clickableCodesArray(translateJson, attribute, attributeValue) {
+        return <div key={attribute}>
             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
             <ul>
                 {attributeValue.map((val, j) => (
-                    <li key={j}><a key={"related_code_" + j} className="link" onClick={() => {
+                    <li key={j}><a key={attribute + "_" + j} className="link" onClick={() => {
                         this.goToCode(val)
                     }}>{val.code}: </a>
                         <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
@@ -217,22 +217,11 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 
     /**
-     * Returns a unordered list of object type code attributes (used for limitations, exclusions, ...).
+     * Returns a html list element.
      */
-    objectTypeCodeAttributes(translateJson, attribute, ind, attributeValue) {
-        return <div key={ind}>
-            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-            <ul>
-                {attributeValue.map((val, j) => (
-                    this.htmlListItem(attribute, val, j)
-                ))}
-            </ul>
-        </div>
-    }
-
     htmlListItem(attribute, val, j) {
         if (["exclusions", "supplement_codes"].includes(attribute)) {
-            return this.lookingForLink(val, j)
+            return this.lookingForLink(val, j, attribute)
         }
         else {
             return <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
@@ -267,12 +256,19 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                 });
             }, {});
 
-        let attributesHtml = Object.keys(codeAttributes).map((attribute, i) => {
+        let attributesHtml = Object.keys(codeAttributes).map((attribute) => {
             let attributeValue = codeAttributes[attribute];
             if (typeof attributeValue === 'object') {
-                return this.objectTypeCodeAttributes(translateJson, attribute, i, attributeValue)
+                return <div key={attribute}>
+                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                    <ul>
+                        {attributeValue.map((val, j) => (
+                            this.htmlListItem(attribute, val, j)
+                        ))}
+                    </ul>
+                </div>
             } else {
-                return <div key={i}>
+                return <div key={attribute}>
                     <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                     <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
                 </div>
@@ -313,13 +309,13 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         // Add children (subordinate codes).
         let children = this.state.attributes.children;
         if (children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, 'children', children))
+            attributesHtml.push(this.clickableCodesArray(translateJson, 'children', children))
         }
 
         // Add siblings (similar codes).
         let siblings = this.state.siblings;
         if(siblings.length && !children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, "siblings", siblings))
+            attributesHtml.push(this.clickableCodesArray(translateJson, "siblings", siblings))
         }
 
         let title = this.state.attributes.code.replace("_", " ");
@@ -340,5 +336,5 @@ class CodeBodyVersionized extends Component<Props, ICode> {
 export default function(props) {
     const NAVIGATION = useNavigate();
     const LOCATION = useLocation();
-    return <CodeBodyVersionized {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()} key={"bodyI"}/>
+    return <CodeBodyVersionized {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()} key={"versionized_body"}/>
 }

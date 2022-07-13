@@ -170,12 +170,12 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     /**
      * Returns a unordered list of clickable codes (used for subordinate or similar codes).
      */
-    clickableCodesArray(translateJson, ind, attribute, attributeValue) {
-        return <div key={ind}>
+    clickableCodesArray(translateJson, attribute, attributeValue) {
+        return <div key={attribute}>
             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
             <ul>
                 {attributeValue.map((val, j) => (
-                    <li key={j}><a key={"related_code_" + j} className="link" onClick={() => {
+                    <li key={j}><a key={attribute + "_" + j} className="link" onClick={() => {
                         this.goToCode(val)
                     }}>{val.code}: </a>
                         <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
@@ -212,10 +212,10 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                 });
             }, {});
 
-        let attributesHtml = Object.keys(codeAttributes).map((attribute, i) => {
+        let attributesHtml = Object.keys(codeAttributes).map((attribute) => {
             let attributeValue = codeAttributes[attribute];
             if (typeof attributeValue === 'object') {
-                return <div key={i}>
+                return <div key={attribute}>
                     <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                     <ul>
                         {attributeValue.map((val, j) => (
@@ -224,7 +224,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                     </ul>
                 </div>
             } else {
-                return <div key={i}>
+                return <div key={attribute}>
                     <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                     <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
                 </div>
@@ -234,7 +234,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         // Add swissmedic number for drugs.
         if (this.props.params.catalog === "DRUG" && this.props.params.code != 'all') {
             attributesHtml.push(
-                <div key={attributesHtml.length}>
+                <div key={"swissmedic_nr"}>
                     <h5>{translateJson["LBL_SWISSMEDIC_NR"]}</h5>
                     <p> {this.state.attributes.auth_number + this.state.attributes.package_code} </p>
                 </div>
@@ -244,13 +244,13 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         // Add children (subordinate codes).
         let children = this.state.attributes.children;
         if (children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, 'children', children))
+            attributesHtml.push(this.clickableCodesArray(translateJson, 'children', children))
         }
 
         // Add siblings (similar codes).
         let siblings = this.state.siblings;
         if(siblings.length && !children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, attributesHtml.length, "siblings", siblings))
+            attributesHtml.push(this.clickableCodesArray(translateJson, "siblings", siblings))
         }
 
         return (
@@ -270,5 +270,5 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
 export default function(props) {
     const NAVIGATION = useNavigate();
     const LOCATION = useLocation();
-    return <CodeBodyUnversionized {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()}/>
+    return <CodeBodyUnversionized {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()} key={"unversionized_body"}/>
 }
