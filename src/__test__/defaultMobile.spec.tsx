@@ -75,6 +75,7 @@ describe('Default test suite for mobile version, testing general navigation via 
         await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
         await page.waitForSelector("ul>li:first-child>a")
+        // TODO: await page.click("ul>li:first-child>a") fails if not enough timeout in headless mode. Not sure why.
         await page.click("ul>li:first-child>a")
         await page.waitForTimeout(n);
         await expect(page).toMatch("Infektiöse Darmkrankheiten")
@@ -108,6 +109,7 @@ describe('Default test suite for mobile version, testing general navigation via 
         await expect(page).toMatch("Certaines maladies infectieuses et parasitaires")
         await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
+        // TODO: await page.click("ul>li:first-child>a") fails if not enough timeout in headless mode. Not sure why.
         await page.waitForSelector("ul>li:first-child>a")
         await page.click("ul>li:first-child>a")
         await page.waitForTimeout(n);
@@ -143,6 +145,7 @@ describe('Default test suite for mobile version, testing general navigation via 
         await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
         await page.waitForSelector("ul>li:first-child>a")
+        // TODO: await page.click("ul>li:first-child>a") fails if not enough timeout in headless mode. Not sure why.
         await page.click("ul>li:first-child>a")
         await page.waitForTimeout(n);
         await expect(page).toMatch("Malattie infettive intestinali")
