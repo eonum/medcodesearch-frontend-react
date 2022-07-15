@@ -411,7 +411,8 @@ class App extends Component<Props, IApp>{
 
 }
 
-export default function(props) {
-    const navigation = useNavigate();
-    return <App {...props} params={useParams} navigation={navigation}/>;
+function withParams(Component) {
+    return props => <Component {...props} params={useParams()} navigation={useNavigate()}/>;
 }
+
+export default withParams(App);

@@ -333,8 +333,8 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 }
 
-export default function(props) {
-    const NAVIGATION = useNavigate();
-    const LOCATION = useLocation();
-    return <CodeBodyVersionized {...props} navigation={NAVIGATION} location={LOCATION} params={useParams()} key={"versionized_body"}/>
+function withParams(Component) {
+    return props => <Component {...props} navigation={useNavigate()} location={useLocation()} params={useParams()} key={"versionized_body"}/>;
 }
+
+export default withParams(CodeBodyVersionized);

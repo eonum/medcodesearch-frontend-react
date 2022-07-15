@@ -138,7 +138,8 @@ class PopUp extends Component<Props, IPopUp>{
     }
 }
 
-export default function(props) {
-    const navigation = useNavigate();
-    return <PopUp {...props} params={useParams} navigation={navigation}/>;
+function withParams(Component) {
+    return props => <Component {...props} params={useParams()} navigation={useNavigate()}/>;
 }
+
+export default withParams(PopUp);
