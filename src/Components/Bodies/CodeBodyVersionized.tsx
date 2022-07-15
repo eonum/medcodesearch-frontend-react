@@ -117,9 +117,9 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                     }} className="link">{arr[0].replace(/\.$/, '')}</a>) </span>)
                 }
             }
-            return <li key={attribute + "_" + "link" + "_" + index}>{aString.substring(0, firstIndex)} {results}</li>
+            return <li key={`${attribute}_link_${index}`}>{aString.substring(0, firstIndex)} {results}</li>
         } else {
-            return <li key={attribute + "_" + "link" + "_" + index}>{aString}</li>
+            return <li key={`${attribute}_link_${index}`}>{aString}</li>
         }
     }
 
@@ -164,7 +164,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     // TODO: Does it make sense to refactor grandparents and siblings fetching into utils to share between un- and
     //  versionized bodies (maybe not since we're setting state)?
     async fetchSiblings(parent) {
-        if(this.state.attributes.children == null && this.props.params.resource_type != "partitions") {
+        if(this.state.attributes.children === null && this.props.params.resource_type !== "partitions") {
             await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
@@ -282,9 +282,9 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             if (this.state.attributes[field] != null) {
                 // is this a non-trivial mapping?
                 if(this.state.attributes[field].length > 1 ||
-                    this.state.attributes[field].length == 1 &&
+                    this.state.attributes[field].length == 1 && (
                     (this.state.attributes[field][0]['code'] != this.state.attributes['code'] ||
-                        this.state.attributes[field][0]['text'] != this.state.attributes['text'])) {
+                        this.state.attributes[field][0]['text'] != this.state.attributes['text']))) {
                     attributesHtml.push(
                         <div key={"mapping_pre_succ" + j}>
                             <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
