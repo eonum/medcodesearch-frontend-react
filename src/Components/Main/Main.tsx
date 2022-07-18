@@ -41,8 +41,8 @@ class Main extends Component<Props, IMain> {
     }
 }
 
-function withParams(Component) {
+function addProps(Component) {
     return props => <Component {...props} params={useParams()}/>;
 }
 
-export default withParams(Main);
+export default addProps(Main);

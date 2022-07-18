@@ -23,8 +23,7 @@ import {IVersions} from "./interfaces";
 
 // TODO: don't use any
 interface Props {
-    navigation: any,
-    params: any
+    navigation: any
 }
 
 interface IApp {
@@ -411,8 +410,8 @@ class App extends Component<Props, IApp>{
 
 }
 
-function withParams(Component) {
-    return props => <Component {...props} params={useParams()} navigation={useNavigate()}/>;
+function addProps(Component) {
+    return props => <Component {...props} navigation={useNavigate()}/>;
 }
 
-export default withParams(App);
+export default addProps(App);

@@ -267,8 +267,8 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 }
 
-function withParams(Component) {
+function addProps(Component) {
     return props => <Component {...props} navigation={useNavigate()} location={useLocation()} params={useParams()} key={"unversionized_body"}/>;
 }
 
-export default withParams(CodeBodyUnversionized);
+export default addProps(CodeBodyUnversionized);

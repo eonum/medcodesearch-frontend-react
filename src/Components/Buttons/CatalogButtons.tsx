@@ -284,9 +284,9 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
 
 }
 
-function withParams(Component) {
+function addProps(Component) {
     return props => <Component {...props} params={useParams()}/>;
 }
 
-export default withParams(CatalogButtons);
+export default addProps(CatalogButtons);
 
