@@ -21,8 +21,8 @@ interface Props {
     selectedLanguage: any,
     language: string,
     selectedButton: any,
-    selectedList: any,
-    selectedDate: any,
+    updateVersion: any,
+    updateDate: any,
     labels: string[],
     fullLabels: string[],
     buttons: IButtonLabels
@@ -102,7 +102,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
         }
         this.updateDate(date);
         this.setState({selectedButton: btn, activeList: version});
-        this.props.selectedList(version);
+        this.props.updateVersion(version);
         this.props.selectedButton(btn);
     }
 
@@ -181,7 +181,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
     updateDate = (date) => {
         this.setState({selectedDate: date});
         // TODO: What is this call doing?
-        this.props.selectedDate(date);
+        this.props.updateDate(date);
     }
 
     /**
@@ -220,7 +220,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         language={this.props.language}
                                         version={this.getVersion(btn)}
                                         selectedLanguage={this.props.selectedLanguage}
-                                        updateVersion={this.props.selectedList}
+                                        updateVersion={this.props.updateVersion}
                                         updateCategory={this.props.selectedButton}
                                         selectedVersion={this.props.params.version}
                                         selectedCategory={this.props.category}
@@ -238,7 +238,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                     <ButtonUnversionized
                                         selectedCatalog={this.props.params.catalog}
                                         updateCategory={this.props.selectedButton}
-                                        updateVersion={this.props.selectedList}
+                                        updateVersion={this.props.updateVersion}
                                         selectedLanguage={this.props.selectedLanguage}
                                         language={this.props.language}
                                         showHideCal={this.state.showHideCal}
@@ -269,7 +269,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                         category={this.props.category}
                         language={this.props.language}
                         selectedLanguage={this.props.selectedLanguage}
-                        updateVersion={this.props.selectedList}
+                        updateVersion={this.props.updateVersion}
                         updateCategory={this.props.selectedButton}
                         buttons={this.props.buttons}
                         labels={this.props.labels}

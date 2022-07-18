@@ -21,7 +21,6 @@ import {INavigationHook, IVersions} from "./interfaces";
  * @component
  */
 
-// TODO: don't use any
 interface Props {
     navigation: INavigationHook
 }
@@ -29,7 +28,7 @@ interface Props {
 interface IApp {
     language: string,
     selectedButton: string,
-    selectedList: string,
+    selectedVersion: string,
     selectedDate: string,
     searchResults: string[],
     clickedOnLogo: boolean,
@@ -40,7 +39,6 @@ interface IApp {
 }
 
 class App extends Component<Props, IApp>{
-
     /**
      * gets the language, selected button, selected list, selected date and search results and bind them
      * @param props
@@ -50,7 +48,7 @@ class App extends Component<Props, IApp>{
         this.state = {
             language: RouterService.getLanguageFromURL(),
             selectedButton: RouterService.getCategoryFromURL(),
-            selectedList: RouterService.getVersionFromURL(),
+            selectedVersion: RouterService.getVersionFromURL(),
             selectedDate: convertDate(new Date().toDateString()),
             searchResults: [],
             clickedOnLogo: false,
@@ -61,7 +59,7 @@ class App extends Component<Props, IApp>{
         };
         this.updateButton = this.updateButton.bind(this);
         this.updateDate = this.updateDate.bind(this);
-        this.updateList = this.updateList.bind(this);
+        this.updateVersion = this.updateVersion.bind(this);
         this.reRenderButton = this.reRenderButton.bind(this);
         this.reNavigateToHome = this.reNavigateToHome.bind(this)
         this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
@@ -70,15 +68,15 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * takes a list and set them as a state
-     * @param list
+     * Updates state of selectedVersion.
+     * @param version
      */
-    updateList = (list) => {
-        this.setState({selectedList: list})
+    updateVersion = (version) => {
+        this.setState({selectedVersion: version})
     }
 
     /**
-     * takes a button and sets it as a state
+     * Updates state of selectedButton.
      * @param btn
      */
     updateButton = (btn) => {
@@ -86,7 +84,7 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * takes a date and sets it as a state
+     * Updates state of selectedDate.
      * @param date
      */
     updateDate = (date) => {
@@ -94,7 +92,8 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * takes a searchResult and resets is or add it to the current seachResults state
+     * Updates state of searchResults. If input === 'reset', searchResults are cleared, otherwise input is
+     * added to current searchResults.
      * @param searchResult
      */
     updateSearchResults = (searchResult) => {
@@ -108,22 +107,22 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * check if the selected button has a valid version
+     * Returns true if selected button has a valid version, false otherwise.
      * @param button
-     * @param list
+     * @param version
      * @param lang
      * @returns {boolean|*}
      */
-    isValidVersion(button, list, lang) {
+    isValidVersion(button, version, lang) {
         if(button.toUpperCase() === 'MIGEL' || button === 'AL' || button === 'DRUG') {
             return lang !== "en"
         } else {
-            return this.state.currentVersions[button].includes(list)
+            return this.state.currentVersions[button].includes(version)
         }
     }
 
     /**
-     * takes a language and sets it as a state
+     * Updates state of language.
      * @param lang
      */
     updateLanguage = (lang) => {
@@ -139,11 +138,11 @@ class App extends Component<Props, IApp>{
     async componentDidUpdate(prevProps, prevState, snapshot) {
         let navigate = this.props.navigation;
         if(prevState.language !== this.state.language) {
-            let list = this.state.selectedList;
+            let list = this.state.selectedVersion;
             let button = this.state.selectedButton;
             let code = RouterService.getCodeFromURL();
             let chapters = RouterService.getChapterFromURL();
-            let i = this.state.selectedList === '' ? '' : '/';
+            let i = this.state.selectedVersion === '' ? '' : '/';
             this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
             if(this.isValidVersion(button, list, this.state.language)) {
                 navigate({
@@ -154,7 +153,7 @@ class App extends Component<Props, IApp>{
                 })
             } else {
                 this.updateButton("ICD")
-                this.updateList("ICD10-GM-2022")
+                this.updateVersion("ICD10-GM-2022")
                 navigate({
                     pathname: this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
                     search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
@@ -164,12 +163,12 @@ class App extends Component<Props, IApp>{
         }
 
         if(prevState.selectedButton !== this.state.selectedButton ||
-            prevState.selectedList !== this.state.selectedList ||
+            prevState.selectedVersion !== this.state.selectedVersion ||
             prevState.selectedDate !== this.state.selectedDate ||
             this.state.reSetPath) {
-            let list = this.state.selectedList;
+            let list = this.state.selectedVersion;
             let button = this.state.selectedButton;
-            let i = this.state.selectedList === '' ? '' : '/';
+            let i = this.state.selectedVersion === '' ? '' : '/';
             let chapters;
             if (button === 'MiGeL' || button === 'AL' || button === 'DRUG' ){
                 button = button.toUpperCase();
@@ -189,7 +188,7 @@ class App extends Component<Props, IApp>{
                 })
             } else {
                 this.updateButton("ICD")
-                this.updateList("ICD10-GM-2022")
+                this.updateVersion("ICD10-GM-2022")
                 navigate({
                     pathname: this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
                     search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
@@ -322,10 +321,10 @@ class App extends Component<Props, IApp>{
         this.props.navigation({search: ''});
         this.updateButton('ICD')
         if (this.state.language === 'de' || this.state.language === 'en') {
-            this.updateList('ICD10-GM-2022')
+            this.updateVersion('ICD10-GM-2022')
         }
         else {
-            this.updateList('ICD10-GM-2020')
+            this.updateVersion('ICD10-GM-2020')
         }
     }
 
@@ -364,7 +363,7 @@ class App extends Component<Props, IApp>{
                           <Searchbar
                               language={this.state.language}
                               selectedButton={this.state.selectedButton}
-                              version={this.state.selectedList}
+                              version={this.state.selectedVersion}
                               date={this.state.selectedDate}
                               searchResults={this.updateSearchResults}/>
                       </div>
@@ -374,14 +373,14 @@ class App extends Component<Props, IApp>{
                               currentVersions={this.state.currentVersions}
                               clickedOnLogo={this.state.clickedOnLogo}
                               category={this.state.selectedButton}
-                              version={this.state.selectedList}
+                              version={this.state.selectedVersion}
                               reSetClickOnLogo={this.reSetClickedOnLogo}
                               reSetButton={this.reRenderButton}
                               selectedLanguage={this.updateLanguage}
                               language={this.state.language}
                               selectedButton={this.updateButton}
-                              selectedList={this.updateList}
-                              selectedDate={this.updateDate}
+                              updateVersion={this.updateVersion}
+                              updateDate={this.updateDate}
                               labels={this.getLabels(this.state.language)}
                               fullLabels={this.getFullLabels(this.state.language)}
                               buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
