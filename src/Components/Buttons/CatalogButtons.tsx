@@ -7,10 +7,10 @@ import convertDate from "../../Services/convert-date.service";
 import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
 import ConvertDateService from "../../Services/convert-date.service";
-import {IVersions, IButtonLabels} from "../../interfaces";
+import {IVersions, IButtonLabels, IParamTypes} from "../../interfaces";
 
 interface Props {
-    params: any,
+    params: IParamTypes,
     initialVersions: IVersions,
     currentVersions: IVersions,
     clickedOnLogo: boolean,

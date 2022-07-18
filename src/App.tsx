@@ -6,7 +6,7 @@ import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import { ReactComponent as Arrow } from './assets/arrow-up.svg';
-import {Outlet, useNavigate, useParams} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import CatalogButtons from "./Components/Buttons/CatalogButtons";
 import RouterService from "./Services/router.service";
 import React, {Component} from "react";
@@ -14,7 +14,7 @@ import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/category-version.service";
 import findJsonService from "./Services/find-json.service";
-import {IVersions} from "./interfaces";
+import {INavigationHook, IVersions} from "./interfaces";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -23,7 +23,7 @@ import {IVersions} from "./interfaces";
 
 // TODO: don't use any
 interface Props {
-    navigation: any
+    navigation: INavigationHook
 }
 
 interface IApp {

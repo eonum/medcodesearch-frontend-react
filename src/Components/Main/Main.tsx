@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import './Main.css';
 import {Outlet, useParams} from "react-router-dom";
+import {IParamTypes} from "../../interfaces";
 
 interface Props{
-    params: any
+    params: IParamTypes
 }
 
 interface IMain {

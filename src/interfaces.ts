@@ -71,17 +71,18 @@ export interface IParamTypes {
     language: string,
     catalog: string,
     resource_type: string,
-    code: string
+    code: string,
+    version?: string
 }
 
-export interface IParamTypesVersionized extends IParamTypes {
-    version: string
-}
+export interface INavigationHook {
+    (input: {
+        pathname?: string,
+        search?: string
+    }): void
+};
 
-export interface IVersionizedCode {
-    key: string,
-    title: string,
-    text: string,
-    attributes: string[],
-    parents: string[]
+export interface ILocation {
+    pathname?: string,
+    search?: string,
 }

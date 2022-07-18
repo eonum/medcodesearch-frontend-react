@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import React, {Component} from "react";
 import "./PopUp.css"
 import {Modal} from "react-bootstrap";
@@ -138,8 +138,4 @@ class PopUp extends Component<Props, IPopUp>{
     }
 }
 
-function addProps(Component) {
-    return props => <Component {...props} params={useParams()} navigation={useNavigate()}/>;
-}
-
-export default addProps(PopUp);
+export default PopUp;

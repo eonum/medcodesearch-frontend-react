@@ -2,10 +2,11 @@ import React, {Component} from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
 import RouterService from "../../Services/router.service";
+import {ILocation, INavigationHook} from "../../interfaces";
 
 interface Props {
-    navigation: any,
-    location: any,
+    navigation: INavigationHook,
+    location: ILocation,
     key: string,
     result: ISearchResult
 }

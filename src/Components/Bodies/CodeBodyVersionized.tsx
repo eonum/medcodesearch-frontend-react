@@ -1,17 +1,16 @@
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb} from "react-bootstrap";
 import findJsonService from "../../Services/find-json.service";
-import {ICode, IParamTypesVersionized} from "../../interfaces";
+import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
 import {fetchURL, initialCodeState, skippableAttributes} from "../../Utils";
 import IcdSortService from "../../Services/icd-sort.service";
 import CodeSortService from "../../Services/code-sort.service";
 import RouterService from "../../Services/router.service";
 
 interface Props {
-    params: IParamTypesVersionized,
-    navigation: any,
-    location: any,
+    params: IParamTypes,
+    navigation: INavigationHook,
 }
 
 /**
@@ -334,7 +333,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} location={useLocation()} params={useParams()} key={"versionized_body"}/>;
+    return props => <Component {...props} navigation={useNavigate()} params={useParams()} key={"versionized_body"}/>;
 }
 
 export default addProps(CodeBodyVersionized);

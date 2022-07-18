@@ -7,6 +7,7 @@ import RouterService from "../../Services/router.service";
 import ConvertDateService from "../../Services/convert-date.service";
 import findJsonService from "../../Services/find-json.service";
 import {fetchURL} from "../../Utils";
+import {INavigationHook} from "../../interfaces";
 
 interface Props {
     language: string,
@@ -14,7 +15,7 @@ interface Props {
     version: string,
     date: string,
     searchResults: any,
-    navigation: any
+    navigation: INavigationHook
 }
 
 interface ISearchbar  {
