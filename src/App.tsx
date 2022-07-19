@@ -13,7 +13,7 @@ import React, {Component} from "react";
 import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/category-version.service";
-import findJsonService from "./Services/find-json.service";
+import getTranslationHash from "./Services/translation.service";
 import {INavigationHook, IVersions} from "./interfaces";
 
 /**
@@ -47,7 +47,7 @@ class App extends Component<Props, IApp>{
         super(props);
         this.state = {
             language: RouterService.getLanguageFromURL(),
-            selectedButton: RouterService.getCategoryFromURL(),
+            selectedButton: RouterService.getCatalogFromURL(),
             selectedVersion: RouterService.getVersionFromURL(),
             selectedDate: convertDate(new Date().toDateString()),
             searchResults: [],
@@ -130,69 +130,61 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * sets the correct url
+     * Navigates to root url, i.e. newest ICD catalog.
+     * @param lang
+     */
+    navigateTo = (path, searchString) => {
+        let navigate = this.props.navigation;
+        navigate({
+            pathname: path,
+            search: searchString
+        })
+    }
+
+    /**
+     * Navigates to the correct path.
      * @param prevProps
      * @param prevState
      * @param snapshot
      */
     async componentDidUpdate(prevProps, prevState, snapshot) {
-        let navigate = this.props.navigation;
-        if(prevState.language !== this.state.language) {
-            let list = this.state.selectedVersion;
-            let button = this.state.selectedButton;
-            let code = RouterService.getCodeFromURL();
-            let chapters = RouterService.getChapterFromURL();
-            let i = this.state.selectedVersion === '' ? '' : '/';
-            this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
-            if(this.isValidVersion(button, list, this.state.language)) {
-                navigate({
-                    // falls liste leer --> de/button/chapters
-                    // sonst --> de/button/list/chapters/list
-                    pathname: this.state.language + "/" + button + '/' + list + i + chapters + '/' + code,
-                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
-                })
-            } else {
-                this.updateButton("ICD")
-                this.updateVersion("ICD10-GM-2022")
-                navigate({
-                    pathname: this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
-                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
-                })
-            }
-            this.setState({reSetPath: false})
-        }
-
-        if(prevState.selectedButton !== this.state.selectedButton ||
+        // version is empty for non versionized catalogs.
+        let version = this.state.selectedVersion;
+        let button = this.state.selectedButton;
+        let catalog = button === 'SwissDRG' ? button : button.toUpperCase();
+        let delimiter = this.state.selectedVersion === '' ? "" : "/";
+        let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+        let resource_type = RouterService.getResourceTypeFromURL();
+        let code = RouterService.getCodeFromURL();
+        // Check for navigation other than language change.
+        let navigationWithoutLanguageChange = false;
+        if (prevState.selectedButton !== this.state.selectedButton ||
             prevState.selectedVersion !== this.state.selectedVersion ||
             prevState.selectedDate !== this.state.selectedDate ||
             this.state.reSetPath) {
-            let list = this.state.selectedVersion;
-            let button = this.state.selectedButton;
-            let i = this.state.selectedVersion === '' ? '' : '/';
-            let chapters;
-            if (button === 'MiGeL' || button === 'AL' || button === 'DRUG' ){
-                button = button.toUpperCase();
-                chapters = this.state.selectedButton.toLowerCase() + 's/all'
+            navigationWithoutLanguageChange = true;
+            if (['MIGEL', 'AL', 'DRUG'].includes(catalog)) {
+                code = 'all';
+                resource_type = catalog.toLowerCase() + 's'
+            } else {
+                code = version;
+                resource_type = catalog === 'SwissDRG' ? 'mdcs' : catalog.toLowerCase() + '_chapters'
             }
-            else if (button === 'SwissDRG') {
-                chapters = 'mdcs';
-            }else {
-                chapters =button.toLowerCase() + '_chapters';
-            }
-            if(this.isValidVersion(button, list, this.state.language)) {
-                navigate({
-                    // falls liste leer --> de/button/chapters
-                    // sonst --> de/button/list/chapters/list
-                    pathname: this.state.language + "/" + button + '/' + list + i + chapters + i + list,
-                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
-                })
+        }
+
+        // Set current version depending on language.
+        if (prevState.language !== this.state.language) {
+            this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
+        }
+
+        // Navigate to new path.
+        if (navigationWithoutLanguageChange || prevState.language !== this.state.language) {
+            if (this.isValidVersion(catalog, version, this.state.language)) {
+                this.navigateTo(this.state.language + "/" + catalog + '/' + version + delimiter + resource_type + '/' + code, searchString)
             } else {
                 this.updateButton("ICD")
                 this.updateVersion("ICD10-GM-2022")
-                navigate({
-                    pathname: this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022",
-                    search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
-                })
+                this.navigateTo(this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022", searchString)
             }
             this.setState({reSetPath: false})
         }
@@ -216,47 +208,45 @@ class App extends Component<Props, IApp>{
 
 
     /**
-     * returns the labels for the buttons depending on the chosen language
+     * Returns the labels for the buttons depending on the chosen language.
      * @returns labels
      */
-    getLabels(language){
-        if(language === "fr"){
-            return['LiMA', 'LA', 'Med']
-        }
-        else if(language === "it"){
-            return ['EMAp', 'EA', 'Med']
-        }
-        else{
-            return ['MiGeL', 'AL', 'Med']
+    getLabels(language) {
+        switch (language) {
+            case "fr":
+                return ['LiMA', 'LA', 'Med']
+            case "it":
+                return ['EMAp', 'EA', 'Med']
+            default:
+                return ['MiGeL', 'AL', 'Med']
         }
     }
 
     /**
-     * change the full labels language
+     * Changes the full labels language.
      * @param language
      * @returns {string[]}
      */
-    getFullLabels(language){
-        if(language === "fr"){
-            return['Liste des moyens et appareils', 'Liste des analyses', 'médicaments']
-        }
-        else if(language === "it"){
-           return ['Elenco dei mezzi e degli apparecchi', 'Insieme elenco delle analisi', 'droga']
-        }
-        else{
-            return ['Mittel und Gegenständeliste', 'Analysenliste', 'Medikamente']
+    getFullLabels(language) {
+        switch (language) {
+            case "fr":
+                return ['Liste des moyens et appareils', 'Liste des analyses', 'médicaments']
+            case "it":
+                return ['Elenco dei mezzi e degli apparecchi', 'Insieme elenco delle analisi', 'droga']
+            default:
+                return ['Mittel und Gegenständeliste', 'Analysenliste', 'Medikamente']
         }
     }
 
     /**
-     * render the search result from the backend
+     * Render search results from the backend.
      * @returns {JSX.Element}
      */
     searchResults() {
-        let searchResults
-        let translateJson = findJsonService(this.state.language)
+        let searchResults;
+        let translationHash = getTranslationHash(this.state.language);
         if(this.state.searchResults[0] === "empty") {
-            searchResults = <div key={"search_results_div"} className="searchResult"><p key={"search_results_p"}>{translateJson["LBL_NO_RESULTS"]}</p></div>
+            searchResults = <div key={"search_results_div"} className="searchResult"><p key={"search_results_p"}>{translationHash["LBL_NO_RESULTS"]}</p></div>
         } else {
             searchResults =
                 <div key={"search_results_div"}>
@@ -265,8 +255,7 @@ class App extends Component<Props, IApp>{
                     })}
                 </div>
         }
-        // TODO: using onClick in Collapse causes error: Property 'onClick' does not exist on type 'IntrinsicAttributes & CollapseProps & RefAttributes<Transition<any>>'
-        //  Removed it but not sure if correct.
+
         return(
             <div className="container" id="searchResults">
                 <p className="text-center mt-3">
@@ -292,7 +281,7 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * hide the object if the window is too small
+     * Hide the catalog div if the window is too small.
      * @param e
      */
     showHide(e) {
@@ -314,98 +303,89 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * Reset everything back to the default
+     * Reset everything back to the default but stay in current language.
      */
     reNavigateToHome(){
         this.setState({clickedOnLogo: true});
         this.props.navigation({search: ''});
         this.updateButton('ICD')
-        if (this.state.language === 'de' || this.state.language === 'en') {
-            this.updateVersion('ICD10-GM-2022')
-        }
-        else {
-            this.updateVersion('ICD10-GM-2020')
-        }
+        this.updateVersion('ICD10-GM-2022')
     }
 
     /**
-     * change the clickedOnLogo state
+     * Change the clickedOnLogo state.
      */
     reSetClickedOnLogo(){
         this.setState({clickedOnLogo: false})
     }
 
     /**
-     * renders the whole website
+     * Renders the whole website.
      * @returns {JSX.Element}
      */
     render() {
         let searchResults = this.searchResults()
+        return (
+            <div key={"app"}>
+                <div key={"app_container_0"} className="container">
+                    <div key={"app_header"} className="row">
+                        <div key={"app_header_0"} className="col-sm-12">
+                            <Header language={this.updateLanguage} activeLanguage={this.state.language}/>
+                        </div>
+                    </div>
+                    <div key={"app_img"} className="row">
+                        <div key={"app_img_0"} className="col-sm-12">
+                            <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
+                        </div>
+                    </div>
+                </div>
 
-          return (
-
-              <div key={"app"}>
-                  <div key={"app_container_0"} className="container">
-                      <div key={"app_header"} className="row">
-                          <div key={"app_header_0"} className="col-sm-12">
-                              <Header language={this.updateLanguage} activeLanguage={this.state.language}/>
-                          </div>
-                      </div>
-                      <div key={"app_img"} className="row">
-                          <div key={"app_img_0"} className="col-sm-12">
-                              <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div key={"app_container_1"} className="container">
-                      <div key={"app_searchbar"} className="row" onClick={this.showSearchResults}>
-                          <Searchbar
-                              language={this.state.language}
-                              selectedButton={this.state.selectedButton}
-                              version={this.state.selectedVersion}
-                              date={this.state.selectedDate}
-                              searchResults={this.updateSearchResults}/>
-                      </div>
-                      <div key={"app_catalog_buttons"} className="row">
-                          <CatalogButtons
-                              initialVersions={this.state.initialVersions}
-                              currentVersions={this.state.currentVersions}
-                              clickedOnLogo={this.state.clickedOnLogo}
-                              category={this.state.selectedButton}
-                              version={this.state.selectedVersion}
-                              reSetClickOnLogo={this.reSetClickedOnLogo}
-                              reSetButton={this.reRenderButton}
-                              selectedLanguage={this.updateLanguage}
-                              language={this.state.language}
-                              selectedButton={this.updateButton}
-                              updateVersion={this.updateVersion}
-                              updateDate={this.updateDate}
-                              labels={this.getLabels(this.state.language)}
-                              fullLabels={this.getFullLabels(this.state.language)}
-                              buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'],['MiGeL', 'AL', 'DRUG']]}
-                          />
-                      </div>
-                         <div key={"app_main"} className="row">
-                          {this.state.searchResults.length > 0 &&
-                          <div key={"app_searchresults"} className="col-12 col-lg">
-                              {searchResults}
-                          </div>}
-
-                          <div key={"app_outlet"} className="col" id="main">
-                              <Outlet />
-                          </div>
-                      </div>
-
-                      <div key={"app_footer"}className="navbar row">
-                          <div key={"app_footer_0"} className="col">
-                              <Footer/>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          )
-      }
+                <div key={"app_container_1"} className="container">
+                    <div key={"app_searchbar"} className="row" onClick={this.showSearchResults}>
+                        <Searchbar
+                            language={this.state.language}
+                            selectedButton={this.state.selectedButton}
+                            version={this.state.selectedVersion}
+                            date={this.state.selectedDate}
+                            searchResults={this.updateSearchResults}/>
+                    </div>
+                    <div key={"app_catalog_buttons"} className="row">
+                        <CatalogButtons
+                            initialVersions={this.state.initialVersions}
+                            currentVersions={this.state.currentVersions}
+                            clickedOnLogo={this.state.clickedOnLogo}
+                            category={this.state.selectedButton}
+                            version={this.state.selectedVersion}
+                            reSetClickOnLogo={this.reSetClickedOnLogo}
+                            reSetButton={this.reRenderButton}
+                            selectedLanguage={this.updateLanguage}
+                            language={this.state.language}
+                            selectedButton={this.updateButton}
+                            updateVersion={this.updateVersion}
+                            updateDate={this.updateDate}
+                            labels={this.getLabels(this.state.language)}
+                            fullLabels={this.getFullLabels(this.state.language)}
+                            buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'], ['MiGeL', 'AL', 'DRUG']]}
+                        />
+                    </div>
+                    <div key={"app_main"} className="row">
+                        {this.state.searchResults.length > 0 &&
+                            <div key={"app_searchresults"} className="col-12 col-lg">
+                                {searchResults}
+                            </div>}
+                        <div key={"app_outlet"} className="col" id="main">
+                            <Outlet/>
+                        </div>
+                    </div>
+                    <div key={"app_footer"} className="navbar row">
+                        <div key={"app_footer_0"} className="col">
+                            <Footer/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
 }
 
