@@ -53,7 +53,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
     constructor(props) {
         super(props);
         this.state = {
-            selectedButton: RouterService.getCategoryFromURL(),
+            selectedButton: RouterService.getCatalogFromURL(),
             activeList: this.props.params.version,
             lastICD: 'ICD10-GM-2022',
             lastDRG: 'V11.0',

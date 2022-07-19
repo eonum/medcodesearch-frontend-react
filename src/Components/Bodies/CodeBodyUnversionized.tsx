@@ -1,7 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
-import findJsonService from "../../Services/find-json.service";
+import getTranslationHash from "../../Services/translation.service";
 import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
 import {fetchURL, initialCodeState, skippableAttributes} from "../../Utils";
 import RouterService from "../../Services/router.service";
@@ -197,7 +197,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
             return breadcrumbItem;
         })
 
-        let translateJson = findJsonService(this.props.params.language);
+        let translateJson = getTranslationHash(this.props.params.language);
 
         // Use filter to only select attributes we want to display (not in skippable attributes and value not null,
         // undefined or empty.

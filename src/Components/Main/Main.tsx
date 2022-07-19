@@ -12,17 +12,16 @@ interface IMain {
 }
 
 /**
- * Sets the default page and is responsible for the background
+ * Sets the default page and is responsible for the background.
  */
 class Main extends Component<Props, IMain> {
-
     constructor(props) {
         super(props);
         this.state = {page: "I"}
     }
 
     /**
-     * Render the Main component
+     * Render the Main component.
      * @returns {JSX.Element}
      */
     render() {
