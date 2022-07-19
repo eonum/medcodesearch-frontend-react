@@ -7,7 +7,7 @@ import convertDate from "../../Services/convert-date.service";
 import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
 import ConvertDateService from "../../Services/convert-date.service";
-import {IVersions, IButtonLabels, IParamTypes} from "../../interfaces";
+import {IVersions, IButtonLabels, IParamTypes, INoArgsFunction, IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
     params: IParamTypes,
@@ -16,13 +16,13 @@ interface Props {
     clickedOnLogo: boolean,
     category: string,
     version: string,
-    reSetClickOnLogo: any,
-    reSetButton: any,
-    selectedLanguage: any,
+    reSetClickOnLogo: INoArgsFunction,
+    reSetButton: INoArgsFunction,
+    updateLanguage: IUpdateStateByArg,
     language: string,
-    selectedButton: any,
-    updateVersion: any,
-    updateDate: any,
+    updateButton: IUpdateStateByArg,
+    updateVersion: IUpdateStateByArg,
+    updateDate: IUpdateStateByArg,
     labels: string[],
     fullLabels: string[],
     buttons: IButtonLabels
@@ -61,7 +61,6 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             lastTARMED: 'TARMED_01.09',
             selectedDate: convertDate(new Date().toDateString()),
             showHideCal: false,
-            //TODO: i don't think this is good practice...
             buttons: this.props.buttons,
         }
         this.updateButton = this.updateButton.bind(this);
@@ -103,7 +102,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
         this.updateDate(date);
         this.setState({selectedButton: btn, activeList: version});
         this.props.updateVersion(version);
-        this.props.selectedButton(btn);
+        this.props.updateButton(btn);
     }
 
     /**
@@ -219,12 +218,12 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         currentVersions={this.props.currentVersions[btn]}
                                         language={this.props.language}
                                         version={this.getVersion(btn)}
-                                        selectedLanguage={this.props.selectedLanguage}
+                                        updateLanguage={this.props.updateLanguage}
                                         updateVersion={this.props.updateVersion}
-                                        updateCategory={this.props.selectedButton}
+                                        updateButton={this.props.updateButton}
                                         selectedVersion={this.props.params.version}
                                         selectedCategory={this.props.category}
-                                        chooseV={(version) => {
+                                        updateVersionizedButton={(version) => {
                                             this.updateButton(version, btn, false, '');
                                         }}
                                     />
@@ -237,9 +236,9 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                 <div key={"catalog_button_" + btn}>
                                     <ButtonUnversionized
                                         selectedCatalog={this.props.params.catalog}
-                                        updateCategory={this.props.selectedButton}
+                                        updateButton={this.props.updateButton}
                                         updateVersion={this.props.updateVersion}
-                                        selectedLanguage={this.props.selectedLanguage}
+                                        updateLanguage={this.props.updateLanguage}
                                         language={this.props.language}
                                         showHideCal={this.state.showHideCal}
                                         date={this.state.selectedDate}
@@ -268,12 +267,12 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                         reRender={this.props.clickedOnLogo}
                         category={this.props.category}
                         language={this.props.language}
-                        selectedLanguage={this.props.selectedLanguage}
+                        updateLanguage={this.props.updateLanguage}
                         updateVersion={this.props.updateVersion}
-                        updateCategory={this.props.selectedButton}
+                        updateCategory={this.props.updateButton}
                         buttons={this.props.buttons}
                         labels={this.props.labels}
-                        chooseC={(version, category, isCalendar, date) => {
+                        updateMobileButton={(version, category, isCalendar, date) => {
                             this.updateButton(version, category, isCalendar, date)
                         }}
                     />

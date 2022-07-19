@@ -7,7 +7,7 @@ interface Props {
     isMobile: boolean,
     selectedCatalog: string,
     activeDate: string,
-    setDate: any
+    setDate: { (date: string): void }
 }
 
 interface IDatePicker {

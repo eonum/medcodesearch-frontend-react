@@ -86,3 +86,16 @@ export interface ILocation {
     pathname?: string,
     search?: string,
 }
+
+export interface INoArgsFunction {
+    (): void
+}
+
+export interface IUpdateStateByArg {
+    (arg0: string): void
+}
+
+export interface IUpdateButton {
+    (version?: string, category?: string, isCalendar?: boolean, date?: string):
+        void
+}

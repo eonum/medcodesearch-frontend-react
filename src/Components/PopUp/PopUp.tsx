@@ -6,14 +6,15 @@ import deJson from "../../assets/translations/de.json";
 import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
 import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
+import {IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
     language: string,
-    selectedLanguage: any,
-    selectedVersion: any,
-    selectedCategory: any,
+    selectedLanguage: IUpdateStateByArg,
+    selectedVersion: IUpdateStateByArg,
+    selectedCategory: IUpdateStateByArg,
     show: boolean
-    updateValue: any,
+    updatePopUpState: { (boolean_value: boolean): void },
     version: string,
     category: string
 }
@@ -46,7 +47,7 @@ class PopUp extends Component<Props, IPopUp>{
         this.setState({
             show: value
         })
-        this.props.updateValue(value)
+        this.props.updatePopUpState(value)
     }
 
     /**

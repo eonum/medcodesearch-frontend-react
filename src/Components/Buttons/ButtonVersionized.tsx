@@ -2,22 +2,23 @@ import React from "react";
 import {Dropdown} from "react-bootstrap";
 import PopUp from "../PopUp/PopUp";
 import {convertCategory, findCategory} from "../../Services/category-version.service";
+import {IUpdateButton, IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
     key: string,
     index: number,
-    activate: any,
+    activate: {(button: string): void},
     category: string
     initialVersions: string[],
     currentVersions:  string[],
     language: string,
     version: string,
-    selectedLanguage: any,
-    updateVersion: any,
-    updateCategory: any,
+    updateLanguage: IUpdateStateByArg,
+    updateVersion: IUpdateStateByArg,
+    updateButton: IUpdateStateByArg,
     selectedVersion: string,
     selectedCategory: string,
-    chooseV: any
+    updateVersionizedButton: IUpdateButton
 }
 
 export interface IButtonVersionized {
@@ -50,8 +51,8 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
      * updates the current showPopUp with the given value
      * @param value
      */
-    updatePopUp = (value) => {
-        this.setState({showPopUp: value})
+    updatePopUp = (boolean_value) => {
+        this.setState({showPopUp: boolean_value})
     }
 
     /**
@@ -62,7 +63,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
     handleVersionClick(version) {
         const DROPDOWN = document.getElementById(version);
         if(!DROPDOWN.classList.contains('disabled')) {
-            this.props.chooseV(version)
+            this.props.updateVersionizedButton(version)
         } else {
             this.setState({disabledCategory: findCategory(version)})
             this.setState({disabledVersion: version})
@@ -157,11 +158,11 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
             <div key={"button_versionized"}>
                 {<PopUp
                     language={this.props.language}
-                    selectedLanguage={this.props.selectedLanguage}
+                    selectedLanguage={this.props.updateLanguage}
                     selectedVersion={this.props.updateVersion}
-                    selectedCategory={this.props.updateCategory}
+                    selectedCategory={this.props.updateButton}
                     show={this.state.showPopUp}
-                    updateValue={this.updatePopUp}
+                    updatePopUpState={this.updatePopUp}
                     version={this.state.disabledVersion}
                     category={this.state.disabledCategory}
                 />}

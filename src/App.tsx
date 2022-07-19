@@ -330,7 +330,7 @@ class App extends Component<Props, IApp>{
                 <div key={"app_container_0"} className="container">
                     <div key={"app_header"} className="row">
                         <div key={"app_header_0"} className="col-sm-12">
-                            <Header language={this.updateLanguage} activeLanguage={this.state.language}/>
+                            <Header updateLanguage={this.updateLanguage} activeLanguage={this.state.language}/>
                         </div>
                     </div>
                     <div key={"app_img"} className="row">
@@ -347,7 +347,7 @@ class App extends Component<Props, IApp>{
                             selectedButton={this.state.selectedButton}
                             version={this.state.selectedVersion}
                             date={this.state.selectedDate}
-                            searchResults={this.updateSearchResults}/>
+                            updateSearchResults={this.updateSearchResults}/>
                     </div>
                     <div key={"app_catalog_buttons"} className="row">
                         <CatalogButtons
@@ -358,9 +358,9 @@ class App extends Component<Props, IApp>{
                             version={this.state.selectedVersion}
                             reSetClickOnLogo={this.reSetClickedOnLogo}
                             reSetButton={this.reRenderButton}
-                            selectedLanguage={this.updateLanguage}
+                            updateLanguage={this.updateLanguage}
                             language={this.state.language}
-                            selectedButton={this.updateButton}
+                            updateButton={this.updateButton}
                             updateVersion={this.updateVersion}
                             updateDate={this.updateDate}
                             labels={this.getLabels(this.state.language)}

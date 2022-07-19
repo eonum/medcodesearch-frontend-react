@@ -6,7 +6,7 @@ import {convertCategory, findCategory} from "../../Services/category-version.ser
 import React, {Component} from "react";
 import CategorySortService from "../../Services/category-sort.service";
 import DatePicker from "./DatePicker";
-import {IVersions, IButtonLabels} from "../../interfaces";
+import {IVersions, IButtonLabels, IUpdateStateByArg, IUpdateButton} from "../../interfaces";
 import {fetchURL} from "../../Utils";
 
 interface Props {
@@ -19,12 +19,12 @@ interface Props {
     reRender: boolean,
     category: string,
     language: string,
-    selectedLanguage: any,
-    updateVersion: any,
-    updateCategory: any,
+    updateLanguage: IUpdateStateByArg,
+    updateVersion: IUpdateStateByArg,
+    updateCategory: IUpdateStateByArg,
     buttons: IButtonLabels,
     labels: string[],
-    chooseC: any
+    updateMobileButton: IUpdateButton
 }
 
 export interface IMobileButton {
@@ -32,7 +32,7 @@ export interface IMobileButton {
     disabledVersion: string,
     disabledCategory: string,
     allVersions: string[], // all versions of one catalog in an array, f.e. ["CHOP_2011", "CHOP_2012", ...]
-    currentVersions: any,
+    currentVersions: string[],
     buttons: string[],
     selectedButton: string
 }
@@ -108,7 +108,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     handleVersionClick(version, btn) {
         const DROPDOWN = document.getElementById(version);
         if(!DROPDOWN.classList.contains('disabled')) {
-            this.props.chooseC(version, btn)
+            this.props.updateMobileButton(version, btn)
         } else {
             this.setState({disabledCategory: findCategory(version)})
             this.setState({showPopUp: true})
@@ -124,7 +124,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     handleCategoryClick(category) {
         const CAT = document.getElementById(category);
         if(!CAT.classList.contains('disabled')) {
-            this.props.chooseC('', category, false, "")
+            this.props.updateMobileButton('', category, false, "")
         } else {
             this.setState({disabledCategory: category})
             this.setState({showPopUp: true})
@@ -296,11 +296,11 @@ class MobileButton extends Component<Props,IMobileButton>{
                 {
                     <PopUp
                         language={this.props.language}
-                        selectedLanguage={this.props.selectedLanguage}
+                        selectedLanguage={this.props.updateLanguage}
                         selectedVersion={this.props.updateVersion}
                         selectedCategory={this.props.updateCategory}
                         show={this.state.showPopUp}
-                        updateValue={this.updatePopUp}
+                        updatePopUpState={this.updatePopUp}
                         version={this.state.disabledVersion}
                         category={this.state.disabledCategory}
                     />
@@ -341,16 +341,16 @@ class MobileButton extends Component<Props,IMobileButton>{
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
                         {this.state.allVersions.reverse().map(
-                            (versions) => (
+                            (version) => (
                                 <Dropdown.Item
-                                    className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
-                                    eventKey={versions}
-                                    key={"mobile_button_dropdown_versions_" + versions}
-                                    id={versions}
+                                    className={this.state.currentVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
+                                    eventKey={version}
+                                    key={"mobile_button_dropdown_versions_" + version}
+                                    id={version}
                                     onClick={() => {
-                                        this.handleVersionClick(versions, this.props.category)
+                                        this.handleVersionClick(version, this.props.category)
                                     }}
-                                >{convertCategory(this.props.category, versions)}</Dropdown.Item>
+                                >{convertCategory(this.props.category, version)}</Dropdown.Item>
                             )
                         )}
                     </Dropdown.Menu>
@@ -362,7 +362,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                     selectedCatalog={this.props.selectedCatalog}
                     activeDate = {this.props.date}
                     setDate={(date) => {
-                        this.props.chooseC('',this.props.category, true, date)
+                        this.props.updateMobileButton('',this.props.category, true, date)
                     }}
                 />
                 }
