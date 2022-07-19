@@ -354,7 +354,7 @@ class App extends Component<Props, IApp>{
                             initialVersions={this.state.initialVersions}
                             currentVersions={this.state.currentVersions}
                             clickedOnLogo={this.state.clickedOnLogo}
-                            category={this.state.selectedButton}
+                            selectedButton={this.state.selectedButton}
                             version={this.state.selectedVersion}
                             reSetClickOnLogo={this.reSetClickedOnLogo}
                             reSetButton={this.reRenderButton}

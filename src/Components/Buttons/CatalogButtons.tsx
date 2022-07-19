@@ -14,7 +14,7 @@ interface Props {
     initialVersions: IVersions,
     currentVersions: IVersions,
     clickedOnLogo: boolean,
-    category: string,
+    selectedButton: string,
     version: string,
     reSetClickOnLogo: INoArgsFunction,
     reSetButton: INoArgsFunction,
@@ -30,13 +30,13 @@ interface Props {
 
 interface ICatalogButtons {
     selectedButton: string,
-    activeList: string,
-    lastICD: string,
-    lastDRG: string,
-    lastCHOP: string,
-    lastTARMED: string,
+    activeVersion: string,
+    currentICD: string,
+    currentDRG: string,
+    currentCHOP: string,
+    currentTARMED: string,
     selectedDate: string,
-    showHideCal: false,
+    showCalendar: false,
     buttons: IButtonLabels,
 }
 
@@ -45,22 +45,22 @@ interface ICatalogButtons {
  * @component
  */
 class CatalogButtons extends Component<Props,ICatalogButtons>{
-
     /**
      * Sets the default state values and binds the buttons.
      * @param props
      */
+    // TODO: Parse currentICD/DRG/... dynamically.
     constructor(props) {
         super(props);
         this.state = {
             selectedButton: RouterService.getCatalogFromURL(),
-            activeList: this.props.params.version,
-            lastICD: 'ICD10-GM-2022',
-            lastDRG: 'V11.0',
-            lastCHOP: 'CHOP_2022',
-            lastTARMED: 'TARMED_01.09',
+            activeVersion: this.props.params.version,
+            currentICD: 'ICD10-GM-2022',
+            currentDRG: 'V11.0',
+            currentCHOP: 'CHOP_2022',
+            currentTARMED: 'TARMED_01.09',
             selectedDate: convertDate(new Date().toDateString()),
-            showHideCal: false,
+            showCalendar: false,
             buttons: this.props.buttons,
         }
         this.updateButton = this.updateButton.bind(this);
@@ -74,34 +74,41 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      * @param isCalendarType
      * @param date
      */
+        // TODO: If choosing different version from different button, should old button version jump back to default or stay where it was?
+        //  F.e. if clicking from ICD10-GM-2014 to SwissDRG V9.0, should version button of icd stay at GM-2014 or jump back to GM-2022?
     updateButton = (version, btn, isCalendarType, date) => {
-        if (version === '') {
-            version = this.getVersion(btn);
-        }
-        switch (btn) {
-            case 'ICD':
-                this.setState({lastICD: version});
-                break;
-            case 'SwissDRG':
-                this.setState({lastDRG: version});
-                break;
-            case 'CHOP':
-                this.setState({lastCHOP: version});
-                break;
-            case 'TARMED':
-                this.setState({lastTARMED: version});
-                break;
-            default:
-        }
+        // If empty version, get it using btn.
+        // Set
+        let selectedVersion;
         if (isCalendarType) {
-            version = ''
+            selectedVersion = ''
+        } else {
+            selectedVersion = version === '' ? this.getVersionFromButton(btn) : version;
+            // Update currentVersion.
+            // TODO: are the 'break' statements needed?
+            switch (btn) {
+                case 'ICD':
+                    this.setState({currentICD: version});
+                    break;
+                case 'SwissDRG':
+                    this.setState({currentDRG: version});
+                    break;
+                case 'CHOP':
+                    this.setState({currentCHOP: version});
+                    break;
+                case 'TARMED':
+                    this.setState({currentTARMED: version});
+                    break;
+                default:
+            }
         }
+
         if (date === ''){
             date = ConvertDateService(new Date().toDateString())
         }
         this.updateDate(date);
-        this.setState({selectedButton: btn, activeList: version});
-        this.props.updateVersion(version);
+        this.setState({selectedButton: btn, activeVersion: selectedVersion});
+        this.props.updateVersion(selectedVersion);
         this.props.updateButton(btn);
     }
 
@@ -120,16 +127,18 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      * @param btn
      * @returns {string|string|*}
      */
-    getVersion(btn) {
+    // TODO: Could this be solved in a more dynamic way, f.e. something like return this.state[stateAttribute[btn]]
+    //  where stateAttribute is a hash with attribute name by button, i.e. convert string to variable name?!
+    getVersionFromButton(btn) {
         switch (btn){
             case 'ICD':
-                return this.state.lastICD;
+                return this.state.currentICD;
             case 'SwissDRG':
-                return this.state.lastDRG;
+                return this.state.currentDRG;
             case 'CHOP':
-                return this.state.lastCHOP;
+                return this.state.currentCHOP;
             case 'TARMED':
-                return this.state.lastTARMED;
+                return this.state.currentTARMED;
             default:
                 return '';
         }
@@ -138,15 +147,22 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
     /**
      * Sets the category of the state.
      */
-    getVersionCategory() {
-        if(this.props.category === "CHOP") {
-            this.setState({lastCHOP: this.props.version})
-        } else if(this.props.category === "ICD") {
-            this.setState({lastICD: this.props.version})
-        } else if(this.props.category === "SwissDRG") {
-            this.setState({lastDRG: this.props.version})
-        } else if(this.props.category === "TARMED") {
-            this.setState({lastTARMED: this.props.version})
+    // TODO: same thoughts on making it more dynamic as above.
+    setCurrentVersionBySelectedButton() {
+        switch (this.props.selectedButton) {
+            case "CHOP":
+                this.setState({currentCHOP: this.props.version})
+                break;
+            case "ICD":
+                this.setState({currentICD: this.props.version})
+                break;
+            case "SwissDRG":
+                this.setState({currentDRG: this.props.version})
+                break;
+            case "TARMED":
+                this.setState({currentTARMED: this.props.version})
+                break;
+            default:
         }
     }
 
@@ -154,7 +170,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      * Calls getVersionCategory(), if successful mounted.
      */
     componentDidMount() {
-        this.getVersionCategory()
+        this.setCurrentVersionBySelectedButton()
     }
 
     /**
@@ -165,7 +181,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      */
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.version !== this.props.version) {
-            this.getVersionCategory()
+            this.setCurrentVersionBySelectedButton()
         }
         if (this.props.clickedOnLogo){
             this.setState({selectedButton: prevProps.category})
@@ -179,16 +195,16 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      */
     updateDate = (date) => {
         this.setState({selectedDate: date});
-        // TODO: What is this call doing?
+        // TODO: What is below call doing?
         this.props.updateDate(date);
     }
 
     /**
      * Sets the state of the calendar visibility to 'false' or 'true'.
-     * @param state
+     * @param visible
      */
-    showHideCal = (state) => {
-        this.setState({showHideCal: state})
+    updateCalendarVisibility = (visible) => {
+        this.setState({showCalendar: visible})
     }
 
     /**
@@ -210,19 +226,19 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         index={index}
                                         activate={(button) => {
                                             this.updateButton('', button, false, '');
-                                            this.showHideCal(false);
+                                            this.updateCalendarVisibility(false);
                                             this.reRender(button)
                                         }}
                                         category={btn}
                                         initialVersions={this.props.initialVersions[btn]}
                                         currentVersions={this.props.currentVersions[btn]}
                                         language={this.props.language}
-                                        version={this.getVersion(btn)}
+                                        version={this.getVersionFromButton(btn)}
                                         updateLanguage={this.props.updateLanguage}
                                         updateVersion={this.props.updateVersion}
                                         updateButton={this.props.updateButton}
                                         selectedVersion={this.props.params.version}
-                                        selectedCategory={this.props.category}
+                                        selectedCategory={this.props.selectedButton}
                                         updateVersionizedButton={(version) => {
                                             this.updateButton(version, btn, false, '');
                                         }}
@@ -240,17 +256,17 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         updateVersion={this.props.updateVersion}
                                         updateLanguage={this.props.updateLanguage}
                                         language={this.props.language}
-                                        showHideCal={this.state.showHideCal}
+                                        showHideCal={this.state.showCalendar}
                                         date={this.state.selectedDate}
                                         name={btn}
                                         label={this.props.labels[index]}
                                         fullLabel={this.props.fullLabels[index]}
                                         select={(btn, date) => {
                                             this.updateButton('', btn, true, date);
-                                            this.showHideCal(true);
+                                            this.updateCalendarVisibility(true);
                                             this.reRender(btn)
                                         }}
-                                        active={this.props.category}
+                                        active={this.props.selectedButton}
                                     />
                                 </div>
                             ))}
@@ -262,10 +278,10 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                         initialVersions={this.props.initialVersions}
                         currentVersions={this.props.currentVersions}
                         date ={this.state.selectedDate}
-                        version={this.getVersion(this.state.selectedButton)}
+                        version={this.getVersionFromButton(this.state.selectedButton)}
                         selectedVersion={this.props.params.version}
                         reRender={this.props.clickedOnLogo}
-                        category={this.props.category}
+                        category={this.props.selectedButton}
                         language={this.props.language}
                         updateLanguage={this.props.updateLanguage}
                         updateVersion={this.props.updateVersion}
