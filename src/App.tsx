@@ -57,9 +57,9 @@ class App extends Component<Props, IApp>{
             initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': []},
             currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': []}
         };
-        this.updateButton = this.updateButton.bind(this);
-        this.updateDate = this.updateDate.bind(this);
-        this.updateVersion = this.updateVersion.bind(this);
+        this.changeSelectedButton = this.changeSelectedButton.bind(this);
+        this.changeSelectedDate = this.changeSelectedDate.bind(this);
+        this.changeSelectedVersion = this.changeSelectedVersion.bind(this);
         this.reRenderButton = this.reRenderButton.bind(this);
         this.reNavigateToHome = this.reNavigateToHome.bind(this)
         this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
@@ -71,23 +71,31 @@ class App extends Component<Props, IApp>{
      * Updates state of selectedVersion.
      * @param version
      */
-    updateVersion = (version) => {
+    changeSelectedVersion = (version) => {
         this.setState({selectedVersion: version})
     }
 
     /**
-     * Updates state of selectedButton.
+     * Changes the selected button.
      * @param btn
      */
-    updateButton = (btn) => {
+    changeSelectedButton = (btn) => {
         this.setState({selectedButton: btn})
+    }
+
+    /**
+     * Changes language.
+     * @param lang
+     */
+    changeLanguage = (lang) => {
+        this.setState({language: lang})
     }
 
     /**
      * Updates state of selectedDate.
      * @param date
      */
-    updateDate = (date) => {
+    changeSelectedDate = (date) => {
         this.setState({selectedDate: date})
     }
 
@@ -119,14 +127,6 @@ class App extends Component<Props, IApp>{
         } else {
             return this.state.currentVersions[button].includes(version)
         }
-    }
-
-    /**
-     * Updates state of language.
-     * @param lang
-     */
-    updateLanguage = (lang) => {
-        this.setState({language: lang})
     }
 
     /**
@@ -182,8 +182,8 @@ class App extends Component<Props, IApp>{
             if (this.isValidVersion(catalog, version, this.state.language)) {
                 this.navigateTo(this.state.language + "/" + catalog + '/' + version + delimiter + resource_type + '/' + code, searchString)
             } else {
-                this.updateButton("ICD")
-                this.updateVersion("ICD10-GM-2022")
+                this.changeSelectedButton("ICD")
+                this.changeSelectedVersion("ICD10-GM-2022")
                 this.navigateTo(this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022", searchString)
             }
             this.setState({reSetPath: false})
@@ -308,8 +308,8 @@ class App extends Component<Props, IApp>{
     reNavigateToHome(){
         this.setState({clickedOnLogo: true});
         this.props.navigation({search: ''});
-        this.updateButton('ICD')
-        this.updateVersion('ICD10-GM-2022')
+        this.changeSelectedButton('ICD')
+        this.changeSelectedVersion('ICD10-GM-2022')
     }
 
     /**
@@ -330,7 +330,7 @@ class App extends Component<Props, IApp>{
                 <div key={"app_container_0"} className="container">
                     <div key={"app_header"} className="row">
                         <div key={"app_header_0"} className="col-sm-12">
-                            <Header updateLanguage={this.updateLanguage} activeLanguage={this.state.language}/>
+                            <Header changeLanguage={this.changeLanguage} activeLanguage={this.state.language}/>
                         </div>
                     </div>
                     <div key={"app_img"} className="row">
@@ -358,11 +358,11 @@ class App extends Component<Props, IApp>{
                             version={this.state.selectedVersion}
                             reSetClickOnLogo={this.reSetClickedOnLogo}
                             reSetButton={this.reRenderButton}
-                            updateLanguage={this.updateLanguage}
+                            changeLanguage={this.changeLanguage}
                             language={this.state.language}
-                            updateButton={this.updateButton}
-                            updateVersion={this.updateVersion}
-                            updateDate={this.updateDate}
+                            changeSelectedButton={this.changeSelectedButton}
+                            changeSelectedVersion={this.changeSelectedVersion}
+                            changeSelectedDate={this.changeSelectedDate}
                             labels={this.getLabels(this.state.language)}
                             fullLabels={this.getFullLabels(this.state.language)}
                             buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'], ['MiGeL', 'AL', 'DRUG']]}

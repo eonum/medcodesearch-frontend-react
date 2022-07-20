@@ -7,9 +7,9 @@ import {IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
     selectedCatalog: string
-    updateButton: IUpdateStateByArg,
-    updateVersion: IUpdateStateByArg,
-    updateLanguage: IUpdateStateByArg,
+    changeSelectedButton: IUpdateStateByArg,
+    changeSelectedVersion: IUpdateStateByArg,
+    changeLanguage: IUpdateStateByArg,
     language: string,
     showHideCal: boolean,
     date : string,
@@ -97,10 +97,10 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
                     <PopUp
                         language={this.props.language}
                         version={""}
-                        selectedVersion={this.props.updateVersion}
-                        selectedLanguage={this.props.updateLanguage}
+                        selectedVersion={this.props.changeSelectedVersion}
+                        changeLanguage={this.props.changeLanguage}
                         category={this.state.disabledCategory}
-                        selectedCategory={this.props.updateButton}
+                        selectedCategory={this.props.changeSelectedButton}
                         show={this.state.showPopUp}
                         updatePopUpState={this.updatePopUp}
                     />

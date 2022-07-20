@@ -13,9 +13,9 @@ interface Props {
     currentVersions:  string[],
     language: string,
     version: string,
-    updateLanguage: IUpdateStateByArg,
-    updateVersion: IUpdateStateByArg,
-    updateButton: IUpdateStateByArg,
+    changeLanguage: IUpdateStateByArg,
+    changeSelectedVersion: IUpdateStateByArg,
+    changeSelectedButton: IUpdateStateByArg,
     selectedVersion: string,
     selectedCategory: string,
     updateVersionizedButton: IUpdateButton
@@ -158,9 +158,9 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
             <div key={"button_versionized"}>
                 {<PopUp
                     language={this.props.language}
-                    selectedLanguage={this.props.updateLanguage}
-                    selectedVersion={this.props.updateVersion}
-                    selectedCategory={this.props.updateButton}
+                    changeLanguage={this.props.changeLanguage}
+                    selectedVersion={this.props.changeSelectedVersion}
+                    selectedCategory={this.props.changeSelectedButton}
                     show={this.state.showPopUp}
                     updatePopUpState={this.updatePopUp}
                     version={this.state.disabledVersion}

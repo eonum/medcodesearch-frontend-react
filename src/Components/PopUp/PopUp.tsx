@@ -10,7 +10,7 @@ import {IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
     language: string,
-    selectedLanguage: IUpdateStateByArg,
+    changeLanguage: IUpdateStateByArg,
     selectedVersion: IUpdateStateByArg,
     selectedCategory: IUpdateStateByArg,
     show: boolean
@@ -104,7 +104,7 @@ class PopUp extends Component<Props, IPopUp>{
      */
     handleLanguageClick(language) {
         this.handleShow(false)
-        this.props.selectedLanguage(language)
+        this.props.changeLanguage(language)
         this.props.selectedVersion(this.props.version)
         this.props.selectedCategory(this.props.category)
     }

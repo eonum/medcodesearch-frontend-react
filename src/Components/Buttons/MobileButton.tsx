@@ -19,8 +19,8 @@ interface Props {
     reRender: boolean,
     category: string,
     language: string,
-    updateLanguage: IUpdateStateByArg,
-    updateVersion: IUpdateStateByArg,
+    changeLanguage: IUpdateStateByArg,
+    changeSelectedVersion: IUpdateStateByArg,
     updateCategory: IUpdateStateByArg,
     buttons: IButtonLabels,
     labels: string[],
@@ -296,8 +296,8 @@ class MobileButton extends Component<Props,IMobileButton>{
                 {
                     <PopUp
                         language={this.props.language}
-                        selectedLanguage={this.props.updateLanguage}
-                        selectedVersion={this.props.updateVersion}
+                        changeLanguage={this.props.changeLanguage}
+                        selectedVersion={this.props.changeSelectedVersion}
                         selectedCategory={this.props.updateCategory}
                         show={this.state.showPopUp}
                         updatePopUpState={this.updatePopUp}
