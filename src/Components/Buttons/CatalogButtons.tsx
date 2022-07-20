@@ -126,8 +126,9 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      * @param btn
      * @returns {string|string|*}
      */
-    // TODO: Could this be solved in a more dynamic way, f.e. something like return this.state[stateAttribute[btn]]
-    //  where stateAttribute is a hash with attribute name by button, i.e. convert string to variable name?!
+    // TODO: @Tim: Could this be solved in a more dynamic way, f.e. storing currentICD/DRG/CHOP/TARMED in a hash and
+    //  then just return hash[btn] if ['ICD',...].include(btn) and '' else? Not sure how to do since currentICD is a
+    //  state attribute and not a string? I wasn't good at googling this time...
     getVersionFromButton(btn) {
         switch (btn){
             case 'ICD':
