@@ -32,9 +32,8 @@ export interface IButtonVersionized {
  * @component
  */
 class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
-
     /**
-     *  sets the default state values and bind the popup
+     * Set the default state values and binds the popup.
      * @param props
      */
     constructor(props) {
@@ -44,21 +43,21 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
             disabledVersion: "",
             disabledCategory: "",
         }
-        this.updatePopUp = this.updatePopUp.bind(this);
+        this.changeShowPopUp = this.changeShowPopUp.bind(this);
     }
 
     /**
-     * updates the current showPopUp with the given value
-     * @param value
+     * Changes the current showPopUp with the given boolean value.
+     * @param boolean_value
      */
-    updatePopUp = (boolean_value) => {
+    changeShowPopUp = (boolean_value) => {
         this.setState({showPopUp: boolean_value})
     }
 
     /**
-     * set the new version and button
+     * Handles version change when clicking on a button, i.e. sets the selected version, button and date or renders
+     * popup for non available versions.
      * @param version
-     * @param btn
      */
     handleVersionClick(version) {
         const DROPDOWN = document.getElementById(version);
@@ -162,7 +161,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
                     selectedVersion={this.props.changeSelectedVersion}
                     selectedCategory={this.props.changeSelectedButton}
                     show={this.state.showPopUp}
-                    updatePopUpState={this.updatePopUp}
+                    updatePopUpState={this.changeShowPopUp}
                     version={this.state.disabledVersion}
                     category={this.state.disabledCategory}
                 />}
