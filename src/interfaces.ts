@@ -48,7 +48,9 @@ interface IAttributes {
     cumulation?: string,
     faculty?: string,
     active_substances?: string[],
-    terminal?: boolean
+    terminal?: boolean,
+    auth_number?: string,
+    package_code?: string
 }
 
 export interface ICode {
@@ -69,17 +71,31 @@ export interface IParamTypes {
     language: string,
     catalog: string,
     resource_type: string,
-    code: string
+    code: string,
+    version?: string
 }
 
-export interface IParamTypesVersionized extends IParamTypes {
-    version: string
+export interface INavigationHook {
+    (input: {
+        pathname?: string,
+        search?: string
+    }): void
+};
+
+export interface ILocation {
+    pathname?: string,
+    search?: string,
 }
 
-export interface IVersionizedCode {
-    key: string,
-    title: string,
-    text: string,
-    attributes: string[],
-    parents: string[]
+export interface INoArgsFunction {
+    (): void
+}
+
+export interface IUpdateStateByArg {
+    (arg0: string): void
+}
+
+export interface IUpdateButton {
+    (version?: string, category?: string, isCalendar?: boolean, date?: string):
+        void
 }

@@ -37,7 +37,7 @@ class RouterService extends Component {
      * get the category defined in the url and if it isn't defined set it to 'ICD'
      * @returns {string|*}
      */
-    static getCategoryFromURL() {
+    static getCatalogFromURL() {
         if(window.location.pathname !== '/') {
             return window.location.pathname.split("/")[2]
         }
@@ -60,26 +60,33 @@ class RouterService extends Component {
         return 'ICD10-GM-2022'
     }
 
-    static getChapterFromURL() {
+    static getResourceTypeFromURL() {
         if(window.location.pathname !== '/') {
             let arr = window.location.pathname.split("/")
             if(arr.length === 6) {
+                // Versionized code.
                 return arr[4]
             } else {
+                // Unversionized code.
                 return arr[3]
             }
         }
-        return 'ICD10-GM-2022'
+        return 'icd_chapters'
     }
+
     static getCodeFromURL() {
         if(window.location.pathname !== '/') {
             let arr = window.location.pathname.split("/")
             if(arr.length === 6) {
+                // Versionized code.
                 return arr[5]
             } else {
+                // Unversionized code.
                 return arr[4]
             }
         }
+        // Base code for ICD, which is the catalog for root url, i.e. when visiting medcodesearch.ch.
+        // TODO: Get newest ICD base code dynamically since this will not work when catalog is newer than 2022.
         return 'ICD10-GM-2022'
     }
 

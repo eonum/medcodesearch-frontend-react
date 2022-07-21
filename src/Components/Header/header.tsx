@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './header.css'
+import {IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
-    language: any,
+    changeLanguage: IUpdateStateByArg,
     activeLanguage: string
 }
 
@@ -36,8 +37,9 @@ class Header extends Component<Props, IHeader> {
      * Change the languagePrev state to the current language
      * @param lang
      */
+    // TODO: I don't really get the use of this function.
     updateLanguage(lang) {
-        this.props.language(lang)
+        this.props.changeLanguage(lang)
         this.setState({languagePrev: this.state.language, language: lang})
     }
 

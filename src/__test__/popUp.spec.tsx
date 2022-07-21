@@ -23,8 +23,8 @@ describe('PopUp test suite', function () {
     await page.waitForTimeout(2*n);
     await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022');
     // Click on versions button for icds.
-    await page.waitForSelector("#buttonversion", {visible: true})
-    await page.click("#buttonversion")
+    await page.waitForSelector("#button_versionized", {visible: true})
+    await page.click("#button_versionized")
     // Select ICD 2021 (which is not available in 'fr').
     await page.waitForSelector("#ICD10-GM-2021", {visible: true})
     await page.click("#ICD10-GM-2021");
@@ -38,8 +38,8 @@ describe('PopUp test suite', function () {
     await page.click(".modal-footer>button");
     await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022');
     // Again click ICD 2021 but now choose 'de' and check if correct forwarded.
-    await page.waitForSelector("#buttonversion", {visible: true});
-    await page.click("#buttonversion");
+    await page.waitForSelector("#button_versionized", {visible: true});
+    await page.click("#button_versionized");
     await page.waitForSelector("#ICD10-GM-2021", {visible: true})
     await page.click("#ICD10-GM-2021");
     await page.waitForSelector(".modal-footer>button", {visible: true})

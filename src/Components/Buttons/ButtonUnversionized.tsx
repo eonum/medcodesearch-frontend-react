@@ -3,22 +3,24 @@ import convertDate from "../../Services/convert-date.service";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import DatePicker from "./DatePicker";
 import PopUp from "../PopUp/PopUp";
+import {IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
-    updateCategory: any,
-    updateVersion: any,
-    selectedLanguage: any,
+    selectedCatalog: string
+    changeSelectedButton: IUpdateStateByArg,
+    changeSelectedVersion: IUpdateStateByArg,
+    changeLanguage: IUpdateStateByArg,
     language: string,
     showHideCal: boolean,
     date : string,
     name: string,
     label: string,
     fullLabel: string,
-    select: any,
+    select: {(btn: string, date: string): void},
     active: string
 }
 
-interface IButtonWithCal {
+interface IButtonUnversionized {
     disabledCategory: string,
     showPopUp: boolean
 }
@@ -27,7 +29,7 @@ interface IButtonWithCal {
  * creates a button with a calender
  * @component
  */
-class ButtonWithCal extends Component<Props,IButtonWithCal>{
+class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
 
     constructor(props) {
         super(props);
@@ -86,21 +88,21 @@ class ButtonWithCal extends Component<Props,IButtonWithCal>{
     }
 
     /**
-     * renders the ButtonWithCal
+     * renders the ButtonUnversionized
      * @returns {JSX.Element}
      */
     render(){
         return(
-                <div key={"buttonwithCal div 0"} id={"cal"}>
+                <div key={"button_unversionized"} id={"cal"}>
                     <PopUp
                         language={this.props.language}
                         version={""}
-                        selectedVersion={this.props.updateVersion}
-                        selectedLanguage={this.props.selectedLanguage}
+                        selectedVersion={this.props.changeSelectedVersion}
+                        changeLanguage={this.props.changeLanguage}
                         category={this.state.disabledCategory}
-                        selectedCategory={this.props.updateCategory}
+                        selectedCategory={this.props.changeSelectedButton}
                         show={this.state.showPopUp}
-                        updateValue={this.updatePopUp}
+                        updatePopUpState={this.updatePopUp}
                     />
                     <OverlayTrigger
                         placement="bottom"
@@ -109,7 +111,7 @@ class ButtonWithCal extends Component<Props,IButtonWithCal>{
                     >
                     <button
                         id={this.props.name}
-                        key={"buttonwithcal " + this.props.name}
+                        key={"button_unversionized_" + this.props.name}
                         name={this.props.name}
                         className={this.getClassName()}
                         onClick={() =>{
@@ -119,16 +121,17 @@ class ButtonWithCal extends Component<Props,IButtonWithCal>{
                     </button>
                     </OverlayTrigger>
                         {this.props.showHideCal && (this.props.active === this.props.name) &&
-
                         <DatePicker
-                                activeDate = {this.props.date}
-                                setDate={(date) => {
-                                    this.props.select(this.props.name, date)
-                                }}
-                            />
+                            isMobile={false}
+                            selectedCatalog={this.props.selectedCatalog}
+                            activeDate = {this.props.date}
+                            setDate={(date) => {
+                                this.props.select(this.props.name, date)
+                            }}
+                        />
                         }
                 </div>
                 )}
 
 }
-export default ButtonWithCal;
+export default ButtonUnversionized;

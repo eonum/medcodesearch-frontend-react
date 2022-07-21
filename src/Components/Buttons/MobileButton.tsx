@@ -6,9 +6,11 @@ import {convertCategory, findCategory} from "../../Services/category-version.ser
 import React, {Component} from "react";
 import CategorySortService from "../../Services/category-sort.service";
 import DatePicker from "./DatePicker";
-import {IVersions, IButtonLabels} from "../../interfaces";
+import {IVersions, IButtonLabels, IUpdateStateByArg, IUpdateButton} from "../../interfaces";
+import {fetchURL} from "../../Utils";
 
 interface Props {
+    selectedCatalog: string
     initialVersions: IVersions,
     currentVersions: IVersions,
     date: string,
@@ -17,20 +19,20 @@ interface Props {
     reRender: boolean,
     category: string,
     language: string,
-    selectedLanguage: any,
-    updateVersion: any,
-    updateCategory: any,
+    changeLanguage: IUpdateStateByArg,
+    changeSelectedVersion: IUpdateStateByArg,
+    updateCategory: IUpdateStateByArg,
     buttons: IButtonLabels,
     labels: string[],
-    chooseC: any
+    updateMobileButton: IUpdateButton
 }
 
 export interface IMobileButton {
     showPopUp: boolean,
     disabledVersion: string,
     disabledCategory: string,
-    allVersions: any,
-    currentVersions: any,
+    allVersions: string[], // all versions of one catalog in an array, f.e. ["CHOP_2011", "CHOP_2012", ...]
+    currentVersions: string[],
     buttons: string[],
     selectedButton: string
 }
@@ -106,7 +108,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     handleVersionClick(version, btn) {
         const DROPDOWN = document.getElementById(version);
         if(!DROPDOWN.classList.contains('disabled')) {
-            this.props.chooseC(version, btn)
+            this.props.updateMobileButton(version, btn)
         } else {
             this.setState({disabledCategory: findCategory(version)})
             this.setState({showPopUp: true})
@@ -122,7 +124,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     handleCategoryClick(category) {
         const CAT = document.getElementById(category);
         if(!CAT.classList.contains('disabled')) {
-            this.props.chooseC('', category, false, "")
+            this.props.updateMobileButton('', category, false, "")
         } else {
             this.setState({disabledCategory: category})
             this.setState({showPopUp: true})
@@ -141,7 +143,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     async fetchInitialVersions() {
         if (!this.isCalBut()) {
             if (this.props.category === "SwissDRG") {
-                await fetch(`https://search.eonum.ch/de/drgs/versions`)
+                await fetch([fetchURL, '/de/drgs/versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({
@@ -150,7 +152,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                         })
                     })
             } else {
-                await fetch(`https://search.eonum.ch/de/` + this.props.category.toLowerCase() + `s/versions`)
+                await fetch([fetchURL, 'de', this.props.category.toLowerCase() + 's' ,'versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({
@@ -171,13 +173,13 @@ class MobileButton extends Component<Props,IMobileButton>{
     async fetchCurrentVersions() {
         if (!this.isCalBut()) {
             if (this.props.category === "SwissDRG") {
-                await fetch(`https://search.eonum.ch/` + this.props.language + `/drgs/versions`)
+                await fetch([fetchURL, this.props.language, 'drgs/versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({currentVersions: CategorySortService(json)})
                     })
             } else {
-                await fetch(`https://search.eonum.ch/` + this.props.language + `/` + this.props.category.toLowerCase() + `s/versions`)
+                await fetch([fetchURL, this.props.language, this.props.category.toLowerCase() + 's', 'versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({currentVersions: CategorySortService(json)})
@@ -289,66 +291,66 @@ class MobileButton extends Component<Props,IMobileButton>{
     render(){
         let renderCal = this.isCalBut()
         return(
-        <div key={"mobileButton div 0"} className="d-lg-none text-center">
-            <div key={"mobileButton div 1"} className="btn-group">
+        <div key={"mobile_button"} className="d-lg-none text-center">
+            <div key={"mobile_button_0"} className="btn-group">
                 {
                     <PopUp
                         language={this.props.language}
-                        selectedLanguage={this.props.selectedLanguage}
-                        selectedVersion={this.props.updateVersion}
+                        changeLanguage={this.props.changeLanguage}
+                        selectedVersion={this.props.changeSelectedVersion}
                         selectedCategory={this.props.updateCategory}
                         show={this.state.showPopUp}
-                        updateValue={this.updatePopUp}
+                        updatePopUpState={this.updatePopUp}
                         version={this.state.disabledVersion}
                         category={this.state.disabledCategory}
                     />
                 }
-                <Dropdown key={"mobileButton dropdown catalog"} className="catalogButtons">
+                <Dropdown key={"mobile_button_dropdown_catalog"} className="catalogButtons">
                     <DropdownToggle
-                        key={"mobileButton dropdown catalog toggle"}
+                        key={"mobile_button_dropdown_catalog_toggle"}
                         className="customButton"
                         variant=""
                         type="button"
-                        id={"mobilebutton catalog"}>
+                        id={"mobile_button_catalog"}>
                         {this.convertToLabel()}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
-                        {this.state.buttons.map((category, index) => (
-                                <Dropdown.Item className={this.getClassName(category)}
-                                               eventKey={category}
-                                               key={"mobileButton dropdown catalog " + category}
-                                               id={category}
+                        {this.state.buttons.map((btn, index) => (
+                                <Dropdown.Item className={this.getClassName(btn)}
+                                               eventKey={btn}
+                                               key={"mobile_button_dropdown_catalog_" + btn}
+                                               id={btn}
                                                onClick={() => {
-                                    this.handleCategoryClick(category)
+                                    this.handleCategoryClick(btn)
                                 }}>
-                                    {this.extractLabels(category, index)}
+                                    {this.extractLabels(btn, index)}
                                 </Dropdown.Item>
                             )
                         )}
                     </DropdownMenu>
                 </Dropdown>
                 {!renderCal &&
-                <Dropdown key={"mobileButton dropdown versions"} className="catalogButtons">
+                <Dropdown key={"mobile_button_dropdown_versions"} className="catalogButtons">
                     <Dropdown.Toggle
-                        key={"mobileButton dropdown versions toggle"}
+                        key={"mobile_button_dropdown_versions_toggle"}
                         className="customButton"
                         variant=""
                         type="button"
-                        id={"mobilebutton version"}>
+                        id={"mobile_button_version"}>
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
                         {this.state.allVersions.reverse().map(
-                            (versions) => (
+                            (version) => (
                                 <Dropdown.Item
-                                    className={this.state.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
-                                    eventKey={versions}
-                                    key={"mobileButton dropdown versions " + versions}
-                                    id={versions}
+                                    className={this.state.currentVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
+                                    eventKey={version}
+                                    key={"mobile_button_dropdown_versions_" + version}
+                                    id={version}
                                     onClick={() => {
-                                        this.handleVersionClick(versions, this.props.category)
+                                        this.handleVersionClick(version, this.props.category)
                                     }}
-                                >{convertCategory(this.props.category, versions)}</Dropdown.Item>
+                                >{convertCategory(this.props.category, version)}</Dropdown.Item>
                             )
                         )}
                     </Dropdown.Menu>
@@ -356,9 +358,11 @@ class MobileButton extends Component<Props,IMobileButton>{
                 }
                 {renderCal &&
                 <DatePicker
+                    isMobile={true}
+                    selectedCatalog={this.props.selectedCatalog}
                     activeDate = {this.props.date}
                     setDate={(date) => {
-                        this.props.chooseC('',this.props.category, true, date)
+                        this.props.updateMobileButton('',this.props.category, true, date)
                     }}
                 />
                 }
