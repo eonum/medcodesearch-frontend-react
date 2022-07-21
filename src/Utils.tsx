@@ -27,5 +27,9 @@ export const skippableAttributes = [
     "base_analyis",
     "special_analysis",
     "auth_holder_nr",
-    "prefix"
+    "prefix",
+    "predecessors",
+    "successors"
 ]
+
+export const fetchURL = 'https://search.eonum.ch'

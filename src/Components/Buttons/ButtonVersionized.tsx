@@ -2,38 +2,38 @@ import React from "react";
 import {Dropdown} from "react-bootstrap";
 import PopUp from "../PopUp/PopUp";
 import {convertCategory, findCategory} from "../../Services/category-version.service";
+import {IUpdateButton, IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
     key: string,
     index: number,
-    activate: any,
+    activate: {(button: string): void},
     category: string
     initialVersions: string[],
     currentVersions:  string[],
     language: string,
     version: string,
-    selectedLanguage: any,
-    updateVersion: any,
-    updateCategory: any,
+    changeLanguage: IUpdateStateByArg,
+    changeSelectedVersion: IUpdateStateByArg,
+    changeSelectedButton: IUpdateStateByArg,
     selectedVersion: string,
     selectedCategory: string,
-    chooseV: any
+    updateVersionizedButton: IUpdateButton
 }
 
-export interface IButtonVersion {
+export interface IButtonVersionized {
     showPopUp: boolean,
     disabledVersion: string,
     disabledCategory: string,
 }
 
 /**
- * is responsible for the buttons with versions
+ * Responsible for the buttons with versions.
  * @component
  */
-class ButtonVersion extends React.Component<Props,IButtonVersion>{
-
+class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
     /**
-     *  sets the default state values and bind the popup
+     * Set the default state values and binds the popup.
      * @param props
      */
     constructor(props) {
@@ -43,26 +43,26 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
             disabledVersion: "",
             disabledCategory: "",
         }
-        this.updatePopUp = this.updatePopUp.bind(this);
+        this.changeShowPopUp = this.changeShowPopUp.bind(this);
     }
 
     /**
-     * updates the current showPopUp with the given value
-     * @param value
+     * Changes the current showPopUp with the given boolean value.
+     * @param boolean_value
      */
-    updatePopUp = (value) => {
-        this.setState({showPopUp: value})
+    changeShowPopUp = (boolean_value) => {
+        this.setState({showPopUp: boolean_value})
     }
 
     /**
-     * set the new version and button
+     * Handles version change when clicking on a button, i.e. sets the selected version, button and date or renders
+     * popup for non available versions.
      * @param version
-     * @param btn
      */
     handleVersionClick(version) {
         const DROPDOWN = document.getElementById(version);
         if(!DROPDOWN.classList.contains('disabled')) {
-            this.props.chooseV(version)
+            this.props.updateVersionizedButton(version)
         } else {
             this.setState({disabledCategory: findCategory(version)})
             this.setState({disabledVersion: version})
@@ -143,7 +143,7 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
                         <Dropdown.Item
                             className={this.props.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                             eventKey={versions}
-                            key={"buttonversion " + this.props.category + " DropDown " + versions}
+                            key={"button_versionized_" + this.props.category + "_drop_down_" + versions}
                             id={versions}
                             onClick={() => {
                                 this.handleVersionClick(versions)
@@ -154,14 +154,14 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
             </Dropdown.Menu>
         }
         return (
-            <div key={"buttonVersion div 0"}>
+            <div key={"button_versionized"}>
                 {<PopUp
                     language={this.props.language}
-                    selectedLanguage={this.props.selectedLanguage}
-                    selectedVersion={this.props.updateVersion}
-                    selectedCategory={this.props.updateCategory}
+                    changeLanguage={this.props.changeLanguage}
+                    selectedVersion={this.props.changeSelectedVersion}
+                    selectedCategory={this.props.changeSelectedButton}
                     show={this.state.showPopUp}
-                    updateValue={this.updatePopUp}
+                    updatePopUpState={this.changeShowPopUp}
                     version={this.state.disabledVersion}
                     category={this.state.disabledCategory}
                 />}
@@ -169,7 +169,7 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
                     <button 
                         type="button"
                         id={this.props.category}
-                        key={"buttonversion " + this.props.category + "-button"}
+                        key={"button_versionized_" + this.props.category + "_button"}
                         title={this.props.category}
                         onClick={(e) => {
                             this.handleCategoryClick(this.props.category)
@@ -180,10 +180,10 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
                     </button>
                     <Dropdown.Toggle
                         className="customButton"
-                        id={"buttonversion"}
+                        id={"button_versionized"}
                         type="button"
                         variant=""
-                        key={"buttonversion " + this.props.category + " DropDown"
+                        key={"button_versionized_" + this.props.category + "_drop_down"
                     }>
                         {this.getVersion()}
                     </Dropdown.Toggle>
@@ -194,4 +194,4 @@ class ButtonVersion extends React.Component<Props,IButtonVersion>{
     }
 }
 
-export default ButtonVersion
+export default ButtonVersionized

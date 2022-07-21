@@ -29,35 +29,35 @@ describe('Default test suite for mobile version, testing general navigation via 
         // Load base URL
         await page.goto(baseUrl, {waitUntil: 'networkidle0'})
         // Click on catalog button and select CHOP from dropdown.
-        await page.click("#mobilebutton\\ catalog")
+        await page.click("#mobile_button_catalog")
         await page.click(".dropdown.dropdown-menu.show>a#CHOP");
-        await page.waitForSelector("#mobilebutton\\ version", {visible: true});
+        await page.waitForSelector("#mobile_button_version", {visible: true});
         // Click on version button and select 2016 from dropdown.
-        await page.click("#mobilebutton\\ version");
+        await page.click("#mobile_button_version");
         await page.waitForSelector("#CHOP_2016", {visible: true});
         await page.click("#CHOP_2016");
         await page.waitForTimeout(n);
         await expect(page).toMatch("CHOP 2016")
         await expect(page.url()).toBe(baseUrl + '/de/CHOP/CHOP_2016/chop_chapters/CHOP_2016')
         // Click on version button and select 2020 from dropdown.
-        await page.click("#mobilebutton\\ version")
+        await page.click("#mobile_button_version")
         await page.waitForSelector("#CHOP_2020", {visible: true});
         await page.click("#CHOP_2020")
         await page.waitForTimeout(n);
         await expect(page).toMatch("CHOP 2020")
         await expect(page.url()).toBe(baseUrl + '/de/CHOP/CHOP_2020/chop_chapters/CHOP_2020')
         // Change to Swissdrg V7.0.
-        await page.click("#mobilebutton\\ catalog")
+        await page.click("#mobile_button_catalog")
         await page.click(".dropdown.dropdown-menu.show>a#SwissDRG")
-        await page.waitForSelector("#mobilebutton\\ version", {visible: true});
+        await page.waitForSelector("#mobile_button_version", {visible: true});
         // Click on version button and select V7.0 from dropdown.
-        await page.click("#mobilebutton\\ version")
+        await page.click("#mobile_button_version")
         await page.click("#V7\\.0")
         await page.waitForTimeout(n);
         await expect(page).toMatch("SwissDRG 7.0")
         await expect(page.url()).toBe(baseUrl + '/de/SwissDRG/V7.0/mdcs/V7.0')
         // Click on version button and select V7.0 from dropdown.
-        await page.click("#mobilebutton\\ catalog")
+        await page.click("#mobile_button_catalog")
         await page.click(".dropdown.dropdown-menu.show>a#TARMED")
         await page.waitForTimeout(n);
         await expect(page).toMatch("TARMED")
@@ -75,6 +75,7 @@ describe('Default test suite for mobile version, testing general navigation via 
         await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
         await page.waitForSelector("ul>li:first-child>a")
+        // TODO: await page.click("ul>li:first-child>a") fails if not enough timeout in headless mode. Not sure why.
         await page.click("ul>li:first-child>a")
         await page.waitForTimeout(n);
         await expect(page).toMatch("Infektiöse Darmkrankheiten")
@@ -108,6 +109,7 @@ describe('Default test suite for mobile version, testing general navigation via 
         await expect(page).toMatch("Certaines maladies infectieuses et parasitaires")
         await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
+        // TODO: await page.click("ul>li:first-child>a") fails if not enough timeout in headless mode. Not sure why.
         await page.waitForSelector("ul>li:first-child>a")
         await page.click("ul>li:first-child>a")
         await page.waitForTimeout(n);
@@ -143,6 +145,7 @@ describe('Default test suite for mobile version, testing general navigation via 
         await expect(page.url()).toBe(baseUrl + '/it/ICD/ICD10-GM-2022/icd_chapters/I')
         // Click on A00-A09 (first group of ICD Chapter I).
         await page.waitForSelector("ul>li:first-child>a")
+        // TODO: await page.click("ul>li:first-child>a") fails if not enough timeout in headless mode. Not sure why.
         await page.click("ul>li:first-child>a")
         await page.waitForTimeout(n);
         await expect(page).toMatch("Malattie infettive intestinali")
