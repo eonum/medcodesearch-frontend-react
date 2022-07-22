@@ -5,16 +5,17 @@ import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useNavigate} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 import ConvertDateService from "../../Services/convert-date.service";
-import findJsonService from "../../Services/find-json.service";
+import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
+import {INavigationHook} from "../../interfaces";
 
 interface Props {
     language: string,
     selectedButton: string,
     version: string,
     date: string,
-    searchResults: any,
-    navigation: any
+    updateSearchResults: { (searchResult: string | object): void },
+    navigation: INavigationHook
 }
 
 interface ISearchbar  {
@@ -132,13 +133,13 @@ class Searchbar extends Component<Props,ISearchbar> {
                 }
             })
             .then((json) => {
-                this.props.searchResults("reset") //reset parent array
+                this.props.updateSearchResults("reset") //reset parent array
                 if(json.length === 0 && searchTerm !== "") {
-                    this.props.searchResults("empty")
+                    this.props.updateSearchResults("empty")
                 }
                 for(let i = 0; i < json.length; i++) {
                     let obj = json[i];
-                    this.props.searchResults(obj);
+                    this.props.updateSearchResults(obj);
                 }
             })
     }
@@ -147,7 +148,7 @@ class Searchbar extends Component<Props,ISearchbar> {
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = findJsonService(this.props.language)
+        let translateJson = getTranslationHash(this.props.language)
         return (
             <div>
                 <Form className="d-flex search-center">
@@ -172,8 +173,8 @@ class Searchbar extends Component<Props,ISearchbar> {
     }
 }
 
-function withParams(Component) {
+function addProps(Component) {
     return props => <Component {...props} navigation={useNavigate()}/>;
 }
 
-export default withParams(Searchbar);
+export default addProps(Searchbar);

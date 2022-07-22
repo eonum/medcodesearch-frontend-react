@@ -45,7 +45,7 @@ describe('PopUp test suite for mobile version', function () {
     await page.waitForSelector(".modal-footer>button", {visible: true})
     // 'de' should be first button.
     await page.click(".modal-footer>div>.customButton.langBtn:nth-child(1)");
-    await page.waitForTimeout(2*n);
+    await page.waitForTimeout(3*n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2019/icd_chapters/ICD10-GM-2019');
   })
 })

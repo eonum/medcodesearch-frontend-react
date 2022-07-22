@@ -21,31 +21,32 @@ describe('Default test suite, testing general navigation via clicks', function (
     it('clicking from one catalog to another (de)', async function () {
         await page.goto(baseUrl, {waitUntil: 'networkidle0'});
         await page.click('#ICD');
-        await expect(page.url()).toMatch(baseUrl + "/de/ICD/ICD10-GM-2022/icd_chapters/")
         await expect(page).toMatch('ICD10-GM')
         await expect(page).toMatch('IX: Krankheiten des Kreislaufsystems')
         await expect(page).toMatch('Untergeordnete Codes')
+        await expect(page.url()).toBe(baseUrl + "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
         await page.click('#CHOP');
-        await expect(page.url()).toMatch(baseUrl + "/de/CHOP/CHOP_2022/chop_chapters/")
         await expect(page).toMatch('CHOP')
         await expect(page).toMatch('C14: Operationen an den Bewegungsorganen (76–84)')
         await expect(page).toMatch('Untergeordnete Codes')
+        await expect(page.url()).toBe(baseUrl + "/de/CHOP/CHOP_2022/chop_chapters/CHOP_2022")
         await page.click('#SwissDRG');
-        await expect(page.url()).toMatch(baseUrl + "/de/SwissDRG/V11.0/mdcs/")
+        await page.waitForTimeout(n)
         await expect(page).toMatch('SwissDRG')
         await expect(page).toMatch('MDC 22:')
         await expect(page).toMatch('Verbrennungen')
         await expect(page).toMatch('Untergeordnete Codes')
+        await expect(page.url()).toBe(baseUrl + "/de/SwissDRG/V11.0/mdcs/V11.0")
         await page.click("#TARMED");
         await expect(page).toMatch('TARMED')
         await expect(page).toMatch('24: Diagnostik und Therapie des Bewegungsapparates')
         await expect(page).toMatch('Untergeordnete Codes')
-        await expect(page.url()).toMatch(baseUrl + "/de/TARMED/TARMED_01.09/tarmed_chapters/")
+        await expect(page.url()).toBe(baseUrl + "/de/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09")
         await page.click('#MiGeL');
-        await expect(page.url()).toMatch(baseUrl + "/de/MIGEL/migels/all")
         await expect(page).toMatch('MiGeL')
         await expect(page).toMatch('13: HOERHILFEN')
         await expect(page).toMatch('Untergeordnete Codes')
+        await expect(page.url()).toMatch(baseUrl + "/de/MIGEL/migels/all")
         var element = await page.$("#datepicker_MIGEL_desktop");
         // If "#datepicker_MIGEL_desktop" not existing, element would be null.
         await expect(element).toBeTruthy()

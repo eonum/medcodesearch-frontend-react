@@ -1,17 +1,16 @@
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb} from "react-bootstrap";
-import findJsonService from "../../Services/find-json.service";
-import {ICode, IParamTypesVersionized} from "../../interfaces";
+import getTranslationHash from "../../Services/translation.service";
+import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
 import {fetchURL, initialCodeState, skippableAttributes} from "../../Utils";
 import IcdSortService from "../../Services/icd-sort.service";
 import CodeSortService from "../../Services/code-sort.service";
 import RouterService from "../../Services/router.service";
 
 interface Props {
-    params: IParamTypesVersionized,
-    navigation: any,
-    location: any,
+    params: IParamTypes,
+    navigation: INavigationHook,
 }
 
 /**
@@ -117,9 +116,9 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                     }} className="link">{arr[0].replace(/\.$/, '')}</a>) </span>)
                 }
             }
-            return <li key={attribute + "_" + "link" + "_" + index}>{aString.substring(0, firstIndex)} {results}</li>
+            return <li key={`${attribute}_link_${index}`}>{aString.substring(0, firstIndex)} {results}</li>
         } else {
-            return <li key={attribute + "_" + "link" + "_" + index}>{aString}</li>
+            return <li key={`${attribute}_link_${index}`}>{aString}</li>
         }
     }
 
@@ -164,7 +163,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     // TODO: Does it make sense to refactor grandparents and siblings fetching into utils to share between un- and
     //  versionized bodies (maybe not since we're setting state)?
     async fetchSiblings(parent) {
-        if(this.state.attributes.children == null && this.props.params.resource_type != "partitions") {
+        if(this.state.attributes.children === null && this.props.params.resource_type !== "partitions") {
             await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
                 .then((res) => res.json())
                 .then((json) => {
@@ -242,7 +241,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             return breadcrumbItem;
         })
 
-        let translateJson = findJsonService(this.props.params.language);
+        let translateJson = getTranslationHash(this.props.params.language);
 
         // Use filter to only select attributes we want to display (not in skippable attributes and value not null,
         // undefined or empty.
@@ -282,9 +281,9 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             if (this.state.attributes[field] != null) {
                 // is this a non-trivial mapping?
                 if(this.state.attributes[field].length > 1 ||
-                    this.state.attributes[field].length == 1 &&
+                    this.state.attributes[field].length == 1 && (
                     (this.state.attributes[field][0]['code'] != this.state.attributes['code'] ||
-                        this.state.attributes[field][0]['text'] != this.state.attributes['text'])) {
+                        this.state.attributes[field][0]['text'] != this.state.attributes['text']))) {
                     attributesHtml.push(
                         <div key={"mapping_pre_succ" + j}>
                             <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
@@ -333,8 +332,8 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 }
 
-function withParams(Component) {
-    return props => <Component {...props} navigation={useNavigate()} location={useLocation()} params={useParams()} key={"versionized_body"}/>;
+function addProps(Component) {
+    return props => <Component {...props} navigation={useNavigate()} params={useParams()} key={"versionized_body"}/>;
 }
 
-export default withParams(CodeBodyVersionized);
+export default addProps(CodeBodyVersionized);

@@ -2,10 +2,11 @@ import React, {Component} from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
 import RouterService from "../../Services/router.service";
+import {ILocation, INavigationHook} from "../../interfaces";
 
 interface Props {
-    navigation: any,
-    location: any,
+    navigation: INavigationHook,
+    location: ILocation,
     key: string,
     result: ISearchResult
 }
@@ -108,8 +109,8 @@ class SearchResult extends Component<Props, ISearchResult> {
     }
 }
 
-function withParams(Component) {
+function addProps(Component) {
     return props => <Component {...props} navigation={useNavigate()} location={useLocation()} key={"searchresults_default"}/>;
 }
 
-export default withParams(SearchResult);
+export default addProps(SearchResult);

@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import './Main.css';
 import {Outlet, useParams} from "react-router-dom";
+import {IParamTypes} from "../../interfaces";
 
 interface Props{
-    params: any
+    params: IParamTypes
 }
 
 interface IMain {
@@ -11,17 +12,16 @@ interface IMain {
 }
 
 /**
- * Sets the default page and is responsible for the background
+ * Sets the default page and is responsible for the background.
  */
 class Main extends Component<Props, IMain> {
-
     constructor(props) {
         super(props);
         this.state = {page: "I"}
     }
 
     /**
-     * Render the Main component
+     * Render the Main component.
      * @returns {JSX.Element}
      */
     render() {
@@ -41,8 +41,8 @@ class Main extends Component<Props, IMain> {
     }
 }
 
-function withParams(Component) {
+function addProps(Component) {
     return props => <Component {...props} params={useParams()}/>;
 }
 
-export default withParams(Main);
+export default addProps(Main);

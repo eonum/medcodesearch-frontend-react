@@ -1,19 +1,20 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import React, {Component} from "react";
 import "./PopUp.css"
 import {Modal} from "react-bootstrap";
 import deJson from "../../assets/translations/de.json";
 import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
-import findJsonService from "../../Services/find-json.service";
+import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
+import {IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
     language: string,
-    selectedLanguage: any,
-    selectedVersion: any,
-    selectedCategory: any,
+    changeLanguage: IUpdateStateByArg,
+    selectedVersion: IUpdateStateByArg,
+    selectedCategory: IUpdateStateByArg,
     show: boolean
-    updateValue: any,
+    updatePopUpState: { (boolean_value: boolean): void },
     version: string,
     category: string
 }
@@ -46,7 +47,7 @@ class PopUp extends Component<Props, IPopUp>{
         this.setState({
             show: value
         })
-        this.props.updateValue(value)
+        this.props.updatePopUpState(value)
     }
 
     /**
@@ -103,7 +104,7 @@ class PopUp extends Component<Props, IPopUp>{
      */
     handleLanguageClick(language) {
         this.handleShow(false)
-        this.props.selectedLanguage(language)
+        this.props.changeLanguage(language)
         this.props.selectedVersion(this.props.version)
         this.props.selectedCategory(this.props.category)
     }
@@ -117,12 +118,12 @@ class PopUp extends Component<Props, IPopUp>{
             <>
                 <Modal size="sm" show={this.state.show} onHide={() => this.handleShow(false)}>
                     <Modal.Header closeButton>
-                        <Modal.Title className="pull-left">{findJsonService(this.props.language)['LBL_SELECT_LANGUAGE']}</Modal.Title>
+                        <Modal.Title className="pull-left">{getTranslationHash(this.props.language)['LBL_SELECT_LANGUAGE']}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>{findJsonService(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
+                    <Modal.Body>{getTranslationHash(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
                     <Modal.Footer>
                             <button className="customButton" onClick={() => this.handleShow(false)}>
-                                {findJsonService(this.props.language)['LBL_BACK']}
+                                {getTranslationHash(this.props.language)['LBL_BACK']}
                             </button>
                         <div className="float-end">
                         {this.state.availableLanguages.map((language, i) => (
@@ -138,8 +139,4 @@ class PopUp extends Component<Props, IPopUp>{
     }
 }
 
-function withParams(Component) {
-    return props => <Component {...props} params={useParams()} navigation={useNavigate()}/>;
-}
-
-export default withParams(PopUp);
+export default PopUp;

@@ -1,15 +1,14 @@
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
-import findJsonService from "../../Services/find-json.service";
-import {ICode, IParamTypes} from "../../interfaces";
+import getTranslationHash from "../../Services/translation.service";
+import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
 import {fetchURL, initialCodeState, skippableAttributes} from "../../Utils";
 import RouterService from "../../Services/router.service";
 
 interface Props {
     params: IParamTypes,
-    navigation: any,
-    location: any,
+    navigation: INavigationHook,
 }
 
 /**
@@ -198,7 +197,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
             return breadcrumbItem;
         })
 
-        let translateJson = findJsonService(this.props.params.language);
+        let translateJson = getTranslationHash(this.props.params.language);
 
         // Use filter to only select attributes we want to display (not in skippable attributes and value not null,
         // undefined or empty.
@@ -267,8 +266,8 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 }
 
-function withParams(Component) {
-    return props => <Component {...props} navigation={useNavigate()} location={useLocation()} params={useParams()} key={"unversionized_body"}/>;
+function withProps(Component) {
+    return props => <Component {...props} navigation={useNavigate()} params={useParams()} key={"unversionized_body"}/>;
 }
 
-export default withParams(CodeBodyUnversionized);
+export default withProps(CodeBodyUnversionized);

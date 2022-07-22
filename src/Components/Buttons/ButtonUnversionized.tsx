@@ -3,19 +3,20 @@ import convertDate from "../../Services/convert-date.service";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import DatePicker from "./DatePicker";
 import PopUp from "../PopUp/PopUp";
+import {IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
     selectedCatalog: string
-    updateCategory: any,
-    updateVersion: any,
-    selectedLanguage: any,
+    changeSelectedButton: IUpdateStateByArg,
+    changeSelectedVersion: IUpdateStateByArg,
+    changeLanguage: IUpdateStateByArg,
     language: string,
     showHideCal: boolean,
     date : string,
     name: string,
     label: string,
     fullLabel: string,
-    select: any,
+    select: {(btn: string, date: string): void},
     active: string
 }
 
@@ -96,12 +97,12 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
                     <PopUp
                         language={this.props.language}
                         version={""}
-                        selectedVersion={this.props.updateVersion}
-                        selectedLanguage={this.props.selectedLanguage}
+                        selectedVersion={this.props.changeSelectedVersion}
+                        changeLanguage={this.props.changeLanguage}
                         category={this.state.disabledCategory}
-                        selectedCategory={this.props.updateCategory}
+                        selectedCategory={this.props.changeSelectedButton}
                         show={this.state.showPopUp}
-                        updateValue={this.updatePopUp}
+                        updatePopUpState={this.updatePopUp}
                     />
                     <OverlayTrigger
                         placement="bottom"
