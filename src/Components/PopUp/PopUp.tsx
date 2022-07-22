@@ -5,6 +5,7 @@ import {Modal} from "react-bootstrap";
 import deJson from "../../assets/translations/de.json";
 import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
 import findJsonService from "../../Services/find-json.service";
+import {fetchURL} from "../../Utils";
 
 interface Props {
     language: string,
@@ -83,7 +84,7 @@ class PopUp extends Component<Props, IPopUp>{
             let catalog = convertCategoryToCatalog(this.props.category)
             for(let lang of languages) {
                 if(lang !== this.props.language && lang !== 'de') {
-                    await fetch(`https://search.eonum.ch/` + lang + "/" + catalog + "/versions")
+                    await fetch([fetchURL, lang, catalog, 'versions'].join("/"))
                         .then((res) => res.json())
                         .then((json) => {
                             if(json.includes(this.props.version)) {

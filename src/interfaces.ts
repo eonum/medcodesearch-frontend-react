@@ -48,7 +48,9 @@ interface IAttributes {
     cumulation?: string,
     faculty?: string,
     active_substances?: string[],
-    terminal?: boolean
+    terminal?: boolean,
+    auth_number?: string,
+    package_code?: string
 }
 
 export interface ICode {

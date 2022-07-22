@@ -1,3 +1,5 @@
+import {fetchURL} from "../Utils";
+
 export const languages = ['de', 'fr', 'it', 'en']
 export const categories = ['ICD', 'SwissDRG', 'CHOP', 'TARMED']
 
@@ -87,7 +89,7 @@ export function convertCategoryToChapters(category) {
 export async function getVersionsByLanguage(language) {
     let allVersions = {}
     for (let category of categories) {
-        await fetch('https://search.eonum.ch/' + language + "/" + convertCategoryToCatalog(category) + '/versions')
+        await fetch([fetchURL, language, convertCategoryToCatalog(category), 'versions' ].join("/"))
             .then((res) => res.json())
             .then((json) => {
                 allVersions[category] = json;
