@@ -171,7 +171,9 @@ class Searchbar extends Component<Props,ISearchbar> {
         )
     }
 }
-export default function(props) {
-    const NAVIGATION = useNavigate();
-    return <Searchbar {...props} navigation={NAVIGATION}/>;
+
+function withParams(Component) {
+    return props => <Component {...props} navigation={useNavigate()}/>;
 }
+
+export default withParams(Searchbar);

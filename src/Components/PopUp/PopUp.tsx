@@ -25,7 +25,8 @@ interface IPopUp {
 }
 
 /**
- * If a wrong date is selected this popup should point this out
+ * Pop Up appearing if a non available version selected.
+ * Points you out to go back or switch language where the version is available.
  */
 class PopUp extends Component<Props, IPopUp>{
     constructor(props) {
@@ -137,7 +138,8 @@ class PopUp extends Component<Props, IPopUp>{
     }
 }
 
-export default function(props) {
-    const navigation = useNavigate();
-    return <PopUp {...props} params={useParams} navigation={navigation}/>;
+function withParams(Component) {
+    return props => <Component {...props} params={useParams()} navigation={useNavigate()}/>;
 }
+
+export default withParams(PopUp);

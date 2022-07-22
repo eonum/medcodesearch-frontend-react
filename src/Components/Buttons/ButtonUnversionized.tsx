@@ -5,6 +5,7 @@ import DatePicker from "./DatePicker";
 import PopUp from "../PopUp/PopUp";
 
 interface Props {
+    selectedCatalog: string
     updateCategory: any,
     updateVersion: any,
     selectedLanguage: any,
@@ -18,7 +19,7 @@ interface Props {
     active: string
 }
 
-interface IButtonWithCal {
+interface IButtonUnversionized {
     disabledCategory: string,
     showPopUp: boolean
 }
@@ -27,7 +28,7 @@ interface IButtonWithCal {
  * creates a button with a calender
  * @component
  */
-class ButtonWithCal extends Component<Props,IButtonWithCal>{
+class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
 
     constructor(props) {
         super(props);
@@ -86,12 +87,12 @@ class ButtonWithCal extends Component<Props,IButtonWithCal>{
     }
 
     /**
-     * renders the ButtonWithCal
+     * renders the ButtonUnversionized
      * @returns {JSX.Element}
      */
     render(){
         return(
-                <div key={"buttonwithCal div 0"} id={"cal"}>
+                <div key={"button_unversionized"} id={"cal"}>
                     <PopUp
                         language={this.props.language}
                         version={""}
@@ -109,7 +110,7 @@ class ButtonWithCal extends Component<Props,IButtonWithCal>{
                     >
                     <button
                         id={this.props.name}
-                        key={"buttonwithcal " + this.props.name}
+                        key={"button_unversionized_" + this.props.name}
                         name={this.props.name}
                         className={this.getClassName()}
                         onClick={() =>{
@@ -119,16 +120,17 @@ class ButtonWithCal extends Component<Props,IButtonWithCal>{
                     </button>
                     </OverlayTrigger>
                         {this.props.showHideCal && (this.props.active === this.props.name) &&
-
                         <DatePicker
-                                activeDate = {this.props.date}
-                                setDate={(date) => {
-                                    this.props.select(this.props.name, date)
-                                }}
-                            />
+                            isMobile={false}
+                            selectedCatalog={this.props.selectedCatalog}
+                            activeDate = {this.props.date}
+                            setDate={(date) => {
+                                this.props.select(this.props.name, date)
+                            }}
+                        />
                         }
                 </div>
                 )}
 
 }
-export default ButtonWithCal;
+export default ButtonUnversionized;
