@@ -4,7 +4,7 @@ export const languages = ['de', 'fr', 'it', 'en']
 export const versionizedCatalogs = ['ICD', 'SwissDRG', 'CHOP', 'TARMED']
 export const currentCatalogsByButton = {
     'ICD': 'currentICD',
-    'SwissDRG': 'currentDRG',
+    'SwissDRG': 'currentSwissDRG',
     'CHOP': 'currentCHOP',
     'TARMED': 'currentTARMED'}
 

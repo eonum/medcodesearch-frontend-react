@@ -33,7 +33,7 @@ interface ICatalogButtons {
     selectedButton: string,
     activeVersion: string,
     currentICD: string,
-    currentDRG: string,
+    currentSwissDRG: string,
     currentCHOP: string,
     currentTARMED: string,
     selectedDate: string,
@@ -56,7 +56,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             selectedButton: RouterService.getCatalogFromURL(),
             activeVersion: this.props.params.version,
             currentICD: this.props.initialVersions['ICD'].at(-1),
-            currentDRG: this.props.initialVersions['SwissDRG'].at(-1),
+            currentSwissDRG: this.props.initialVersions['SwissDRG'].at(-1),
             currentCHOP: this.props.initialVersions['CHOP'].at(-1),
             currentTARMED: this.props.initialVersions['TARMED'].at(-1),
             selectedDate: convertDate(new Date().toDateString()),
@@ -84,21 +84,9 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
         } else {
             selectedVersion = version === '' ? this.getVersionFromButton(btn) : version;
             // Update currentVersion.
-            switch (btn) {
-                case 'ICD':
-                    this.setState({currentICD: version});
-                    break;
-                case 'SwissDRG':
-                    this.setState({currentDRG: version});
-                    break;
-                case 'CHOP':
-                    this.setState({currentCHOP: version});
-                    break;
-                case 'TARMED':
-                    this.setState({currentTARMED: version});
-                    break;
-                default:
-            }
+            let currentCatalogs = {}
+            currentCatalogs['current' + btn] = version
+            this.setState(currentCatalogs)
         }
 
         if (date === ''){
@@ -131,24 +119,13 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
     }
 
     /**
-     * Sets the category of the state.
+     * Sets the catalog version of the state.
      */
-    // TODO: same thoughts on making it more dynamic as above.
     setCurrentVersionBySelectedButton() {
-        switch (this.props.selectedButton) {
-            case "CHOP":
-                this.setState({currentCHOP: this.props.version})
-                break;
-            case "ICD":
-                this.setState({currentICD: this.props.version})
-                break;
-            case "SwissDRG":
-                this.setState({currentDRG: this.props.version})
-                break;
-            case "TARMED":
-                this.setState({currentTARMED: this.props.version})
-                break;
-            default:
+        if (versionizedCatalogs.includes(this.props.selectedButton)) {
+            let currentCatalogs = {}
+            currentCatalogs['current' + this.props.selectedButton] = this.props.version
+            this.setState(currentCatalogs)
         }
     }
 
