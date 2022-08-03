@@ -1,7 +1,7 @@
 import React from "react";
 import {Dropdown} from "react-bootstrap";
 import PopUp from "../PopUp/PopUp";
-import {convertCategory, findCategory} from "../../Services/category-version.service";
+import {cutCatalogFromVersion, findCatalog} from "../../Services/category-version.service";
 import {IUpdateButton, IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
@@ -60,11 +60,11 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
      * @param version
      */
     handleVersionClick(version) {
-        const DROPDOWN = document.getElementById(version);
-        if(!DROPDOWN.classList.contains('disabled')) {
+        const dropDown = document.getElementById(version);
+        if(!dropDown.classList.contains('disabled')) {
             this.props.updateVersionizedButton(version)
         } else {
-            this.setState({disabledCategory: findCategory(version)})
+            this.setState({disabledCategory: findCatalog(version)})
             this.setState({disabledVersion: version})
             this.setState({showPopUp: true})
         }
@@ -78,7 +78,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
         if(this.props.currentVersions) {
             let lastVersion = this.props.currentVersions[this.props.currentVersions.length - 1];
             if (lastVersion) {
-                return convertCategory(this.props.category, this.props.currentVersions[this.props.currentVersions.length - 1])
+                return cutCatalogFromVersion(this.props.category, this.props.currentVersions[this.props.currentVersions.length - 1])
             }
         }
         return ""
@@ -124,9 +124,9 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
             return lastVersion
         }
         if(this.props.version === this.props.selectedVersion) {
-            return convertCategory(this.props.category, this.props.selectedVersion)
+            return cutCatalogFromVersion(this.props.category, this.props.selectedVersion)
         } else {
-            return convertCategory(this.props.category, this.props.version)
+            return cutCatalogFromVersion(this.props.category, this.props.version)
         }
     }
 
@@ -148,7 +148,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
                             onClick={() => {
                                 this.handleVersionClick(versions)
                             }}
-                        >{convertCategory(this.props.category, versions)}</Dropdown.Item>
+                        >{cutCatalogFromVersion(this.props.category, versions)}</Dropdown.Item>
                     )
                 )}
             </Dropdown.Menu>

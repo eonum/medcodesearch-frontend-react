@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import "./PopUp.css"
 import {Modal} from "react-bootstrap";
 import deJson from "../../assets/translations/de.json";
-import {convertCategoryToCatalog, languages} from "../../Services/category-version.service";
+import {convertCatalogToResourceType, languages} from "../../Services/category-version.service";
 import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
 import {IUpdateStateByArg} from "../../interfaces";
@@ -83,7 +83,7 @@ class PopUp extends Component<Props, IPopUp>{
         if(this.props.category === "AL" || this.props.category === "DRUG" || this.props.category === "MiGeL") {
             this.setState({availableLanguages: ["de", "fr", "it"]})
         } else {
-            let catalog = convertCategoryToCatalog(this.props.category)
+            let catalog = convertCatalogToResourceType(this.props.category)
             for(let lang of languages) {
                 if(lang !== this.props.language && lang !== 'de') {
                     await fetch([fetchURL, lang, catalog, 'versions'].join("/"))

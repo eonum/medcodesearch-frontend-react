@@ -36,7 +36,7 @@ interface ICatalogButtons {
     currentCHOP: string,
     currentTARMED: string,
     selectedDate: string,
-    showCalendar: false,
+    showCalendar: boolean,
     buttons: IButtonLabels,
 }
 
@@ -55,10 +55,10 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
         this.state = {
             selectedButton: RouterService.getCatalogFromURL(),
             activeVersion: this.props.params.version,
-            currentICD: 'ICD10-GM-2022',
-            currentDRG: 'V11.0',
-            currentCHOP: 'CHOP_2022',
-            currentTARMED: 'TARMED_01.09',
+            currentICD: '',
+            currentDRG: '',
+            currentCHOP: '',
+            currentTARMED: '',
             selectedDate: convertDate(new Date().toDateString()),
             showCalendar: false,
             buttons: this.props.buttons,
@@ -84,7 +84,6 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
         } else {
             selectedVersion = version === '' ? this.getVersionFromButton(btn) : version;
             // Update currentVersion.
-            // TODO: are the 'break' statements needed?
             switch (btn) {
                 case 'ICD':
                     this.setState({currentICD: version});

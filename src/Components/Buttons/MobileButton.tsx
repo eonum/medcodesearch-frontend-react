@@ -2,7 +2,7 @@ import PopUp from "../PopUp/PopUp";
 import {Dropdown} from "react-bootstrap";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
-import {convertCategory, findCategory} from "../../Services/category-version.service";
+import {cutCatalogFromVersion, findCatalog} from "../../Services/category-version.service";
 import React, {Component} from "react";
 import CategorySortService from "../../Services/category-sort.service";
 import DatePicker from "./DatePicker";
@@ -110,7 +110,7 @@ class MobileButton extends Component<Props,IMobileButton>{
         if(!DROPDOWN.classList.contains('disabled')) {
             this.props.updateMobileButton(version, btn)
         } else {
-            this.setState({disabledCategory: findCategory(version)})
+            this.setState({disabledCategory: findCatalog(version)})
             this.setState({showPopUp: true})
             this.setState({disabledVersion: version})
         }
@@ -213,9 +213,9 @@ class MobileButton extends Component<Props,IMobileButton>{
      */
     getVersion() {
         if(this.props.selectedVersion) {
-            return convertCategory(this.props.category, this.props.selectedVersion)
+            return cutCatalogFromVersion(this.props.category, this.props.selectedVersion)
         } else {
-            return convertCategory(this.props.category, this.props.version)
+            return cutCatalogFromVersion(this.props.category, this.props.version)
         }
     }
 
@@ -350,7 +350,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                                     onClick={() => {
                                         this.handleVersionClick(version, this.props.category)
                                     }}
-                                >{convertCategory(this.props.category, version)}</Dropdown.Item>
+                                >{cutCatalogFromVersion(this.props.category, version)}</Dropdown.Item>
                             )
                         )}
                     </Dropdown.Menu>

@@ -1,16 +1,16 @@
 import {fetchURL} from "../Utils";
 
 export const languages = ['de', 'fr', 'it', 'en']
-export const categories = ['ICD', 'SwissDRG', 'CHOP', 'TARMED']
+export const versionizedCatalogs = ['ICD', 'SwissDRG', 'CHOP', 'TARMED']
 
 /**
- * cuts the string as long as the category is
- * @param category
+ * Cuts the catalog from the version, f.e. returns 10-GM-2021 for ICD10-GM-2021.
+ * @param catalog
  * @param version
  * @returns {string|*}
  */
-export function convertCategory(category, version) {
-    switch (category) {
+export function cutCatalogFromVersion(catalog, version) {
+    switch (catalog) {
         case "ICD":
             return version.substring(3)
         case "CHOP":
@@ -25,11 +25,11 @@ export function convertCategory(category, version) {
 }
 
 /**
- * compare which version is used
+ * Returns catalog matching the version.
  * @param version
  * @returns {string}
  */
-export function findCategory(version) {
+export function findCatalog(version) {
     if (version.includes("ICD")) {
         return "ICD"
     } else if (version.includes("CHOP")) {
@@ -42,12 +42,12 @@ export function findCategory(version) {
 }
 
 /**
- * converts the category to in the catalog needed format
- * @param category
+ * Returns ressource type matching the catalog.
+ * @param catalog
  * @returns {string}
  */
-export function convertCategoryToCatalog(category) {
-    switch (category) {
+export function convertCatalogToResourceType(catalog) {
+    switch (catalog) {
         case "ICD":
             return "icds"
         case "CHOP":
@@ -62,38 +62,35 @@ export function convertCategoryToCatalog(category) {
 }
 
 /**
- * converts the category to in the chapter needed format
- * @param category
- * @returns {string}
- */
-export function convertCategoryToChapters(category) {
-    switch (category) {
-        case "ICD":
-            return "icd_chapters"
-        case "CHOP":
-            return "chop_chapters"
-        case "SwissDRG":
-            return "mdcs"
-        case "TARMED":
-            return "tarmed_chapters"
-        default:
-            return
-    }
-}
-
-/**
- * fetch all categories in the given language
+ * Fetch all versions in the given language.
  * @param language
  * @returns {Promise<{}>}
  */
 export async function getVersionsByLanguage(language) {
     let allVersions = {}
-    for (let category of categories) {
-        await fetch([fetchURL, language, convertCategoryToCatalog(category), 'versions' ].join("/"))
+    for (let catalog of versionizedCatalogs) {
+        await fetch([fetchURL, language, convertCatalogToResourceType(catalog), 'versions' ].join("/"))
             .then((res) => res.json())
             .then((json) => {
-                allVersions[category] = json;
+                allVersions[catalog] = json;
             })
     }
     return allVersions
+}
+
+/**
+ * Fetch latest versions for versionized catalogs.
+ * @param language
+ * @returns {Promise<{}>}
+ */
+export function getLatestVersions() {
+    let latestVersions = {}
+    for (let catalog of versionizedCatalogs) {
+        fetch([fetchURL, 'de', convertCatalogToResourceType(catalog), 'versions' ].join("/"))
+            .then((res) => res.json())
+            .then((json) => {
+                latestVersions[catalog] = json[-1];
+            })
+    }
+    return latestVersions
 }
