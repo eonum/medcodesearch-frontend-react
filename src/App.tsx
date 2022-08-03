@@ -15,6 +15,7 @@ import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/category-version.service";
 import getTranslationHash from "./Services/translation.service";
 import {INavigationHook, IVersions} from "./interfaces";
+import loadingSpinner from "./Components/Spinner/spinner";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -322,18 +323,6 @@ class App extends Component<Props, IApp>{
         this.setState({clickedOnLogo: false})
     }
 
-    /**
-     * Creates spinner displayed when loading / fetching data.
-     */
-    loadingSpinner() {
-        return (
-            <div className="spinner-container">
-                <div className="loading-spinner">
-                </div>
-            </div>
-        );
-    }
-
     renderContent() {
         let searchResults = this.searchResults();
         return (
@@ -403,7 +392,7 @@ class App extends Component<Props, IApp>{
                     </div>
                 </div>
                 <div key={"app_container_1"} className="container">
-                    {this.state.isFetching ? this.loadingSpinner() : this.renderContent()}
+                    {this.state.isFetching ? loadingSpinner() : this.renderContent()}
                 </div>
             </div>
         )
