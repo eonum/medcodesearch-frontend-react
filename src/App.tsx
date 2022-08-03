@@ -12,7 +12,7 @@ import RouterService from "./Services/router.service";
 import React, {Component, useState} from "react";
 import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
-import {getVersionsByLanguage} from "./Services/category-version.service";
+import {getVersionsByLanguage} from "./Services/catalog-version.service";
 import getTranslationHash from "./Services/translation.service";
 import {INavigationHook, IVersions} from "./interfaces";
 import loadingSpinner from "./Components/Spinner/spinner";

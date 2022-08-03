@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import "./PopUp.css"
 import {Modal} from "react-bootstrap";
 import deJson from "../../assets/translations/de.json";
-import {convertCatalogToResourceType, languages} from "../../Services/category-version.service";
+import {convertCatalogToResourceType, languages} from "../../Services/catalog-version.service";
 import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
 import {IUpdateStateByArg} from "../../interfaces";

@@ -2,7 +2,7 @@ import PopUp from "../PopUp/PopUp";
 import {Dropdown} from "react-bootstrap";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
-import {cutCatalogFromVersion, findCatalog} from "../../Services/category-version.service";
+import {cutCatalogFromVersion, findCatalog} from "../../Services/catalog-version.service";
 import React, {Component} from "react";
 import CategorySortService from "../../Services/category-sort.service";
 import DatePicker from "./DatePicker";

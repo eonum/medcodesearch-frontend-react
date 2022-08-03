@@ -8,6 +8,7 @@ import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
 import ConvertDateService from "../../Services/convert-date.service";
 import {IVersions, IButtonLabels, IParamTypes, INoArgsFunction, IUpdateStateByArg} from "../../interfaces";
+import {currentCatalogsByButton, versionizedCatalogs} from "../../Services/catalog-version.service";
 
 interface Props {
     params: IParamTypes,
@@ -49,7 +50,6 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      * Sets the default state values and binds the buttons.
      * @param props
      */
-    // TODO: Parse currentICD/DRG/... dynamically.
     constructor(props) {
         super(props);
         this.state = {
@@ -125,22 +125,9 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      * @param btn
      * @returns {string|string|*}
      */
-    // TODO: @Tim: Could this be solved in a more dynamic way, f.e. storing currentICD/DRG/CHOP/TARMED in a hash and
-    //  then just return hash[btn] if ['ICD',...].include(btn) and '' else? Not sure how to do since currentICD is a
-    //  state attribute and not a string? I wasn't good at googling this time...
     getVersionFromButton(btn) {
-        switch (btn){
-            case 'ICD':
-                return this.state.currentICD;
-            case 'SwissDRG':
-                return this.state.currentDRG;
-            case 'CHOP':
-                return this.state.currentCHOP;
-            case 'TARMED':
-                return this.state.currentTARMED;
-            default:
-                return '';
-        }
+        let currentVersion = versionizedCatalogs.includes(btn) ? this.state[currentCatalogsByButton[btn]] : ""
+        return currentVersion
     }
 
     /**

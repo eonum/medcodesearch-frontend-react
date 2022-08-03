@@ -2,6 +2,11 @@ import {fetchURL} from "../Utils";
 
 export const languages = ['de', 'fr', 'it', 'en']
 export const versionizedCatalogs = ['ICD', 'SwissDRG', 'CHOP', 'TARMED']
+export const currentCatalogsByButton = {
+    'ICD': 'currentICD',
+    'SwissDRG': 'currentDRG',
+    'CHOP': 'currentCHOP',
+    'TARMED': 'currentTARMED'}
 
 /**
  * Cuts the catalog from the version, f.e. returns 10-GM-2021 for ICD10-GM-2021.

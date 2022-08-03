@@ -1,7 +1,7 @@
 import React from "react";
 import {Dropdown} from "react-bootstrap";
 import PopUp from "../PopUp/PopUp";
-import {cutCatalogFromVersion, findCatalog} from "../../Services/category-version.service";
+import {cutCatalogFromVersion, findCatalog} from "../../Services/catalog-version.service";
 import {IUpdateButton, IUpdateStateByArg} from "../../interfaces";
 
 interface Props {
