@@ -9,7 +9,7 @@ import { ReactComponent as Arrow } from './assets/arrow-up.svg';
 import {Outlet, useNavigate} from "react-router-dom";
 import CatalogButtons from "./Components/Buttons/CatalogButtons";
 import RouterService from "./Services/router.service";
-import React, {Component} from "react";
+import React, {Component, useState} from "react";
 import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/category-version.service";
@@ -35,7 +35,8 @@ interface IApp {
     reSetPath: boolean,
     collapseMenu: boolean,
     initialVersions: IVersions,
-    currentVersions: IVersions
+    currentVersions: IVersions,
+    isFetching: boolean
 }
 
 class App extends Component<Props, IApp>{
@@ -55,7 +56,8 @@ class App extends Component<Props, IApp>{
             reSetPath: false,
             collapseMenu: false,
             initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': []},
-            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': []}
+            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': []},
+            isFetching: true
         };
         this.changeSelectedButton = this.changeSelectedButton.bind(this);
         this.changeSelectedDate = this.changeSelectedDate.bind(this);
@@ -197,6 +199,7 @@ class App extends Component<Props, IApp>{
     async componentDidMount() {
         this.setState({initialVersions: await getVersionsByLanguage('de')})
         this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
+        this.setState({isFetching: false})
     }
 
     /**
@@ -320,11 +323,71 @@ class App extends Component<Props, IApp>{
     }
 
     /**
+     * Creates spinner displayed when loading / fetching data.
+     */
+    loadingSpinner() {
+        return (
+            <div className="spinner-container">
+                <div className="loading-spinner">
+                </div>
+            </div>
+        );
+    }
+
+    renderContent() {
+        let searchResults = this.searchResults();
+        return (
+            <div>
+                <div key={"app_searchbar"} className="row" onClick={this.showSearchResults}>
+                    <Searchbar
+                        language={this.state.language}
+                        selectedButton={this.state.selectedButton}
+                        version={this.state.selectedVersion}
+                        date={this.state.selectedDate}
+                        updateSearchResults={this.updateSearchResults}/>
+                </div>
+                <div key={"app_catalog_buttons"} className="row">
+                    <CatalogButtons
+                        initialVersions={this.state.initialVersions}
+                        currentVersions={this.state.currentVersions}
+                        clickedOnLogo={this.state.clickedOnLogo}
+                        selectedButton={this.state.selectedButton}
+                        version={this.state.selectedVersion}
+                        reSetClickOnLogo={this.reSetClickedOnLogo}
+                        reSetButton={this.reRenderButton}
+                        changeLanguage={this.changeLanguage}
+                        language={this.state.language}
+                        changeSelectedButton={this.changeSelectedButton}
+                        changeSelectedVersion={this.changeSelectedVersion}
+                        changeSelectedDate={this.changeSelectedDate}
+                        labels={this.getLabels(this.state.language)}
+                        fullLabels={this.getFullLabels(this.state.language)}
+                        buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'], ['MiGeL', 'AL', 'DRUG']]}
+                    />
+                </div>
+                <div key={"app_main"} className="row">
+                    {this.state.searchResults.length > 0 &&
+                        <div key={"app_searchresults"} className="col-12 col-lg">
+                            {searchResults}
+                        </div>}
+                    <div key={"app_outlet"} className="col" id="main">
+                        <Outlet/>
+                    </div>
+                </div>
+                <div key={"app_footer"} className="navbar row">
+                    <div key={"app_footer_0"} className="col">
+                        <Footer/>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    /**
      * Renders the whole website.
      * @returns {JSX.Element}
      */
     render() {
-        let searchResults = this.searchResults()
         return (
             <div key={"app"}>
                 <div key={"app_container_0"} className="container">
@@ -339,54 +402,12 @@ class App extends Component<Props, IApp>{
                         </div>
                     </div>
                 </div>
-
                 <div key={"app_container_1"} className="container">
-                    <div key={"app_searchbar"} className="row" onClick={this.showSearchResults}>
-                        <Searchbar
-                            language={this.state.language}
-                            selectedButton={this.state.selectedButton}
-                            version={this.state.selectedVersion}
-                            date={this.state.selectedDate}
-                            updateSearchResults={this.updateSearchResults}/>
-                    </div>
-                    <div key={"app_catalog_buttons"} className="row">
-                        <CatalogButtons
-                            initialVersions={this.state.initialVersions}
-                            currentVersions={this.state.currentVersions}
-                            clickedOnLogo={this.state.clickedOnLogo}
-                            selectedButton={this.state.selectedButton}
-                            version={this.state.selectedVersion}
-                            reSetClickOnLogo={this.reSetClickedOnLogo}
-                            reSetButton={this.reRenderButton}
-                            changeLanguage={this.changeLanguage}
-                            language={this.state.language}
-                            changeSelectedButton={this.changeSelectedButton}
-                            changeSelectedVersion={this.changeSelectedVersion}
-                            changeSelectedDate={this.changeSelectedDate}
-                            labels={this.getLabels(this.state.language)}
-                            fullLabels={this.getFullLabels(this.state.language)}
-                            buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'], ['MiGeL', 'AL', 'DRUG']]}
-                        />
-                    </div>
-                    <div key={"app_main"} className="row">
-                        {this.state.searchResults.length > 0 &&
-                            <div key={"app_searchresults"} className="col-12 col-lg">
-                                {searchResults}
-                            </div>}
-                        <div key={"app_outlet"} className="col" id="main">
-                            <Outlet/>
-                        </div>
-                    </div>
-                    <div key={"app_footer"} className="navbar row">
-                        <div key={"app_footer_0"} className="col">
-                            <Footer/>
-                        </div>
-                    </div>
+                    {this.state.isFetching ? this.loadingSpinner() : this.renderContent()}
                 </div>
             </div>
         )
     }
-
 }
 
 function addProps(Component) {
