@@ -77,20 +77,3 @@ export async function getVersionsByLanguage(language) {
     }
     return allVersions
 }
-
-/**
- * Fetch latest versions for versionized catalogs.
- * @param language
- * @returns {Promise<{}>}
- */
-export function getLatestVersions() {
-    let latestVersions = {}
-    for (let catalog of versionizedCatalogs) {
-        fetch([fetchURL, 'de', convertCatalogToResourceType(catalog), 'versions' ].join("/"))
-            .then((res) => res.json())
-            .then((json) => {
-                latestVersions[catalog] = json[-1];
-            })
-    }
-    return latestVersions
-}
