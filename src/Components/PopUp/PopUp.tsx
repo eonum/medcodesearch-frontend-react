@@ -12,7 +12,7 @@ interface Props {
     language: string,
     changeLanguage: IUpdateStateByArg,
     selectedVersion: IUpdateStateByArg,
-    selectedCategory: IUpdateStateByArg,
+    changeSelectedButton: IUpdateStateByArg,
     show: boolean
     updatePopUpState: { (boolean_value: boolean): void },
     version: string,
@@ -106,7 +106,7 @@ class PopUp extends Component<Props, IPopUp>{
         this.handleShow(false)
         this.props.changeLanguage(language)
         this.props.selectedVersion(this.props.version)
-        this.props.selectedCategory(this.props.category)
+        this.props.changeSelectedButton(this.props.category)
     }
 
     /**

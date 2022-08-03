@@ -238,7 +238,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                         language={this.props.language}
                         changeLanguage={this.props.changeLanguage}
                         changeSelectedVersion={this.props.changeSelectedVersion}
-                        updateCategory={this.props.changeSelectedButton}
+                        changeSelectedButton={this.props.changeSelectedButton}
                         buttons={this.props.buttons}
                         labels={this.props.labels}
                         updateMobileButton={(version, category, isCalendar, date) => {

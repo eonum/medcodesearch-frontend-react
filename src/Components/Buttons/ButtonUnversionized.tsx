@@ -100,7 +100,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
                         selectedVersion={this.props.changeSelectedVersion}
                         changeLanguage={this.props.changeLanguage}
                         category={this.state.disabledCategory}
-                        selectedCategory={this.props.changeSelectedButton}
+                        changeSelectedButton={this.props.changeSelectedButton}
                         show={this.state.showPopUp}
                         updatePopUpState={this.updatePopUp}
                     />

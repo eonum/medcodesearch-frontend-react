@@ -21,7 +21,7 @@ interface Props {
     language: string,
     changeLanguage: IUpdateStateByArg,
     changeSelectedVersion: IUpdateStateByArg,
-    updateCategory: IUpdateStateByArg,
+    changeSelectedButton: IUpdateStateByArg,
     buttons: IButtonLabels,
     labels: string[],
     updateMobileButton: IUpdateButton
@@ -298,7 +298,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                         language={this.props.language}
                         changeLanguage={this.props.changeLanguage}
                         selectedVersion={this.props.changeSelectedVersion}
-                        selectedCategory={this.props.updateCategory}
+                        changeSelectedButton={this.props.changeSelectedButton}
                         show={this.state.showPopUp}
                         updatePopUpState={this.updatePopUp}
                         version={this.state.disabledVersion}

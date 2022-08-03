@@ -96,6 +96,6 @@ export interface IUpdateStateByArg {
 }
 
 export interface IUpdateButton {
-    (version?: string, category?: string, isCalendar?: boolean, date?: string):
+    (version?: string, catalog?: string, isCalendar?: boolean, date?: string):
         void
 }

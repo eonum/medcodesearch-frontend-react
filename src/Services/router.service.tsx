@@ -34,7 +34,7 @@ class RouterService extends Component {
     }
 
     /**
-     * get the category defined in the url and if it isn't defined set it to 'ICD'
+     * get the catalog defined in the url and if it isn't defined set it to 'ICD'
      * @returns {string|*}
      */
     static getCatalogFromURL() {

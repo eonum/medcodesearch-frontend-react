@@ -159,7 +159,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
                     language={this.props.language}
                     changeLanguage={this.props.changeLanguage}
                     selectedVersion={this.props.changeSelectedVersion}
-                    selectedCategory={this.props.changeSelectedButton}
+                    changeSelectedButton={this.props.changeSelectedButton}
                     show={this.state.showPopUp}
                     updatePopUpState={this.changeShowPopUp}
                     version={this.state.disabledVersion}
