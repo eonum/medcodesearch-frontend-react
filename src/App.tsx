@@ -10,7 +10,6 @@ import {Outlet, useNavigate} from "react-router-dom";
 import CatalogButtons from "./Components/Buttons/CatalogButtons";
 import RouterService from "./Services/router.service";
 import React, {Component, useState} from "react";
-import convertDate from "./Services/convert-date.service";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/catalog-version.service";
 import getTranslationHash from "./Services/translation.service";
@@ -51,7 +50,7 @@ class App extends Component<Props, IApp>{
             language: RouterService.getLanguageFromURL(),
             selectedButton: RouterService.getCatalogFromURL(),
             selectedVersion: RouterService.getVersionFromURL(),
-            selectedDate: convertDate(new Date().toDateString()),
+            selectedDate: new Date().toLocaleDateString("uk-Uk"), // this yields DD.MM.YYYY of today
             searchResults: [],
             clickedOnLogo: false,
             reSetPath: false,
@@ -96,7 +95,7 @@ class App extends Component<Props, IApp>{
 
     /**
      * Updates state of selectedDate.
-     * @param date
+     * @param date string in DD.MM.YYYY format
      */
     changeSelectedDate = (date) => {
         this.setState({selectedDate: date})
@@ -332,7 +331,7 @@ class App extends Component<Props, IApp>{
                         language={this.state.language}
                         selectedButton={this.state.selectedButton}
                         version={this.state.selectedVersion}
-                        date={this.state.selectedDate}
+                        selectedDate={this.state.selectedDate}
                         updateSearchResults={this.updateSearchResults}/>
                 </div>
                 <div key={"app_catalog_buttons"} className="row">

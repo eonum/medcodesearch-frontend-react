@@ -12,7 +12,7 @@ interface Props {
     selectedCatalog: string
     initialVersions: IVersions,
     currentVersions: IVersions,
-    date: string,
+    selectedDate: string,
     version: string,
     selectedVersion: string,
     reRender: boolean,
@@ -329,7 +329,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                 <DatePicker
                     isMobile={true}
                     selectedCatalog={this.props.selectedCatalog}
-                    activeDate = {this.props.date}
+                    selectedDate= {this.props.selectedDate}
                     setDate={(date) => {
                         this.props.updateMobileButton('',this.props.catalog, true, date)
                     }}

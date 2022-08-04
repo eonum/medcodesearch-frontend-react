@@ -6,7 +6,7 @@ import "./DatePicker.css"
 interface Props {
     isMobile: boolean,
     selectedCatalog: string,
-    activeDate: string,
+    selectedDate: string,
     setDate: { (date: string): void }
 }
 
@@ -18,7 +18,6 @@ interface IDatePicker {
  * Creates the Datepicker for MIGEL, AL and Med.
  */
 class DatePicker extends React.Component<Props,IDatePicker>{
-
     constructor(props) {
         super(props);
         this.updateDate = this.updateDate.bind(this);
@@ -31,7 +30,6 @@ class DatePicker extends React.Component<Props,IDatePicker>{
      * Update the date saved in the state.
      * @param value
      */
-    // TODO: I don't really get the use of this function.
     updateDate(value) {
         this.setState({currentDate: value})
         this.props.setDate(ConvertDateService(value));

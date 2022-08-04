@@ -4,7 +4,6 @@ import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useNavigate} from "react-router-dom";
 import RouterService from "../../Services/router.service";
-import ConvertDateService from "../../Services/convert-date.service";
 import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
 import {INavigationHook} from "../../interfaces";
@@ -23,7 +22,7 @@ interface Props {
     language: string,
     selectedButton: string,
     version: string,
-    date: string,
+    selectedDate: string,
     updateSearchResults: { (searchResult: string | object): void },
     navigation: INavigationHook
 }
@@ -73,8 +72,8 @@ class Searchbar extends Component<Props,ISearchbar> {
         } else {
             if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
                 || this.props.selectedButton === 'DRUG') {
-                if (this.props.date !== ConvertDateService(new Date().toDateString())) {
-                    date = 'date=' + this.props.date + '&'
+                if (this.props.selectedDate !== new Date().toLocaleDateString("uk-Uk")) {
+                    date = 'date=' + this.props.selectedDate + '&'
                 }
             }
             navigate({search: date + createSearchParams({query: e.target.value}).toString()});
@@ -104,7 +103,7 @@ class Searchbar extends Component<Props,ISearchbar> {
         if(prevProps.language !== this.props.language
             || prevProps.selectedButton !== this.props.selectedButton
             || prevProps.version !== this.props.version
-            || prevProps.date !== this.props.date) {
+            || prevProps.selectedDate !== this.props.selectedDate) {
             await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
         }
     }
@@ -118,8 +117,8 @@ class Searchbar extends Component<Props,ISearchbar> {
         this.setState({searchTerm: searchTerm})
         let date = '';
         if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'){
-            if(this.props.date !== ConvertDateService(new Date().toDateString())){
-                date = 'date=' + this.props.date + '&'
+            if(this.props.selectedDate !== new Date().toLocaleDateString("uk-Uk")){
+                date = 'date=' + this.props.selectedDate + '&'
             }
         }
         await fetch([

@@ -3,10 +3,8 @@ import ButtonVersionized from "./ButtonVersionized";
 import ButtonUnversionized from "./ButtonUnversionized";
 import "./CatalogButtons.css"
 import {useParams} from "react-router-dom";
-import convertDate from "../../Services/convert-date.service";
 import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
-import ConvertDateService from "../../Services/convert-date.service";
 import {
     IVersions,
     IButtonLabels,
@@ -66,7 +64,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             currentSwissDRG: this.props.initialVersions['SwissDRG'].at(-1),
             currentCHOP: this.props.initialVersions['CHOP'].at(-1),
             currentTARMED: this.props.initialVersions['TARMED'].at(-1),
-            selectedDate: convertDate(new Date().toDateString()),
+            selectedDate: new Date().toLocaleDateString("uk-Uk"),
             showCalendar: false,
             buttons: this.props.buttons,
         }
@@ -97,7 +95,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
         }
 
         if (date === ''){
-            date = ConvertDateService(new Date().toDateString())
+            date = new Date().toLocaleDateString("uk-Uk")
         }
         this.props.changeSelectedDate(date);
         this.setState({selectedButton: btn, activeVersion: selectedVersion});
@@ -217,7 +215,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         changeLanguage={this.props.changeLanguage}
                                         language={this.props.language}
                                         showHideCal={this.state.showCalendar}
-                                        date={this.state.selectedDate}
+                                        selectedDate={this.state.selectedDate}
                                         name={btn}
                                         label={this.props.labels[btn.toUpperCase()]}
                                         fullLabel={this.props.fullLabels[index]}
@@ -237,7 +235,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                         selectedCatalog={this.props.params.catalog}
                         initialVersions={this.props.initialVersions}
                         currentVersions={this.props.currentVersions}
-                        date ={this.state.selectedDate}
+                        selectedDate={this.state.selectedDate}
                         version={this.getVersionFromButton(this.state.selectedButton)}
                         selectedVersion={this.props.params.version}
                         reRender={this.props.clickedOnLogo}

@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import convertDate from "../../Services/convert-date.service";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import DatePicker from "./DatePicker";
 import PopUp from "../PopUp/PopUp";
@@ -12,7 +11,7 @@ interface Props {
     changeLanguage: IUpdateStateByArg,
     language: string,
     showHideCal: boolean,
-    date : string,
+    selectedDate : string,
     name: string,
     label: string,
     fullLabel: string,
@@ -45,7 +44,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
     handleCatalogClick(catalog) {
         const button = document.getElementById(catalog);
         if(!button.classList.contains("disabled")) {
-            this.props.select(this.props.name, convertDate(new Date().toDateString()))
+            this.props.select(this.props.name, new Date().toLocaleDateString("uk-Uk"))
         } else {
             this.setState({showPopUp: true})
             this.setState({disabledCatalog: catalog})
@@ -123,7 +122,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
                         <DatePicker
                             isMobile={false}
                             selectedCatalog={this.props.selectedCatalog}
-                            activeDate = {this.props.date}
+                            selectedDate= {this.props.selectedDate}
                             setDate={(date) => {
                                 this.props.select(this.props.name, date)
                             }}
