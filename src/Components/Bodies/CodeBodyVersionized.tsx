@@ -234,11 +234,10 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     render() {
         // Generate BreadCrumbs.
         let parentBreadCrumbs = this.state.parents.reverse().map((currElement, i) => {
-            let breadcrumbItem =
+            return(
                 <Breadcrumb.Item key={i} onClick={() => this.goToCode(currElement)} className="breadLink">
                     {currElement.code}
-                </Breadcrumb.Item>
-            return breadcrumbItem;
+                </Breadcrumb.Item>);
         })
 
         let translateJson = getTranslationHash(this.props.params.language);
