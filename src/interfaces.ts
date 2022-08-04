@@ -67,6 +67,10 @@ export interface IButtonLabels {
     [index: number]: string[];
 }
 
+export interface IUnversionizedLabels {
+    [index: string]: string;
+}
+
 export interface IParamTypes {
     language: string,
     catalog: string,

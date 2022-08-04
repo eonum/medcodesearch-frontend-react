@@ -4,9 +4,8 @@ import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
 import {cutCatalogFromVersion, findCatalog} from "../../Services/catalog-version.service";
 import React, {Component} from "react";
-import CategorySortService from "../../Services/category-sort.service";
 import DatePicker from "./DatePicker";
-import {IVersions, IButtonLabels, IUpdateStateByArg, IUpdateButton} from "../../interfaces";
+import {IVersions, IButtonLabels, IUpdateStateByArg, IUpdateButton, IUnversionizedLabels} from "../../interfaces";
 import {fetchURL} from "../../Utils";
 
 interface Props {
@@ -17,20 +16,20 @@ interface Props {
     version: string,
     selectedVersion: string,
     reRender: boolean,
-    category: string,
+    catalog: string,
     language: string,
     changeLanguage: IUpdateStateByArg,
     changeSelectedVersion: IUpdateStateByArg,
     changeSelectedButton: IUpdateStateByArg,
     buttons: IButtonLabels,
-    labels: string[],
+    labels: IUnversionizedLabels,
     updateMobileButton: IUpdateButton
 }
 
 export interface IMobileButton {
     showPopUp: boolean,
     disabledVersion: string,
-    disabledCategory: string,
+    disabledCatalog: string,
     allVersions: string[], // all versions of one catalog in an array, f.e. ["CHOP_2011", "CHOP_2012", ...]
     currentVersions: string[],
     buttons: string[],
@@ -52,11 +51,11 @@ class MobileButton extends Component<Props,IMobileButton>{
         this.state={
             showPopUp: false,
             disabledVersion: "",
-            disabledCategory: "",
+            disabledCatalog: "",
             allVersions: [],
             currentVersions: [],
             buttons: this.convertButtons(),
-            selectedButton: this.props.category
+            selectedButton: this.props.catalog
         }
         this.updatePopUp = this.updatePopUp.bind(this);
     }
@@ -84,7 +83,7 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @returns {Promise<void>}
      */
     async componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.language !== this.props.language || prevProps.category !== this.props.category
+        if(prevProps.language !== this.props.language || prevProps.catalog !== this.props.catalog
             || this.props.reRender) {
             await this.fetchInitialVersions()
             await this.fetchCurrentVersions()
@@ -110,7 +109,7 @@ class MobileButton extends Component<Props,IMobileButton>{
         if(!DROPDOWN.classList.contains('disabled')) {
             this.props.updateMobileButton(version, btn)
         } else {
-            this.setState({disabledCategory: findCatalog(version)})
+            this.setState({disabledCatalog: findCatalog(version)})
             this.setState({showPopUp: true})
             this.setState({disabledVersion: version})
         }
@@ -118,20 +117,20 @@ class MobileButton extends Component<Props,IMobileButton>{
     }
 
     /**
-     * If a category get clicked update the state
-     * @param category
+     * Update state if a catalog get clicked.
+     * @param catalog
      */
-    handleCategoryClick(category) {
-        const CAT = document.getElementById(category);
+    handleCatalogClick(catalog) {
+        const CAT = document.getElementById(catalog);
         if(!CAT.classList.contains('disabled')) {
-            this.props.updateMobileButton('', category, false, "")
+            this.props.updateMobileButton('', catalog, false, "")
         } else {
-            this.setState({disabledCategory: category})
+            this.setState({disabledCatalog: catalog})
             this.setState({showPopUp: true})
-            if(category === "MiGeL" || category === "AL" || category === "DRUG") {
+            if(catalog === "MiGeL" || catalog === "AL" || catalog === "DRUG") {
                 this.setState({disabledVersion: ""})
             } else {
-                this.setState({disabledVersion: this.getLastVersion(category)})
+                this.setState({disabledVersion: this.props.initialVersions[catalog].at(-1)})
             }
         }
     }
@@ -142,22 +141,22 @@ class MobileButton extends Component<Props,IMobileButton>{
      */
     async fetchInitialVersions() {
         if (!this.isCalBut()) {
-            if (this.props.category === "SwissDRG") {
+            if (this.props.catalog === "SwissDRG") {
                 await fetch([fetchURL, '/de/drgs/versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({
-                            allVersions: CategorySortService(json),
-                            currentVersions: CategorySortService(json)
+                            allVersions: json,
+                            currentVersions: json
                         })
                     })
             } else {
-                await fetch([fetchURL, 'de', this.props.category.toLowerCase() + 's' ,'versions'].join("/"))
+                await fetch([fetchURL, 'de', this.props.catalog.toLowerCase() + 's' ,'versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
                         this.setState({
-                            allVersions: CategorySortService(json),
-                            currentVersions: CategorySortService(json)
+                            allVersions: json,
+                            currentVersions: json
                         })
                     })
             }
@@ -172,38 +171,21 @@ class MobileButton extends Component<Props,IMobileButton>{
      */
     async fetchCurrentVersions() {
         if (!this.isCalBut()) {
-            if (this.props.category === "SwissDRG") {
+            if (this.props.catalog === "SwissDRG") {
                 await fetch([fetchURL, this.props.language, 'drgs/versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
-                        this.setState({currentVersions: CategorySortService(json)})
+                        this.setState({currentVersions: json})
                     })
             } else {
-                await fetch([fetchURL, this.props.language, this.props.category.toLowerCase() + 's', 'versions'].join("/"))
+                await fetch([fetchURL, this.props.language, this.props.catalog.toLowerCase() + 's', 'versions'].join("/"))
                     .then((res) => res.json())
                     .then((json) => {
-                        this.setState({currentVersions: CategorySortService(json)})
+                        this.setState({currentVersions: json})
                     })
             }
         }else {
             this.setState({currentVersions: []})
-        }
-    }
-
-    /**
-     * looks for the last used version
-     * @returns {*|string} last version if it is present
-     */
-    getLastVersion(category) {
-        switch (category) {
-            case "ICD":
-                return "ICD-GM-2022"
-            case "CHOP":
-                return "CHOP_2022"
-            case "TARMED":
-                return "TARMED_01.09"
-            case "SwissDRG":
-                return "V11.0"
         }
     }
 
@@ -213,9 +195,9 @@ class MobileButton extends Component<Props,IMobileButton>{
      */
     getVersion() {
         if(this.props.selectedVersion) {
-            return cutCatalogFromVersion(this.props.category, this.props.selectedVersion)
+            return cutCatalogFromVersion(this.props.catalog, this.props.selectedVersion)
         } else {
-            return cutCatalogFromVersion(this.props.category, this.props.version)
+            return cutCatalogFromVersion(this.props.catalog, this.props.version)
         }
     }
 
@@ -228,58 +210,45 @@ class MobileButton extends Component<Props,IMobileButton>{
     }
 
     /**
-     * looks if the category uses a calendar
-     * @returns {boolean} if calender is needed or not
+     * Looks if the catalog uses a calendar (true or false).
+     * @returns {boolean}
      */
     isCalBut() {
-        let category = this.props.category;
-        return category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG';
+        let catalog = this.props.catalog;
+        return catalog === 'AL' || catalog.toUpperCase() === 'MIGEL' || catalog === 'DRUG'
     }
 
     /**
-     * converts a category into a label so that it shows buttons with calendars in the correct language
-     * only used for the selected button
+     * Converts a catalog into a label, s.t. buttons with calendars are displayed in correct language.
+     * Only used for the selected button.
      * @returns label
      */
     convertToLabel() {
-        if(this.props.category === "SwissDRG" || this.props.category === "ICD" || this.props.category === "CHOP" || this.props.category === "TARMED"){
-            return this.props.category;
+        if(this.props.catalog === "SwissDRG" || this.props.catalog === "ICD" || this.props.catalog === "CHOP" || this.props.catalog === "TARMED"){
+            return this.props.catalog;
         }
         else{
-            if(this.props.category.toUpperCase() === "MIGEL"){
-                return this.props.labels[0];
-            }
-            else if(this.props.category.toUpperCase() === "AL"){
-                return this.props.labels[1];
-            }
-            else{
-                return this.props.labels[2];
-            }
+            return this.props.labels[this.props.catalog.toUpperCase()]
         }
     }
 
     /**
-     * converts a category into a label so that it shows buttons with calendars in the correct language, depends on the index
+     * Extracts label by button s.t. buttons with calendars are displayed in the correct language.
      * @returns label
      */
-    extractLabels(category, index) {
-        if (category === 'AL' || category.toUpperCase() === 'MIGEL' || category === 'DRUG'){
-            return this.props.labels[index-4];
-        }
-        else {
-            return category;
-        }
+    extractLabel(btn) {
+        return ["AL", "MIGEL", "DRUG"].includes(btn.toUpperCase()) ? this.props.labels[btn.toUpperCase()] : btn
     }
 
     /**
-     * Returns the class name
-     * @param category
+     * Returns the class name of a button.
+     * @param btn
      * @returns {string}
      */
-    getClassName(category) {
+    getClassName(btn) {
         let name = "dropdown-item"
-        if(this.props.language === "en" && category !== "ICD") {
-            name += " disabled"
+        if(this.props.language === "en" && btn !== "ICD") {
+            name += "-disabled"
         }
         return name
     }
@@ -302,7 +271,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                         show={this.state.showPopUp}
                         updatePopUpState={this.updatePopUp}
                         version={this.state.disabledVersion}
-                        category={this.state.disabledCategory}
+                        catalog={this.state.disabledCatalog}
                     />
                 }
                 <Dropdown key={"mobile_button_dropdown_catalog"} className="catalogButtons">
@@ -315,15 +284,15 @@ class MobileButton extends Component<Props,IMobileButton>{
                         {this.convertToLabel()}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
-                        {this.state.buttons.map((btn, index) => (
+                        {this.state.buttons.map((btn) => (
                                 <Dropdown.Item className={this.getClassName(btn)}
                                                eventKey={btn}
                                                key={"mobile_button_dropdown_catalog_" + btn}
                                                id={btn}
                                                onClick={() => {
-                                    this.handleCategoryClick(btn)
+                                    this.handleCatalogClick(btn)
                                 }}>
-                                    {this.extractLabels(btn, index)}
+                                    {this.extractLabel(btn)}
                                 </Dropdown.Item>
                             )
                         )}
@@ -348,9 +317,9 @@ class MobileButton extends Component<Props,IMobileButton>{
                                     key={"mobile_button_dropdown_versions_" + version}
                                     id={version}
                                     onClick={() => {
-                                        this.handleVersionClick(version, this.props.category)
+                                        this.handleVersionClick(version, this.props.catalog)
                                     }}
-                                >{cutCatalogFromVersion(this.props.category, version)}</Dropdown.Item>
+                                >{cutCatalogFromVersion(this.props.catalog, version)}</Dropdown.Item>
                             )
                         )}
                     </Dropdown.Menu>
@@ -362,7 +331,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                     selectedCatalog={this.props.selectedCatalog}
                     activeDate = {this.props.date}
                     setDate={(date) => {
-                        this.props.updateMobileButton('',this.props.category, true, date)
+                        this.props.updateMobileButton('',this.props.catalog, true, date)
                     }}
                 />
                 }

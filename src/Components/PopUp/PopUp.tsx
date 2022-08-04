@@ -16,7 +16,7 @@ interface Props {
     show: boolean
     updatePopUpState: { (boolean_value: boolean): void },
     version: string,
-    category: string
+    catalog: string
 }
 
 interface IPopUp {
@@ -66,7 +66,7 @@ class PopUp extends Component<Props, IPopUp>{
      */
     async componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.version !== this.props.version ||
-            prevProps.category !== this.props.category) {
+            prevProps.catalog !== this.props.catalog) {
             this.setState({availableLanguages: ['de']})
             await this.findAvailableLanguages()
         }
@@ -80,10 +80,10 @@ class PopUp extends Component<Props, IPopUp>{
      * @returns {Promise<void>}
      */
     async findAvailableLanguages() {
-        if(this.props.category === "AL" || this.props.category === "DRUG" || this.props.category === "MiGeL") {
+        if(this.props.catalog === "AL" || this.props.catalog === "DRUG" || this.props.catalog === "MiGeL") {
             this.setState({availableLanguages: ["de", "fr", "it"]})
         } else {
-            let catalog = convertCatalogToResourceType(this.props.category)
+            let catalog = convertCatalogToResourceType(this.props.catalog)
             for(let lang of languages) {
                 if(lang !== this.props.language && lang !== 'de') {
                     await fetch([fetchURL, lang, catalog, 'versions'].join("/"))
@@ -106,7 +106,7 @@ class PopUp extends Component<Props, IPopUp>{
         this.handleShow(false)
         this.props.changeLanguage(language)
         this.props.selectedVersion(this.props.version)
-        this.props.changeSelectedButton(this.props.category)
+        this.props.changeSelectedButton(this.props.catalog)
     }
 
     /**

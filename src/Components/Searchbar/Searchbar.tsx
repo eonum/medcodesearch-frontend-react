@@ -9,6 +9,16 @@ import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
 import {INavigationHook} from "../../interfaces";
 
+const resourceTypeByBtn = {
+    "SwissDRG": 'drgs',
+    "ICD": 'icds',
+    "CHOP": 'chops',
+    "TARMED": 'tarmeds',
+    "MiGeL": 'migels',
+    "AL": 'laboratory_analyses',
+    "DRUG": 'drugs'
+}
+
 interface Props {
     language: string,
     selectedButton: string,
@@ -71,28 +81,14 @@ class Searchbar extends Component<Props,ISearchbar> {
         }
     }
 
-
     /**
-     * takes the chosen button name and returns the name with the version
+     * takes the chosen button name and returns the corresponding resource_type and version joined by "/".
      * @param chosenBtn
      * @returns {string}
      */
-    convertCategory(chosenBtn) {
-        if(chosenBtn === "SwissDRG") {
-            return "drgs/" + this.props.version;
-        } else if(chosenBtn === "ICD") {
-            return "icds/" + this.props.version;
-        } else if(chosenBtn === "CHOP") {
-            return "chops/" + this.props.version;
-        } else if(chosenBtn === "TARMED") {
-            return "tarmeds/" + this.props.version;
-        } else if (chosenBtn.toUpperCase() === "MIGEL"){
-            return "migels/" + chosenBtn.toUpperCase();
-        } else if (chosenBtn === "AL"){
-            return "laboratory_analyses/" + chosenBtn.toUpperCase();
-        } else if (chosenBtn === "DRUG"){
-            return "drugs/" + chosenBtn.toUpperCase();
-        }
+    convertButtonToBackendVersion(chosenBtn) {
+        let versionized = ['MiGeL', 'AL', 'DRUG'].includes(chosenBtn) ? false : true
+        return versionized ? this.props.version : chosenBtn.toUpperCase()
     }
 
     /**
@@ -126,7 +122,11 @@ class Searchbar extends Component<Props,ISearchbar> {
                 date = 'date=' + this.props.date + '&'
             }
         }
-        await fetch([fetchURL, this.props.language, this.convertCategory(this.props.selectedButton), 'search?' + date + 'highlight=1&search='+ searchTerm].join("/"))
+        await fetch([
+            fetchURL, this.props.language,
+            resourceTypeByBtn[this.props.selectedButton],
+            this.convertButtonToBackendVersion(this.props.selectedButton),
+            'search?' + date + 'highlight=1&search='+ searchTerm].join("/"))
             .then((res) => {
                 if(res.ok) {
                     return res.json()

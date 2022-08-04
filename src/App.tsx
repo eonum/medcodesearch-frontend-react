@@ -218,11 +218,11 @@ class App extends Component<Props, IApp>{
     getLabels(language) {
         switch (language) {
             case "fr":
-                return ['LiMA', 'LA', 'Med']
+                return {'MIGEL': 'LiMA', 'AL': 'LA', 'DRUG': 'Med'}
             case "it":
-                return ['EMAp', 'EA', 'Med']
+                return {'MIGEL': 'EMAp', 'AL': 'EA', 'DRUG': 'Med'}
             default:
-                return ['MiGeL', 'AL', 'Med']
+                return  {'MIGEL': 'MiGeL', 'AL': 'AL', 'DRUG': 'Med'}
         }
     }
 

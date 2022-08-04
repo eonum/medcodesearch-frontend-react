@@ -7,7 +7,14 @@ import convertDate from "../../Services/convert-date.service";
 import RouterService from "../../Services/router.service";
 import MobileButton from "./MobileButton";
 import ConvertDateService from "../../Services/convert-date.service";
-import {IVersions, IButtonLabels, IParamTypes, INoArgsFunction, IUpdateStateByArg} from "../../interfaces";
+import {
+    IVersions,
+    IButtonLabels,
+    IParamTypes,
+    INoArgsFunction,
+    IUpdateStateByArg,
+    IUnversionizedLabels
+} from "../../interfaces";
 import {currentCatalogsByButton, versionizedCatalogs} from "../../Services/catalog-version.service";
 
 interface Props {
@@ -24,7 +31,7 @@ interface Props {
     changeSelectedButton: IUpdateStateByArg,
     changeSelectedVersion: IUpdateStateByArg,
     changeSelectedDate: IUpdateStateByArg,
-    labels: string[],
+    labels: IUnversionizedLabels,
     fullLabels: string[],
     buttons: IButtonLabels
 }
@@ -130,14 +137,14 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
     }
 
     /**
-     * Calls getVersionCategory(), if successful mounted.
+     * Calls setCurrentVersionBySelectedButton() if successful mounted.
      */
     componentDidMount() {
         this.setCurrentVersionBySelectedButton()
     }
 
     /**
-     * Calls getVersionCategory() if version has changed.
+     * Calls setCurrentVersionBySelectedButton() if version has changed or resets if clicked on logo.
      * @param prevProps
      * @param prevState
      * @param snapshot
@@ -147,7 +154,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             this.setCurrentVersionBySelectedButton()
         }
         if (this.props.clickedOnLogo){
-            this.setState({selectedButton: prevProps.category})
+            this.setState({selectedButton: prevProps.catalog})
             this.props.reSetClickOnLogo()
         }
     }
@@ -182,7 +189,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                             this.updateCalendarVisibility(false);
                                             this.reRender(button)
                                         }}
-                                        category={btn}
+                                        button={btn}
                                         initialVersions={this.props.initialVersions[btn]}
                                         currentVersions={this.props.currentVersions[btn]}
                                         language={this.props.language}
@@ -191,7 +198,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         changeSelectedVersion={this.props.changeSelectedVersion}
                                         changeSelectedButton={this.props.changeSelectedButton}
                                         selectedVersion={this.props.params.version}
-                                        selectedCategory={this.props.selectedButton}
+                                        selectedButton={this.props.selectedButton}
                                         updateVersionizedButton={(version) => {
                                             this.updateButton(version, btn, false, '');
                                         }}
@@ -200,7 +207,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                             ), this)}
                         {
                             // Map unversionized buttons, this.state.buttons[1] is the array of unversionized buttons,
-                            // i.e. ["MIGEL", "AL", "DRUG"].
+                            // i.e. ["MiGeL", "AL", "DRUG"].
                             this.state.buttons[1].map((btn, index) => (
                                 <div key={"catalog_button_" + btn}>
                                     <ButtonUnversionized
@@ -212,7 +219,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         showHideCal={this.state.showCalendar}
                                         date={this.state.selectedDate}
                                         name={btn}
-                                        label={this.props.labels[index]}
+                                        label={this.props.labels[btn.toUpperCase()]}
                                         fullLabel={this.props.fullLabels[index]}
                                         select={(btn, date) => {
                                             this.updateButton('', btn, true, date);
@@ -234,15 +241,15 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                         version={this.getVersionFromButton(this.state.selectedButton)}
                         selectedVersion={this.props.params.version}
                         reRender={this.props.clickedOnLogo}
-                        category={this.props.selectedButton}
+                        catalog={this.props.selectedButton}
                         language={this.props.language}
                         changeLanguage={this.props.changeLanguage}
                         changeSelectedVersion={this.props.changeSelectedVersion}
                         changeSelectedButton={this.props.changeSelectedButton}
                         buttons={this.props.buttons}
                         labels={this.props.labels}
-                        updateMobileButton={(version, category, isCalendar, date) => {
-                            this.updateButton(version, category, isCalendar, date)
+                        updateMobileButton={(version, catalog, isCalendar, date) => {
+                            this.updateButton(version, catalog, isCalendar, date)
                         }}
                     />
                 </div>

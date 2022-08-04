@@ -21,7 +21,7 @@ interface Props {
 }
 
 interface IButtonUnversionized {
-    disabledCategory: string,
+    disabledCatalog: string,
     showPopUp: boolean
 }
 
@@ -30,26 +30,25 @@ interface IButtonUnversionized {
  * @component
  */
 class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
-
     constructor(props) {
         super(props);
         this.state = {
-            disabledCategory: "",
+            disabledCatalog: "",
             showPopUp: false
         }
     }
 
     /**
-     * If a category get clicked update the state
-     * @param category
+     * Updates the state if a catalog gets clicked.
+     * @param catalog
      */
-    handleCategoryClick(category) {
-        const BUTTON = document.getElementById(category);
-        if(!BUTTON.classList.contains("disabled")) {
+    handleCatalogClick(catalog) {
+        const button = document.getElementById(catalog);
+        if(!button.classList.contains("disabled")) {
             this.props.select(this.props.name, convertDate(new Date().toDateString()))
         } else {
             this.setState({showPopUp: true})
-            this.setState({disabledCategory: category})
+            this.setState({disabledCatalog: catalog})
         }
     }
 
@@ -99,7 +98,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
                         version={""}
                         selectedVersion={this.props.changeSelectedVersion}
                         changeLanguage={this.props.changeLanguage}
-                        category={this.state.disabledCategory}
+                        catalog={this.state.disabledCatalog}
                         changeSelectedButton={this.props.changeSelectedButton}
                         show={this.state.showPopUp}
                         updatePopUpState={this.updatePopUp}
@@ -115,7 +114,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
                         name={this.props.name}
                         className={this.getClassName()}
                         onClick={() =>{
-                            this.handleCategoryClick(this.props.name)
+                            this.handleCatalogClick(this.props.name)
                         }}>
                         {this.props.label}
                     </button>

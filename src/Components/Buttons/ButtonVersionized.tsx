@@ -8,7 +8,7 @@ interface Props {
     key: string,
     index: number,
     activate: {(button: string): void},
-    category: string
+    button: string
     initialVersions: string[],
     currentVersions:  string[],
     language: string,
@@ -17,14 +17,14 @@ interface Props {
     changeSelectedVersion: IUpdateStateByArg,
     changeSelectedButton: IUpdateStateByArg,
     selectedVersion: string,
-    selectedCategory: string,
+    selectedButton: string,
     updateVersionizedButton: IUpdateButton
 }
 
 export interface IButtonVersionized {
     showPopUp: boolean,
     disabledVersion: string,
-    disabledCategory: string,
+    disabledCatalog: string,
 }
 
 /**
@@ -41,7 +41,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
         this.state = {
             showPopUp: false,
             disabledVersion: "",
-            disabledCategory: "",
+            disabledCatalog: "",
         }
         this.changeShowPopUp = this.changeShowPopUp.bind(this);
     }
@@ -64,7 +64,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
         if(!dropDown.classList.contains('disabled')) {
             this.props.updateVersionizedButton(version)
         } else {
-            this.setState({disabledCategory: findCatalog(version)})
+            this.setState({disabledCatalog: findCatalog(version)})
             this.setState({disabledVersion: version})
             this.setState({showPopUp: true})
         }
@@ -78,23 +78,23 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
         if(this.props.currentVersions) {
             let lastVersion = this.props.currentVersions[this.props.currentVersions.length - 1];
             if (lastVersion) {
-                return cutCatalogFromVersion(this.props.category, this.props.currentVersions[this.props.currentVersions.length - 1])
+                return cutCatalogFromVersion(this.props.button, this.props.currentVersions[this.props.currentVersions.length - 1])
             }
         }
         return ""
     }
 
     /**
-     * set the new category
-     * @param category
+     * set the new catalog
+     * @param catalog
      */
-    handleCategoryClick(category) {
-        const DROPDOWN = document.getElementById(category);
-        if(!DROPDOWN.classList.contains('disabled')) {
-            this.props.activate(category);
+    handleCatalogButtonClick(catalog) {
+        const dropDown = document.getElementById(catalog);
+        if(!dropDown.classList.contains('disabled')) {
+            this.props.activate(catalog);
         } else {
             this.setState({showPopUp: true})
-            this.setState({disabledCategory: category})
+            this.setState({disabledCatalog: catalog})
             this.setState({disabledVersion: this.props.initialVersions[this.props.initialVersions.length-1]})
         }
     }
@@ -105,7 +105,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
      */
     getClassName() {
         let classname = "customButton"
-        if(this.props.category === this.props.selectedCategory) {
+        if(this.props.button === this.props.selectedButton) {
             classname += " activeCatalog"
         }
         if(this.props.currentVersions && this.props.currentVersions.length === 0) {
@@ -124,9 +124,9 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
             return lastVersion
         }
         if(this.props.version === this.props.selectedVersion) {
-            return cutCatalogFromVersion(this.props.category, this.props.selectedVersion)
+            return cutCatalogFromVersion(this.props.button, this.props.selectedVersion)
         } else {
-            return cutCatalogFromVersion(this.props.category, this.props.version)
+            return cutCatalogFromVersion(this.props.button, this.props.version)
         }
     }
 
@@ -143,12 +143,12 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
                         <Dropdown.Item
                             className={this.props.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
                             eventKey={versions}
-                            key={"button_versionized_" + this.props.category + "_drop_down_" + versions}
+                            key={"button_versionized_" + this.props.button + "_drop_down_" + versions}
                             id={versions}
                             onClick={() => {
                                 this.handleVersionClick(versions)
                             }}
-                        >{cutCatalogFromVersion(this.props.category, versions)}</Dropdown.Item>
+                        >{cutCatalogFromVersion(this.props.button, versions)}</Dropdown.Item>
                     )
                 )}
             </Dropdown.Menu>
@@ -163,27 +163,27 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
                     show={this.state.showPopUp}
                     updatePopUpState={this.changeShowPopUp}
                     version={this.state.disabledVersion}
-                    category={this.state.disabledCategory}
+                    catalog={this.state.disabledCatalog}
                 />}
                 <Dropdown className="catalogButtons d-none d-lg-block">
                     <button 
                         type="button"
-                        id={this.props.category}
-                        key={"button_versionized_" + this.props.category + "_button"}
-                        title={this.props.category}
+                        id={this.props.button}
+                        key={"button_versionized_" + this.props.button + "_button"}
+                        title={this.props.button}
                         onClick={(e) => {
-                            this.handleCategoryClick(this.props.category)
+                            this.handleCatalogButtonClick(this.props.button)
                         }}
                         className={this.getClassName()}
                         >
-                        {this.props.category}
+                        {this.props.button}
                     </button>
                     <Dropdown.Toggle
                         className="customButton"
                         id={"button_versionized"}
                         type="button"
                         variant=""
-                        key={"button_versionized_" + this.props.category + "_drop_down"
+                        key={"button_versionized_" + this.props.button + "_drop_down"
                     }>
                         {this.getVersion()}
                     </Dropdown.Toggle>
