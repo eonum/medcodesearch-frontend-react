@@ -23,7 +23,7 @@ interface Props {
     changeSelectedButton: IUpdateStateByArg,
     buttons: IButtonLabels,
     labels: IUnversionizedLabels,
-    updateMobileButton: IUpdateButton
+    updateOnButtonClick: IUpdateButton
 }
 
 export interface IMobileButton {
@@ -107,7 +107,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     handleVersionClick(version, btn) {
         const DROPDOWN = document.getElementById(version);
         if(!DROPDOWN.classList.contains('disabled')) {
-            this.props.updateMobileButton(version, btn)
+            this.props.updateOnButtonClick(version, btn)
         } else {
             this.setState({disabledCatalog: findCatalog(version)})
             this.setState({showPopUp: true})
@@ -123,7 +123,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     handleCatalogClick(catalog) {
         const CAT = document.getElementById(catalog);
         if(!CAT.classList.contains('disabled')) {
-            this.props.updateMobileButton('', catalog, false, "")
+            this.props.updateOnButtonClick('', catalog, false, "")
         } else {
             this.setState({disabledCatalog: catalog})
             this.setState({showPopUp: true})
@@ -330,8 +330,8 @@ class MobileButton extends Component<Props,IMobileButton>{
                     isMobile={true}
                     selectedCatalog={this.props.selectedCatalog}
                     selectedDate= {this.props.selectedDate}
-                    setDate={(date) => {
-                        this.props.updateMobileButton('',this.props.catalog, true, date)
+                    clickDate={(date) => {
+                        this.props.updateOnButtonClick('',this.props.catalog, true, date)
                     }}
                 />
                 }

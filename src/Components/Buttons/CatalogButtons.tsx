@@ -66,7 +66,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             selectedDate: new Date().toLocaleDateString("uk-Uk"), // this yields DD.MM.YYYY of today
             buttons: this.props.buttons,
         }
-        this.updateButton = this.updateButton.bind(this);
+        this.updateOnButtonClick = this.updateOnButtonClick.bind(this);
     }
 
     /**
@@ -78,7 +78,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      */
         // TODO: If choosing different version from different button, should old button version jump back to default or stay where it was?
         //  F.e. if clicking from ICD10-GM-2014 to SwissDRG V9.0, should version button of icd stay at GM-2014 or jump back to GM-2022?
-    updateButton = (version, btn, isCalendarType, date) => {
+    updateOnButtonClick = (version, btn, isCalendarType, date) => {
         // If empty version, get it using btn.
         // Set
         let selectedVersion;
@@ -172,8 +172,8 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                     <ButtonVersionized
                                         key={btn}
                                         index={index}
-                                        activate={(button) => {
-                                            this.updateButton('', button, false, '');
+                                        clickButton={(button) => {
+                                            this.updateOnButtonClick('', button, false, '');
                                             this.reRender(button)
                                         }}
                                         button={btn}
@@ -186,8 +186,8 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         changeSelectedButton={this.props.changeSelectedButton}
                                         selectedVersion={this.props.params.version}
                                         selectedButton={this.props.selectedButton}
-                                        updateVersionizedButton={(version) => {
-                                            this.updateButton(version, btn, false, '');
+                                        updateOnButtonClick={(version) => {
+                                            this.updateOnButtonClick(version, btn, false, '');
                                         }}
                                     />
                                 </div>
@@ -204,14 +204,14 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         changeLanguage={this.props.changeLanguage}
                                         language={this.props.language}
                                         selectedDate={this.state.selectedDate}
-                                        name={btn}
+                                        buttonName={btn}
                                         label={this.props.labels[btn.toUpperCase()]}
                                         fullLabel={this.props.fullLabels[index]}
-                                        select={(btn, date) => {
-                                            this.updateButton('', btn, true, date);
-                                            this.reRender(btn)
+                                        clickButton={(button, date) => {
+                                            this.updateOnButtonClick('', button, true, date);
+                                            this.reRender(button)
                                         }}
-                                        active={this.props.selectedButton}
+                                        selectedButton={this.props.selectedButton}
                                     />
                                 </div>
                             ))}
@@ -233,8 +233,8 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                         changeSelectedButton={this.props.changeSelectedButton}
                         buttons={this.props.buttons}
                         labels={this.props.labels}
-                        updateMobileButton={(version, catalog, isCalendar, date) => {
-                            this.updateButton(version, catalog, isCalendar, date)
+                        updateOnButtonClick={(version, catalog, isCalendar, date) => {
+                            this.updateOnButtonClick(version, catalog, isCalendar, date)
                         }}
                     />
                 </div>

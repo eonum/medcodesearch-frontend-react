@@ -6,7 +6,7 @@ interface Props {
     isMobile: boolean,
     selectedCatalog: string,
     selectedDate: string,
-    setDate: { (date: string): void }
+    clickDate: { (date: string): void }
 }
 
 interface IDatePicker {
@@ -38,7 +38,7 @@ class DatePicker extends React.Component<Props,IDatePicker>{
     handleChange(date) {
         this.setState({showCalendar: false})
         this.setState({currentDate: new Date(date).toLocaleDateString("uk-Uk")})
-        this.props.setDate(date.toLocaleDateString("uk-Uk"));
+        this.props.clickDate(date.toLocaleDateString("uk-Uk"));
     }
 
     /**
@@ -46,10 +46,9 @@ class DatePicker extends React.Component<Props,IDatePicker>{
      * @returns {JSX.Element}
      */
     render() {
-        // TODO: check if this view variable should be used or deleted...
-        // let view = this.props.isMobile ? '_mobile' : '_desktop';
         return (
             <ReactDatePicker
+                id={"datepicker_" + this.props.selectedCatalog + (this.props.isMobile ? '_mobile' : '_desktop')}
                 className="form-control"
                 selected={this.state.showCalendar}
                 dateFormat="dd.MM.yyyy"

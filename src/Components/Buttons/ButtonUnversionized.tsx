@@ -11,11 +11,11 @@ interface Props {
     changeLanguage: IUpdateStateByArg,
     language: string,
     selectedDate : string,
-    name: string,
+    buttonName: string,
     label: string,
     fullLabel: string,
-    select: {(btn: string, date: string): void},
-    active: string
+    clickButton: {(btn: string, date: string): void},
+    selectedButton: string
 }
 
 interface IButtonUnversionized {
@@ -43,7 +43,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
     handleCatalogClick(catalog) {
         const button = document.getElementById(catalog);
         if(!button.classList.contains("disabled")) {
-            this.props.select(this.props.name, new Date().toLocaleDateString("uk-Uk"))
+            this.props.clickButton(this.props.buttonName, new Date().toLocaleDateString("uk-Uk"))
         } else {
             this.setState({showPopUp: true})
             this.setState({disabledCatalog: catalog})
@@ -67,7 +67,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
      */
     getClassName() {
         let classname = "customButton"
-        if(this.props.name.toUpperCase() === this.props.active.toUpperCase()) {
+        if(this.props.buttonName.toUpperCase() === this.props.selectedButton.toUpperCase()) {
             classname += " activeCatalog"
         }
         if(this.props.language === "en") {
@@ -107,23 +107,23 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
                     overlay={this.renderTooltip}
                 >
                     <button
-                        id={this.props.name}
-                        key={"button_unversionized_" + this.props.name}
-                        name={this.props.name}
+                        id={this.props.buttonName}
+                        key={"button_unversionized_" + this.props.buttonName}
+                        name={this.props.buttonName}
                         className={this.getClassName()}
                         onClick={() => {
-                            this.handleCatalogClick(this.props.name)
+                            this.handleCatalogClick(this.props.buttonName)
                         }}>
                         {this.props.label}
                     </button>
                 </OverlayTrigger>
-                {(this.props.active === this.props.name) &&
+                {(this.props.selectedButton === this.props.buttonName) &&
                     <DatePicker
                         isMobile={false}
                         selectedCatalog={this.props.selectedCatalog}
                         selectedDate={this.props.selectedDate}
-                        setDate={(date) => {
-                            this.props.select(this.props.name, date)
+                        clickDate={(date) => {
+                            this.props.clickButton(this.props.buttonName, date)
                         }}
                     />
                 }
