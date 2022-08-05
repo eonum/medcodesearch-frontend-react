@@ -14,6 +14,8 @@ interface Props {
 /**
  * Responsible for the body of the website, for catalogs without versions (i.e. MIGEL, AL, DRUG)
  */
+
+// TODO: add selectedDate as prop from App component and integrate in fetching.
 class CodeBodyUnversionized extends Component<Props, ICode> {
     constructor(props) {
         super(props);

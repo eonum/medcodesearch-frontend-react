@@ -11,6 +11,9 @@ import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
 /**
  * Renders the whole application
  */
+
+// TODO: render app here and move <Router /> part to app
+//  (see casematch or https://github.com/eonum/medlandscape/blob/master/src/index.js for examples)
 ReactDOM.render(
     // StrictMode renders components twice (on dev but not production), detecting problems / deprecations / warnings.
     <React.StrictMode>
