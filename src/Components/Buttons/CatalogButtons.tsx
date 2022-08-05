@@ -42,7 +42,6 @@ interface ICatalogButtons {
     currentCHOP: string,
     currentTARMED: string,
     selectedDate: string,
-    showCalendar: boolean,
     buttons: IButtonLabels,
 }
 
@@ -64,8 +63,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             currentSwissDRG: this.props.initialVersions['SwissDRG'].at(-1),
             currentCHOP: this.props.initialVersions['CHOP'].at(-1),
             currentTARMED: this.props.initialVersions['TARMED'].at(-1),
-            selectedDate: new Date().toLocaleDateString("uk-Uk"),
-            showCalendar: false,
+            selectedDate: new Date().toLocaleDateString("uk-Uk"), // this yields DD.MM.YYYY of today
             buttons: this.props.buttons,
         }
         this.updateButton = this.updateButton.bind(this);
@@ -158,14 +156,6 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
     }
 
     /**
-     * Sets the state of the calendar visibility to 'false' or 'true'.
-     * @param visible
-     */
-    updateCalendarVisibility = (visible) => {
-        this.setState({showCalendar: visible})
-    }
-
-    /**
      * Render the button group.
      * @returns {JSX.Element}
      */
@@ -184,7 +174,6 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         index={index}
                                         activate={(button) => {
                                             this.updateButton('', button, false, '');
-                                            this.updateCalendarVisibility(false);
                                             this.reRender(button)
                                         }}
                                         button={btn}
@@ -214,14 +203,12 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         changeSelectedVersion={this.props.changeSelectedVersion}
                                         changeLanguage={this.props.changeLanguage}
                                         language={this.props.language}
-                                        showHideCal={this.state.showCalendar}
                                         selectedDate={this.state.selectedDate}
                                         name={btn}
                                         label={this.props.labels[btn.toUpperCase()]}
                                         fullLabel={this.props.fullLabels[index]}
                                         select={(btn, date) => {
                                             this.updateButton('', btn, true, date);
-                                            this.updateCalendarVisibility(true);
                                             this.reRender(btn)
                                         }}
                                         active={this.props.selectedButton}

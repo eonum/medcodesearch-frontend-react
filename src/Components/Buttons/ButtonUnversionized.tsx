@@ -10,7 +10,6 @@ interface Props {
     changeSelectedVersion: IUpdateStateByArg,
     changeLanguage: IUpdateStateByArg,
     language: string,
-    showHideCal: boolean,
     selectedDate : string,
     name: string,
     label: string,
@@ -118,7 +117,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
                         {this.props.label}
                     </button>
                     </OverlayTrigger>
-                        {this.props.showHideCal && (this.props.active === this.props.name) &&
+                        {(this.props.active === this.props.name) &&
                         <DatePicker
                             isMobile={false}
                             selectedCatalog={this.props.selectedCatalog}
