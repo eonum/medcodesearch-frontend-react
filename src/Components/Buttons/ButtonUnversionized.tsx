@@ -88,47 +88,48 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
      * renders the ButtonUnversionized
      * @returns {JSX.Element}
      */
-    render(){
-        return(
-                <div key={"button_unversionized"} id={"cal"}>
-                    <PopUp
-                        language={this.props.language}
-                        version={""}
-                        selectedVersion={this.props.changeSelectedVersion}
-                        changeLanguage={this.props.changeLanguage}
-                        catalog={this.state.disabledCatalog}
-                        changeSelectedButton={this.props.changeSelectedButton}
-                        show={this.state.showPopUp}
-                        updatePopUpState={this.updatePopUp}
-                    />
-                    <OverlayTrigger
-                        placement="bottom"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={this.renderTooltip}
-                    >
+    render() {
+        return (
+            <div key={"button_unversionized"} id={"cal"}>
+                <PopUp
+                    language={this.props.language}
+                    version={""}
+                    selectedVersion={this.props.changeSelectedVersion}
+                    changeLanguage={this.props.changeLanguage}
+                    catalog={this.state.disabledCatalog}
+                    changeSelectedButton={this.props.changeSelectedButton}
+                    show={this.state.showPopUp}
+                    updatePopUpState={this.updatePopUp}
+                />
+                <OverlayTrigger
+                    placement="bottom"
+                    delay={{show: 250, hide: 400}}
+                    overlay={this.renderTooltip}
+                >
                     <button
                         id={this.props.name}
                         key={"button_unversionized_" + this.props.name}
                         name={this.props.name}
                         className={this.getClassName()}
-                        onClick={() =>{
+                        onClick={() => {
                             this.handleCatalogClick(this.props.name)
                         }}>
                         {this.props.label}
                     </button>
-                    </OverlayTrigger>
-                        {(this.props.active === this.props.name) &&
-                        <DatePicker
-                            isMobile={false}
-                            selectedCatalog={this.props.selectedCatalog}
-                            selectedDate= {this.props.selectedDate}
-                            setDate={(date) => {
-                                this.props.select(this.props.name, date)
-                            }}
-                        />
-                        }
-                </div>
-                )}
+                </OverlayTrigger>
+                {(this.props.active === this.props.name) &&
+                    <DatePicker
+                        isMobile={false}
+                        selectedCatalog={this.props.selectedCatalog}
+                        selectedDate={this.props.selectedDate}
+                        setDate={(date) => {
+                            this.props.select(this.props.name, date)
+                        }}
+                    />
+                }
+            </div>
+        )
+    }
 
 }
 export default ButtonUnversionized;
