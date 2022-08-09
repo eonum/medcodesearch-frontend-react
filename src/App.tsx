@@ -363,11 +363,11 @@ class App extends Component<Props, IApp>{
                             <div key={"body_0_0"} className="col">
                                 <div key={"body_0_0_0"} id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
                                     <div key={"body_0_0_0_0"} className="text-start ms-3">
-                                        <Outlet/>
                                         {this.state.searchResults.length > 0 &&
                                             <div key={"app_searchresults"} className="col-12 col-lg">
                                                 {searchResults}
                                             </div>}
+                                        <Outlet/>
                                     </div>
                                 </div>
                             </div>

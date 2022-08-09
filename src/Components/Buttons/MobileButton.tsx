@@ -105,7 +105,7 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @param btn
      */
     handleVersionClick(version, btn) {
-        const DROPDOWN = document.getElementById(version);
+        const DROPDOWN = document.getElementById(version.replace(/\./g, ''));
         if(!DROPDOWN.classList.contains('disabled')) {
             this.props.updateOnButtonClick(version, btn)
         } else {
@@ -280,7 +280,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                         className="customButton"
                         variant=""
                         type="button"
-                        id={"mobile_button_catalog"}>
+                        id={"mobile_catalog_button"}>
                         {this.convertToLabel()}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
@@ -288,7 +288,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                                 <Dropdown.Item className={this.getClassName(btn)}
                                                eventKey={btn}
                                                key={"mobile_button_dropdown_catalog_" + btn}
-                                               id={btn}
+                                               id={btn + "_mobile_catalog_button"}
                                                onClick={() => {
                                     this.handleCatalogClick(btn)
                                 }}>
@@ -305,7 +305,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                         className="customButton"
                         variant=""
                         type="button"
-                        id={"mobile_button_version"}>
+                        id={"mobile_version_button"}>
                         {this.getVersion()}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown">
@@ -315,7 +315,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                                     className={this.state.currentVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
                                     eventKey={version}
                                     key={"mobile_button_dropdown_versions_" + version}
-                                    id={version}
+                                    id={version.replace(/\./g, '')}
                                     onClick={() => {
                                         this.handleVersionClick(version, this.props.catalog)
                                     }}

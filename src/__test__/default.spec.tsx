@@ -1,8 +1,6 @@
 import puppeteer from "puppeteer";
 import packageJson from "../../package.json"
 
-// TODO: We use 4 seconds sleep after await page.goto(baseUrl) since we didn't integrate waiting for page to load all
-//  catalogs before clicking is allowed.
 // TODO: Viewport should be set via config
 describe('Default test suite, testing general navigation via clicks', function () {
     let browser;
@@ -65,12 +63,12 @@ describe('Default test suite, testing general navigation via clicks', function (
         // Catalogs other than the selected one shouldn't be visible if not clicked on versions button.
         var element = await page.$("#ICD10-GM-2018");
         await expect(element).toBeNull();
-        await page.click("#button_versionized");
+        await page.click("#ICD_version_button");
         await page.click("#ICD10-GM-2018")
         await expect(page).toMatch('ICD10-GM-2018')
         await expect(page).toMatch('XV: Schwangerschaft, Geburt und Wochenbett')
         await expect(element).toBeNull();
-        await page.click("#button_versionized");
+        await page.click("#ICD_version_button");
         await page.click("#ICD10-GM-2022");
         await expect(page).toMatch('ICD10-GM-2022')
         await expect(page).toMatch('XXII: Schlüsselnummern für besondere Zwecke')
@@ -99,22 +97,21 @@ describe('Default test suite, testing general navigation via clicks', function (
     it('moving from a specific catalog version to other versions of other catalogs', async function() {
         await page.goto(baseUrl, {waitUntil: 'networkidle0'});
         // Move from ICD 2022 to CHOP 2020
-        await page.click("div:nth-child(2)>div>.catalogButtons>#button_versionized");
+        await page.click("#CHOP_version_button");
         await page.click("#CHOP_2020");
         await expect(page).toMatch("CHOP 2020")
         // Move to DRG V8.0
-        await page.click("div:nth-child(3) #button_versionized")
+        await page.click("#SwissDRG_version_button")
+        await page.click("#V80")
         await page.waitForTimeout(n);
-        // TODO: better use ID that are without "." --> stick to best practices!
-        await page.click("#V8\\.0")
         await expect(page).toMatch("SwissDRG 8.0")
         // Move to AL
         await page.click("#AL")
         await expect(page).toMatch("A: Chemie/Hämatologie/Immunologie")
         // Move to ICD 2016
-        await page.click("div:nth-child(1)>div>.catalogButtons>#button_versionized");
+        await page.click("#ICD_version_button");
         await page.click("#ICD10-GM-2016");
-        await page.click("#button_versionized");
+        await page.click("#ICD_version_button");
         await expect(page).toMatch("ICD10-GM-2016")
     })
 

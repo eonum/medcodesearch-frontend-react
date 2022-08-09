@@ -60,7 +60,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
      * @param version
      */
     handleVersionClick(version) {
-        const dropDown = document.getElementById(version);
+        const dropDown = document.getElementById(version.replace(/\./g, ''));
         if(!dropDown.classList.contains('disabled')) {
             this.props.updateOnButtonClick(version)
         } else {
@@ -139,16 +139,16 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
         if(this.props.initialVersions && this.props.currentVersions) {
             dropdown = <Dropdown.Menu className="dropdown">
                 {this.props.initialVersions.reverse().map(
-                    (versions) => (
+                    (version) => (
                         <Dropdown.Item
-                            className={this.props.currentVersions.includes(versions) ? "dropdown-item" : "dropdown-item disabled"}
-                            eventKey={versions}
-                            key={"button_versionized_" + this.props.button + "_drop_down_" + versions}
-                            id={versions}
+                            className={this.props.currentVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
+                            eventKey={version}
+                            key={"button_versionized_" + this.props.button + "_drop_down_" + version}
+                            id={version.replace(/\./g, '')}
                             onClick={() => {
-                                this.handleVersionClick(versions)
+                                this.handleVersionClick(version)
                             }}
-                        >{cutCatalogFromVersion(this.props.button, versions)}</Dropdown.Item>
+                        >{cutCatalogFromVersion(this.props.button, version)}</Dropdown.Item>
                     )
                 )}
             </Dropdown.Menu>
@@ -180,7 +180,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
                     </button>
                     <Dropdown.Toggle
                         className="customButton"
-                        id={"button_versionized"}
+                        id={this.props.button + "_version_button"}
                         type="button"
                         variant=""
                         key={"button_versionized_" + this.props.button + "_drop_down"
