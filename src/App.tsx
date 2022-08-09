@@ -357,12 +357,12 @@ class App extends Component<Props, IApp>{
                         buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'], ['MiGeL', 'AL', 'DRUG']]}
                     />
                 </div>
-                <div key={"app_main"} className="row">
-                    <div key={"main"} className="Wrapper">
-                        <div key={"main_0"} className="row">
-                            <div key={"main_0_0"} className="col">
-                                <div key={"main_0_0_0"} id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
-                                    <div key={"main_0_0_0_0"} className="text-start ms-3">
+                <div key={"app_body"} className="row">
+                    <div key={"body"} className="Wrapper">
+                        <div key={"body_0"} className="row">
+                            <div key={"body_0_0"} className="col">
+                                <div key={"body_0_0_0"} id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
+                                    <div key={"body_0_0_0_0"} className="text-start ms-3">
                                         <Outlet/>
                                         {this.state.searchResults.length > 0 &&
                                             <div key={"app_searchresults"} className="col-12 col-lg">
