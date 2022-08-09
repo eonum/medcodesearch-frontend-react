@@ -332,7 +332,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} params={useParams()} key={"versionized_body"}/>;
+    return props => <Component {...props} navigation={useNavigate()} key={"versionized_body"} params={useParams()}/>;
 }
 
 export default addProps(CodeBodyVersionized);

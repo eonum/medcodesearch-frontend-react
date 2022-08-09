@@ -56,7 +56,7 @@ interface IAttributes {
 export interface ICode {
     attributes: IAttributes
     parents: IShortEntry[],
-    siblings: IShortEntry[],
+    siblings: IShortEntry[]
 }
 
 export interface IVersions {

@@ -2,19 +2,22 @@ import './App.css';
 import './index.css';
 import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';
+import {Navigate, Routes, Route, Outlet} from "react-router-dom";
 import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import { ReactComponent as Arrow } from './assets/arrow-up.svg';
-import {Outlet, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import CatalogButtons from "./Components/Buttons/CatalogButtons";
 import RouterService from "./Services/router.service";
 import React, {Component, useState} from "react";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/catalog-version.service";
 import getTranslationHash from "./Services/translation.service";
-import {INavigationHook, IVersions} from "./interfaces";
+import {INavigationHook, IParamTypes, IVersions} from "./interfaces";
 import loadingSpinner from "./Components/Spinner/spinner";
+import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
+import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -23,6 +26,7 @@ import loadingSpinner from "./Components/Spinner/spinner";
 
 interface Props {
     navigation: INavigationHook
+    params: IParamTypes
 }
 
 interface IApp {
@@ -197,9 +201,9 @@ class App extends Component<Props, IApp>{
      * @returns {Promise<void>}
      */
     async componentDidMount() {
-        this.setState({initialVersions: await getVersionsByLanguage('de')})
-        this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
-        this.setState({isFetching: false})
+        await this.setState({initialVersions: await getVersionsByLanguage('de')})
+        await this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
+        await this.setState({isFetching: false})
     }
 
     /**
@@ -322,9 +326,9 @@ class App extends Component<Props, IApp>{
         this.setState({clickedOnLogo: false})
     }
 
-    renderContent() {
+    renderAfterFetch() {
         let searchResults = this.searchResults();
-        return (
+        return(
             <div>
                 <div key={"app_searchbar"} className="row" onClick={this.showSearchResults}>
                     <Searchbar
@@ -354,12 +358,20 @@ class App extends Component<Props, IApp>{
                     />
                 </div>
                 <div key={"app_main"} className="row">
-                    {this.state.searchResults.length > 0 &&
-                        <div key={"app_searchresults"} className="col-12 col-lg">
-                            {searchResults}
-                        </div>}
-                    <div key={"app_outlet"} className="col" id="main">
-                        <Outlet/>
+                    <div key={"main"} className="Wrapper">
+                        <div key={"main_0"} className="row">
+                            <div key={"main_0_0"} className="col">
+                                <div key={"main_0_0_0"} id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
+                                    <div key={"main_0_0_0_0"} className="text-start ms-3">
+                                        <Outlet/>
+                                        {this.state.searchResults.length > 0 &&
+                                            <div key={"app_searchresults"} className="col-12 col-lg">
+                                                {searchResults}
+                                            </div>}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div key={"app_footer"} className="navbar row">
@@ -367,6 +379,24 @@ class App extends Component<Props, IApp>{
                         <Footer/>
                     </div>
                 </div>
+            </div>
+        )
+    }
+
+    renderContent() {
+        return (
+            <div key={"app_container_0"} className="container">
+                <div key={"app_header"} className="row">
+                    <div key={"app_header_0"} className="col-sm-12">
+                        <Header changeLanguage={this.changeLanguage} activeLanguage={this.state.language}/>
+                    </div>
+                </div>
+                <div key={"app_img"} className="row">
+                    <div key={"app_img_0"} className="col-sm-12">
+                        <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
+                    </div>
+                </div>
+                {this.state.isFetching ? loadingSpinner() : this.renderAfterFetch()}
             </div>
         );
     }
@@ -377,23 +407,14 @@ class App extends Component<Props, IApp>{
      */
     render() {
         return (
-            <div key={"app"}>
-                <div key={"app_container_0"} className="container">
-                    <div key={"app_header"} className="row">
-                        <div key={"app_header_0"} className="col-sm-12">
-                            <Header changeLanguage={this.changeLanguage} activeLanguage={this.state.language}/>
-                        </div>
-                    </div>
-                    <div key={"app_img"} className="row">
-                        <div key={"app_img_0"} className="col-sm-12">
-                            <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
-                        </div>
-                    </div>
-                </div>
-                <div key={"app_container_1"} className="container">
-                    {this.state.isFetching ? loadingSpinner() : this.renderContent()}
-                </div>
-            </div>
+            <Routes>
+                <Route path="/" element={this.renderContent()}>
+                    <Route path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
+                    <Route path=":language/:catalog/:resource_type/:code" element={<CodeBodyUnversionized selectedDate={this.state.selectedDate} />}/>
+                    <Route path=":language/:catalog/:version/:resource_type/:code" element={<CodeBodyVersionized/>}/>
+                </Route>
+            </Routes>
+
         )
     }
 }

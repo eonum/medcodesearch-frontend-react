@@ -29,3 +29,23 @@
   transform: rotate(180deg);
 }
 
+.whiteBackground {
+  background-color: white;
+}
+
+#color {
+  border-color: #24add3!important;
+}
+.text-start {
+  padding: 10px;
+}
+.breadLink a {
+  color: #337ab7;
+  text-decoration: none;
+  cursor: pointer;
+}
+.breadLink a:hover {
+  color: #23527c;
+  text-decoration: underline;
+}
+

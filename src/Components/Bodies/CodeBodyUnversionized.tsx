@@ -9,13 +9,13 @@ import RouterService from "../../Services/router.service";
 interface Props {
     params: IParamTypes,
     navigation: INavigationHook,
+    selectedDate: string
 }
 
 /**
  * Responsible for the body of the website, for catalogs without versions (i.e. MIGEL, AL, DRUG)
  */
 
-// TODO: add selectedDate as prop from App component and integrate in fetching.
 class CodeBodyUnversionized extends Component<Props, ICode> {
     constructor(props) {
         super(props);
@@ -42,7 +42,8 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     async componentDidUpdate(prevProps, prevState, snapshot) {
             if (prevProps.params.language !== this.props.params.language ||
                 prevProps.params.code !== this.props.params.code ||
-                prevProps.params.catalog !== this.props.params.catalog) {
+                prevProps.params.catalog !== this.props.params.catalog ||
+                prevProps.selectedDate !== this.props.selectedDate) {
                 this.setState(initialCodeState)
                 await this.fetchInformations()
                 await this.fetchSiblings(this.state.attributes["parent"])
@@ -59,7 +60,8 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @returns {Promise<null|any>}
      */
     async fetchHelper(language, resource_type, code, catalog) {
-        let fetchString = [fetchURL, language, resource_type, catalog, code].join("/") + "?show_detail=1"
+        let fetchString = [fetchURL, language, resource_type, catalog, code].join("/") +
+            "?show_detail=1&date=" + this.props.selectedDate;
         return await fetch(fetchString)
             .then((res) => {
                 return res.json()
@@ -108,17 +110,16 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @returns {Promise<void>}
      */
     async fetchSiblings(parent) {
-        if(this.state.attributes.children == null && parent) {
-            await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    for(let i = 0; i < json.children.length; i++) {
-                        if(json.children[i].code !== this.props.params.code) {
-                            this.setState({siblings: [...this.state.siblings, json.children[i]]})
-                        }
+        let fetchString = [fetchURL, parent.url].join("/") + "?show_detail=1&date=" + this.props.selectedDate;
+        await fetch(fetchString)
+            .then((res) => res.json())
+            .then((json) => {
+                for (let i = 0; i < json.children.length; i++) {
+                    if (json.children[i].code !== this.props.params.code) {
+                        this.setState({siblings: [...this.state.siblings, json.children[i]]})
                     }
-                })
-        }
+                }
+            })
     }
 
     /**
@@ -269,7 +270,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
 }
 
 function withProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} params={useParams()} key={"unversionized_body"}/>;
+    return props => <Component {...props} navigation={useNavigate()} key={"unversionized_body"} params={useParams() }/>;
 }
 
 export default withProps(CodeBodyUnversionized);
