@@ -191,7 +191,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         }}
                                     />
                                 </div>
-                            ), this)}
+                            ))}
                         {
                             // Map unversionized buttons, this.state.buttons[1] is the array of unversionized buttons,
                             // i.e. ["MiGeL", "AL", "DRUG"].
