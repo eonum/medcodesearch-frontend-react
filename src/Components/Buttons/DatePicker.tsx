@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import dateFormat from "dateformat";
 
 interface Props {
     isMobile: boolean,
@@ -36,9 +37,10 @@ class DatePicker extends React.Component<Props,IDatePicker>{
      * @param value
      */
     handleChange(date) {
+        let dateString = dateFormat(date, "dd.mm.yyyy")
         this.setState({showCalendar: false})
-        this.setState({currentDate: new Date(date).toLocaleDateString("uk-Uk")})
-        this.props.clickDate(date.toLocaleDateString("uk-Uk"));
+        this.setState({currentDate: dateString})
+        this.props.clickDate(dateString);
     }
 
     /**
