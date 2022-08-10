@@ -3,6 +3,7 @@ import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import DatePicker from "./DatePicker";
 import PopUp from "../PopUp/PopUp";
 import {IUpdateStateByArg} from "../../interfaces";
+import dateFormat from "dateformat";
 
 interface Props {
     selectedCatalog: string
@@ -43,7 +44,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
     handleCatalogClick(catalog) {
         const button = document.getElementById(catalog);
         if(!button.classList.contains("disabled")) {
-            this.props.clickButton(this.props.buttonName, new Date().toLocaleDateString("uk-Uk"))
+            this.props.clickButton(this.props.buttonName,  dateFormat(new Date(), "dd.mm.yyyy"))
         } else {
             this.setState({showPopUp: true})
             this.setState({disabledCatalog: catalog})

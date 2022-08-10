@@ -7,6 +7,7 @@ import RouterService from "../../Services/router.service";
 import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
 import {INavigationHook} from "../../interfaces";
+import dateFormat from "dateformat"
 
 const resourceTypeByBtn = {
     "SwissDRG": 'drgs',
@@ -72,7 +73,7 @@ class Searchbar extends Component<Props,ISearchbar> {
         } else {
             if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
                 || this.props.selectedButton === 'DRUG') {
-                if (this.props.selectedDate !== new Date().toLocaleDateString("uk-Uk")) {
+                if (this.props.selectedDate !==  dateFormat(new Date(), "dd.mm.yyyy")) {
                     date = 'date=' + this.props.selectedDate + '&'
                 }
             }
@@ -117,7 +118,7 @@ class Searchbar extends Component<Props,ISearchbar> {
         this.setState({searchTerm: searchTerm})
         let date = '';
         if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'){
-            if(this.props.selectedDate !== new Date().toLocaleDateString("uk-Uk")){
+            if(this.props.selectedDate !== dateFormat(new Date(), "dd.mm.yyyy")){
                 date = 'date=' + this.props.selectedDate + '&'
             }
         }

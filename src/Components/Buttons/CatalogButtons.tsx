@@ -14,6 +14,7 @@ import {
     IUnversionizedLabels
 } from "../../interfaces";
 import {currentCatalogsByButton, versionizedCatalogs} from "../../Services/catalog-version.service";
+import dateFormat from "dateformat"
 
 interface Props {
     params: IParamTypes,
@@ -63,7 +64,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             currentSwissDRG: this.props.initialVersions['SwissDRG'].at(-1),
             currentCHOP: this.props.initialVersions['CHOP'].at(-1),
             currentTARMED: this.props.initialVersions['TARMED'].at(-1),
-            selectedDate: new Date().toLocaleDateString("uk-Uk"), // this yields DD.MM.YYYY of today
+            selectedDate: dateFormat(new Date(), "dd.mm.yyyy"),
             buttons: this.props.buttons,
         }
         this.updateOnButtonClick = this.updateOnButtonClick.bind(this);
@@ -93,7 +94,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
         }
 
         if (date === ''){
-            date = new Date().toLocaleDateString("uk-Uk")
+            date = dateFormat(new Date(), "dd.mm.yyyy")
         }
         this.props.changeSelectedDate(date);
         this.setState({selectedButton: btn, activeVersion: selectedVersion});

@@ -18,6 +18,8 @@ import {INavigationHook, IParamTypes, IVersions} from "./interfaces";
 import loadingSpinner from "./Components/Spinner/spinner";
 import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
 import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
+import dateFormat from "dateformat";
+
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -54,7 +56,7 @@ class App extends Component<Props, IApp>{
             language: RouterService.getLanguageFromURL(),
             selectedButton: RouterService.getCatalogFromURL(),
             selectedVersion: RouterService.getVersionFromURL(),
-            selectedDate: new Date().toLocaleDateString("uk-Uk"), // this yields DD.MM.YYYY of today
+            selectedDate: dateFormat(new Date(), "dd.mm.yyyy"),
             searchResults: [],
             clickedOnLogo: false,
             reSetPath: false,
