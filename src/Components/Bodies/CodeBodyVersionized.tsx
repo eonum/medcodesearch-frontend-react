@@ -97,8 +97,8 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      */
     lookingForLink(aString, index, attribute) {
         let results = []
-        const REGEX = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
-        let matches = aString.match(REGEX)
+        const codeRegex = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
+        let matches = aString.match(codeRegex)
         if(matches) {
             let firstIndex = aString.indexOf(matches[0])
             for (let i = 0; i < matches.length; i++) {

@@ -105,8 +105,8 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @param btn
      */
     handleVersionClick(version, btn) {
-        const DROPDOWN = document.getElementById(version.replace(/\./g, ''));
-        if(!DROPDOWN.classList.contains('disabled')) {
+        const dropdown = document.getElementById(version.replace(/\./g, ''));
+        if(!dropdown.classList.contains('disabled')) {
             this.props.updateOnButtonClick(version, btn)
         } else {
             this.setState({disabledCatalog: findCatalog(version)})
@@ -121,8 +121,8 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @param catalog
      */
     handleCatalogClick(catalog) {
-        const CAT = document.getElementById(catalog);
-        if(!CAT.classList.contains('disabled')) {
+        const cat = document.getElementById(catalog);
+        if(!cat.classList.contains('disabled')) {
             this.props.updateOnButtonClick('', catalog, false, "")
         } else {
             this.setState({disabledCatalog: catalog})

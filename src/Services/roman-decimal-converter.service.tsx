@@ -14,11 +14,6 @@ const lookup = {
     I: 1
 };
 
-export const MIN_DECIMAL_VALUE = 1;
-export const MAX_DECIMAL_VALUE = 3999;
-export const MIN_ROMAN_VALUE = toRoman(MIN_DECIMAL_VALUE);
-export const MAX_ROMAN_VALUE = toRoman(MAX_DECIMAL_VALUE);
-
 /**
  * Calls the recursion for calculating a roman number into a decimal
  * @param romanNumber
