@@ -164,6 +164,7 @@ class App extends Component<Props, IApp>{
         let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
         let resource_type = RouterService.getResourceTypeFromURL();
         let code = RouterService.getCodeFromURL();
+
         // Check for navigation other than language change.
         let navigationWithoutLanguageChange = false;
         if (prevState.selectedButton !== this.state.selectedButton ||
@@ -190,9 +191,10 @@ class App extends Component<Props, IApp>{
             if (this.isValidVersion(catalog, version, this.state.language)) {
                 this.navigateTo(this.state.language + "/" + catalog + '/' + version + delimiter + resource_type + '/' + code, searchString)
             } else {
+                let latestICD = this.state.initialVersions['ICD'].at(-1);
                 this.changeSelectedButton("ICD")
-                this.changeSelectedVersion("ICD10-GM-2022")
-                this.navigateTo(this.state.language + "/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022", searchString)
+                this.changeSelectedVersion(latestICD)
+                this.navigateTo(this.state.language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD, searchString)
             }
             this.setState({reSetPath: false})
         }
@@ -214,7 +216,6 @@ class App extends Component<Props, IApp>{
     reRenderButton(){
         this.setState({reSetPath: true});
     }
-
 
     /**
      * Returns the labels for the buttons depending on the chosen language.
@@ -315,10 +316,11 @@ class App extends Component<Props, IApp>{
      * Reset everything back to the default but stay in current language.
      */
     reNavigateToHome(){
+        let latestICD = this.state.initialVersions['ICD'].at(-1);
         this.setState({clickedOnLogo: true});
         this.props.navigation({search: ''});
         this.changeSelectedButton('ICD')
-        this.changeSelectedVersion('ICD10-GM-2022')
+        this.changeSelectedVersion(latestICD)
     }
 
     /**
@@ -408,10 +410,11 @@ class App extends Component<Props, IApp>{
      * @returns {JSX.Element}
      */
     render() {
+        let latestICD = this.state.initialVersions['ICD'].at(-1);
         return (
             <Routes>
                 <Route path="/" element={this.renderContent()}>
-                    <Route path="/" element={<Navigate to="de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022"/>}/>
+                    <Route path="/" element={<Navigate to={"de/ICD/" + latestICD + "/icd_chapters/" + latestICD}/>}/>
                     <Route path=":language/:catalog/:resource_type/:code" element={<CodeBodyUnversionized selectedDate={this.state.selectedDate} />}/>
                     <Route path=":language/:catalog/:version/:resource_type/:code" element={<CodeBodyVersionized/>}/>
                 </Route>

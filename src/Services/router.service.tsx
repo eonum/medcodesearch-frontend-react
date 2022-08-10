@@ -45,9 +45,10 @@ class RouterService extends Component {
     }
 
     /**
-     * get the version defined in the url and if it isn't defined set it to 'ICD10-GM-2022'
+     * get the version defined in the url and if it isn't defined set it to latest icd version.
      * @returns {string|*}
      */
+    // TODO: Get latest ICD version code dynamically since this will not work when catalog is newer than 2022.
     static getVersionFromURL() {
         if(window.location.pathname !== '/') {
             let arr = window.location.pathname.split("/")
@@ -74,6 +75,7 @@ class RouterService extends Component {
         return 'icd_chapters'
     }
 
+    // TODO: Get latest ICD base code dynamically since this will not work when catalog is newer than 2022.
     static getCodeFromURL() {
         if(window.location.pathname !== '/') {
             let arr = window.location.pathname.split("/")
@@ -86,7 +88,6 @@ class RouterService extends Component {
             }
         }
         // Base code for ICD, which is the catalog for root url, i.e. when visiting medcodesearch.ch.
-        // TODO: Get newest ICD base code dynamically since this will not work when catalog is newer than 2022.
         return 'ICD10-GM-2022'
     }
 
