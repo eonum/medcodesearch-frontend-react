@@ -333,7 +333,7 @@ class App extends Component<Props, IApp>{
     renderAfterFetch() {
         let searchResults = this.searchResults();
         return(
-            <div>
+            <div key={"app_container_1"} className="container">
                 <div key={"app_searchbar"} className="row" onClick={this.showSearchResults}>
                     <Searchbar
                         language={this.state.language}
@@ -362,16 +362,18 @@ class App extends Component<Props, IApp>{
                     />
                 </div>
                 <div key={"app_body"} className="row">
-                    <div key={"body"} className="Wrapper">
-                        <div key={"body_0"} className="row">
-                            <div key={"body_0_0"} className="col">
-                                <div key={"body_0_0_0"} id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
-                                    <div key={"body_0_0_0_0"} className="text-start ms-3">
-                                        {this.state.searchResults.length > 0 &&
-                                            <div key={"app_searchresults"} className="col-12 col-lg">
-                                                {searchResults}
-                                            </div>}
-                                        <Outlet/>
+                    <div key={"app_body_0"} className="Wrapper">
+                        <div key={"app_body_0_0"} className="row">
+                            {this.state.searchResults.length > 0 &&
+                                <div key={"search_results_body"} className="col-12 col-lg">
+                                    {searchResults}
+                                </div>}
+                            <div key={"code_body"} className="col">
+                                <div key={"code_body_0"} id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
+                                    <div key={"code_body_0_0"} className="col" id="codeBody">
+                                        <div key={"code_body_0_0_0"} className="text-start ms-3">
+                                            <Outlet />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -389,15 +391,17 @@ class App extends Component<Props, IApp>{
 
     renderContent() {
         return (
-            <div key={"app_container_0"} className="container">
-                <div key={"app_header"} className="row">
-                    <div key={"app_header_0"} className="col-sm-12">
-                        <Header changeLanguage={this.changeLanguage} activeLanguage={this.state.language}/>
+            <div key={"app div 0"}>
+                <div key={"app_container_0"} className="container">
+                    <div key={"app_header"} className="row">
+                        <div key={"app_header_0"} className="col-sm-12">
+                            <Header changeLanguage={this.changeLanguage} activeLanguage={this.state.language}/>
+                        </div>
                     </div>
-                </div>
-                <div key={"app_img"} className="row">
-                    <div key={"app_img_0"} className="col-sm-12">
-                        <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
+                    <div key={"app_img"} className="row">
+                        <div key={"app_img_0"} className="col-sm-12">
+                            <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
+                        </div>
                     </div>
                 </div>
                 {this.state.isFetching ? loadingSpinner() : this.renderAfterFetch()}
