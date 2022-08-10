@@ -173,7 +173,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                     <ButtonVersionized
                                         key={btn}
                                         index={index}
-                                        clickButton={(button) => {
+                                        clickCatalogButton={(button) => {
                                             this.updateOnButtonClick('', button, false, '');
                                             this.reRender(button)
                                         }}

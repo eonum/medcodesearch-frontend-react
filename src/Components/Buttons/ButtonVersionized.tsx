@@ -7,7 +7,7 @@ import {IUpdateButton, IUpdateStateByArg} from "../../interfaces";
 interface Props {
     key: string,
     index: number,
-    clickButton: {(button: string): void},
+    clickCatalogButton: {(button: string): void},
     button: string
     initialVersions: string[],
     currentVersions:  string[],
@@ -91,7 +91,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
     handleCatalogButtonClick(catalog) {
         const dropDown = document.getElementById(catalog);
         if(!dropDown.classList.contains('disabled')) {
-            this.props.clickButton(catalog);
+            this.props.clickCatalogButton(catalog);
         } else {
             this.setState({showPopUp: true})
             this.setState({disabledCatalog: catalog})
