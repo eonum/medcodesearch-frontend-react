@@ -7,17 +7,14 @@ find the catalog number easier and to look up the different versions or expiry d
 Frontend from the website: [medcodesearch.ch](http://medcodesearch.ch) \
 Backend which is used is: [search.eonum.ch](https://search.eonum.ch/documentation) 
 
-### Installation instructions
-
-For the local installation go into the folder `medcodesearch-frontend-react` and run `npm install`. To start the local app run `npm start`. 
-It will open at [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Issues
-
-There is one screen size in which the buttons don't line up perfectly, but we couldn't figure out which exactly.
+### Setup
+#### Development
+For the local installation go into the folder `medcodesearch-frontend-react` and run `npm install`. 
+To start the local app run `npm start`. It will open at [http://localhost:3000](http://localhost:3000) in your browser.
+#### Production
+Run deploy script `deploy.sh`.
 
 ### Coding conventions
-
 Each class is defined in *its own file*. \
 Everything has been written in English (Comments included). \
 The first letter of a classname is in uppercase, the reminder is lowercase. \
