@@ -77,7 +77,7 @@ class Searchbar extends Component<Props,ISearchbar> {
                     date = 'date=' + this.props.selectedDate + '&'
                 }
             }
-            navigate({search: date + createSearchParams({query: e.target.value}).toString()});
+            navigate({search: date + createSearchParams({query: e.target.value.replace(/\+/g, ' ')}).toString()});
         }
     }
 
@@ -161,7 +161,7 @@ class Searchbar extends Component<Props,ISearchbar> {
                         onChange={this.updateSearch}
                         type="search"
                         placeholder={translateJson["LBL_SEARCH_PLACEHOLDER"]}
-                        value={this.state.searchTerm === "" ? "" : this.state.searchTerm.replace(/\+/g, ' ')}
+                        defaultValue={this.state.searchTerm}
                         className="me-2"
                         aria-label="Search"
                     /><Button id="btn-go">
