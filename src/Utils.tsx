@@ -29,7 +29,8 @@ export const skippableAttributes = [
     "auth_holder_nr",
     "prefix",
     "predecessors",
-    "successors"
+    "successors",
+    "created_at"
 ]
 
 export const fetchURL = 'https://search.eonum.ch'
