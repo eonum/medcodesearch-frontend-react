@@ -70,6 +70,7 @@
   "LBL_PHARMA_FORM": "Pharmazeutische Form",
   "LBL_EXCIPIENTS": "Hilfsstoffe",
   "LBL_AUTH_NUMBER": "Autorisierungsnummer",
-  "LBL_PACKAGE_CODE": "Paketcode"
+  "LBL_PACKAGE_CODE": "Paketcode",
+  "LBL_UPDATED_AT": "Zuletzt geändert"
 }
 

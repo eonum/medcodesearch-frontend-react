@@ -43,5 +43,6 @@
   "LBL_UNIT": "Unit",
   "LBL_COMMENT": "Comment",
   "LBL_GROUPS": "TARMED groups",
-  "LBL_BLOCKS": "TARMED blocks"
+  "LBL_BLOCKS": "TARMED blocks",
+  "LBL_UPDATED_AT": "Last modified"
 }

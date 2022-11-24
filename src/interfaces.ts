@@ -50,7 +50,8 @@ interface IAttributes {
     active_substances?: string[],
     terminal?: boolean,
     auth_number?: string,
-    package_code?: string
+    package_code?: string,
+    updated_at?: string
 }
 
 export interface ICode {

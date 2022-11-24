@@ -66,5 +66,6 @@
   "LBL_MIGEL": "EMAp",
   "LBL_AL": "Insieme elenco delle analisi",
   "LBL_TP_ASSI": "Punti tariffali dell'assistenza",
-  "LBL_SWISSMEDIC_NR": "Swissmedic-Code"
+  "LBL_SWISSMEDIC_NR": "Swissmedic-Code",
+  "LBL_UPDATED_AT": "Ultima modifica"
 }

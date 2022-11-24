@@ -66,5 +66,6 @@
   "LBL_MIGEL": "LiMA",
   "LBL_AL": "Liste des analyses",
   "LBL_TP_ASSI": "Points tarifaires de l'assistance",
-  "LBL_SWISSMEDIC_NR": "Code Swissmédic"
+  "LBL_SWISSMEDIC_NR": "Code Swissmédic",
+  "LBL_UPDATED_AT": "Dernière modification"
 }

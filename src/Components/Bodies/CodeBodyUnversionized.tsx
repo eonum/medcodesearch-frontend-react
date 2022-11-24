@@ -5,6 +5,7 @@ import getTranslationHash from "../../Services/translation.service";
 import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
 import {fetchURL, initialCodeState, skippableAttributes} from "../../Utils";
 import RouterService from "../../Services/router.service";
+import dateFormat from "dateformat";
 
 interface Props {
     params: IParamTypes,
@@ -213,7 +214,6 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                     [key]: this.state.attributes[key]
                 });
             }, {});
-
         let attributesHtml = Object.keys(codeAttributes).map((attribute) => {
             let attributeValue = codeAttributes[attribute];
             if (typeof attributeValue === 'object') {
@@ -228,7 +228,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
             } else {
                 return <div key={attribute}>
                     <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                    <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
+                    <p dangerouslySetInnerHTML={{__html: attribute === 'updated_at' ? dateFormat(new Date(this.state.attributes[attribute]), "dd.mm.yyyy") : this.state.attributes[attribute]}}/>
                 </div>
             }
         })
