@@ -71,6 +71,7 @@
   "LBL_EXCIPIENTS": "Hilfsstoffe",
   "LBL_AUTH_NUMBER": "Autorisierungsnummer",
   "LBL_PACKAGE_CODE": "Paketcode",
-  "LBL_UPDATED_AT": "Zuletzt geändert"
+  "LBL_UPDATED_AT": "Zuletzt geändert",
+  "LBL_VALID_FROM": "Gültig ab"
 }
 

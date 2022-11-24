@@ -18,7 +18,6 @@ export const skippableAttributes = [
     "terminal",
     "active",
     "version",
-    "valid_from",
     "valid_to",
     "children",
     "is_limited",
@@ -33,4 +32,4 @@ export const skippableAttributes = [
     "created_at"
 ]
 
-export const fetchURL = 'https://search.eonum.ch'
+export const fetchURL = 'http://localhost:4000'
