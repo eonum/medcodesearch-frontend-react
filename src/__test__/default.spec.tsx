@@ -257,4 +257,15 @@ describe('Default test suite, testing general navigation via clicks', function (
         await expect(page).toMatch("Cholera due to Vibrio cholerae 01, biovar eltor")
         await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icds/A00.1')
     })
+
+    it ('available and enabled attributes are displayed', async function() {
+        await page.goto(baseUrl + "/de/MIGEL/migels/10.01.01.00.1", {waitUntil: 'networkidle0'})
+        await expect(page).toMatch("Krücken für Erwachsene, ergonomischer Griff, Kauf")
+        await expect(page).toMatch("Limitation")
+        await expect(page).toMatch("HVB Pflege: Vergütung nur bei Anwendung durch Pflegefachfrauen und Pflegefachmänner die den Beruf selbständig und auf eigene Rechnung ausüben")
+        await expect(page).toMatch("Einheit")
+        await expect(page).toMatch("1 Paar")
+        await expect(page).toMatch("Zuletzt geändert")
+        await expect(page).toMatch("Ähnliche Codes")
+    })
 })
