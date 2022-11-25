@@ -1,12 +1,11 @@
 import {useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb} from "react-bootstrap";
-import getTranslationHash from "../../Services/translation.service";
-import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
-import {fetchURL, initialCodeState, skippableAttributes} from "../../Utils";
+import {ICode, INavigationHook, IParamTypes, IShortEntry} from "../../interfaces";
+import {fetchURL, getPathnameAndSearch, initialCodeState, skippableAttributes} from "../../Utils";
 import IcdSortService from "../../Services/icd-sort.service";
 import CodeSortService from "../../Services/code-sort.service";
-import RouterService from "../../Services/router.service";
+import CodeAttributesVersionized from "../CodeAttributes/CodeAttributesVersionized";
 
 interface Props {
     params: IParamTypes,
@@ -90,78 +89,10 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 
     /**
-     * Looks if the given string has a pattern which indicates a link
-     * @param aString
-     * @param index
-     * @returns {JSX.Element}
-     */
-    lookingForLink(aString, index, attribute) {
-        let results = []
-        const codeRegex = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
-        let matches = aString.match(codeRegex)
-        if(matches) {
-            let firstIndex = aString.indexOf(matches[0])
-            for (let i = 0; i < matches.length; i++) {
-                matches[i] = matches[i].substring(1, matches[i].length - 1);
-                let arr = matches[i].split("-")
-                if(arr.length > 1 && arr[1] !== "") {
-                    results.push(<span key={attribute + "_" + index}>(<a onClick={() => {
-                        this.searchExclusion(arr[0].replace(/\.$/, ''))
-                    }} className="link">{arr[0].replace(/\.$/, '')}</a>-<a onClick={() => {
-                        this.searchExclusion(arr[1].replace(/\.$/, ''))
-                    }} className="link">{arr[1].replace(/\.$/, '')}</a>) </span>)
-                } else {
-                    results.push(<span key={attribute + "_" + index}>(<a onClick={() => {
-                        this.searchExclusion(arr[0].replace(/\.$/, ''))
-                    }} className="link">{arr[0].replace(/\.$/, '')}</a>) </span>)
-                }
-            }
-            return <li key={`${attribute}_link_${index}`}>{aString.substring(0, firstIndex)} {results}</li>
-        } else {
-            return <li key={`${attribute}_link_${index}`}>{aString}</li>
-        }
-    }
-
-    /**
-     * Navigates to the specified code.
-     * @param code
-     */
-    goToCode(code) {
-        let {language, catalog} = this.props.params;
-        // Transform backend of code to frontend url for navigation
-        // TODO: This split and assignment feels kinda error prone or unstylish but saves a ton of distinctions that
-        //  where made via regexes. Any style suggestions?
-        let backendUrlComponents = code.url.split("/").filter(e => e);
-        let backendCode = backendUrlComponents[3];
-        let backendResourceType = backendUrlComponents[1];
-        let backendVersion = backendUrlComponents[2];
-        // Convert base code 'ALL' from SwissDrg to version.
-        let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
-        let navigate = this.props.navigation
-        let queryString = "?query=" + RouterService.getQueryVariable('query');
-        let pathname = [language, catalog, backendVersion, backendResourceType, codeToNavigate].join("/")
-        navigate({
-            pathname: "/" + pathname,
-            search: RouterService.getQueryVariable('query') === "" ? "" : queryString
-        })
-    }
-
-    /**
-     * looks in the given code for exclusions
-     * @param code
-     */
-    searchExclusion(code) {
-        let navigate = this.props.navigation
-        navigate({search: "?query=" + code})
-    }
-
-    /**
      * fetch the sibling of the component
      * @param parent
      * @returns {Promise<void>}
      */
-    // TODO: Does it make sense to refactor grandparents and siblings fetching into utils to share between un- and
-    //  versionized bodies (maybe not since we're setting state)?
     async fetchSiblings(parent) {
         if(this.state.attributes.children === null && this.props.params.resource_type !== "partitions") {
             await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
@@ -199,133 +130,36 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     }
 
     /**
-     * Returns a unordered list of clickable codes (used for subordinate or similar codes).
-     */
-    clickableCodesArray(translateJson, attribute, attributeValue) {
-        return <div key={attribute}>
-            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-            <ul>
-                {attributeValue.map((val, j) => (
-                    <li key={j}><a key={attribute + "_" + j} className="link" onClick={() => {
-                        this.goToCode(val)
-                    }}>{val.code}: </a>
-                        <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
-                ))}
-            </ul>
-        </div>
-    }
-
-    /**
-     * Returns a html list element.
-     */
-    htmlListItem(attribute, val, j) {
-        if (["exclusions", "supplement_codes"].includes(attribute)) {
-            return this.lookingForLink(val, j, attribute)
-        }
-        else {
-            return <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
-        }
-    }
-
-    /**
      * Render the body component
      * @returns {JSX.Element}
      */
     render() {
-        // Generate BreadCrumbs.
-        let parentBreadCrumbs = this.state.parents.reverse().map((currElement, i) => {
-            return(
-                <Breadcrumb.Item key={i} onClick={() => this.goToCode(currElement)} className="breadLink">
-                    {currElement.code}
-                </Breadcrumb.Item>);
-        })
-
-        let translateJson = getTranslationHash(this.props.params.language);
-
-        // Use filter to only select attributes we want to display (not in skippable attributes and value not null,
-        // undefined or empty.
-        let codeAttributes = Object.keys(this.state.attributes)
-            .filter((key) => !skippableAttributes.includes(key))
-            .filter((key) => !["", null, undefined].includes(this.state.attributes[key]))
-            .filter((key) => this.state.attributes[key].length)
-            .reduce((obj, key) => {
-                return Object.assign(obj, {
-                    [key]: this.state.attributes[key]
-                });
-            }, {});
-
-        let attributesHtml = Object.keys(codeAttributes).map((attribute) => {
-            let attributeValue = codeAttributes[attribute];
-            if (typeof attributeValue === 'object') {
-                return <div key={attribute}>
-                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                    <ul>
-                        {attributeValue.map((val, j) => (
-                            this.htmlListItem(attribute, val, j)
-                        ))}
-                    </ul>
-                </div>
-            } else {
-                return <div key={attribute}>
-                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                    <p dangerouslySetInnerHTML={{__html: this.state.attributes[attribute]}}/>
-                </div>
-            }
-        })
-
-        // Define div for predecessor code info
-        let mappingFields = ['predecessors', 'successors'];
-        for(var j = 0; j < mappingFields.length; j++) {
-            var field = mappingFields[j];
-            if (this.state.attributes[field] != null) {
-                // is this a non-trivial mapping?
-                if(this.state.attributes[field].length > 1 ||
-                    this.state.attributes[field].length == 1 && (
-                    (this.state.attributes[field][0]['code'] != this.state.attributes['code'] ||
-                        this.state.attributes[field][0]['text'] != this.state.attributes['text']))) {
-                    attributesHtml.push(
-                        <div key={"mapping_pre_succ" + j}>
-                            <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
-                            <ul>
-                                {this.state.attributes[field].map((child,i) => (
-                                    <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
-                                ))}
-                            </ul>
-                        </div>)
-                }
-                // Add New Code information.
-                if (field === 'predecessors' && this.state.attributes[field].length === 0 && this.state.attributes.children === null) {
-                    attributesHtml.push(
-                        <div key={"new_code"}>
-                            <h5>{translateJson["LBL_NEW_CODE"]}</h5>
-                        </div>
-                    )
-                }
-            }
-        }
-
-        // Add children (subordinate codes).
-        let children = this.state.attributes.children;
-        if (children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, 'children', children))
-        }
-
-        // Add siblings (similar codes).
+        let {language, catalog} = this.props.params
         let siblings = this.state.siblings;
-        if(siblings.length && !children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, "siblings", siblings))
-        }
-
+        let navigate = this.props.navigation;
         let title = this.state.attributes.code.replace("_", " ");
         return (
             <div>
                 <Breadcrumb>
-                    {parentBreadCrumbs}
+                    {this.state.parents.reverse().map((currElement, i) => {
+                        return(
+                            <Breadcrumb.Item key={i} onClick={() => {
+                                let {pathname, searchString} = getPathnameAndSearch(currElement, language, catalog)
+                                navigate({pathname: pathname, search: searchString})
+                            }} className="breadLink">
+                                {currElement.code}
+                            </Breadcrumb.Item>);
+                    })}
                     <Breadcrumb.Item active>{title}</Breadcrumb.Item>
                 </Breadcrumb>
                 <h3>{title}</h3>
                 <p>{this.state.attributes.text}</p>
-                {attributesHtml}
+                <CodeAttributesVersionized
+                    attributes={this.state.attributes}
+                    catalog={catalog}
+                    siblings={siblings}
+                    language={language}
+                />
             </div>
         )
     }

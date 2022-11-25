@@ -214,7 +214,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                     [key]: this.state.attributes[key]
                 });
             }, {});
-
+        console.log(this.state.attributes)
         let terminal = this.state.attributes.terminal;
 
         // TODO: only display valid_from for terminal codes

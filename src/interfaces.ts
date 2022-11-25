@@ -5,7 +5,7 @@ export interface IShortEntry {
     terminal?: boolean
 }
 
-interface IAttributes {
+export interface IAttributes {
     code: string,
     text: string,
     parent: IShortEntry,
