@@ -3,8 +3,6 @@ import React, {Component} from "react";
 import {Breadcrumb} from "react-bootstrap";
 import {ICode, INavigationHook, IParamTypes, IShortEntry} from "../../interfaces";
 import {fetchURL, getPathnameAndSearch, initialCodeState, skippableAttributes} from "../../Utils";
-import IcdSortService from "../../Services/icd-sort.service";
-import CodeSortService from "../../Services/code-sort.service";
 import CodeAttributesVersionized from "../CodeAttributes/CodeAttributesVersionized";
 
 interface Props {
@@ -73,16 +71,12 @@ class CodeBodyVersionized extends Component<Props, ICode> {
     async fetchInformations() {
         let detailedCode;
         let {language, catalog, resource_type, code, version} = this.props.params;
-        let sortService = catalog === 'ICD' ? IcdSortService : CodeSortService;
         let codeForFetch = code;
         // Set base code for mdcs, since this is not equal to version but equal to 'ALL'.
         if (resource_type === 'mdcs' && code === version) {
             codeForFetch = 'ALL'
         }
         detailedCode = await this.fetchHelper(language, resource_type, codeForFetch, catalog, version)
-        if (version === code) {
-            detailedCode["children"] = sortService(detailedCode["children"])
-        }
         if (detailedCode !== null) {
             this.setState({attributes: detailedCode})
         }
