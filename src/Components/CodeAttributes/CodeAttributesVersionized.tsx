@@ -89,15 +89,26 @@ class CodeAttributesVersionized extends Component<Props, ICodeAttributesUnversio
         </div>
     }
 
-    /**
-     * Returns a html list element.
-     */
-    htmlListItem(attribute, val, j) {
-        if (["exclusions", "supplement_codes"].includes(attribute)) {
-            return this.lookingForLink(val, j, attribute)
-        }
-        else {
-            return <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
+    renderCodeMapping(mappingFields, attributes, translateJson) {
+        for(var j = 0; j < mappingFields.length; j++) {
+            var field = mappingFields[j];
+            if (attributes[field] != null) {
+                // is this a non-trivial mapping?
+                if(attributes[field].length > 1 ||
+                    attributes[field].length == 1 && (
+                        (attributes[field][0]['code'] != attributes['code'] ||
+                            attributes[field][0]['text'] != attributes['text']))) {
+                    return
+                        <div key={"mapping_pre_succ" + j}>
+                            <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
+                            <ul>
+                                {attributes[field].map((child,i) => (
+                                    <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
+                                ))}
+                            </ul>
+                        </div>
+                }
+            }
         }
     }
 
@@ -107,10 +118,15 @@ class CodeAttributesVersionized extends Component<Props, ICodeAttributesUnversio
      */
     render() {
         let translateJson = getTranslationHash(this.props.language);
-        let attributes = this.props.attributes
+        let attributes = this.props.attributes;
+        let children = attributes.children;
+        let siblings = this.props.siblings;
+        // Define mapping fields for predecessor & new code code info.
+        let mappingFields = ['predecessors', 'successors'];
+
         // Use filter to select attributes we want to display, i.e not in skippable attributes and value not null,
         // undefined or empty.
-        let codeAttributes = Object.keys(attributes)
+        let enabledAttributes = Object.keys(attributes)
             .filter((key) => !skippableAttributes.includes(key))
             .filter((key) => !["", null, undefined].includes(attributes[key]))
             .filter((key) => attributes[key].length)
@@ -119,69 +135,51 @@ class CodeAttributesVersionized extends Component<Props, ICodeAttributesUnversio
                     [key]: attributes[key]
                 });
             }, {});
-        let attributesHtml = Object.keys(codeAttributes).map((attribute) => {
-            let attributeValue = codeAttributes[attribute];
-            if (typeof attributeValue === 'object') {
-                return <div key={attribute}>
-                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                    <ul>
-                        {attributeValue.map((val, j) => (
-                            this.htmlListItem(attribute, val, j)
-                        ))}
-                    </ul>
-                </div>
-            } else {
-                return <div key={attribute}>
-                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                    <p dangerouslySetInnerHTML={{__html: attributes[attribute]}}/>
-                </div>
-            }
-        })
-        // Define div for predecessor code info
-        let mappingFields = ['predecessors', 'successors'];
-        for(var j = 0; j < mappingFields.length; j++) {
-            var field = mappingFields[j];
-            if (attributes[field] != null) {
-                // is this a non-trivial mapping?
-                if(attributes[field].length > 1 ||
-                    attributes[field].length == 1 && (
-                        (attributes[field][0]['code'] != attributes['code'] ||
-                            attributes[field][0]['text'] != attributes['text']))) {
-                    attributesHtml.push(
-                        <div key={"mapping_pre_succ" + j}>
-                            <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
-                            <ul>
-                                {attributes[field].map((child,i) => (
-                                    <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
-                                ))}
-                            </ul>
-                        </div>)
-                }
-                // Add New Code information.
-                if (field === 'predecessors' && attributes[field].length === 0 && attributes.children === null) {
-                    attributesHtml.push(
-                        <div key={"new_code"}>
-                            <h5>{translateJson["LBL_NEW_CODE"]}</h5>
-                        </div>
-                    )
-                }
-            }
-        }
 
-        // Add children (subordinate codes).
-        let children = attributes.children;
-        if (children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, 'children', children))
-        }
 
-        // Add siblings (similar codes).
-        let siblings = this.props.siblings;
-        if(siblings.length && !children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, "siblings", siblings))
-        }
         return (
             <>
-                {attributesHtml}
+                {Object.keys(enabledAttributes).map(attribute => (
+                        <div key={attribute}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                            {typeof enabledAttributes[attribute] === 'object' ?
+                                <>
+                                    <ul>
+                                        {enabledAttributes[attribute].map((val, j) => (
+                                            ["exclusions", "supplement_codes"].includes(attribute) ?
+                                                this.lookingForLink(val, j, attribute) :
+                                                <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
+                                        ))}
+                                    </ul>
+                                </> :
+                                <>
+                                    <div key={attribute}>
+                                        <p dangerouslySetInnerHTML={{__html: attributes[attribute]}}/>
+                                    </div>
+                                </>}
+                        </div>))}
+                {mappingFields.map((field, j) => (
+                    attributes[field] != null &&
+                    (attributes[field].length > 1 ||
+                    attributes[field].length == 1 && (
+                        (attributes[field][0]['code'] != attributes['code'] ||
+                            attributes[field][0]['text'] != attributes['text']))) &&
+                    <div key={"mapping_pre_succ" + j}>
+                        <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
+                        <ul>
+                            {attributes[field].map((child,i) => (
+                                <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+                {attributes.predecessors && attributes.predecessors.length == 0 && !attributes['children'] &&
+                    <div className="vertical-spacer alert alert-warning">
+                        <h5>{translateJson["LBL_NEW_CODE"]}</h5>
+                    </div>
+                }
+                {children && this.clickableCodesArray(translateJson, 'children', children)}
+                {siblings.length > 0 && !children && this.clickableCodesArray(translateJson, "siblings", siblings)}
             </>
         );
     }
