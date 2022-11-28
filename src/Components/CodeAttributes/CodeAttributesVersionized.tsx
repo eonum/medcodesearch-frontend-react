@@ -3,6 +3,7 @@ import {IAttributes, INavigationHook, IShortEntry} from "../../interfaces";
 import getTranslationHash from "../../Services/translation.service";
 import {collectEnabledAttributes, getNavParams} from "../../Utils";
 import {useNavigate} from "react-router-dom";
+import ClickableCodesArray from "./ClickableCodesArray";
 
 interface Props {
     attributes: IAttributes,
@@ -60,33 +61,6 @@ class CodeAttributesVersionized extends Component<Props>{
     searchExclusion(code) {
         let navigate = this.props.navigation
         navigate({search: "?query=" + code})
-    }
-
-    /**
-     * Returns a unordered list of clickable codes (used for subordinate or similar codes).
-     */
-    clickableCodesArray(translateJson, attribute, attributeValue) {
-        let navigate = this.props.navigation;
-        let language = this.props.language;
-        let catalog = this.props.catalog;
-        return <div key={attribute}>
-            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-            <ul>
-                {attributeValue.map((val, j) => (
-                    <li key={j}>
-                        <a key={attribute + "_" + j} className="link" onClick={() => {
-                            let {pathname, searchString} = getNavParams(val, language, catalog)
-                            navigate({
-                                pathname: pathname,
-                                search: searchString
-                            })
-                        }}>
-                            {val.code + ": "}
-                        </a>
-                        <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
-                ))}
-            </ul>
-        </div>
     }
 
     renderCodeMapping(mappingFields, attributes, translateJson) {
@@ -166,8 +140,20 @@ class CodeAttributesVersionized extends Component<Props>{
                         <h5>{translateJson["LBL_NEW_CODE"]}</h5>
                     </div>
                 }
-                {children && this.clickableCodesArray(translateJson, 'children', children)}
-                {siblings.length > 0 && !children && this.clickableCodesArray(translateJson, "siblings", siblings)}
+                {children &&
+                    <ClickableCodesArray
+                        codesArray={children}
+                        codesType={'children'}
+                        language={this.props.language}
+                        catalog={this.props.catalog}
+                    />}
+                {siblings.length > 0 && !children &&
+                    <ClickableCodesArray
+                        codesArray={siblings}
+                        codesType={'siblings'}
+                        language={this.props.language}
+                        catalog={this.props.catalog}
+                    />}
             </>
         );
     }

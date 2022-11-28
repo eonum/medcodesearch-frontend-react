@@ -5,6 +5,8 @@ import {collectEnabledAttributes, getNavParams} from "../../Utils";
 import {useNavigate} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 import dateFormat from "dateformat";
+import ClickableCodesArray from "./ClickableCodesArray";
+import {languages} from "../../Services/catalog-version.service";
 
 interface Props {
     attributes: IAttributes,
@@ -22,34 +24,6 @@ interface Props {
 class CodeAttributesUnversionized extends Component<Props>{
     constructor(props) {
         super(props);
-    }
-
-    /**
-     * Returns a unordered list of clickable codes (used for subordinate or similar codes).
-     */
-    clickableCodesArray(translateJson, attribute, attributeValue) {
-        let {navigation, language, catalog, resource_type} = this.props;
-        return (
-            <div key={attribute}>
-                <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                <ul>
-                    {attributeValue.map((val, j) => (
-                        <li key={j}>
-                            <a key={attribute + "_" + j} className="link" onClick={() => {
-                                let pathname = "/" + [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : resource_type, val.code].join("/")
-                                let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
-                                if (["MIGEL", "AL"].includes(catalog)) {
-                                    navigation({pathname: pathname, search: searchString})
-                                }
-                            }}>
-                                {val.code + ": "}
-                            </a>
-                            <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        )
     }
 
     /**
@@ -94,8 +68,22 @@ class CodeAttributesUnversionized extends Component<Props>{
                         <p> {attributes.auth_number + attributes.package_code} </p>
                     </div>
                 }
-                {children && this.clickableCodesArray(translateJson, 'children', children)}
-                {siblings.length > 0 && !children && this.clickableCodesArray(translateJson, "siblings", siblings)}
+                {children &&
+                    <ClickableCodesArray
+                        codesArray={children}
+                        codesType={'children'}
+                        language={this.props.language}
+                        catalog={this.props.catalog}
+                        resource_type={this.props.resource_type}
+                    />}
+                {siblings.length > 0 && !children &&
+                    <ClickableCodesArray
+                        codesArray={siblings}
+                        codesType={'siblings'}
+                        language={this.props.language}
+                        catalog={this.props.catalog}
+                        resource_type={this.props.resource_type}
+                    />}
             </>
         );
     }

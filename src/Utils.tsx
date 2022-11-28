@@ -37,15 +37,22 @@ const skippableAttributes = [
 export const fetchURL = 'https://search.eonum.ch'
 
 // Get frontend url for navigation from backend code url.
-export function getNavParams(code, language, catalog) {
+export function getNavParams(code, language, catalog, resource_type?) {
     let backendUrlComponents = code.url.split("/").filter(e => e);
     let backendResourceType = backendUrlComponents[1];
     let backendVersion = backendUrlComponents[2];
     let backendCode = backendUrlComponents[3];
     // Convert base code 'ALL' from SwissDrg to version.
     let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
-    let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
-    let pathname = "/" + [language, catalog, backendVersion, backendResourceType, codeToNavigate].join("/")
+    let pathname;
+    let searchString;
+    if (['MIGEL', 'AL'].includes(catalog)) {
+        pathname = "/" + [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : resource_type, code.code].join("/")
+        searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+    } else {
+        searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+        pathname = "/" + [language, catalog, backendVersion, backendResourceType, codeToNavigate].join("/")
+    }
     return {pathname, searchString}
 }
 

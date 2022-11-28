@@ -2,8 +2,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
-import {fetchURL, initialCodeState} from "../../Utils";
-import RouterService from "../../Services/router.service";
+import {fetchURL, getNavParams, initialCodeState} from "../../Utils";
 import CodeAttributesUnversionized from "../CodeAttributes/CodeAttributesUnversionized";
 
 interface Props {
@@ -169,8 +168,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                     {this.state.parents.reverse().map((currElement, i) => {
                         return (
                             <Breadcrumb.Item key={i} onClick={() => {
-                                let pathname = "/" + [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : resource_type , currElement.code].join("/")
-                                let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+                                let {pathname, searchString} = getNavParams(currElement, language, catalog, resource_type)
                                 if (["MIGEL", "AL"].includes(catalog)) {
                                     navigate({pathname: pathname, search: searchString})
                                 }
