@@ -66,20 +66,23 @@ class CodeAttributesVersionized extends Component<Props>{
      * Returns a unordered list of clickable codes (used for subordinate or similar codes).
      */
     clickableCodesArray(translateJson, attribute, attributeValue) {
+        let navigate = this.props.navigation;
+        let language = this.props.language;
+        let catalog = this.props.catalog;
         return <div key={attribute}>
             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
             <ul>
                 {attributeValue.map((val, j) => (
-                    <li key={j}><a key={attribute + "_" + j} className="link" onClick={() => {
-                        let navigate = this.props.navigation;
-                        let language = this.props.language;
-                        let catalog = this.props.catalog;
-                        let {pathname, searchString} = getNavParams(val, language, catalog)
-                        navigate({
-                            pathname: pathname,
-                            search: searchString
-                        })
-                    }}>{val.code}: </a>
+                    <li key={j}>
+                        <a key={attribute + "_" + j} className="link" onClick={() => {
+                            let {pathname, searchString} = getNavParams(val, language, catalog)
+                            navigate({
+                                pathname: pathname,
+                                search: searchString
+                            })
+                        }}>
+                            {val.code + ": "}
+                        </a>
                         <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
                 ))}
             </ul>

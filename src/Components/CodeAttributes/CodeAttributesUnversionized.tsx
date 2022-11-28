@@ -42,7 +42,7 @@ class CodeAttributesUnversionized extends Component<Props>{
                                     navigation({pathname: pathname, search: searchString})
                                 }
                             }}>
-                                {val.code}:
+                                {val.code + ": "}
                             </a>
                             <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/>
                         </li>
