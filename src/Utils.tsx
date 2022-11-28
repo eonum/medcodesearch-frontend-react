@@ -11,7 +11,7 @@ export const initialCodeState = {
     siblings: [],
 }
 
-export const skippableAttributes = [
+const skippableAttributes = [
     "code",
     "text",
     "parent",
@@ -35,3 +35,30 @@ export const skippableAttributes = [
 ]
 
 export const fetchURL = 'https://search.eonum.ch'
+
+// Get frontend url for navigation from backend code url.
+export function getNavParams(code, language, catalog) {
+    let backendUrlComponents = code.url.split("/").filter(e => e);
+    let backendResourceType = backendUrlComponents[1];
+    let backendVersion = backendUrlComponents[2];
+    let backendCode = backendUrlComponents[3];
+    // Convert base code 'ALL' from SwissDrg to version.
+    let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
+    let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+    let pathname = "/" + [language, catalog, backendVersion, backendResourceType, codeToNavigate].join("/")
+    return {pathname, searchString}
+}
+
+// Use filter to select attributes we want to display, i.e not in skippable attributes and value not null,
+// undefined or empty.
+export function collectEnabledAttributes(attributes) {
+    return Object.keys(attributes)
+        .filter((key) => !skippableAttributes.includes(key))
+        .filter((key) => !["", null, undefined].includes(attributes[key]))
+        .filter((key) => attributes[key].length)
+        .reduce((obj, key) => {
+            return Object.assign(obj, {
+                [key]: attributes[key]
+            });
+        }, {});
+}

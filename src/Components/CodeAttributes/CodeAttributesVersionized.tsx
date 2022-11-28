@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {IAttributes, INavigationHook, IShortEntry} from "../../interfaces";
 import getTranslationHash from "../../Services/translation.service";
-import {getNavParams, skippableAttributes} from "../../Utils";
-import {useLocation, useNavigate} from "react-router-dom";
+import {collectEnabledAttributes, getNavParams} from "../../Utils";
+import {useNavigate} from "react-router-dom";
 
 interface Props {
     attributes: IAttributes,
@@ -120,19 +120,7 @@ class CodeAttributesVersionized extends Component<Props>{
         let siblings = this.props.siblings;
         // Define mapping fields for predecessor & new code code info.
         let mappingFields = ['predecessors', 'successors'];
-
-        // Use filter to select attributes we want to display, i.e not in skippable attributes and value not null,
-        // undefined or empty.
-        let enabledAttributes = Object.keys(attributes)
-            .filter((key) => !skippableAttributes.includes(key))
-            .filter((key) => !["", null, undefined].includes(attributes[key]))
-            .filter((key) => attributes[key].length)
-            .reduce((obj, key) => {
-                return Object.assign(obj, {
-                    [key]: attributes[key]
-                });
-            }, {});
-
+        let enabledAttributes = collectEnabledAttributes(attributes)
 
         return (
             <>
