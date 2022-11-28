@@ -1,11 +1,10 @@
 import {useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
-import getTranslationHash from "../../Services/translation.service";
 import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
-import {fetchURL, initialCodeState, skippableAttributes} from "../../Utils";
+import {fetchURL, initialCodeState} from "../../Utils";
 import RouterService from "../../Services/router.service";
-import dateFormat from "dateformat";
+import CodeAttributesUnversionized from "../CodeAttributes/CodeAttributesUnversionized";
 
 interface Props {
     params: IParamTypes,
@@ -29,7 +28,9 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      */
     async componentDidMount() {
         await this.fetchInformations()
-        await this.fetchSiblings(this.state.attributes["parent"])
+        if (this.state.attributes["parent"]) {
+            await this.fetchSiblings(this.state.attributes["parent"])
+        }
         await this.fetchGrandparents(this.state.attributes["parent"])
     }
 
@@ -47,7 +48,9 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                 prevProps.selectedDate !== this.props.selectedDate) {
                 this.setState(initialCodeState)
                 await this.fetchInformations()
-                await this.fetchSiblings(this.state.attributes["parent"])
+                if (this.state.attributes["parent"]) {
+                    await this.fetchSiblings(this.state.attributes["parent"])
+                }
                 await this.fetchGrandparents(this.state.attributes["parent"])
             }
     }
@@ -124,25 +127,6 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 
     /**
-     * Navigates to the specified AL or MIGEL code. Used for clickable codes and breadcrumbs, i.e. parents, children
-     * and siblings and thus not needed for drugs.
-     * @param code
-     */
-    goToCode(code) {
-        let navigate = this.props.navigation;
-        let language = this.props.params.language;
-        let catalog = this.props.params.catalog;
-        let pathname = [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : this.props.params.resource_type, code.code].join("/")
-        let queryString = "?query=" + RouterService.getQueryVariable('query');
-        if (["MIGEL", "AL"].includes(catalog)) {
-            navigate({
-                pathname: "/" + pathname,
-                search: RouterService.getQueryVariable('query') === "" ? "" : queryString
-            })
-        }
-    }
-
-    /**
      * If input is a base code ('MIGEL', 'AL', 'DRUG'), the method returns the base code in the given language,
      *  otherwise just returns input.
      * @param code
@@ -171,102 +155,41 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
     }
 
     /**
-     * Returns a unordered list of clickable codes (used for subordinate or similar codes).
-     */
-    clickableCodesArray(translateJson, attribute, attributeValue) {
-        return <div key={attribute}>
-            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-            <ul>
-                {attributeValue.map((val, j) => (
-                    <li key={j}><a key={attribute + "_" + j} className="link" onClick={() => {
-                        this.goToCode(val)
-                    }}>{val.code}: </a>
-                        <span key={"code_text"} dangerouslySetInnerHTML={{__html: val.text}}/></li>
-                ))}
-            </ul>
-        </div>
-    }
-
-    /**
      * Render the CodeBodyUnversionized component
      * @returns {JSX.Element}
      */
     render() {
-        // Generate BreadCrumbs.
-        let parentBreadCrumbs = this.state.parents.reverse().map((currElement, i) => {
-            let breadcrumbItem =
-                <Breadcrumb.Item key={i} onClick={() => this.goToCode(currElement)} className="breadLink">
-                    {this.extractLabel(currElement.code)}
-                </Breadcrumb.Item>
-            return breadcrumbItem;
-        })
-
-        let translateJson = getTranslationHash(this.props.params.language);
-
-        // Use filter to only select attributes we want to display (not in skippable attributes and value not null,
-        // undefined or empty.
-        let codeAttributes = Object.keys(this.state.attributes)
-            .filter((key) => !skippableAttributes.includes(key))
-            .filter((key) => !["", null, undefined].includes(this.state.attributes[key]))
-            .filter((key) => this.state.attributes[key].length)
-            .reduce((obj, key) => {
-                return Object.assign(obj, {
-                    [key]: this.state.attributes[key]
-                });
-            }, {});
-        let terminal = this.state.attributes.terminal;
-
-        // TODO: only display valid_from for terminal codes
-        let attributesHtml = Object.keys(codeAttributes).map((attribute) => {
-            let attributeValue = codeAttributes[attribute];
-            if (typeof attributeValue === 'object') {
-                return <div key={attribute}>
-                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                    <ul>
-                        {attributeValue.map((val, j) => (
-                            <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
-                        ))}
-                    </ul>
-                </div>
-            } else {
-                return <div key={attribute}>
-                    <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                    <p dangerouslySetInnerHTML={{__html: ['updated_at', 'valid_from'].includes(attribute) ? dateFormat(new Date(this.state.attributes[attribute]), "dd.mm.yyyy") : this.state.attributes[attribute]}}/>
-                </div>
-            }
-        })
-
-        // Add swissmedic number for drugs.
-        if (this.props.params.catalog === "DRUG" && this.props.params.code != 'all') {
-            attributesHtml.push(
-                <div key={"swissmedic_nr"}>
-                    <h5>{translateJson["LBL_SWISSMEDIC_NR"]}</h5>
-                    <p> {this.state.attributes.auth_number + this.state.attributes.package_code} </p>
-                </div>
-            )
-        }
-
-        // Add children (subordinate codes).
-        let children = this.state.attributes.children;
-        if (children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, 'children', children))
-        }
-
-        // Add siblings (similar codes).
+        let navigate = this.props.navigation;
+        let {language, catalog, resource_type, code} = this.props.params;
         let siblings = this.state.siblings;
-        if(siblings.length && !children) {
-            attributesHtml.push(this.clickableCodesArray(translateJson, "siblings", siblings))
-        }
 
         return (
             <div>
                 <Breadcrumb>
-                    {parentBreadCrumbs}
+                    {this.state.parents.reverse().map((currElement, i) => {
+                        return (
+                            <Breadcrumb.Item key={i} onClick={() => {
+                                let pathname = "/" + [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : resource_type , currElement.code].join("/")
+                                let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+                                if (["MIGEL", "AL"].includes(catalog)) {
+                                    navigate({pathname: pathname, search: searchString})
+                                }
+                            }} className="breadLink">
+                                {this.extractLabel(currElement.code)}
+                            </Breadcrumb.Item>
+                        )})}
                     <BreadcrumbItem active>{this.extractLabel(this.state.attributes["code"])}</BreadcrumbItem>
                 </Breadcrumb>
                 <h3>{this.extractLabel(this.state.attributes["code"])}</h3>
                 <p dangerouslySetInnerHTML={{__html: this.state.attributes["text"]}} />
-                {attributesHtml}
+                <CodeAttributesUnversionized
+                    attributes={this.state.attributes}
+                    catalog={catalog}
+                    siblings={siblings}
+                    language={language}
+                    resource_type={resource_type}
+                    code={code}
+                />
             </div>
         )
     }
