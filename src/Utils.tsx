@@ -35,19 +35,3 @@ export const skippableAttributes = [
 ]
 
 export const fetchURL = 'https://search.eonum.ch'
-
-export function getPathnameAndSearch(code, language, catalog) {
-    // Transform backend of code to frontend url for navigation
-    // TODO: This split and assignment feels kinda error prone or unstylish but saves a ton of distinctions that
-    //  where made via regexes. Any style suggestions?
-    let backendUrlComponents = code.url.split("/").filter(e => e);
-    let backendCode = backendUrlComponents[3];
-    let backendResourceType = backendUrlComponents[1];
-    let backendVersion = backendUrlComponents[2];
-    // Convert base code 'ALL' from SwissDrg to version.
-    let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
-    let queryString = "?query=" + RouterService.getQueryVariable('query');
-    let pathname = "/" + [language, catalog, backendVersion, backendResourceType, codeToNavigate].join("/")
-    let searchString = RouterService.getQueryVariable('query') === "" ? "" : queryString
-    return {pathname, searchString}
-}

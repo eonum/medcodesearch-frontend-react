@@ -1,9 +1,10 @@
 import {useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb} from "react-bootstrap";
-import {ICode, INavigationHook, IParamTypes, IShortEntry} from "../../interfaces";
-import {fetchURL, getNavParams, initialCodeState, skippableAttributes} from "../../Utils";
+import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
+import {fetchURL, initialCodeState} from "../../Utils";
 import CodeAttributesVersionized from "../CodeAttributes/CodeAttributesVersionized";
+import RouterService from "../../Services/router.service";
 
 interface Props {
     params: IParamTypes,
@@ -123,6 +124,19 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         this.setState({parents: parents})
     }
 
+    // Get frontend url for navigation from backend code url.
+    getNavParams(code, language, catalog) {
+        let backendUrlComponents = code.url.split("/").filter(e => e);
+        let backendResourceType = backendUrlComponents[1];
+        let backendVersion = backendUrlComponents[2];
+        let backendCode = backendUrlComponents[3];
+        // Convert base code 'ALL' from SwissDrg to version.
+        let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
+        let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+        let pathname = "/" + [language, catalog, backendVersion, backendResourceType, codeToNavigate].join("/")
+        return {pathname, searchString}
+    }
+
     /**
      * Render the body component
      * @returns {JSX.Element}
@@ -138,7 +152,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                     {this.state.parents.reverse().map((currElement, i) => {
                         return(
                             <Breadcrumb.Item key={i} onClick={() => {
-                                let {pathname, searchString} = getNavParams(currElement, language, catalog)
+                                let {pathname, searchString} = this.getNavParams(currElement, language, catalog)
                                 navigate({pathname: pathname, search: searchString})
                             }} className="breadLink">
                                 {currElement.code}
