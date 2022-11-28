@@ -239,7 +239,6 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @returns {JSX.Element}
      */
     render(){
-        let renderCal = this.isCalBut()
         return(
         <div key={"mobile_button"} className="d-lg-none text-center">
             <div key={"mobile_button_0"} className="btn-group">
@@ -279,7 +278,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                         )}
                     </DropdownMenu>
                 </Dropdown>
-                {!renderCal &&
+                {!this.isCalBut() &&
                 <Dropdown key={"mobile_button_dropdown_versions"} className="catalogButtons">
                     <Dropdown.Toggle
                         key={"mobile_button_dropdown_versions_toggle"}
@@ -306,7 +305,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                     </Dropdown.Menu>
                 </Dropdown>
                 }
-                {renderCal &&
+                {this.isCalBut() &&
                 <DatePicker
                     isMobile={true}
                     selectedCatalog={this.props.selectedCatalog}
