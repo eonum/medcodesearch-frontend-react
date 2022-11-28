@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {IAttributes, INavigationHook, IShortEntry} from "../../interfaces";
 import getTranslationHash from "../../Services/translation.service";
-import {getPathnameAndSearch, skippableAttributes} from "../../Utils";
+import {getNavParams, skippableAttributes} from "../../Utils";
 import {useLocation, useNavigate} from "react-router-dom";
 
 interface Props {
@@ -77,7 +77,7 @@ class CodeAttributesVersionized extends Component<Props, ICodeAttributesUnversio
                         let navigate = this.props.navigation;
                         let language = this.props.language;
                         let catalog = this.props.catalog;
-                        let {pathname, searchString} = getPathnameAndSearch(val, language, catalog)
+                        let {pathname, searchString} = getNavParams(val, language, catalog)
                         navigate({
                             pathname: pathname,
                             search: searchString

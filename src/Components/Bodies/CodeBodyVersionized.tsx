@@ -2,7 +2,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import React, {Component} from "react";
 import {Breadcrumb} from "react-bootstrap";
 import {ICode, INavigationHook, IParamTypes, IShortEntry} from "../../interfaces";
-import {fetchURL, getPathnameAndSearch, initialCodeState, skippableAttributes} from "../../Utils";
+import {fetchURL, getNavParams, initialCodeState, skippableAttributes} from "../../Utils";
 import CodeAttributesVersionized from "../CodeAttributes/CodeAttributesVersionized";
 
 interface Props {
@@ -138,7 +138,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                     {this.state.parents.reverse().map((currElement, i) => {
                         return(
                             <Breadcrumb.Item key={i} onClick={() => {
-                                let {pathname, searchString} = getPathnameAndSearch(currElement, language, catalog)
+                                let {pathname, searchString} = getNavParams(currElement, language, catalog)
                                 navigate({pathname: pathname, search: searchString})
                             }} className="breadLink">
                                 {currElement.code}
