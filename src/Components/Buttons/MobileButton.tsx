@@ -141,26 +141,15 @@ class MobileButton extends Component<Props,IMobileButton>{
      */
     async fetchInitialVersions() {
         if (!this.isCalBut()) {
-            if (this.props.catalog === "SwissDRG") {
-                await fetch([fetchURL, '/de/drgs/versions'].join("/"))
-                    .then((res) => res.json())
-                    .then((json) => {
-                        this.setState({
-                            allVersions: json,
-                            currentVersions: json
-                        })
+            await fetch([fetchURL, 'de', this.props.catalog === "SwissDRG" ? 'drgs' : this.props.catalog.toLowerCase() + 's', 'versions'].join("/"))
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({
+                        allVersions: json,
+                        currentVersions: json
                     })
-            } else {
-                await fetch([fetchURL, 'de', this.props.catalog.toLowerCase() + 's' ,'versions'].join("/"))
-                    .then((res) => res.json())
-                    .then((json) => {
-                        this.setState({
-                            allVersions: json,
-                            currentVersions: json
-                        })
-                    })
-            }
-        }else {
+                })
+        } else {
             this.setState({allVersions: [], currentVersions: []})
         }
     }
@@ -171,20 +160,12 @@ class MobileButton extends Component<Props,IMobileButton>{
      */
     async fetchCurrentVersions() {
         if (!this.isCalBut()) {
-            if (this.props.catalog === "SwissDRG") {
-                await fetch([fetchURL, this.props.language, 'drgs/versions'].join("/"))
-                    .then((res) => res.json())
-                    .then((json) => {
-                        this.setState({currentVersions: json})
-                    })
-            } else {
-                await fetch([fetchURL, this.props.language, this.props.catalog.toLowerCase() + 's', 'versions'].join("/"))
-                    .then((res) => res.json())
-                    .then((json) => {
-                        this.setState({currentVersions: json})
-                    })
-            }
-        }else {
+            await fetch([fetchURL, 'de', this.props.catalog === "SwissDRG" ? 'drgs' : this.props.catalog.toLowerCase() + 's', 'versions'].join("/"))
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({currentVersions: json})
+                })
+        } else {
             this.setState({currentVersions: []})
         }
     }
