@@ -12,13 +12,10 @@ interface Props {
     navigation: INavigationHook
 }
 
-interface ICodeAttributesUnversionized {
-}
-
 /**
  * Responsible for the attributes of a code, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED).
  */
-class CodeAttributesVersionized extends Component<Props, ICodeAttributesUnversionized>{
+class CodeAttributesVersionized extends Component<Props>{
     constructor(props) {
         super(props);
     }
