@@ -160,7 +160,6 @@ class App extends Component<Props, IApp>{
         let version = this.state.selectedVersion;
         let button = this.state.selectedButton;
         let catalog = button === 'SwissDRG' ? button : button.toUpperCase();
-        let delimiter = this.state.selectedVersion === '' ? "" : "/";
         let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
         let resource_type = RouterService.getResourceTypeFromURL();
         let code = RouterService.getCodeFromURL();
@@ -189,7 +188,7 @@ class App extends Component<Props, IApp>{
         // Navigate to new path.
         if (navigationWithoutLanguageChange || prevState.language !== this.state.language) {
             if (this.isValidVersion(catalog, version, this.state.language)) {
-                this.navigateTo(this.state.language + "/" + catalog + '/' + version + delimiter + resource_type + '/' + code, searchString)
+                this.navigateTo(this.state.language + "/" + catalog + '/' + version + (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
             } else {
                 let latestICD = this.state.initialVersions['ICD'].at(-1);
                 this.changeSelectedButton("ICD")

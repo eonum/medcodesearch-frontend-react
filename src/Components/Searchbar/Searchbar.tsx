@@ -122,11 +122,11 @@ class Searchbar extends Component<Props,ISearchbar> {
                 date = 'date=' + this.props.selectedDate + '&'
             }
         }
-        await fetch([
-            fetchURL, this.props.language,
+        let searchURL = [fetchURL, this.props.language,
             resourceTypeByBtn[this.props.selectedButton],
             this.convertButtonToBackendVersion(this.props.selectedButton),
-            'search?' + date + 'highlight=1&search='+ searchTerm].join("/"))
+        'search?' + date + 'highlight=1&search='+ searchTerm].join("/")
+        await fetch(searchURL)
             .then((res) => {
                 if(res.ok) {
                     return res.json()
