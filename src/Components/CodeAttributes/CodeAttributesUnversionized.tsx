@@ -50,14 +50,18 @@ class CodeAttributesUnversionized extends Component<Props>{
                                     ))}
                                 </ul> :
                                 <div key={attribute}>
-                                    <p dangerouslySetInnerHTML={{
-                                        __html:
-                                            ['updated_at', 'valid_from'].includes(attribute) ?
-                                                dateFormat(new Date(attributes[attribute]), "dd.mm.yyyy") :
-                                                attributes[attribute]
-                                    }}/>
+                                    <p dangerouslySetInnerHTML={{__html: attributes[attribute]}}/>
                                 </div>}
                         </div>))}
+                {// Add last seeding date and valid from if terminal
+                    terminal &&
+                    ['updated_at', 'valid_from'].map( attribute => (
+                        <div key={attribute}>
+                            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                            <p> {dateFormat(new Date(attributes[attribute]), "dd.mm.yyyy")}</p>
+                        </div>
+                    ))
+                }
                 {// Add swissmedic number for drugs.
                     this.props.catalog === "DRUG" && this.props.code != 'all' &&
                     <div key={"swissmedic_nr"}>
