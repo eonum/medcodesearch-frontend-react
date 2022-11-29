@@ -11,7 +11,6 @@ import {fetchURL} from "../../Utils";
 interface Props {
     selectedCatalog: string
     initialVersions: IVersions,
-    currentVersions: IVersions,
     selectedDate: string,
     version: string,
     selectedVersion: string,
@@ -30,8 +29,8 @@ export interface IMobileButton {
     showPopUp: boolean,
     disabledVersion: string,
     disabledCatalog: string,
-    allVersions: string[], // all versions of one catalog in an array, f.e. ["CHOP_2011", "CHOP_2012", ...]
-    currentVersions: string[],
+    allVersions: string[], // All possible versions in language 'de' of one catalog in an array, f.e. ["CHOP_2011", "CHOP_2012", ...].
+    availableVersions: string[], // All available version in a specific language (used to enable / disable versions in dropdown.
     buttons: string[],
     selectedButton: string
 }
@@ -53,7 +52,7 @@ class MobileButton extends Component<Props,IMobileButton>{
             disabledVersion: "",
             disabledCatalog: "",
             allVersions: [],
-            currentVersions: [],
+            availableVersions: [],
             buttons: this.convertButtons(),
             selectedButton: this.props.catalog
         }
@@ -76,7 +75,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     }
 
     /**
-     * after update of the component calls the fetch
+     * Fetches base and available versions after component did update.
      * @param prevProps
      * @param prevState
      * @param snapshot
@@ -85,22 +84,22 @@ class MobileButton extends Component<Props,IMobileButton>{
     async componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.language !== this.props.language || prevProps.catalog !== this.props.catalog
             || this.props.reRender) {
-            await this.fetchInitialVersions()
-            await this.fetchCurrentVersions()
+            await this.fechtBaseVersions()
+            await this.fetchAvailableVersions()
         }
     }
 
     /**
-     * after mount initialize the fetch for content and version
+     * Initializes the base and available versions after mount.
      * @returns {Promise<void>}
      */
     async componentDidMount() {
-        await this.fetchInitialVersions()
-        await this.fetchCurrentVersions()
+        await this.fechtBaseVersions()
+        await this.fetchAvailableVersions()
     }
 
     /**
-     * set the new version and button
+     * Set the clicked version and button.
      * @param version
      * @param btn
      */
@@ -117,7 +116,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     }
 
     /**
-     * Update state if a catalog get clicked.
+     * Update state if a catalog gets clicked.
      * @param catalog
      */
     handleCatalogClick(catalog) {
@@ -136,42 +135,43 @@ class MobileButton extends Component<Props,IMobileButton>{
     }
 
     /**
-     * fetches the first version
+     * Uses 'de' language to fetch base versions.
      * @returns {Promise<void>}
      */
-    async fetchInitialVersions() {
+    async fechtBaseVersions() {
         if (!this.isCalBut()) {
             await fetch([fetchURL, 'de', this.props.catalog === "SwissDRG" ? 'drgs' : this.props.catalog.toLowerCase() + 's', 'versions'].join("/"))
                 .then((res) => res.json())
                 .then((json) => {
                     this.setState({
                         allVersions: json,
-                        currentVersions: json
+                        availableVersions: json
                     })
                 })
         } else {
-            this.setState({allVersions: [], currentVersions: []})
+            this.setState({allVersions: [], availableVersions: []})
         }
     }
 
     /**
-     * fetches the current versions
+     * Uses language from props to fetch available versions for this language.
      * @returns {Promise<void>}
      */
-    async fetchCurrentVersions() {
+    async fetchAvailableVersions() {
         if (!this.isCalBut()) {
-            await fetch([fetchURL, 'de', this.props.catalog === "SwissDRG" ? 'drgs' : this.props.catalog.toLowerCase() + 's', 'versions'].join("/"))
+            let versionsString = [fetchURL, this.props.language, this.props.catalog === "SwissDRG" ? 'drgs' : this.props.catalog.toLowerCase() + 's', 'versions'].join("/")
+            await fetch(versionsString)
                 .then((res) => res.json())
                 .then((json) => {
-                    this.setState({currentVersions: json})
+                    this.setState({availableVersions: json})
                 })
         } else {
-            this.setState({currentVersions: []})
+            this.setState({availableVersions: []})
         }
     }
 
     /**
-     * looks for the current version
+     * Returns the current version without the catalog prefix.
      * @returns {*|string} currently used version
      */
     getVersion() {
@@ -183,7 +183,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     }
 
     /**
-     * updates the current showPopUp with the given value
+     * Set show popup boolean.
      * @param value
      */
     updatePopUp = (value) => {
@@ -195,8 +195,7 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @returns {boolean}
      */
     isCalBut() {
-        let catalog = this.props.catalog;
-        return catalog === 'AL' || catalog.toUpperCase() === 'MIGEL' || catalog === 'DRUG'
+        return ['AL', 'MIGEL', 'DRUG'].includes(this.props.catalog.toUpperCase())
     }
 
     /**
@@ -235,7 +234,7 @@ class MobileButton extends Component<Props,IMobileButton>{
     }
 
     /**
-     * renders the mobile button
+     * Render the mobile button.
      * @returns {JSX.Element}
      */
     render(){
@@ -291,7 +290,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                         {this.state.allVersions.reverse().map(
                             (version) => (
                                 <Dropdown.Item
-                                    className={this.state.currentVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
+                                    className={this.state.availableVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
                                     eventKey={version}
                                     key={"mobile_button_dropdown_versions_" + version}
                                     id={version.replace(/\./g, '')}
