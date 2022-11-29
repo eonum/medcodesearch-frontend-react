@@ -77,8 +77,8 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
      * @param isCalendarType
      * @param date
      */
-        // TODO: If choosing different version from different button, should old button version jump back to default or stay where it was?
-        //  F.e. if clicking from ICD10-GM-2014 to SwissDRG V9.0, should version button of icd stay at GM-2014 or jump back to GM-2022?
+    // TODO: If choosing different version from different button, should old button version jump back to default or stay where it was?
+    //  F.e. if clicking from ICD10-GM-2014 to SwissDRG V9.0, should version button of icd stay at GM-2014 or jump back to GM-2022?
     updateOnButtonClick = (version, btn, isCalendarType, date) => {
         // If empty version, get it using btn.
         // Set
@@ -89,7 +89,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             selectedVersion = version === '' ? this.getVersionFromButton(btn) : version;
             // Update currentVersion.
             let currentCatalogs = {}
-            currentCatalogs['current' + btn] = version
+            currentCatalogs['current' + btn] = selectedVersion
             this.setState(currentCatalogs)
         }
 
@@ -218,26 +218,28 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                             ))}
                     </div>
                 </div>
-                <div key={"catalog_buttons_mobile"} className="d-lg-none">
-                    <MobileButton
-                        selectedCatalog={this.props.params.catalog}
-                        initialVersions={this.props.initialVersions}
-                        currentVersions={this.props.currentVersions}
-                        selectedDate={this.state.selectedDate}
-                        version={this.getVersionFromButton(this.state.selectedButton)}
-                        selectedVersion={this.props.params.version}
-                        reRender={this.props.clickedOnLogo}
-                        catalog={this.props.selectedButton}
-                        language={this.props.language}
-                        changeLanguage={this.props.changeLanguage}
-                        changeSelectedVersion={this.props.changeSelectedVersion}
-                        changeSelectedButton={this.props.changeSelectedButton}
-                        buttons={this.props.buttons}
-                        labels={this.props.labels}
-                        updateOnButtonClick={(version, catalog, isCalendar, date) => {
-                            this.updateOnButtonClick(version, catalog, isCalendar, date)
-                        }}
-                    />
+                <div key={"catalog_buttons_mobile"} className="d-lg-none text-center">
+                    <div key={"catalog_buttons_mobile_0"} className={"alignButtons"}>
+                        <MobileButton
+                            selectedCatalog={this.props.params.catalog}
+                            initialVersions={this.props.initialVersions}
+                            currentVersions={this.props.currentVersions}
+                            selectedDate={this.state.selectedDate}
+                            version={this.getVersionFromButton(this.state.selectedButton)}
+                            selectedVersion={this.props.params.version}
+                            reRender={this.props.clickedOnLogo}
+                            catalog={this.props.selectedButton}
+                            language={this.props.language}
+                            changeLanguage={this.props.changeLanguage}
+                            changeSelectedVersion={this.props.changeSelectedVersion}
+                            changeSelectedButton={this.props.changeSelectedButton}
+                            buttons={this.props.buttons}
+                            labels={this.props.labels}
+                            updateOnButtonClick={(version, catalog, isCalendar, date) => {
+                                this.updateOnButtonClick(version, catalog, isCalendar, date)
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         )

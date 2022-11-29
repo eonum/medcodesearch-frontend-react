@@ -240,7 +240,6 @@ class MobileButton extends Component<Props,IMobileButton>{
      */
     render(){
         return(
-        <div key={"mobile_button"} className="d-lg-none text-center">
             <div key={"mobile_button_0"} className="btn-group">
                 {
                     <PopUp
@@ -315,7 +314,6 @@ class MobileButton extends Component<Props,IMobileButton>{
                     }}
                 />
                 }
-            </div>
         </div>
         )
     }
