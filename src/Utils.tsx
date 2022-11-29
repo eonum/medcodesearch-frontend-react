@@ -36,6 +36,19 @@ const skippableAttributes = [
     'valid_from'
 ]
 
+export const versionsWithoutMappingInfos = [
+    "ICD10-2008",
+    "ICD10-2010",
+    "ICD10-2016",
+    "ICD10-GM-2008",
+    "ICD10-GM-2010",
+    "ICD10-GM-2011",
+    "CHOP 2011",
+    "CHOP 2012",
+    "CHOP 2013",
+    "CHOP 2014",
+    "CHOP 2015"]
+
 export const fetchURL = 'https://search.eonum.ch'
 
 // Get frontend url for navigation from backend code url.

@@ -128,7 +128,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @returns {JSX.Element}
      */
     render() {
-        let {language, catalog} = this.props.params
+        let {language, catalog, version} = this.props.params
         let siblings = this.state.siblings;
         let navigate = this.props.navigation;
         let title = this.state.attributes.code.replace("_", " ");
@@ -151,6 +151,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                 <CodeAttributesVersionized
                     attributes={this.state.attributes}
                     catalog={catalog}
+                    version={version}
                     siblings={siblings}
                     language={language}
                 />

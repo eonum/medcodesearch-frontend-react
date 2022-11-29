@@ -1,13 +1,14 @@
 import React, {Component} from "react";
 import {IAttributes, INavigationHook, IShortEntry} from "../../interfaces";
 import getTranslationHash from "../../Services/translation.service";
-import {collectEnabledAttributes, getNavParams} from "../../Utils";
+import {collectEnabledAttributes, getNavParams, versionsWithoutMappingInfos} from "../../Utils";
 import {useNavigate} from "react-router-dom";
 import ClickableCodesArray from "./ClickableCodesArray";
 
 interface Props {
     attributes: IAttributes,
     catalog: string,
+    version: string,
     siblings: IShortEntry[],
     language: string,
     navigation: INavigationHook
@@ -76,6 +77,11 @@ class CodeAttributesVersionized extends Component<Props>{
         // Define mapping fields for predecessor & new code code info.
         let mappingFields = ['predecessors', 'successors'];
         let enabledAttributes = collectEnabledAttributes(attributes)
+        let showNewCodeInfo = ['CHOP', 'ICD'].includes(this.props.catalog) &&
+            !versionsWithoutMappingInfos.includes(this.props.version) &&
+            attributes.predecessors &&
+            attributes.predecessors.length == 0 &&
+            !attributes['children']
 
         return (
             <>
@@ -114,7 +120,7 @@ class CodeAttributesVersionized extends Component<Props>{
                         </div>
                     ))}
                 {// Add new code information.
-                    attributes.predecessors && attributes.predecessors.length == 0 && !attributes['children'] &&
+                    showNewCodeInfo &&
                     <div className="vertical-spacer alert alert-warning">
                         <h5>{translateJson["LBL_NEW_CODE"]}</h5>
                     </div>
