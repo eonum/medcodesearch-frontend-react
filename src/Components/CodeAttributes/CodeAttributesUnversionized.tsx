@@ -36,7 +36,6 @@ class CodeAttributesUnversionized extends Component<Props>{
         let terminal = attributes.terminal;
         let enabledAttributes = collectEnabledAttributes(attributes)
 
-        // TODO: Only display valid_from if terminal code.
         return (
             <>
                 {// Render enabled attributes (they can be lists, date and strings.
