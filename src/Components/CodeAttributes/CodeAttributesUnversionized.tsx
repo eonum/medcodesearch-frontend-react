@@ -3,10 +3,8 @@ import {IAttributes, INavigationHook, IShortEntry} from "../../interfaces";
 import getTranslationHash from "../../Services/translation.service";
 import {collectEnabledAttributes, getNavParams} from "../../Utils";
 import {useNavigate} from "react-router-dom";
-import RouterService from "../../Services/router.service";
 import dateFormat from "dateformat";
 import ClickableCodesArray from "./ClickableCodesArray";
-import {languages} from "../../Services/catalog-version.service";
 
 interface Props {
     attributes: IAttributes,
@@ -38,28 +36,27 @@ class CodeAttributesUnversionized extends Component<Props>{
         let terminal = attributes.terminal;
         let enabledAttributes = collectEnabledAttributes(attributes)
 
-        // TODO: only display valid_from for terminal codes
+        // TODO: Only display valid_from if terminal code.
         return (
             <>
-                {Object.keys(enabledAttributes).map(attribute => (
+                {// Render enabled attributes (they can be lists, date and strings.
+                    Object.keys(enabledAttributes).map(attribute => (
                         <div key={attribute}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             {typeof enabledAttributes[attribute] === 'object' ?
-                                <>
-                                    <ul>
-                                        {enabledAttributes[attribute].map((val, j) => (
-                                            <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
-                                        ))}
-                                    </ul>
-                                </> :
-                                <>
-                                    <div key={attribute}>
-                                        <p dangerouslySetInnerHTML={{__html:
-                                                ['updated_at', 'valid_from'].includes(attribute) ?
-                                                    dateFormat(new Date(attributes[attribute]), "dd.mm.yyyy") :
-                                                    attributes[attribute]}}/>
-                                    </div>
-                                </>}
+                                <ul>
+                                    {enabledAttributes[attribute].map((val, j) => (
+                                        <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
+                                    ))}
+                                </ul> :
+                                <div key={attribute}>
+                                    <p dangerouslySetInnerHTML={{
+                                        __html:
+                                            ['updated_at', 'valid_from'].includes(attribute) ?
+                                                dateFormat(new Date(attributes[attribute]), "dd.mm.yyyy") :
+                                                attributes[attribute]
+                                    }}/>
+                                </div>}
                         </div>))}
                 {// Add swissmedic number for drugs.
                     this.props.catalog === "DRUG" && this.props.code != 'all' &&

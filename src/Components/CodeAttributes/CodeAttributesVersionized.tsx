@@ -27,6 +27,7 @@ class CodeAttributesVersionized extends Component<Props>{
      * @param index
      * @returns {JSX.Element}
      */
+    // TODO: Check if this could be refactored into easier code.
     lookingForLink(aString, index, attribute) {
         let results = []
         const codeRegex = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);
@@ -55,35 +56,12 @@ class CodeAttributesVersionized extends Component<Props>{
     }
 
     /**
-     * looks in the given code for exclusions
+     * Looks for exclusions in the given code.
      * @param code
      */
     searchExclusion(code) {
         let navigate = this.props.navigation
         navigate({search: "?query=" + code})
-    }
-
-    renderCodeMapping(mappingFields, attributes, translateJson) {
-        for(var j = 0; j < mappingFields.length; j++) {
-            var field = mappingFields[j];
-            if (attributes[field] != null) {
-                // is this a non-trivial mapping?
-                if(attributes[field].length > 1 ||
-                    attributes[field].length == 1 && (
-                        (attributes[field][0]['code'] != attributes['code'] ||
-                            attributes[field][0]['text'] != attributes['text']))) {
-                    return
-                        <div key={"mapping_pre_succ" + j}>
-                            <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
-                            <ul>
-                                {attributes[field].map((child,i) => (
-                                    <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
-                                ))}
-                            </ul>
-                        </div>
-                }
-            }
-        }
     }
 
     /**
@@ -101,41 +79,42 @@ class CodeAttributesVersionized extends Component<Props>{
 
         return (
             <>
-                {Object.keys(enabledAttributes).map(attribute => (
+                {// Render enabled attributes (they can be lists, date and strings.
+                    Object.keys(enabledAttributes).map(attribute => (
                         <div key={attribute}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             {typeof enabledAttributes[attribute] === 'object' ?
-                                <>
-                                    <ul>
-                                        {enabledAttributes[attribute].map((val, j) => (
-                                            ["exclusions", "supplement_codes"].includes(attribute) ?
-                                                this.lookingForLink(val, j, attribute) :
-                                                <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
-                                        ))}
-                                    </ul>
-                                </> :
-                                <>
-                                    <div key={attribute}>
-                                        <p dangerouslySetInnerHTML={{__html: attributes[attribute]}}/>
-                                    </div>
-                                </>}
+                                <ul>
+                                    {enabledAttributes[attribute].map((val, j) => (
+                                        ["exclusions", "supplement_codes"].includes(attribute) ?
+                                            this.lookingForLink(val, j, attribute) :
+                                            <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/>
+                                            </li>
+                                    ))}
+                                </ul> :
+                                <div key={attribute}>
+                                    <p dangerouslySetInnerHTML={{__html: attributes[attribute]}}/>
+                                </div>
+                            }
                         </div>))}
-                {mappingFields.map((field, j) => (
-                    attributes[field] != null &&
-                    (attributes[field].length > 1 ||
-                    attributes[field].length == 1 && (
-                        (attributes[field][0]['code'] != attributes['code'] ||
-                            attributes[field][0]['text'] != attributes['text']))) &&
-                    <div key={"mapping_pre_succ" + j}>
-                        <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
-                        <ul>
-                            {attributes[field].map((child,i) => (
-                                <li key={child + "_" + i}><b>{child.code}</b>{" " +  child.text}</li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
-                {attributes.predecessors && attributes.predecessors.length == 0 && !attributes['children'] &&
+                {// Add mapping information (predecessor / successor information.
+                    mappingFields.map((field, j) => (
+                        attributes[field] != null &&
+                        (attributes[field].length > 1 ||
+                            attributes[field].length == 1 && (
+                                (attributes[field][0]['code'] != attributes['code'] ||
+                                    attributes[field][0]['text'] != attributes['text']))) &&
+                        <div key={"mapping_pre_succ" + j}>
+                            <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
+                            <ul>
+                                {attributes[field].map((child, i) => (
+                                    <li key={child + "_" + i}><b>{child.code}</b>{" " + child.text}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                {// Add new code information.
+                    attributes.predecessors && attributes.predecessors.length == 0 && !attributes['children'] &&
                     <div className="vertical-spacer alert alert-warning">
                         <h5>{translateJson["LBL_NEW_CODE"]}</h5>
                     </div>
