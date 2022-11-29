@@ -171,7 +171,7 @@ class App extends Component<Props, IApp>{
             prevState.selectedDate !== this.state.selectedDate ||
             this.state.reSetPath) {
             navigationWithoutLanguageChange = true;
-            if (['MIGEL', 'AL', 'DRUG'].includes(catalog)) {
+            if (['MIGEL', 'AL', 'DRUG'].includes(catalog.toUpperCase())) {
                 code = 'all';
                 resource_type = catalog.toLowerCase() + 's'
             } else {

@@ -46,8 +46,8 @@ export function getNavParams(code, language, catalog, resource_type?) {
     let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
     let pathname;
     let searchString;
-    if (['MIGEL', 'AL'].includes(catalog)) {
-        pathname = "/" + [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : resource_type, code.code].join("/")
+    if (['MIGEL', 'AL'].includes(catalog.toUpperCase())) {
+        pathname = "/" + [language, catalog.toUpperCase(), catalog === 'AL' ? 'laboratory_analyses' : resource_type, code.code].join("/")
         searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
     } else {
         searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');

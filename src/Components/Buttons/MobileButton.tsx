@@ -127,7 +127,7 @@ class MobileButton extends Component<Props,IMobileButton>{
         } else {
             this.setState({disabledCatalog: catalog})
             this.setState({showPopUp: true})
-            if(catalog === "MiGeL" || catalog === "AL" || catalog === "DRUG") {
+            if(catalog.toUpperCase() === "MIGEL" || catalog === "AL" || catalog === "DRUG") {
                 this.setState({disabledVersion: ""})
             } else {
                 this.setState({disabledVersion: this.props.initialVersions[catalog].at(-1)})

@@ -10,11 +10,11 @@ import {INavigationHook} from "../../interfaces";
 import dateFormat from "dateformat"
 
 const resourceTypeByBtn = {
-    "SwissDRG": 'drgs',
+    "SWISSDRG": 'drgs',
     "ICD": 'icds',
     "CHOP": 'chops',
     "TARMED": 'tarmeds',
-    "MiGeL": 'migels',
+    "MIGEL": 'migels',
     "AL": 'laboratory_analyses',
     "DRUG": 'drugs'
 }
@@ -71,7 +71,7 @@ class Searchbar extends Component<Props,ISearchbar> {
         if (e.target.value === "") {
             navigate({search: ""});
         } else {
-            if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'
+            if (this.props.selectedButton.toUpperCase() === 'MIGEL' || this.props.selectedButton === 'AL'
                 || this.props.selectedButton === 'DRUG') {
                 if (this.props.selectedDate !==  dateFormat(new Date(), "dd.mm.yyyy")) {
                     date = 'date=' + this.props.selectedDate + '&'
@@ -87,7 +87,7 @@ class Searchbar extends Component<Props,ISearchbar> {
      * @returns {string}
      */
     convertButtonToBackendVersion(chosenBtn) {
-        let versionized = ['MiGeL', 'AL', 'DRUG'].includes(chosenBtn) ? false : true
+        let versionized = ['MIGEL', 'AL', 'DRUG'].includes(chosenBtn.toUpperCase()) ? false : true
         return versionized ? this.props.version : chosenBtn.toUpperCase()
     }
 
@@ -117,13 +117,13 @@ class Searchbar extends Component<Props,ISearchbar> {
     async fetchForSearchTerm(searchTerm){
         this.setState({searchTerm: searchTerm})
         let date = '';
-        if (this.props.selectedButton === 'MiGeL' || this.props.selectedButton === 'AL'){
+        if (this.props.selectedButton.toUpperCase() === 'MIGEL' || this.props.selectedButton === 'AL'){
             if(this.props.selectedDate !== dateFormat(new Date(), "dd.mm.yyyy")){
                 date = 'date=' + this.props.selectedDate + '&'
             }
         }
         let searchURL = [fetchURL, this.props.language,
-            resourceTypeByBtn[this.props.selectedButton],
+            resourceTypeByBtn[this.props.selectedButton.toUpperCase()],
             this.convertButtonToBackendVersion(this.props.selectedButton),
         'search?' + date + 'highlight=1&search='+ searchTerm].join("/")
         await fetch(searchURL)
