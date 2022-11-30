@@ -223,7 +223,6 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                         <MobileButton
                             selectedCatalog={this.props.params.catalog}
                             initialVersions={this.props.initialVersions}
-                            currentVersions={this.props.currentVersions}
                             selectedDate={this.state.selectedDate}
                             version={this.getVersionFromButton(this.state.selectedButton)}
                             selectedVersion={this.props.params.version}
