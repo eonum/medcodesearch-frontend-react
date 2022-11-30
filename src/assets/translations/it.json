@@ -68,5 +68,6 @@
   "LBL_TP_ASSI": "Punti tariffali dell'assistenza",
   "LBL_SWISSMEDIC_NR": "Swissmedic-Code",
   "LBL_UPDATED_AT": "Ultima modifica",
-  "LBL_VALID_FROM": "Valido da"
+  "LBL_VALID_FROM": "Valido da",
+  "LBL_VALID_TO": "Valido per"
 }

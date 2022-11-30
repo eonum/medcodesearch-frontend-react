@@ -72,6 +72,7 @@
   "LBL_AUTH_NUMBER": "Autorisierungsnummer",
   "LBL_PACKAGE_CODE": "Paketcode",
   "LBL_UPDATED_AT": "Zuletzt geändert",
-  "LBL_VALID_FROM": "Gültig ab"
+  "LBL_VALID_FROM": "Gültig ab",
+  "LBL_VALID_TO": "Gültig bis"
 }
 

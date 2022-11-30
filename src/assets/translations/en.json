@@ -45,5 +45,6 @@
   "LBL_GROUPS": "TARMED groups",
   "LBL_BLOCKS": "TARMED blocks",
   "LBL_UPDATED_AT": "Last modified",
-  "LBL_VALID_FROM": "Valid from"
+  "LBL_VALID_FROM": "Valid from",
+  "LBL_VALID_TO": "Valid to"
 }

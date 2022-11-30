@@ -258,29 +258,6 @@ describe('Default test suite, testing general navigation via clicks', function (
         await expect(page.url()).toBe(baseUrl + '/en/ICD/ICD10-GM-2022/icds/A00.1')
     })
 
-    it ('available and enabled attributes are displayed', async function() {
-        await page.goto(baseUrl + "/de/MIGEL/migels/10.01.01.00.1", {waitUntil: 'networkidle0'})
-        await expect(page).toMatch("Krücken für Erwachsene, ergonomischer Griff, Kauf")
-        await expect(page).toMatch("Limitation")
-        await expect(page).toMatch("Gültig ab")
-        await expect(page).toMatch("HVB Pflege: Vergütung nur bei Anwendung durch Pflegefachfrauen und Pflegefachmänner die den Beruf selbständig und auf eigene Rechnung ausüben")
-        await expect(page).toMatch("Einheit")
-        await expect(page).toMatch("1 Paar")
-        await expect(page).toMatch("Zuletzt geändert")
-        await expect(page).toMatch("Ähnliche Codes")
-    })
-
-    it ('show new code information', async function() {
-        await page.goto(baseUrl + '/de/CHOP/CHOP_2022/chops/00.4I.11?query=00.4I.11', {waitUntil: 'networkidle0'})
-        await expect(page).toMatch("Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat.")
-        await page.goto(baseUrl + '/de/ICD/ICD10-GM-2021/icds/U13.5?query=u13.5', {waitUntil: 'networkidle0'})
-        await expect(page).toMatch("Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat.")
-        await page.goto(baseUrl + '/de/ICD/ICD10-GM-2011/icds/R11?query=r11', {waitUntil: 'networkidle0'})
-        await expect(page).not.toMatch("Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat.")
-        await page.goto(baseUrl + '/de/ICD/ICD10-GM-2021/icds/N19?query=N19', {waitUntil: 'networkidle0'})
-        await expect(page).not.toMatch("Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat.")
-    })
-
     // If last ICD version is newer than 2022, this test has to be adapted.
     it ('call to base URL', async function() {
         await page.goto(baseUrl, {waitUntil: 'networkidle0'})

@@ -43,18 +43,18 @@ class CodeAttributesUnversionized extends Component<Props>{
                         <div key={attribute}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             {typeof enabledAttributes[attribute] === 'object' ?
-                                <ul>
+                                <ul id={attribute + "_attribute_value"}>
                                     {enabledAttributes[attribute].map((val, j) => (
                                         <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/></li>
                                     ))}
                                 </ul> :
-                                <div key={attribute}>
+                                <div key={attribute} id={attribute + "_attribute_value"}>
                                     <p dangerouslySetInnerHTML={{__html: attributes[attribute]}}/>
                                 </div>}
                         </div>))}
                 {// Add last seeding date and valid from if terminal
                     terminal &&
-                    ['updated_at', 'valid_from'].map( attribute => (
+                    ['updated_at', 'valid_from', 'valid_to'].map( attribute => (
                         <div key={attribute}>
                             <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
                             <p> {dateFormat(new Date(attributes[attribute]), "dd.mm.yyyy")}</p>
