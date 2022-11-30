@@ -225,4 +225,21 @@ describe('Default test suite for mobile version, testing general navigation via 
         await expect(page).toMatch("Zuletzt geändert")
         await expect(page).toMatch("Ähnliche Codes")
     })
+
+    it ('show new code information', async function() {
+        await page.goto(baseUrl + '/de/CHOP/CHOP_2022/chops/00.4I.11?query=00.4I.11', {waitUntil: 'networkidle0'})
+        await expect(page).toMatch("Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat.")
+        await page.goto(baseUrl + '/de/ICD/ICD10-GM-2021/icds/U13.5?query=u13.5', {waitUntil: 'networkidle0'})
+        await expect(page).toMatch("Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat.")
+        await page.goto(baseUrl + '/de/ICD/ICD10-GM-2011/icds/R11?query=r11', {waitUntil: 'networkidle0'})
+        await expect(page).not.toMatch("Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat.")
+        await page.goto(baseUrl + '/de/ICD/ICD10-GM-2021/icds/N19?query=N19', {waitUntil: 'networkidle0'})
+        await expect(page).not.toMatch("Dies ist ein Neukode, der keine Vorgängercodes in Vorversionen hat.")
+    })
+
+    // If last ICD version is newer than 2022, this test has to be adapted.
+    it ('call to base URL', async function() {
+        await page.goto(baseUrl, {waitUntil: 'networkidle0'})
+        await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022')
+    })
 })

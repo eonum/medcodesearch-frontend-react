@@ -26,7 +26,7 @@ class RouterService extends Component {
      * get the language defined in the url and if it isn't defined set it to 'de'
      * @returns {string|*}
      */
-    static getLanguageFromURL() {
+    static initializeLanguageFromURL() {
         if(window.location.pathname !== '/') {
             return window.location.pathname.split("/")[1]
         }
@@ -37,31 +37,14 @@ class RouterService extends Component {
      * get the catalog defined in the url and if it isn't defined set it to 'ICD'
      * @returns {string|*}
      */
-    static getCatalogFromURL() {
+    static initializeCatalogFromURL() {
         if(window.location.pathname !== '/') {
             return window.location.pathname.split("/")[2]
         }
         return 'ICD'
     }
 
-    /**
-     * get the version defined in the url and if it isn't defined set it to latest icd version.
-     * @returns {string|*}
-     */
-    // TODO: Get latest ICD version code dynamically since this will not work when catalog is newer than 2022.
-    static getVersionFromURL() {
-        if(window.location.pathname !== '/') {
-            let arr = window.location.pathname.split("/")
-            if(arr.length === 6) {
-                return arr[3]
-            } else {
-                return ''
-            }
-        }
-        return 'ICD10-GM-2022'
-    }
-
-    static getResourceTypeFromURL() {
+    static initializeResourceTypeFromURL() {
         if(window.location.pathname !== '/') {
             let arr = window.location.pathname.split("/")
             if(arr.length === 6) {
@@ -75,8 +58,7 @@ class RouterService extends Component {
         return 'icd_chapters'
     }
 
-    // TODO: Get latest ICD base code dynamically since this will not work when catalog is newer than 2022.
-    static getCodeFromURL() {
+    static initializeCodeFromURL() {
         if(window.location.pathname !== '/') {
             let arr = window.location.pathname.split("/")
             if(arr.length === 6) {
@@ -87,8 +69,7 @@ class RouterService extends Component {
                 return arr[4]
             }
         }
-        // Base code for ICD, which is the catalog for root url, i.e. when visiting medcodesearch.ch.
-        return 'ICD10-GM-2022'
+        return ''
     }
 
 }

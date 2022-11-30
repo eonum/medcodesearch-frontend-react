@@ -53,9 +53,9 @@ class App extends Component<Props, IApp>{
     constructor(props) {
         super(props);
         this.state = {
-            language: RouterService.getLanguageFromURL(),
-            selectedButton: RouterService.getCatalogFromURL(),
-            selectedVersion: RouterService.getVersionFromURL(),
+            language: RouterService.initializeLanguageFromURL(),
+            selectedButton: RouterService.initializeCatalogFromURL(),
+            selectedVersion: this.initializeVersionFromURL(),
             selectedDate: dateFormat(new Date(), "dd.mm.yyyy"),
             searchResults: [],
             clickedOnLogo: false,
@@ -73,6 +73,23 @@ class App extends Component<Props, IApp>{
         this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
         this.showHide = this.showHide.bind(this);
         this.showSearchResults = this.showSearchResults.bind(this);
+    }
+
+    /**
+     * get the version defined in the url and if it isn't defined set it to latest icd version.
+     * @returns {string|*}
+     */
+    initializeVersionFromURL() {
+        if(window.location.pathname !== '/') {
+            let arr = window.location.pathname.split("/")
+            if(arr.length === 6) {
+                return arr[3]
+            } else {
+                return ''
+            }
+        }
+        // Base version placeholder for ICD when visiting medcodesearch.ch. Will be set in App componentDidMount to latestICD.
+        return 'ICD10-GM-XXXX'
     }
 
     /**
@@ -161,8 +178,9 @@ class App extends Component<Props, IApp>{
         let button = this.state.selectedButton;
         let catalog = button === 'SwissDRG' ? button : button.toUpperCase();
         let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
-        let resource_type = RouterService.getResourceTypeFromURL();
-        let code = RouterService.getCodeFromURL();
+        let resource_type = RouterService.initializeResourceTypeFromURL();
+        let code = RouterService.initializeCodeFromURL();
+
 
         // Check for navigation other than language change.
         let navigationWithoutLanguageChange = false;
@@ -206,6 +224,9 @@ class App extends Component<Props, IApp>{
     async componentDidMount() {
         await this.setState({initialVersions: await getVersionsByLanguage('de')})
         await this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
+        if (this.state.selectedVersion === "ICD10-GM-XXXX") {
+            await this.setState({selectedVersion:  this.state.initialVersions['ICD'].at(-1)})
+        }
         await this.setState({isFetching: false})
     }
 
