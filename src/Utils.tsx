@@ -49,7 +49,7 @@ export const versionsWithoutMappingInfos = [
     "CHOP 2014",
     "CHOP 2015"]
 
-export const fetchURL = 'http://localhost:4000'
+export const fetchURL = 'https://search.eonum.ch'
 
 // Get frontend url for navigation from backend code url.
 export function getNavParams(code, language, catalog, resource_type?) {
