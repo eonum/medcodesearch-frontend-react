@@ -28,7 +28,6 @@ class CodeAttributesVersionized extends Component<Props>{
      * @param index
      * @returns {JSX.Element}
      */
-    // TODO: Check if this could be refactored into easier code.
     lookingForLink(aString, index, attribute) {
         let results = []
         const codeRegex = new RegExp(/[{(](([A-Z\d]{1,3}\.?){1,3})(-(([A-Z\d]{1,3}\.?){1,3})?)?[})]/g);

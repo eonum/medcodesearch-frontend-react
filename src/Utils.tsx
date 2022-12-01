@@ -49,7 +49,7 @@ export const versionsWithoutMappingInfos = [
     "CHOP 2014",
     "CHOP 2015"]
 
-export const fetchURL = 'https://search.eonum.ch'
+export const fetchURL = 'http://localhost:4000'
 
 // Get frontend url for navigation from backend code url.
 export function getNavParams(code, language, catalog, resource_type?) {
@@ -61,8 +61,8 @@ export function getNavParams(code, language, catalog, resource_type?) {
     let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
     let pathname;
     let searchString;
-    if (['MIGEL', 'AL'].includes(catalog.toUpperCase())) {
-        pathname = "/" + [language, catalog.toUpperCase(), catalog === 'AL' ? 'laboratory_analyses' : resource_type, code.code].join("/")
+    if (['MIGEL', 'AL'].includes(catalog)) {
+        pathname = "/" + [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : resource_type, code.code].join("/")
         searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
     } else {
         searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');

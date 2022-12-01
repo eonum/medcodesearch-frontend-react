@@ -126,7 +126,7 @@ class MobileButton extends Component<Props,IMobileButton>{
         } else {
             this.setState({disabledCatalog: catalog})
             this.setState({showPopUp: true})
-            if(catalog.toUpperCase() === "MIGEL" || catalog === "AL" || catalog === "DRUG") {
+            if(catalog === "MIGEL" || catalog === "AL" || catalog === "DRUG") {
                 this.setState({disabledVersion: ""})
             } else {
                 this.setState({disabledVersion: this.props.initialVersions[catalog].at(-1)})
@@ -195,7 +195,7 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @returns {boolean}
      */
     isCalBut() {
-        return ['AL', 'MIGEL', 'DRUG'].includes(this.props.catalog.toUpperCase())
+        return ['AL', 'MIGEL', 'DRUG'].includes(this.props.catalog)
     }
 
     /**
@@ -208,7 +208,7 @@ class MobileButton extends Component<Props,IMobileButton>{
             return this.props.catalog;
         }
         else{
-            return this.props.labels[this.props.catalog.toUpperCase()]
+            return this.props.labels[this.props.catalog]
         }
     }
 
@@ -217,7 +217,7 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @returns label
      */
     extractLabel(btn) {
-        return ["AL", "MIGEL", "DRUG"].includes(btn.toUpperCase()) ? this.props.labels[btn.toUpperCase()] : btn
+        return ["AL", "MIGEL", "DRUG"].includes(btn) ? this.props.labels[btn] : btn
     }
 
     /**

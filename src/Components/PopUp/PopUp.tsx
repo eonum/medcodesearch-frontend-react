@@ -80,7 +80,7 @@ class PopUp extends Component<Props, IPopUp>{
      * @returns {Promise<void>}
      */
     async findAvailableLanguages() {
-        if(this.props.catalog === "AL" || this.props.catalog === "DRUG" || this.props.catalog.toUpperCase() === "MIGEL") {
+        if(this.props.catalog === "AL" || this.props.catalog === "DRUG" || this.props.catalog === "MIGEL") {
             this.setState({availableLanguages: ["de", "fr", "it"]})
         } else {
             let catalog = convertCatalogToResourceType(this.props.catalog)
@@ -99,7 +99,7 @@ class PopUp extends Component<Props, IPopUp>{
     }
 
     /**
-     * handle the action after click on a disabled language
+     * Handles the action after click on a disabled language.
      * @param language
      */
     handleLanguageClick(language) {

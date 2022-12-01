@@ -68,7 +68,7 @@ class ButtonUnversionized extends Component<Props,IButtonUnversionized>{
      */
     getClassName() {
         let classname = "customButton"
-        if(this.props.buttonName.toUpperCase() === this.props.selectedButton.toUpperCase()) {
+        if(this.props.buttonName === this.props.selectedButton) {
             classname += " activeCatalog"
         }
         if(this.props.language === "en") {

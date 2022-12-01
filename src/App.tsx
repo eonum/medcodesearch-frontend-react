@@ -147,7 +147,7 @@ class App extends Component<Props, IApp>{
      * @returns {boolean|*}
      */
     isValidVersion(button, version, lang) {
-        if(button.toUpperCase() === 'MIGEL' || button === 'AL' || button === 'DRUG') {
+        if(button === 'MIGEL' || button === 'AL' || button === 'DRUG') {
             return lang !== "en"
         } else {
             return this.state.currentVersions[button].includes(version)
@@ -176,7 +176,6 @@ class App extends Component<Props, IApp>{
         // version is empty for non versionized catalogs.
         let version = this.state.selectedVersion;
         let button = this.state.selectedButton;
-        let catalog = button === 'SwissDRG' ? button : button.toUpperCase();
         let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
         let resource_type = RouterService.initializeResourceTypeFromURL();
         let code = RouterService.initializeCodeFromURL();
@@ -189,12 +188,12 @@ class App extends Component<Props, IApp>{
             prevState.selectedDate !== this.state.selectedDate ||
             this.state.reSetPath) {
             navigationWithoutLanguageChange = true;
-            if (['MIGEL', 'AL', 'DRUG'].includes(catalog.toUpperCase())) {
+            if (['MIGEL', 'AL', 'DRUG'].includes(button)) {
                 code = 'all';
-                resource_type = catalog.toLowerCase() + 's'
+                resource_type = button.toLowerCase() + 's'
             } else {
                 code = version;
-                resource_type = catalog === 'SwissDRG' ? 'mdcs' : catalog.toLowerCase() + '_chapters'
+                resource_type = button === 'SwissDRG' ? 'mdcs' : button.toLowerCase() + '_chapters'
             }
         }
 
@@ -205,8 +204,8 @@ class App extends Component<Props, IApp>{
 
         // Navigate to new path.
         if (navigationWithoutLanguageChange || prevState.language !== this.state.language) {
-            if (this.isValidVersion(catalog, version, this.state.language)) {
-                this.navigateTo(this.state.language + "/" + catalog + '/' + version + (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
+            if (this.isValidVersion(button, version, this.state.language)) {
+                this.navigateTo(this.state.language + "/" + button + '/' + version + (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
             } else {
                 let latestICD = this.state.initialVersions['ICD'].at(-1);
                 this.changeSelectedButton("ICD")
@@ -378,7 +377,7 @@ class App extends Component<Props, IApp>{
                         changeSelectedDate={this.changeSelectedDate}
                         labels={this.getLabels(this.state.language)}
                         fullLabels={this.getFullLabels(this.state.language)}
-                        buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'], ['MiGeL', 'AL', 'DRUG']]}
+                        buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'], ['MIGEL', 'AL', 'DRUG']]}
                     />
                 </div>
                 <div key={"app_body"} className="row">

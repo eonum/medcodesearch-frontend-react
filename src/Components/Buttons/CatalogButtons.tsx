@@ -43,7 +43,6 @@ interface ICatalogButtons {
     currentCHOP: string,
     currentTARMED: string,
     selectedDate: string,
-    buttons: IButtonLabels,
 }
 
 /**
@@ -65,7 +64,6 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             currentCHOP: this.props.initialVersions['CHOP'].at(-1),
             currentTARMED: this.props.initialVersions['TARMED'].at(-1),
             selectedDate: dateFormat(new Date(), "dd.mm.yyyy"),
-            buttons: this.props.buttons,
         }
         this.updateOnButtonClick = this.updateOnButtonClick.bind(this);
     }
@@ -166,9 +164,9 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                 <div key={"catalog_buttons_desktop"} className="d-none d-lg-block">
                     <div key={"catalog_buttons_desktop_0"} className={"alignButtons"}>
                         {
-                            // Map versionized buttons, this.state.buttons[0] is the array of versionized buttons,
+                            // Map versionized buttons, this.props.buttons[0] is the array of versionized buttons,
                             // i.e. ["ICD", "CHOP", "SwissDRG", "TARMED"].
-                            this.state.buttons[0].map((btn, index) => (
+                            this.props.buttons[0].map((btn, index) => (
                                 <div key={"catalog_button_" + btn}>
                                     <ButtonVersionized
                                         key={btn}
@@ -194,9 +192,9 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                 </div>
                             ))}
                         {
-                            // Map unversionized buttons, this.state.buttons[1] is the array of unversionized buttons,
-                            // i.e. ["MiGeL", "AL", "DRUG"].
-                            this.state.buttons[1].map((btn, index) => (
+                            // Map unversionized buttons, this.props.buttons[1] is the array of unversionized buttons,
+                            // i.e. ["MIGEL", "AL", "DRUG"].
+                            this.props.buttons[1].map((btn, index) => (
                                 <div key={"catalog_button_" + btn}>
                                     <ButtonUnversionized
                                         selectedCatalog={this.props.params.catalog}
@@ -206,7 +204,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                                         language={this.props.language}
                                         selectedDate={this.state.selectedDate}
                                         buttonName={btn}
-                                        label={this.props.labels[btn.toUpperCase()]}
+                                        label={this.props.labels[btn]}
                                         fullLabel={this.props.fullLabels[index]}
                                         clickButton={(button, date) => {
                                             this.updateOnButtonClick('', button, true, date);

@@ -27,7 +27,7 @@ describe('Default test suite, testing general navigation via clicks', function (
         await expect(page).toMatch('CHOP')
         await expect(page).toMatch('C14: Operationen an den Bewegungsorganen (76–84)')
         await expect(page).toMatch('Untergeordnete Codes')
-        await expect(page.url()).toBe(baseUrl + "/de/CHOP/CHOP_2022/chop_chapters/CHOP_2022")
+        await expect(page.url()).toBe(baseUrl + "/de/CHOP/CHOP_2023/chop_chapters/CHOP_2023")
         await page.click('#SwissDRG');
         await page.waitForTimeout(n)
         await expect(page).toMatch('SwissDRG')
