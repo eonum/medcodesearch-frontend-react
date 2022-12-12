@@ -73,6 +73,7 @@
   "LBL_PACKAGE_CODE": "Paketcode",
   "LBL_UPDATED_AT": "Zuletzt auf medcodesearch.ch aktualisiert",
   "LBL_VALID_FROM": "Gültig ab",
-  "LBL_VALID_TO": "Gültig bis"
+  "LBL_VALID_TO": "Gültig bis",
+  "LBL_NO_CODE": "Dieser Code existiert nicht oder ist für dieses Datum nicht verfügbar."
 }
 

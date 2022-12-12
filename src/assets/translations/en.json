@@ -46,5 +46,6 @@
   "LBL_BLOCKS": "TARMED blocks",
   "LBL_UPDATED_AT": "Last updated on medcodesearch.ch",
   "LBL_VALID_FROM": "Valid from",
-  "LBL_VALID_TO": "Valid to"
+  "LBL_VALID_TO": "Valid to",
+  "LBL_NO_CODE": "This code does not exist or is not available for this date."
 }

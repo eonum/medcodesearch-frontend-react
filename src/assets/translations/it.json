@@ -69,5 +69,6 @@
   "LBL_SWISSMEDIC_NR": "Swissmedic-Code",
   "LBL_UPDATED_AT": "Ultimo aggiornamento su medcodesearch.ch",
   "LBL_VALID_FROM": "Valido da",
-  "LBL_VALID_TO": "Valido per"
+  "LBL_VALID_TO": "Valido per",
+  "LBL_NO_CODE": "Questo codice non esiste o non è disponibile per questa data."
 }
