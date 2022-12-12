@@ -10,7 +10,7 @@ import {INavigationHook} from "../../interfaces";
 import dateFormat from "dateformat"
 
 const resourceTypeByBtn = {
-    "SWISSDRG": 'drgs',
+    "SwissDRG": 'drgs',
     "ICD": 'icds',
     "CHOP": 'chops',
     "TARMED": 'tarmeds',

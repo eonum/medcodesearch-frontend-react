@@ -34,13 +34,13 @@ describe('Default test suite, testing general navigation via clicks', function (
         await expect(page).toMatch('MDC 22:')
         await expect(page).toMatch('Verbrennungen')
         await expect(page).toMatch('Untergeordnete Codes')
-        await expect(page.url()).toBe(baseUrl + "/de/SwissDRG/V11.0/mdcs/V11.0")
+        await expect(page.url()).toBe(baseUrl + "/de/SwissDRG/V12.0/mdcs/V12.0")
         await page.click("#TARMED");
         await expect(page).toMatch('TARMED')
         await expect(page).toMatch('24: Diagnostik und Therapie des Bewegungsapparates')
         await expect(page).toMatch('Untergeordnete Codes')
         await expect(page.url()).toBe(baseUrl + "/de/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09")
-        await page.click('#MiGeL');
+        await page.click('#MIGEL');
         await expect(page).toMatch('MiGeL')
         await expect(page).toMatch('13: HOERHILFEN')
         await expect(page).toMatch('Untergeordnete Codes')
