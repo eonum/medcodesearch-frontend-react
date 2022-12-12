@@ -223,6 +223,8 @@ class App extends Component<Props, IApp>{
     async componentDidMount() {
         await this.setState({initialVersions: await getVersionsByLanguage('de')})
         await this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
+        // If medcodesearch is accessed via root url, i.e. medcodesearch.ch, there is no version from url, i.e. the
+        // placeholder ICD10-GM-XXXX set in initializeVersionFromURL has to be transformed to latest ICD.
         if (this.state.selectedVersion === "ICD10-GM-XXXX") {
             await this.setState({selectedVersion:  this.state.initialVersions['ICD'].at(-1)})
         }
