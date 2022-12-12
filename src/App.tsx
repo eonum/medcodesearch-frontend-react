@@ -180,7 +180,6 @@ class App extends Component<Props, IApp>{
         let resource_type = RouterService.initializeResourceTypeFromURL();
         let code = RouterService.initializeCodeFromURL();
 
-
         // Check for navigation other than language change.
         let navigationWithoutLanguageChange = false;
         if (prevState.selectedButton !== this.state.selectedButton ||
@@ -202,15 +201,16 @@ class App extends Component<Props, IApp>{
             this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
         }
 
+
         // Navigate to new path.
         if (navigationWithoutLanguageChange || prevState.language !== this.state.language) {
             if (this.isValidVersion(button, version, this.state.language)) {
                 this.navigateTo(this.state.language + "/" + button + '/' + version + (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
             } else {
                 let latestICD = this.state.initialVersions['ICD'].at(-1);
-                this.changeSelectedButton("ICD")
-                this.changeSelectedVersion(latestICD)
                 this.navigateTo(this.state.language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD, searchString)
+                this.changeSelectedVersion(latestICD)
+                this.changeSelectedButton("ICD")
             }
             this.setState({reSetPath: false})
         }
