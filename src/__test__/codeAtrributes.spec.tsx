@@ -36,7 +36,7 @@ describe('Code attributes test suite for desktop version', function () {
         element = await page.$("#hvb_care_attribute_value")
         value = await page.evaluate(el => el.textContent, element)
         await expect(value).toBe("29.75")
-        await expect(page).toMatch("Zuletzt geändert")
+        await expect(page).toMatch("Zuletzt auf medcodesearch.ch aktualisiert")
         await expect(page).toMatch("Gültig ab")
         await expect(page).toMatch("Gültig bis")
     })

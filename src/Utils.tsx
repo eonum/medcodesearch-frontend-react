@@ -74,18 +74,14 @@ export function getNavParams(code, language, catalog, resource_type?) {
 // Use filter to select attributes we want to display, i.e not in skippable attributes and value not null,
 // undefined or empty.
 export function collectEnabledAttributes(attributes) {
-    let enabledAttributes = {};
-    Object.keys(attributes).map((key) => {
-        if(!skippableAttributes.includes(key) &&
-            !["", null, undefined].includes(attributes[key])) {
-            if (typeof attributes[key] == 'number') {
-                enabledAttributes[key] = attributes[key]
-            } else {
-                if(attributes[key].length > 0) {
-                    enabledAttributes[key] = attributes[key]
-                }
-            }
-        }
-    })
-    return enabledAttributes
+    return Object.keys(attributes)
+        .filter((key) => (
+            !skippableAttributes.includes(key) && (attributes[key] && (attributes[key].length > 0 ||
+                (typeof attributes[key] == 'number' && !isNaN(attributes[key]))))
+        ))
+        .reduce((obj, key) => {
+            return Object.assign(obj, {
+                [key]: attributes[key]
+            });
+        }, {});
 }
