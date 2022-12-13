@@ -70,5 +70,10 @@
   "LBL_UPDATED_AT": "Dernière mise à jour sur medcodesearch.ch",
   "LBL_VALID_FROM": "Valable à partir de",
   "LBL_VALID_TO": "Valable pour",
-  "LBL_NO_CODE": "Ce code n'existe pas ou n'est pas disponible pour cette date."
+  "LBL_NO_CODE": "Ce code n'existe pas ou n'est pas disponible pour cette date.",
+  "LBL_AVERAGE_STAY_DURATION": "Durée de séjour moyenne (journées)",
+  "LBL_FIRST_DAY_DISCOUNT": "Premier jour avec réduction",
+  "LBL_DISCOUNT_PER_DAY": "Réduction journalier",
+  "LBL_FIRST_DAY_SURCHARGE": "Premier jour avec supplément",
+  "LBL_SURCHARGE_PER_DAY": "Supplément journalier"
 }

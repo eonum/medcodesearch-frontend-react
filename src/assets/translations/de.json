@@ -74,6 +74,11 @@
   "LBL_UPDATED_AT": "Zuletzt auf medcodesearch.ch aktualisiert",
   "LBL_VALID_FROM": "Gültig ab",
   "LBL_VALID_TO": "Gültig bis",
-  "LBL_NO_CODE": "Dieser Code existiert nicht oder ist für dieses Datum nicht verfügbar."
+  "LBL_NO_CODE": "Dieser Code existiert nicht oder ist für dieses Datum nicht verfügbar.",
+  "LBL_AVERAGE_STAY_DURATION": "Durchschnittliche Verweildauer (Tage)",
+  "LBL_FIRST_DAY_DISCOUNT": "Erster Tag mit Abschlag",
+  "LBL_DISCOUNT_PER_DAY": "Abschlag pro Tag",
+  "LBL_FIRST_DAY_SURCHARGE": "Erster Tag mit Zuschlag",
+  "LBL_SURCHARGE_PER_DAY": "Zuschlag pro Tag"
 }
 

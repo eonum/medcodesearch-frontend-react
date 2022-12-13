@@ -33,7 +33,10 @@ const skippableAttributes = [
     "successors",
     "created_at",
     'updated_at',
-    'valid_from'
+    'valid_from',
+    'relevant_codes',
+    'transfer_discount',
+    'exception_from_reuptake'
 ]
 
 export const versionsWithoutMappingInfos = [
