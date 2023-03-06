@@ -47,5 +47,18 @@
   "LBL_UPDATED_AT": "Last updated on medcodesearch.ch",
   "LBL_VALID_FROM": "Valid from",
   "LBL_VALID_TO": "Valid to",
-  "LBL_NO_CODE": "This code does not exist or is not available for this date."
+  "LBL_NO_CODE": "This code does not exist or is not available for this date.",
+  "LBL_IS_CURRENTLY_IN_SL": "Currently in SL",
+  "LBL_SL": "SL",
+  "LBL_GGSL": "GGSL",
+  "LBL_PUBLIC_PRICE": "Public price (CHF)",
+  "LBL_DATE_ADDED_IN_SL": "Added to SL",
+  "LBL_DATE_DELETED_FROM_SL": "Deleted from SL",
+  "LBL_DATE_COMPULSATORY_UNTIL": "Compulsory until",
+  "LBL_HAS_LIMITATION": "Limitation",
+  "LBL_IS_GENERICA": "Generic",
+  "LBL_LIMITATION_POINTS": "Limitation points",
+  "LBL_STATUS": "Status",
+  "LBL_REMOVED_FROM_SL": "This package has been removed from the list of specialties. The displayed data correspond to the latest status.",
+  "LBL_SL_INFOS": "Information from specialities list (SL/LS)"
 }

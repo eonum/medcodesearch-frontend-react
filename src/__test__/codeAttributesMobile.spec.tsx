@@ -80,4 +80,24 @@ describe('Code attributes test suite for mobile version', function () {
         await expect(page).toMatch("Supplemento giornaliero")
         await expect(page).toMatch("Elementi simili")
     })
+
+    it ('SL code information', async function() {
+        await page.goto(baseUrl + '/de/DRUG/drugs/7680650440086?', {waitUntil: 'networkidle0'})
+        await expect(page).toMatch("Diese Packung wurde aus der Spezialitätenliste gestrichen. " +
+            "Die angezeigten Daten entsprechen dem letzten Stand.")
+        expect(await page.$eval("#SL_status", (e) => e.textContent)).toContain(
+            "Status: SL");
+        expect(await page.$eval("#SL_public_price", (e) => e.textContent)).toContain(
+            "Publikumspreis (CHF): 56.25");
+        expect(await page.$eval("#SL_date_added_in_sl", (e) => e.textContent)).toContain(
+            "Zur SL hinzugefügt: 01.09.2014");
+        expect(await page.$eval("#SL_date_deleted_from_sl", (e) => e.textContent)).toContain(
+            "Datum der Streichung aus SL: 01.02.2023");
+        expect(await page.$eval("#SL_date_compulsatory_until", (e) => e.textContent)).toContain(
+            "Kassenpflichtig bis: 30.04.2023");
+        expect(await page.$eval("#SL_has_limitation", (e) => e.textContent)).toContain(
+            "Limitation: Nein");
+        expect(await page.$eval("#SL_is_generica", (e) => e.textContent)).toContain(
+            "Generika: Ja");
+    })
 })

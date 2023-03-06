@@ -75,5 +75,19 @@
   "LBL_FIRST_DAY_DISCOUNT": "Primo giorno con riduzione",
   "LBL_DISCOUNT_PER_DAY": "Tasso di riduzione giornaliero",
   "LBL_FIRST_DAY_SURCHARGE": "Primo giorno con supplemento",
-  "LBL_SURCHARGE_PER_DAY": "Supplemento giornaliero"
+  "LBL_SURCHARGE_PER_DAY": "Supplemento giornaliero",
+  "LBL_IS_CURRENTLY_IN_SL": "Attualmente in ES",
+  "LBL_SL": "ES",
+  "LBL_GGSL": "ES-IC",
+  "LBL_PUBLIC_PRICE": "Prezzo al dettaglio (CHF)",
+  "LBL_DATE_ADDED_IN_SL": "Aggiunto alla SL",
+  "LBL_DATE_DELETED_FROM_SL": "Data di cancellazione dalla ES",
+  "LBL_DATE_COMPULSATORY_UNTIL": "Contante obbligatorio fino a",
+  "LBL_HAS_LIMITATION": "Limitazione",
+  "LBL_IS_GENERICA": "Generico",
+  "LBL_LIMITATION_POINTS": "Punti di limitazione",
+  "LBL_STATUS": "Stato",
+  "LBL_REMOVED_FROM_SL": "Questa confezione è stata rimossa dall'elenco delle specialità. I dati indicati corrispondono allo stato più recente.",
+  "LBL_SL_INFOS": "Informazioni dall'elenco delle specialità (ES)"
+
 }

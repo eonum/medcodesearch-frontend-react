@@ -75,5 +75,18 @@
   "LBL_FIRST_DAY_DISCOUNT": "Premier jour avec réduction",
   "LBL_DISCOUNT_PER_DAY": "Réduction journalier",
   "LBL_FIRST_DAY_SURCHARGE": "Premier jour avec supplément",
-  "LBL_SURCHARGE_PER_DAY": "Supplément journalier"
+  "LBL_SURCHARGE_PER_DAY": "Supplément journalier",
+  "LBL_IS_CURRENTLY_IN_SL": "Actuellement en LS",
+  "LBL_SL": "LS",
+  "LBL_GGSL": "LSIC",
+  "LBL_PUBLIC_PRICE": "Prix public (CHF)",
+  "LBL_DATE_ADDED_IN_SL": "Ajouté à la LS",
+  "LBL_DATE_DELETED_FROM_SL": "Date de suppression de la LS",
+  "LBL_DATE_COMPULSATORY_UNTIL": "Couverture par les caisses jusqu'au",
+  "LBL_HAS_LIMITATION": "Limitation",
+  "LBL_IS_GENERICA": "Génériques",
+  "LBL_LIMITATION_POINTS": "Points de limitation",
+  "LBL_STATUS": "Statut",
+  "LBL_REMOVED_FROM_SL": "Cet emballage a été retiré de la liste des spécialités. Les données affichées correspondent à la dernière mise à jour.",
+  "LBL_SL_INFOS": "Informations de la liste des spécialités (LS)"
 }

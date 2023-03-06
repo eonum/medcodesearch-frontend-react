@@ -79,6 +79,21 @@
   "LBL_FIRST_DAY_DISCOUNT": "Erster Tag mit Abschlag",
   "LBL_DISCOUNT_PER_DAY": "Abschlag pro Tag",
   "LBL_FIRST_DAY_SURCHARGE": "Erster Tag mit Zuschlag",
-  "LBL_SURCHARGE_PER_DAY": "Zuschlag pro Tag"
+  "LBL_SURCHARGE_PER_DAY": "Zuschlag pro Tag",
+  "LBL_IS_CURRENTLY_IN_SL": "Momentan in SL",
+  "LBL_SL": "SL",
+  "LBL_GGSL": "GGSL",
+  "LBL_PUBLIC_PRICE": "Publikumspreis (CHF)",
+  "LBL_DATE_ADDED_IN_SL": "Zur SL hinzugefügt",
+  "LBL_DATE_DELETED_FROM_SL": "Datum der Streichung aus SL",
+  "LBL_DATE_COMPULSATORY_UNTIL": "Kassenpflichtig bis",
+  "LBL_HAS_LIMITATION": "Limitation",
+  "LBL_IS_GENERICA": "Generika",
+  "LBL_LIMITATION_POINTS": "Limitationspunkte",
+  "LBL_STATUS": "Status",
+  "LBL_REMOVED_FROM_SL": "Diese Packung wurde aus der Spezialitätenliste gestrichen. Die angezeigten Daten entsprechen dem letzten Stand.",
+  "LBL_SL_INFOS": "Informationen aus der Spezialitätenliste (SL)",
+  "LBL_FALSE": "Nein",
+  "LBL_TRUE": "Ja"
 }
 

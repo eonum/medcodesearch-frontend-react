@@ -36,7 +36,16 @@ const skippableAttributes = [
     'valid_from',
     'relevant_codes',
     'transfer_discount',
-    'exception_from_reuptake'
+    'exception_from_reuptake',
+    "public_price",
+    "date_added_in_sl",
+    "date_deleted_from_sl",
+    "date_compulsatory_until",
+    "has_limitation",
+    "is_generica",
+    "limitation_points",
+    "is_ggsl",
+    "is_currently_in_sl"
 ]
 
 export const versionsWithoutMappingInfos = [
@@ -87,4 +96,23 @@ export function collectEnabledAttributes(attributes) {
                 [key]: attributes[key]
             });
         }, {});
+}
+
+export function collectAttributesSl(attributes, translateJson) {
+    const attributesSl = ["public_price", "date_added_in_sl", "date_deleted_from_sl",
+        "date_compulsatory_until", "has_limitation", "is_generica", "limitation_points"]
+    return {
+        status: translateJson["LBL_" + (attributes["is_ggsl"] ? "GGSL" : "SL")],
+        ...Object.keys(attributes)
+            .filter((key) => (
+                attributesSl.includes(key) &&
+                (attributes[key] && attributes[key].length > 0 ||
+                    (typeof attributes[key] == 'number' && !isNaN(attributes[key])) ||
+                    (typeof attributes[key] == 'boolean'))))
+            .reduce((obj, key) => {
+                return Object.assign(obj, {
+                    [key]: attributes[key]
+                });
+            }, {})
+    };
 }
