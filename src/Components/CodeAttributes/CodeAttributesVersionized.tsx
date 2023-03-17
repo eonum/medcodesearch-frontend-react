@@ -101,7 +101,15 @@ class CodeAttributesVersionized extends Component<Props>{
                                     <p dangerouslySetInnerHTML={{__html: attributes[attribute]}}/>
                                 </div>
                             }
-                        </div>))}
+                        </div>
+                    ))}
+                {attributes["implants_included"] &&
+                    <div key={"implants_included"}>
+                        <h5>{translateJson["LBL_IMPLANTS_INCLUDED"]}</h5>
+                        <div>{translateJson["LBL_" + attributes["implants_included"].toString().toUpperCase()]}</div>
+                        <br/>
+                    </div>
+                }
                 {// Add mapping information (predecessor / successor information.
                     mappingFields.map((field, j) => (
                         attributes[field] != null &&

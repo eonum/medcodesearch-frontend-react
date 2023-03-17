@@ -88,6 +88,9 @@
   "LBL_LIMITATION_POINTS": "Punti di limitazione",
   "LBL_STATUS": "Stato",
   "LBL_REMOVED_FROM_SL": "Questa confezione è stata rimossa dall'elenco delle specialità. I dati indicati corrispondono allo stato più recente.",
-  "LBL_SL_INFOS": "Informazioni dall'elenco delle specialità (ES)"
-
+  "LBL_SL_INFOS": "Informazioni dall'elenco delle specialità (ES)",
+  "LBL_FALSE": "No",
+  "LBL_TRUE": "Si",
+  "LBL_COST_WEIGHT": "Peso dei costi",
+  "LBL_IMPLANTS_INCLUDED": "Impianti inclusie"
 }

@@ -86,7 +86,7 @@ class PopUp extends Component<Props, IPopUp>{
             let catalog = convertCatalogToResourceType(this.props.catalog)
             for(let lang of languages) {
                 if(lang !== this.props.language && lang !== 'de') {
-                    await fetch([fetchURL, lang, catalog, 'versions'].join("/"))
+                    await fetch([fetchURL, lang, convertCatalogToResourceType(catalog), 'versions'].join("/"))
                         .then((res) => res.json())
                         .then((json) => {
                             if(json.includes(this.props.version)) {

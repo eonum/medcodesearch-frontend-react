@@ -88,5 +88,9 @@
   "LBL_LIMITATION_POINTS": "Points de limitation",
   "LBL_STATUS": "Statut",
   "LBL_REMOVED_FROM_SL": "Cet emballage a été retiré de la liste des spécialités. Les données affichées correspondent à la dernière mise à jour.",
-  "LBL_SL_INFOS": "Informations de la liste des spécialités (LS)"
+  "LBL_SL_INFOS": "Informations de la liste des spécialités (LS)",
+  "LBL_FALSE": "Non",
+  "LBL_TRUE": "Oui",
+  "LBL_COST_WEIGHT": "Cost-weight",
+  "LBL_IMPLANTS_INCLUDED": "Implants inclus"
 }

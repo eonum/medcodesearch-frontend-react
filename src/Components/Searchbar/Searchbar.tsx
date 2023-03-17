@@ -16,7 +16,8 @@ const resourceTypeByBtn = {
     "TARMED": 'tarmeds',
     "MIGEL": 'migels',
     "AL": 'laboratory_analyses',
-    "DRUG": 'drugs'
+    "DRUG": 'drugs',
+    'STS': 'amb_drgs'
 }
 
 interface Props {

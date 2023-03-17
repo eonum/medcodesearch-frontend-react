@@ -61,8 +61,8 @@ class App extends Component<Props, IApp>{
             clickedOnLogo: false,
             reSetPath: false,
             collapseMenu: false,
-            initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': []},
-            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': []},
+            initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'STS': []},
+            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'STS': []},
             isFetching: true
         };
         this.changeSelectedButton = this.changeSelectedButton.bind(this);
@@ -192,7 +192,11 @@ class App extends Component<Props, IApp>{
                 resource_type = button.toLowerCase() + 's'
             } else {
                 code = version;
-                resource_type = button === 'SwissDRG' ? 'mdcs' : button.toLowerCase() + '_chapters'
+                if (['SwissDRG', 'STS'].includes(button)) {
+                    resource_type = button === 'SwissDRG' ? 'mdcs' : 'amb_mdcs'
+                } else {
+                    resource_type = button.toLowerCase() + '_chapters'
+                }
             }
         }
 
@@ -379,7 +383,7 @@ class App extends Component<Props, IApp>{
                         changeSelectedDate={this.changeSelectedDate}
                         labels={this.getLabels(this.state.language)}
                         fullLabels={this.getFullLabels(this.state.language)}
-                        buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED'], ['MIGEL', 'AL', 'DRUG']]}
+                        buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'STS'], ['MIGEL', 'AL', 'DRUG']]}
                     />
                 </div>
                 <div key={"app_body"} className="row">

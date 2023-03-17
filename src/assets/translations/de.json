@@ -94,6 +94,8 @@
   "LBL_REMOVED_FROM_SL": "Diese Packung wurde aus der Spezialitätenliste gestrichen. Die angezeigten Daten entsprechen dem letzten Stand.",
   "LBL_SL_INFOS": "Informationen aus der Spezialitätenliste (SL)",
   "LBL_FALSE": "Nein",
-  "LBL_TRUE": "Ja"
+  "LBL_TRUE": "Ja",
+  "LBL_COST_WEIGHT": "Kostengewicht",
+  "LBL_IMPLANTS_INCLUDED": "Inklusive Implantate"
 }
 

@@ -2,7 +2,7 @@ import PopUp from "../PopUp/PopUp";
 import {Dropdown} from "react-bootstrap";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
-import {cutCatalogFromVersion, findCatalog} from "../../Services/catalog-version.service";
+import {convertCatalogToResourceType, cutCatalogFromVersion, findCatalog} from "../../Services/catalog-version.service";
 import React, {Component} from "react";
 import DatePicker from "./DatePicker";
 import {IVersions, IButtonLabels, IUpdateStateByArg, IUpdateButton, IUnversionizedLabels} from "../../interfaces";
@@ -140,7 +140,7 @@ class MobileButton extends Component<Props,IMobileButton>{
      */
     async fechtBaseVersions() {
         if (!this.isCalBut()) {
-            await fetch([fetchURL, 'de', this.props.catalog === "SwissDRG" ? 'drgs' : this.props.catalog.toLowerCase() + 's', 'versions'].join("/"))
+            await fetch([fetchURL, 'de', convertCatalogToResourceType(this.props.catalog), 'versions'].join("/"))
                 .then((res) => res.json())
                 .then((json) => {
                     this.setState({
@@ -159,7 +159,7 @@ class MobileButton extends Component<Props,IMobileButton>{
      */
     async fetchAvailableVersions() {
         if (!this.isCalBut()) {
-            let versionsString = [fetchURL, this.props.language, this.props.catalog === "SwissDRG" ? 'drgs' : this.props.catalog.toLowerCase() + 's', 'versions'].join("/")
+            let versionsString = [fetchURL, this.props.language, convertCatalogToResourceType(this.props.catalog), 'versions'].join("/")
             await fetch(versionsString)
                 .then((res) => res.json())
                 .then((json) => {
