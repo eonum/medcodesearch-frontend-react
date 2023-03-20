@@ -89,8 +89,8 @@ export function collectEnabledAttributes(attributes) {
     return Object.keys(attributes)
         .filter((key) => (
             !skippableAttributes.includes(key) && (attributes[key] && (attributes[key].length > 0 ||
-                (typeof attributes[key] == 'number' && !isNaN(attributes[key]))))
-        ))
+                (typeof attributes[key] == 'number' && !isNaN(attributes[key])) ||
+                typeof attributes[key] == 'boolean'))))
         .reduce((obj, key) => {
             return Object.assign(obj, {
                 [key]: attributes[key]
