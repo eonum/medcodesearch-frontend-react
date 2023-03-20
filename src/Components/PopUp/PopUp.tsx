@@ -83,10 +83,10 @@ class PopUp extends Component<Props, IPopUp>{
         if(this.props.catalog === "AL" || this.props.catalog === "DRUG" || this.props.catalog === "MIGEL") {
             this.setState({availableLanguages: ["de", "fr", "it"]})
         } else {
-            let catalog = convertCatalogToResourceType(this.props.catalog)
+            let ressource_type = convertCatalogToResourceType(this.props.catalog)
             for(let lang of languages) {
                 if(lang !== this.props.language && lang !== 'de') {
-                    await fetch([fetchURL, lang, convertCatalogToResourceType(catalog), 'versions'].join("/"))
+                    await fetch([fetchURL, lang, ressource_type, 'versions'].join("/"))
                         .then((res) => res.json())
                         .then((json) => {
                             if(json.includes(this.props.version)) {
