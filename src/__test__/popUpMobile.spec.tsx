@@ -48,4 +48,15 @@ describe('PopUp test suite for mobile version', function () {
     await page.waitForTimeout(3*n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2019/icd_chapters/ICD10-GM-2019');
   })
+
+  it('Navigates to latest icd with toast warning if selected version for language change not available',
+      async function () {
+        await page.goto(baseUrl + '/de/ICD/ICD10-GM-2021/icd_chapters/ICD10-GM-2021', {waitUntil: 'networkidle0'});
+        // Change language to 'fr'. 2021 ICD doesn't exist in french version which should trigger rendering of latest
+        // existing icd version for 'fr' and rendering of a toast as warnging.
+        await page.waitForSelector(".language-btn:nth-child(3)", {visible: true});
+        await page.click(".language-btn:nth-child(2)");
+        await page.waitForSelector(".Toastify__toast-container", {visible: true})
+        await expect(page).toMatch("Cette version n'est pas disponible dans la langue sélectionnée.")
+      })
 })

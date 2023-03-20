@@ -96,6 +96,7 @@
   "LBL_FALSE": "Nein",
   "LBL_TRUE": "Ja",
   "LBL_COST_WEIGHT": "Kostengewicht",
-  "LBL_IMPLANTS_INCLUDED": "Inklusive Implantate"
+  "LBL_IMPLANTS_INCLUDED": "Inklusive Implantate",
+  "LBL_VERSION_NOT_AVAILABLE": "Diese Version ist in der ausgewählten Sprache nicht verfügbar."
 }
 

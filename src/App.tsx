@@ -19,6 +19,8 @@ import loadingSpinner from "./Components/Spinner/spinner";
 import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
 import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
 import dateFormat from "dateformat";
+import {toast} from "react-toastify";
+import {warning} from "react-toastify/dist/core/toast";
 
 
 /**
@@ -173,6 +175,7 @@ class App extends Component<Props, IApp>{
      * @param snapshot
      */
     async componentDidUpdate(prevProps, prevState, snapshot) {
+        let translationHash = getTranslationHash(this.state.language);
         // version is empty for non versionized catalogs.
         let version = this.state.selectedVersion;
         let button = this.state.selectedButton;
@@ -212,9 +215,13 @@ class App extends Component<Props, IApp>{
                 this.navigateTo(this.state.language + "/" + button + '/' + version + (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
             } else {
                 let latestICD = this.state.initialVersions['ICD'].at(-1);
+                console.log("I AM HERE")
                 this.navigateTo(this.state.language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD, searchString)
                 this.changeSelectedVersion(latestICD)
                 this.changeSelectedButton("ICD")
+                toast.warning(translationHash["LBL_VERSION_NOT_AVAILABLE"], {
+                    position: toast.POSITION.TOP_RIGHT
+                });
             }
             this.setState({reSetPath: false})
         }
@@ -441,15 +448,16 @@ class App extends Component<Props, IApp>{
     render() {
         let latestICD = this.state.initialVersions['ICD'].at(-1);
         return (
-            <Routes>
-                <Route path="/" element={this.renderContent()}>
-                    <Route path="/" element={<Navigate to={"de/ICD/" + latestICD + "/icd_chapters/" + latestICD}/>}/>
-                    <Route path=":language/:catalog/:resource_type/:code" element={<CodeBodyUnversionized selectedDate={this.state.selectedDate} />}/>
-                    <Route path=":language/:catalog/:version/:resource_type/:code" element={<CodeBodyVersionized/>}/>
-                </Route>
-            </Routes>
-
-        )
+            <>
+                <Routes>
+                    <Route path="/" element={this.renderContent()}>
+                        <Route path="/" element={<Navigate to={"de/ICD/" + latestICD + "/icd_chapters/" + latestICD}/>}/>
+                        <Route path=":language/:catalog/:resource_type/:code" element={<CodeBodyUnversionized selectedDate={this.state.selectedDate} />}/>
+                        <Route path=":language/:catalog/:version/:resource_type/:code" element={<CodeBodyVersionized/>}/>
+                    </Route>
+                </Routes>
+            </>
+    )
     }
 }
 
