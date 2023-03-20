@@ -215,7 +215,6 @@ class App extends Component<Props, IApp>{
                 this.navigateTo(this.state.language + "/" + button + '/' + version + (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
             } else {
                 let latestICD = this.state.initialVersions['ICD'].at(-1);
-                console.log("I AM HERE")
                 this.navigateTo(this.state.language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD, searchString)
                 this.changeSelectedVersion(latestICD)
                 this.changeSelectedButton("ICD")
