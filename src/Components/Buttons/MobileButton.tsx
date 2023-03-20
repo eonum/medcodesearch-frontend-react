@@ -204,7 +204,8 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @returns label
      */
     convertToLabel() {
-        if(this.props.catalog === "SwissDRG" || this.props.catalog === "ICD" || this.props.catalog === "CHOP" || this.props.catalog === "TARMED"){
+        if(this.props.catalog === "SwissDRG" || this.props.catalog === "ICD" || this.props.catalog === "CHOP"
+            || this.props.catalog === "TARMED" || this.props.catalog === "STS"){
             return this.props.catalog;
         }
         else{
@@ -240,18 +241,16 @@ class MobileButton extends Component<Props,IMobileButton>{
     render(){
         return(
             <div key={"mobile_button_0"} className="btn-group">
-                {
-                    <PopUp
-                        language={this.props.language}
-                        changeLanguage={this.props.changeLanguage}
-                        selectedVersion={this.props.changeSelectedVersion}
-                        changeSelectedButton={this.props.changeSelectedButton}
-                        show={this.state.showPopUp}
-                        updatePopUpState={this.updatePopUp}
-                        version={this.state.disabledVersion}
-                        catalog={this.state.disabledCatalog}
-                    />
-                }
+                <PopUp
+                    language={this.props.language}
+                    changeLanguage={this.props.changeLanguage}
+                    selectedVersion={this.props.changeSelectedVersion}
+                    changeSelectedButton={this.props.changeSelectedButton}
+                    show={this.state.showPopUp}
+                    updatePopUpState={this.updatePopUp}
+                    version={this.state.disabledVersion}
+                    catalog={this.state.disabledCatalog}
+                />
                 <Dropdown key={"mobile_button_dropdown_catalog"} className="catalogButtons">
                     <DropdownToggle
                         key={"mobile_button_dropdown_catalog_toggle"}
@@ -276,42 +275,40 @@ class MobileButton extends Component<Props,IMobileButton>{
                         )}
                     </DropdownMenu>
                 </Dropdown>
-                {!this.isCalBut() &&
-                <Dropdown key={"mobile_button_dropdown_versions"} className="catalogButtons">
-                    <Dropdown.Toggle
-                        key={"mobile_button_dropdown_versions_toggle"}
-                        className="customButton"
-                        variant=""
-                        type="button"
-                        id={"mobile_version_button"}>
-                        {this.getVersion()}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className="dropdown">
-                        {this.state.allVersions.reverse().map(
-                            (version) => (
-                                <Dropdown.Item
-                                    className={this.state.availableVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
-                                    eventKey={version}
-                                    key={"mobile_button_dropdown_versions_" + version}
-                                    id={version.replace(/\./g, '')}
-                                    onClick={() => {
-                                        this.handleVersionClick(version, this.props.catalog)
-                                    }}
-                                >{cutCatalogFromVersion(this.props.catalog, version)}</Dropdown.Item>
-                            )
-                        )}
-                    </Dropdown.Menu>
-                </Dropdown>
-                }
-                {this.isCalBut() &&
-                <DatePicker
-                    isMobile={true}
-                    selectedCatalog={this.props.selectedCatalog}
-                    selectedDate= {this.props.selectedDate}
-                    clickDate={(date) => {
-                        this.props.updateOnButtonClick('',this.props.catalog, true, date)
-                    }}
-                />
+                {this.isCalBut() ?
+                    <DatePicker
+                        isMobile={true}
+                        selectedCatalog={this.props.selectedCatalog}
+                        selectedDate= {this.props.selectedDate}
+                        clickDate={(date) => {
+                            this.props.updateOnButtonClick('',this.props.catalog, true, date)
+                        }}
+                    /> :
+                    <Dropdown key={"mobile_button_dropdown_versions"} className="catalogButtons">
+                        <Dropdown.Toggle
+                            key={"mobile_button_dropdown_versions_toggle"}
+                            className="customButton"
+                            variant=""
+                            type="button"
+                            id={"mobile_version_button"}>
+                            {this.getVersion()}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="dropdown">
+                            {this.state.allVersions.reverse().map(
+                                (version) => (
+                                    <Dropdown.Item
+                                        className={this.state.availableVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
+                                        eventKey={version}
+                                        key={"mobile_button_dropdown_versions_" + version}
+                                        id={version.replace(/\./g, '')}
+                                        onClick={() => {
+                                            this.handleVersionClick(version, this.props.catalog)
+                                        }}
+                                    >{cutCatalogFromVersion(this.props.catalog, version)}</Dropdown.Item>
+                                )
+                            )}
+                        </Dropdown.Menu>
+                    </Dropdown>
                 }
         </div>
         )

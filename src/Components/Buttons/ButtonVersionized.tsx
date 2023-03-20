@@ -155,7 +155,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
         }
         return (
             <div key={"button_versionized"}>
-                {<PopUp
+                <PopUp
                     language={this.props.language}
                     changeLanguage={this.props.changeLanguage}
                     selectedVersion={this.props.changeSelectedVersion}
@@ -164,7 +164,7 @@ class ButtonVersionized extends React.Component<Props,IButtonVersionized>{
                     updatePopUpState={this.changeShowPopUp}
                     version={this.state.disabledVersion}
                     catalog={this.state.disabledCatalog}
-                />}
+                />
                 <Dropdown className="catalogButtons d-none d-lg-block">
                     <button 
                         type="button"
