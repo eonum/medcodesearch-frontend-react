@@ -42,6 +42,7 @@ interface ICatalogButtons {
     currentSwissDRG: string,
     currentCHOP: string,
     currentTARMED: string,
+    currentSTS: string
     selectedDate: string,
 }
 
@@ -63,6 +64,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             currentSwissDRG: this.props.initialVersions['SwissDRG'].at(-1),
             currentCHOP: this.props.initialVersions['CHOP'].at(-1),
             currentTARMED: this.props.initialVersions['TARMED'].at(-1),
+            currentSTS: this.props.initialVersions['STS'].at(-1),
             selectedDate: dateFormat(new Date(), "dd.mm.yyyy"),
         }
         this.updateOnButtonClick = this.updateOnButtonClick.bind(this);
