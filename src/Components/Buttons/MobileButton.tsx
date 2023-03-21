@@ -251,10 +251,10 @@ class MobileButton extends Component<Props,IMobileButton>{
                     version={this.state.disabledVersion}
                     catalog={this.state.disabledCatalog}
                 />
-                <Dropdown key={"mobile_button_dropdown_catalog"} className="catalogButtons">
+                <Dropdown key={"mobile_button_dropdown_catalog"} className={this.isCalBut() ? "catalogButtons mobileCal" : "catalogButtons"}>
                     <DropdownToggle
                         key={"mobile_button_dropdown_catalog_toggle"}
-                        className="customButton"
+                        className={this.isCalBut() ? "customButton mobileCal" : "customButton"}
                         variant=""
                         type="button"
                         id={"mobile_catalog_button"}>

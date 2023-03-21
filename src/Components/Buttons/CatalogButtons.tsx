@@ -218,7 +218,7 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
                             ))}
                     </div>
                 </div>
-                <div key={"catalog_buttons_mobile"} className="d-lg-none text-center">
+                <div key={"catalog_buttons_mobile"} className="d-lg-none">
                     <div key={"catalog_buttons_mobile_0"} className={"alignButtons"}>
                         <MobileButton
                             selectedCatalog={this.props.params.catalog}

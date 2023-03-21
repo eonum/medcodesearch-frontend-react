@@ -69,3 +69,12 @@
     cursor: not-allowed !important;
     pointer-events: all !important;
 }
+
+.dropdown.mobileCal {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.customButton.customButton.mobileCal {
+    padding: 7px 12px;
+}

@@ -131,7 +131,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         let {language, catalog, version} = this.props.params
         let siblings = this.state.siblings;
         let navigate = this.props.navigation;
-        let title = this.state.attributes.code.replace("_", " ");
+        let title = this.state.attributes.code ? this.state.attributes.code.replace("_", " ") : "";
         return (
             <div>
                 <Breadcrumb>
