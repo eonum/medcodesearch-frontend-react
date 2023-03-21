@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {IAttributes, INavigationHook, IShortEntry} from "../../interfaces";
 import getTranslationHash from "../../Services/translation.service";
-import {collectEnabledAttributes, collectAttributesSl} from "../../Utils";
+import {collectAttributesSl, commonCodeInfos} from "../../Utils";
 import {useNavigate} from "react-router-dom";
 import dateFormat from "dateformat";
 import ClickableCodesArray from "./ClickableCodesArray";
@@ -34,29 +34,15 @@ class CodeAttributesUnversionized extends Component<Props>{
         let children = attributes.children;
         let siblings = this.props.siblings;
         let terminal = attributes.terminal;
-        let enabledAttributes = collectEnabledAttributes(attributes)
         let slAttributes = collectAttributesSl(attributes, translateJson)
-        let noCodeError = Object.keys(enabledAttributes).includes("error")
-
+        const { noCodeError, codeInfos } = commonCodeInfos(attributes, translateJson, false, undefined)
         return (
             noCodeError ?
                 <div>{translateJson["LBL_NO_CODE"]}</div> :
                 <>
                     {// Render enabled attributes (they can be lists, date and strings.
-                        Object.keys(enabledAttributes).map(attribute => (
-                            <div key={attribute}>
-                                <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
-                                {typeof enabledAttributes[attribute] === 'object' ?
-                                    <ul id={attribute + "_attribute_value"}>
-                                        {enabledAttributes[attribute].map((val, j) => (
-                                            <li key={attribute + "_" + j}><p dangerouslySetInnerHTML={{__html: val}}/>
-                                            </li>
-                                        ))}
-                                    </ul> :
-                                    <div key={attribute} id={attribute + "_attribute_value"}>
-                                        <p dangerouslySetInnerHTML={{__html: attributes[attribute]}}/>
-                                    </div>}
-                            </div>))}
+                        codeInfos
+                    }
                     {// Add last seeding date and valid from if terminal
                         terminal &&
                         ['updated_at', 'valid_from', 'valid_to'].map( attribute => (

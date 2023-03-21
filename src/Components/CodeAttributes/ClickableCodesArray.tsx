@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import {INavigationHook, IShortEntry} from "../../interfaces";
+import {INavigationHook} from "../../interfaces";
 import getTranslationHash from "../../Services/translation.service";
 import {useNavigate} from "react-router-dom";
-import RouterService from "../../Services/router.service";
 import {getNavParams} from "../../Utils";
 
 interface Props {
