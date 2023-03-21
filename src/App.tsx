@@ -20,7 +20,6 @@ import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
 import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
 import dateFormat from "dateformat";
 import {toast} from "react-toastify";
-import {warning} from "react-toastify/dist/core/toast";
 
 
 /**
@@ -90,7 +89,8 @@ class App extends Component<Props, IApp>{
                 return ''
             }
         }
-        // Base version placeholder for ICD when visiting medcodesearch.ch. Will be set in App componentDidMount to latestICD.
+        // Base version placeholder for ICD when visiting medcodesearch.ch.
+        // Will be set in App componentDidMount to latestICD.
         return 'ICD10-GM-XXXX'
     }
 
@@ -168,6 +168,21 @@ class App extends Component<Props, IApp>{
         })
     }
 
+    async navigateToLatestIcd(translationHash) {
+        let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" +
+            RouterService.getQueryVariable('query');
+        let latestICD = this.state.initialVersions['ICD'].at(-1);
+        this.navigateTo(this.state.language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD, searchString)
+        this.changeSelectedVersion(latestICD)
+        this.changeSelectedButton("ICD")
+        // Adding toastId avoids toast getting rendered multiple times (since we're firing this in component did mount
+        // and update. This want be necessary if we rewrite everythin into functional components and use effect hook.
+        toast.warning(translationHash["LBL_VERSION_NOT_AVAILABLE"], {
+            position: toast.POSITION.TOP_RIGHT,
+            toastId: 'no_version_toast',
+        });
+    }
+
     /**
      * Navigates to the correct path.
      * @param prevProps
@@ -179,7 +194,8 @@ class App extends Component<Props, IApp>{
         // version is empty for non versionized catalogs.
         let version = this.state.selectedVersion;
         let button = this.state.selectedButton;
-        let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+        let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" +
+            RouterService.getQueryVariable('query');
         let resource_type = RouterService.initializeResourceTypeFromURL();
         let code = RouterService.initializeCodeFromURL();
 
@@ -212,15 +228,10 @@ class App extends Component<Props, IApp>{
         // Navigate to new path.
         if (navigationWithoutLanguageChange || prevState.language !== this.state.language) {
             if (this.isValidVersion(button, version, this.state.language)) {
-                this.navigateTo(this.state.language + "/" + button + '/' + version + (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
+                this.navigateTo(this.state.language + "/" + button + '/' + version +
+                    (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
             } else {
-                let latestICD = this.state.initialVersions['ICD'].at(-1);
-                this.navigateTo(this.state.language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD, searchString)
-                this.changeSelectedVersion(latestICD)
-                this.changeSelectedButton("ICD")
-                toast.warning(translationHash["LBL_VERSION_NOT_AVAILABLE"], {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+                await this.navigateToLatestIcd(translationHash);
             }
             this.setState({reSetPath: false})
         }
@@ -231,12 +242,16 @@ class App extends Component<Props, IApp>{
      * @returns {Promise<void>}
      */
     async componentDidMount() {
+        let translationHash = getTranslationHash(this.state.language);
         await this.setState({initialVersions: await getVersionsByLanguage('de')})
         await this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
         // If medcodesearch is accessed via root url, i.e. medcodesearch.ch, there is no version from url, i.e. the
         // placeholder ICD10-GM-XXXX set in initializeVersionFromURL has to be transformed to latest ICD.
         if (this.state.selectedVersion === "ICD10-GM-XXXX") {
             await this.setState({selectedVersion:  this.state.initialVersions['ICD'].at(-1)})
+        }
+        if (!this.isValidVersion(this.state.selectedButton, this.state.selectedVersion, this.state.language)) {
+            await this.navigateToLatestIcd(translationHash);
         }
         await this.setState({isFetching: false})
     }
@@ -287,7 +302,10 @@ class App extends Component<Props, IApp>{
         let searchResults;
         let translationHash = getTranslationHash(this.state.language);
         if(this.state.searchResults[0] === "empty") {
-            searchResults = <div key={"search_results_div"} className="searchResult"><p key={"search_results_p"}>{translationHash["LBL_NO_RESULTS"]}</p></div>
+            searchResults =
+                <div key={"search_results_div"} className="searchResult">
+                    <p key={"search_results_p"}>{translationHash["LBL_NO_RESULTS"]}</p>
+                </div>
         } else {
             searchResults =
                 <div key={"search_results_div"}>
