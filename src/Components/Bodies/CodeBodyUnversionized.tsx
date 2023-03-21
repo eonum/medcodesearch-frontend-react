@@ -113,15 +113,15 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @returns {Promise<void>}
      */
     async fetchSiblings(parent) {
+        const code = this.props.params.code
         let fetchString = [fetchURL, parent.url].join("/") + "?show_detail=1&date=" + this.props.selectedDate;
         await fetch(fetchString)
             .then((res) => res.json())
             .then((json) => {
-                for (let i = 0; i < json.children.length; i++) {
-                    if (json.children[i].code !== this.props.params.code) {
-                        this.setState({siblings: [...this.state.siblings, json.children[i]]})
-                    }
-                }
+                let siblings = json.children.filter(function(child) {
+                    return child.code !== code;
+                })
+                this.setState({siblings: siblings})
             })
     }
 
