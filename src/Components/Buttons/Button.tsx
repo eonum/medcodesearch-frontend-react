@@ -25,7 +25,7 @@ interface Props {
     updateOnButtonClick: IUpdateButton
 }
 
-export interface IMobileButton {
+export interface IButton {
     showPopUp: boolean,
     disabledVersion: string,
     disabledCatalog: string,
@@ -39,7 +39,7 @@ export interface IMobileButton {
  * creates the button for the mobile version
  * @component
  */
-class MobileButton extends Component<Props,IMobileButton>{
+class Button extends Component<Props,IButton>{
 
     /**
      * sets the default state values and bind the popup
@@ -120,7 +120,7 @@ class MobileButton extends Component<Props,IMobileButton>{
      * @param catalog
      */
     handleCatalogClick(catalog) {
-        const cat = document.getElementById(catalog);
+        const cat = document.getElementById(catalog + "_button");
         if(!cat.classList.contains('disabled')) {
             this.props.updateOnButtonClick('', catalog, false, "")
         } else {
@@ -265,7 +265,7 @@ class MobileButton extends Component<Props,IMobileButton>{
                                 <Dropdown.Item className={this.getClassName(btn)}
                                                eventKey={btn}
                                                key={"mobile_button_dropdown_catalog_" + btn}
-                                               id={btn + "_mobile_catalog_button"}
+                                               id={btn + "_button"}
                                                onClick={() => {
                                     this.handleCatalogClick(btn)
                                 }}>
@@ -314,4 +314,4 @@ class MobileButton extends Component<Props,IMobileButton>{
         )
     }
 }
-export default MobileButton;
+export default Button;

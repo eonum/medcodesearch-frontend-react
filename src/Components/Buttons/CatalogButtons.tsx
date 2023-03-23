@@ -1,10 +1,8 @@
 import React, {Component} from "react";
-import ButtonVersionized from "./ButtonVersionized";
-import ButtonUnversionized from "./ButtonUnversionized";
 import "./CatalogButtons.css"
 import {useParams} from "react-router-dom";
 import RouterService from "../../Services/router.service";
-import MobileButton from "./MobileButton";
+import Button from "./Button";
 import {
     IVersions,
     IButtonLabels,
@@ -165,62 +163,29 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
             <div key={"catalog_buttons"}>
                 <div key={"catalog_buttons_desktop"} className="d-none d-lg-block">
                     <div key={"catalog_buttons_desktop_0"} className={"alignButtons"}>
-                        {
-                            // Map versionized buttons, this.props.buttons[0] is the array of versionized buttons,
-                            // i.e. ["ICD", "CHOP", "SwissDRG", "TARMED"].
-                            this.props.buttons[0].map((btn, index) => (
-                                <div key={"catalog_button_" + btn}>
-                                    <ButtonVersionized
-                                        key={btn}
-                                        index={index}
-                                        clickCatalogButton={(button) => {
-                                            this.updateOnButtonClick('', button, false, '');
-                                            this.reRender(button)
-                                        }}
-                                        button={btn}
-                                        initialVersions={this.props.initialVersions[btn]}
-                                        currentVersions={this.props.currentVersions[btn]}
-                                        language={this.props.language}
-                                        version={this.getVersionFromButton(btn)}
-                                        changeLanguage={this.props.changeLanguage}
-                                        changeSelectedVersion={this.props.changeSelectedVersion}
-                                        changeSelectedButton={this.props.changeSelectedButton}
-                                        selectedVersion={this.props.params.version}
-                                        selectedButton={this.props.selectedButton}
-                                        updateOnButtonClick={(version) => {
-                                            this.updateOnButtonClick(version, btn, false, '');
-                                        }}
-                                    />
-                                </div>
-                            ))}
-                        {
-                            // Map unversionized buttons, this.props.buttons[1] is the array of unversionized buttons,
-                            // i.e. ["MIGEL", "AL", "DRUG"].
-                            this.props.buttons[1].map((btn, index) => (
-                                <div key={"catalog_button_" + btn}>
-                                    <ButtonUnversionized
-                                        selectedCatalog={this.props.params.catalog}
-                                        changeSelectedButton={this.props.changeSelectedButton}
-                                        changeSelectedVersion={this.props.changeSelectedVersion}
-                                        changeLanguage={this.props.changeLanguage}
-                                        language={this.props.language}
-                                        selectedDate={this.state.selectedDate}
-                                        buttonName={btn}
-                                        label={this.props.labels[btn]}
-                                        fullLabel={this.props.fullLabels[index]}
-                                        clickButton={(button, date) => {
-                                            this.updateOnButtonClick('', button, true, date);
-                                            this.reRender(button)
-                                        }}
-                                        selectedButton={this.props.selectedButton}
-                                    />
-                                </div>
-                            ))}
+                        <Button
+                            selectedCatalog={this.props.params.catalog}
+                            initialVersions={this.props.initialVersions}
+                            selectedDate={this.state.selectedDate}
+                            version={this.getVersionFromButton(this.state.selectedButton)}
+                            selectedVersion={this.props.params.version}
+                            reRender={this.props.clickedOnLogo}
+                            catalog={this.props.selectedButton}
+                            language={this.props.language}
+                            changeLanguage={this.props.changeLanguage}
+                            changeSelectedVersion={this.props.changeSelectedVersion}
+                            changeSelectedButton={this.props.changeSelectedButton}
+                            buttons={this.props.buttons}
+                            labels={this.props.labels}
+                            updateOnButtonClick={(version, catalog, isCalendar, date) => {
+                                this.updateOnButtonClick(version, catalog, isCalendar, date)
+                            }}
+                        />
                     </div>
                 </div>
                 <div key={"catalog_buttons_mobile"} className="d-lg-none">
                     <div key={"catalog_buttons_mobile_0"} className={"alignButtons"}>
-                        <MobileButton
+                        <Button
                             selectedCatalog={this.props.params.catalog}
                             initialVersions={this.props.initialVersions}
                             selectedDate={this.state.selectedDate}
