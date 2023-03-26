@@ -36,7 +36,7 @@ export interface IButton {
 }
 
 /**
- * creates the button for the mobile version
+ * Creates the catalog and version dropdown buttons.
  * @component
  */
 class Button extends Component<Props,IButton>{
@@ -235,12 +235,12 @@ class Button extends Component<Props,IButton>{
     }
 
     /**
-     * Render the mobile button.
+     * Render the button.
      * @returns {JSX.Element}
      */
     render(){
         return(
-            <div key={"mobile_button_0"} className="btn-group">
+            <div key={"buttons"} className="btn-group">
                 <PopUp
                     language={this.props.language}
                     changeLanguage={this.props.changeLanguage}
@@ -251,20 +251,20 @@ class Button extends Component<Props,IButton>{
                     version={this.state.disabledVersion}
                     catalog={this.state.disabledCatalog}
                 />
-                <Dropdown key={"mobile_button_dropdown_catalog"} className={this.isCalBut() ? "catalogButtons mobileCal" : "catalogButtons"}>
+                <Dropdown key={"dropdown_catalog"} className={"catalogButton"}>
                     <DropdownToggle
-                        key={"mobile_button_dropdown_catalog_toggle"}
-                        className={this.isCalBut() ? "customButton mobileCal" : "customButton"}
+                        key={"dropdown_catalog_toggle"}
+                        className={"customButton"}
                         variant=""
                         type="button"
-                        id={"mobile_catalog_button"}>
+                        id={"catalog_button"}>
                         {this.convertToLabel()}
                     </DropdownToggle>
                     <DropdownMenu className="dropdown" >
                         {this.state.buttons.map((btn) => (
                                 <Dropdown.Item className={this.getClassName(btn)}
                                                eventKey={btn}
-                                               key={"mobile_button_dropdown_catalog_" + btn}
+                                               key={"button_dropdown_catalog_" + btn}
                                                id={btn + "_button"}
                                                onClick={() => {
                                     this.handleCatalogClick(btn)
@@ -277,20 +277,19 @@ class Button extends Component<Props,IButton>{
                 </Dropdown>
                 {this.isCalBut() ?
                     <DatePicker
-                        isMobile={true}
                         selectedCatalog={this.props.selectedCatalog}
                         selectedDate= {this.props.selectedDate}
                         clickDate={(date) => {
                             this.props.updateOnButtonClick('',this.props.catalog, true, date)
                         }}
                     /> :
-                    <Dropdown key={"mobile_button_dropdown_versions"} className="catalogButtons">
+                    <Dropdown key={"dropdown_versions"} className="catalogButton">
                         <Dropdown.Toggle
-                            key={"mobile_button_dropdown_versions_toggle"}
+                            key={"dropdown_versions_toggle"}
                             className="customButton"
                             variant=""
                             type="button"
-                            id={"mobile_version_button"}>
+                            id={"version_button"}>
                             {this.getVersion()}
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="dropdown">
@@ -299,7 +298,7 @@ class Button extends Component<Props,IButton>{
                                     <Dropdown.Item
                                         className={this.state.availableVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
                                         eventKey={version}
-                                        key={"mobile_button_dropdown_versions_" + version}
+                                        key={"button_dropdown_versions_" + version}
                                         id={version.replace(/\./g, '')}
                                         onClick={() => {
                                             this.handleVersionClick(version, this.props.catalog)

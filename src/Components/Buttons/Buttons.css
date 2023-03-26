@@ -1,15 +1,21 @@
-.catalogButtons{
+.catalogButton{
     padding: 5px;
 }
 
+/* Ensure vertical alignment synced with catalogButtons */
+.react-datepicker__input-container {
+    padding: 5px;
+    border-radius: 5px;
+}
+
 .customButton.customButton {
-    border-radius: 0px;
+    border-radius: 5px;
     background-color: white;
     color: rgb(0, 0, 0);
     border: 1.5px solid rgba(24, 24, 24, 0.195);
     cursor: pointer;
     font-size: 14px;
-    padding: 6px 12px;
+    padding: 7.5px 12px;
 }
 
 .customButton:hover.customButton {
@@ -20,10 +26,6 @@
 .customButton:focus.customButton{
     outline-style: none;
     box-shadow: none;
-}
-
-.customButton:active.customButton{
-    box-shadow: 2px 1px 4px -1px rgba(89,89,89,0.4);
 }
 
 .activeCatalog{
@@ -40,20 +42,6 @@
     margin-top: 5px;
 }
 
-.search-center {
-    max-width: 983px;
-    margin: auto;
-    text-align: center;
-}
-
-#cal {
-    display: flex;
-    margin-top: 5px;
-    width: auto;
-    margin-right: 8px;
-    height: auto;
-}
-
 .dropdown-item {
     font-size: 14px;
     font-weight: 400;
@@ -68,13 +56,4 @@
 .disabled {
     cursor: not-allowed !important;
     pointer-events: all !important;
-}
-
-.dropdown.mobileCal {
-    padding-top: 0px;
-    padding-bottom: 0px;
-}
-
-.customButton.customButton.mobileCal {
-    padding: 7px 12px;
 }

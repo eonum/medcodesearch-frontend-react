@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import "./CatalogButtons.css"
+import "./Buttons.css"
 import {useParams} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 import Button from "./Button";
@@ -33,7 +33,7 @@ interface Props {
     buttons: IButtonLabels
 }
 
-interface ICatalogButtons {
+interface IButtons {
     selectedButton: string,
     activeVersion: string,
     currentICD: string,
@@ -48,7 +48,7 @@ interface ICatalogButtons {
  * Responsible for all buttons to render
  * @component
  */
-class CatalogButtons extends Component<Props,ICatalogButtons>{
+class Buttons extends Component<Props,IButtons>{
     /**
      * Sets the default state values and binds the buttons.
      * @param props
@@ -154,44 +154,31 @@ class CatalogButtons extends Component<Props,ICatalogButtons>{
         }
     }
 
-    button() {
-        return <Button
-            selectedCatalog={this.props.params.catalog}
-            initialVersions={this.props.initialVersions}
-            selectedDate={this.state.selectedDate}
-            version={this.getVersionFromButton(this.state.selectedButton)}
-            selectedVersion={this.props.params.version}
-            reRender={this.props.clickedOnLogo}
-            catalog={this.props.selectedButton}
-            language={this.props.language}
-            changeLanguage={this.props.changeLanguage}
-            changeSelectedVersion={this.props.changeSelectedVersion}
-            changeSelectedButton={this.props.changeSelectedButton}
-            buttons={this.props.buttons}
-            labels={this.props.labels}
-            updateOnButtonClick={(version, catalog, isCalendar, date) => {
-                this.updateOnButtonClick(version, catalog, isCalendar, date)
-            }}
-        />
-    }
-
     /**
      * Render the button group.
      * @returns {JSX.Element}
      */
     render() {
         return (
-            <div key={"catalog_buttons"}>
-                <div key={"catalog_buttons_desktop"} className="d-none d-lg-block">
-                    <div key={"catalog_buttons_desktop_0"} className={"alignButtons"}>
-                        {this.button()}
-                    </div>
-                </div>
-                <div key={"catalog_buttons_mobile"} className="d-lg-none">
-                    <div key={"catalog_buttons_mobile_0"} className={"alignButtons"}>
-                        {this.button()}
-                    </div>
-                </div>
+            <div key={"buttons"} className={"alignButtons"}>
+                <Button
+                    selectedCatalog={this.props.params.catalog}
+                    initialVersions={this.props.initialVersions}
+                    selectedDate={this.state.selectedDate}
+                    version={this.getVersionFromButton(this.state.selectedButton)}
+                    selectedVersion={this.props.params.version}
+                    reRender={this.props.clickedOnLogo}
+                    catalog={this.props.selectedButton}
+                    language={this.props.language}
+                    changeLanguage={this.props.changeLanguage}
+                    changeSelectedVersion={this.props.changeSelectedVersion}
+                    changeSelectedButton={this.props.changeSelectedButton}
+                    buttons={this.props.buttons}
+                    labels={this.props.labels}
+                    updateOnButtonClick={(version, catalog, isCalendar, date) => {
+                        this.updateOnButtonClick(version, catalog, isCalendar, date)
+                    }}
+                />
             </div>
         )
     }
@@ -202,5 +189,5 @@ function addProps(Component) {
     return props => <Component {...props} params={useParams()}/>;
 }
 
-export default addProps(CatalogButtons);
+export default addProps(Buttons);
 

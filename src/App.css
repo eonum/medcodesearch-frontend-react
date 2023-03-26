@@ -6,6 +6,7 @@
   display: block;
   max-width:200px;
   margin: 20px auto;
+  cursor: pointer;
 }
 #title > img {
   max-width: 200px;

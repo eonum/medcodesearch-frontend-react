@@ -4,7 +4,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import dateFormat from "dateformat";
 
 interface Props {
-    isMobile: boolean,
     selectedCatalog: string,
     selectedDate: string,
     clickDate: { (date: string): void }
@@ -50,7 +49,7 @@ class DatePicker extends React.Component<Props,IDatePicker>{
     render() {
         return (
             <ReactDatePicker
-                id={"datepicker_" + this.props.selectedCatalog + (this.props.isMobile ? '_mobile' : '_desktop')}
+                id={"datepicker"}
                 className="form-control"
                 selected={this.state.showCalendar}
                 dateFormat="dd.MM.yyyy"
