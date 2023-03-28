@@ -18,42 +18,46 @@ describe('Default test suite, testing general navigation via clicks', function (
 
     it('clicking from one catalog to another (de)', async function () {
         await page.goto(baseUrl, {waitUntil: 'networkidle0'});
-        await page.click('#ICD');
         await expect(page).toMatch('ICD10-GM')
         await expect(page).toMatch('IX: Krankheiten des Kreislaufsystems')
         await expect(page).toMatch('Untergeordnete Codes')
         await expect(page.url()).toBe(baseUrl + "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022")
-        await page.click('#CHOP');
+        await page.click('#catalog_button');
+        await page.click('#CHOP_button');
         await expect(page).toMatch('CHOP')
         await expect(page).toMatch('C14: Operationen an den Bewegungsorganen (76–84)')
         await expect(page).toMatch('Untergeordnete Codes')
         await expect(page.url()).toBe(baseUrl + "/de/CHOP/CHOP_2023/chop_chapters/CHOP_2023")
-        await page.click('#SwissDRG');
+        await page.click('#catalog_button');
+        await page.click('#SwissDRG_button');
         await page.waitForTimeout(n)
         await expect(page).toMatch('SwissDRG')
         await expect(page).toMatch('MDC 22:')
         await expect(page).toMatch('Verbrennungen')
         await expect(page).toMatch('Untergeordnete Codes')
         await expect(page.url()).toBe(baseUrl + "/de/SwissDRG/V12.0/mdcs/V12.0")
-        await page.click("#TARMED");
+        await page.click('#catalog_button');
+        await page.click("#TARMED_button");
         await expect(page).toMatch('TARMED')
         await expect(page).toMatch('24: Diagnostik und Therapie des Bewegungsapparates')
         await expect(page).toMatch('Untergeordnete Codes')
         await expect(page.url()).toBe(baseUrl + "/de/TARMED/TARMED_01.09/tarmed_chapters/TARMED_01.09")
-        await page.click('#MIGEL');
+        await page.click('#catalog_button');
+        await page.click('#MIGEL_button');
         await expect(page).toMatch('MiGeL')
         await expect(page).toMatch('13: HOERHILFEN')
         await expect(page).toMatch('Untergeordnete Codes')
         await expect(page.url()).toMatch(baseUrl + "/de/MIGEL/migels/all")
-        var element = await page.$("#datepicker_MIGEL_desktop");
+        var element = await page.$("#datepicker");
         // If "#datepicker_MIGEL_desktop" not existing, element would be null.
         await expect(element).toBeTruthy()
-        await page.click('#AL');
+        await page.click('#catalog_button');
+        await page.click('#AL_button');
         await expect(page.url()).toMatch(baseUrl + "/de/AL/als/all")
         await expect(page).toMatch('AL')
         await expect(page).toMatch('C: Mikrobiologie')
         await expect(page).toMatch('Untergeordnete Codes')
-        var element = await page.$("#datepicker_AL_desktop");
+        var element = await page.$("#datepicker");
         // If "#datepicker_AL_desktop" not existing, element would be null.
         await expect(element).toBeTruthy()
     })
@@ -63,12 +67,11 @@ describe('Default test suite, testing general navigation via clicks', function (
         // Catalogs other than the selected one shouldn't be visible if not clicked on versions button.
         var element = await page.$("#ICD10-GM-2018");
         await expect(element).toBeNull();
-        await page.click("#ICD_version_button");
+        await page.click("#version_button");
         await page.click("#ICD10-GM-2018")
         await expect(page).toMatch('ICD10-GM-2018')
         await expect(page).toMatch('XV: Schwangerschaft, Geburt und Wochenbett')
-        await expect(element).toBeNull();
-        await page.click("#ICD_version_button");
+        await page.click("#version_button");
         await page.click("#ICD10-GM-2022");
         await expect(page).toMatch('ICD10-GM-2022')
         await expect(page).toMatch('XXII: Schlüsselnummern für besondere Zwecke')
@@ -76,20 +79,22 @@ describe('Default test suite, testing general navigation via clicks', function (
 
     it('changing languages', async function () {
         await page.goto(baseUrl, {waitUntil: 'networkidle0'});
+        // Languages are de, fr, it, en. I.e. nth-child(2) should be french.
         await page.click(".language-btn:nth-child(2)")
         await expect(page).toMatch('Eléments subordonnés')
         await expect(page).toMatch('XIX: Lésions traumatiques, empoisonnements et certaines autres conséquences de causes externes')
         await page.click(".language-btn:nth-child(3)")
         await expect(page).toMatch('Elementi subordinati')
         await expect(page).toMatch('XVIII: Sintomi, segni e risultati anormali di esami clinici e di laboratorio, non classificati altrove')
+        // nth-child(2) should be english.
         await page.click(".language-btn:nth-child(4)")
         await expect(page).toMatch('Subordinate codes')
         await expect(page).toMatch('VII: Diseases of the eye and adnexa')
-        // Clicks on first ICD Chapter
-        await page.click(".link")
+        // Click on first ICD Chapter link.
+        await page.click("ul>li:nth-child(1)>.link")
         await expect(page).toMatch('Certain infectious and parasitic diseases')
         await expect(page).toMatch('A50-A64: Infections with a predominantly sexual mode of transmission')
-        // Click on french button
+        // Click on french button.
         await page.click(".language-btn:nth-child(2)")
         await expect(page).toMatch('Certaines maladies infectieuses et parasitaires')
     })
@@ -97,21 +102,31 @@ describe('Default test suite, testing general navigation via clicks', function (
     it('moving from a specific catalog version to other versions of other catalogs', async function() {
         await page.goto(baseUrl, {waitUntil: 'networkidle0'});
         // Move from ICD 2022 to CHOP 2020
-        await page.click("#CHOP_version_button");
+        await page.click("#catalog_button");
+        await page.click("#CHOP_button");
+        await page.click("#version_button");
+        await page.waitForSelector("#CHOP_2020", {visible: true});
         await page.click("#CHOP_2020");
         await expect(page).toMatch("CHOP 2020")
         // Move to DRG V8.0
-        await page.click("#SwissDRG_version_button")
+        await page.click("#catalog_button");
+        await page.click("#SwissDRG_button");
+        await page.click("#version_button")
+        await page.waitForSelector("#V80", {visible: true});
         await page.click("#V80")
         await page.waitForTimeout(n);
         await expect(page).toMatch("SwissDRG 8.0")
         // Move to AL
-        await page.click("#AL")
+        await page.click("#catalog_button");
+        await page.click("#AL_button");
         await expect(page).toMatch("A: Chemie/Hämatologie/Immunologie")
         // Move to ICD 2016
-        await page.click("#ICD_version_button");
+        await page.click("#catalog_button");
+        await page.click("#ICD_button");
+        await page.click("#version_button");
+        await page.waitForSelector("#ICD10-GM-2016", {visible: true});
         await page.click("#ICD10-GM-2016");
-        await page.click("#ICD_version_button");
+        await page.click("#version_button");
         await expect(page).toMatch("ICD10-GM-2016")
     })
 
@@ -119,13 +134,13 @@ describe('Default test suite, testing general navigation via clicks', function (
         await page.goto(baseUrl + '/de/SwissDRG/V4.0/mdcs/V4.0', {waitUntil: 'networkidle0'});
         await expect(page).toMatch("SwissDRG 4.0");
         await page.click("#logo");
-        await expect(page).toMatch("ICD10-GM-");
+        // TODO: Adapt if seeded new ics version
+        await expect(page).toMatch("ICD10-GM-2022");
     })
 
     it('icd clicking from I to A00.0 (de, 2022)', async function() {
         await page.goto(baseUrl + "/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022", {waitUntil: 'networkidle0'})
         // Click on I (first ICD chapter).
-        await page.waitForSelector("ul>li:first-child>a")
         await page.click("ul>li:first-child>a")
         await page.waitForTimeout(n);
         await expect(page).toMatch("Bestimmte infektiöse und parasitäre Krankheiten")
