@@ -32,12 +32,19 @@ interface Props {
     params: IParamTypes
 }
 
+interface ISearchResult {
+    code: string,
+    text: string,
+    terminal: boolean,
+    url: string,
+    highlight: object
+}
 interface IApp {
     language: string,
     selectedButton: string,
     selectedVersion: string,
     selectedDate: string,
-    searchResults: string[],
+    searchResults: string[] | ISearchResult[] ,
     clickedOnLogo: boolean,
     reSetPath: boolean,
     collapseMenu: boolean,
@@ -299,21 +306,13 @@ class App extends Component<Props, IApp>{
      * @returns {JSX.Element}
      */
     searchResults() {
-        let searchResults;
         let translationHash = getTranslationHash(this.state.language);
-        if(this.state.searchResults[0] === "empty") {
-            searchResults =
-                <div key={"search_results_div"} className="searchResult">
-                    <p key={"search_results_p"}>{translationHash["LBL_NO_RESULTS"]}</p>
-                </div>
-        } else {
-            searchResults =
-                <div key={"search_results_div"}>
-                    {this.state.searchResults.map(function(searchResult, i){
-                        return <SearchResult result = {searchResult} key={"search_results_" + i}/>
-                    })}
-                </div>
-        }
+        const searchResults =
+            this.state.searchResults[0] === "empty" ?
+                <div className="searchResult">{translationHash["LBL_NO_RESULTS"]}</div> :
+                this.state.searchResults.map(function (searchResult) {
+                    return <SearchResult result={searchResult} key={searchResult.code}/>
+                })
 
         return(
             <div className="container" id="searchResults">
@@ -365,11 +364,11 @@ class App extends Component<Props, IApp>{
      * Reset everything back to the default but stay in current language.
      */
     reNavigateToHome(){
-        let latestICD = this.state.initialVersions['ICD'].at(-1);
         this.setState({clickedOnLogo: true});
-        this.props.navigation({search: ''});
+        let latestICD = this.state.initialVersions['ICD'].at(-1);
         this.changeSelectedButton('ICD')
         this.changeSelectedVersion(latestICD)
+        this.props.navigation({pathname: "/",search: ''});
     }
 
     /**
@@ -380,9 +379,8 @@ class App extends Component<Props, IApp>{
     }
 
     renderAfterFetch() {
-        let searchResults = this.searchResults();
         return(
-            <div key={"app_container_1"} className="container">
+            <div key={"app_content"}>
                 <div key={"app_searchbar"} className="row" onClick={this.showSearchResults}>
                     <Searchbar
                         language={this.state.language}
@@ -391,7 +389,7 @@ class App extends Component<Props, IApp>{
                         selectedDate={this.state.selectedDate}
                         updateSearchResults={this.updateSearchResults}/>
                 </div>
-                <div key={"app_catalog_buttons"} className="row">
+                <div key={"app_buttons"} className="row">
                     <CatalogButtons
                         initialVersions={this.state.initialVersions}
                         currentVersions={this.state.currentVersions}
@@ -411,16 +409,16 @@ class App extends Component<Props, IApp>{
                     />
                 </div>
                 <div key={"app_body"} className="row">
-                    <div key={"app_body_0"} className="Wrapper">
-                        <div key={"app_body_0_0"} className="row">
+                    <div className="Wrapper">
+                        <div className="row">
                             {this.state.searchResults.length > 0 &&
-                                <div key={"search_results_body"} className="col-12 col-lg">
-                                    {searchResults}
+                                <div key={"search_results"} className="col-12 col-lg">
+                                    {this.searchResults()}
                                 </div>}
                             <div key={"code_body"} className="col">
-                                <div key={"code_body_0"} id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
-                                    <div key={"code_body_0_0"} className="col" id="codeBody">
-                                        <div key={"code_body_0_0_0"} className="text-start ms-3">
+                                <div id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
+                                    <div className="col" id="codeBody">
+                                        <div className="text-start ms-3">
                                             <Outlet />
                                         </div>
                                     </div>
@@ -429,31 +427,27 @@ class App extends Component<Props, IApp>{
                         </div>
                     </div>
                 </div>
-                <div key={"app_footer"} className="navbar row">
-                    <div key={"app_footer_0"} className="col">
-                        <Footer/>
-                    </div>
-                </div>
             </div>
         )
     }
 
     renderContent() {
         return (
-            <div key={"app div 0"}>
-                <div key={"app_container_0"} className="container">
-                    <div key={"app_header"} className="row">
-                        <div key={"app_header_0"} className="col-sm-12">
+            <div>
+                <div className="container">
+                    <div key={"app_header"} className="row col-sm-12">
                             <Header changeLanguage={this.changeLanguage} activeLanguage={this.state.language}/>
-                        </div>
                     </div>
-                    <div key={"app_img"} className="row">
-                        <div key={"app_img_0"} className="col-sm-12">
+                    <div key={"app_logo"} className="row col-sm-12">
                             <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
+                    </div>
+                    {this.state.isFetching ? loadingSpinner() : this.renderAfterFetch()}
+                    <div key={"app_footer"} className="navbar row">
+                        <div key={"app_footer_0"} className="col">
+                            <Footer/>
                         </div>
                     </div>
                 </div>
-                {this.state.isFetching ? loadingSpinner() : this.renderAfterFetch()}
             </div>
         );
     }

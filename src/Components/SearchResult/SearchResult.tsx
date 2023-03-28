@@ -8,7 +8,6 @@ import getTranslationHash from "../../Services/translation.service";
 interface Props {
     navigation: INavigationHook,
     location: ILocation,
-    key: string,
     result: ISearchResult,
     language: string
 }
@@ -88,7 +87,7 @@ class SearchResult extends Component<Props, ISearchResult> {
      */
     render() {
         return (
-            <div key={"searchresults"} className="searchResult" onClick={this.handleClick}>
+            <div className="searchResult" onClick={this.handleClick}>
                 <dl>
                     <dt><span className="link">{this.props.result.code}</span></dt>
                     <dd id="noMargin" dangerouslySetInnerHTML={{__html: this.collectSearchHighlights()}}/>
@@ -99,7 +98,7 @@ class SearchResult extends Component<Props, ISearchResult> {
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} location={useLocation()} key={"searchresults_default"}/>;
+    return props => <Component {...props} navigation={useNavigate()} location={useLocation()}/>;
 }
 
 export default addProps(SearchResult);
