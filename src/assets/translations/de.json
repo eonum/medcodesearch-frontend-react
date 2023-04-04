@@ -62,9 +62,6 @@
   "LBL_CUMULATION": "Kumulierbarkeit",
   "LBL_FACULTY": "Fachbereich",
   "LBL_ACTIVE_SUBSTANCES": "Wirkstoff",
-  "LBL_LIST_OF_ANALYSES": "AL",
-  "LBL_MIGEL": "MiGeL",
-  "LBL_AL": "Analysenliste",
   "LBL_TP_ASSI": "Taxpunkte Assistenz",
   "LBL_SWISSMEDIC_NR": "Swissmedic-Code",
   "LBL_PHARMA_FORM": "Pharmazeutische Form",
@@ -98,6 +95,11 @@
   "LBL_TRUE": "Ja",
   "LBL_COST_WEIGHT": "Kostengewicht",
   "LBL_IMPLANTS_INCLUDED": "Inklusive Implantate",
-  "LBL_VERSION_NOT_AVAILABLE": "Diese Version ist in der ausgewählten Sprache nicht verfügbar."
+  "LBL_VERSION_NOT_AVAILABLE": "Diese Version ist in der ausgewählten Sprache nicht verfügbar.",
+  "LBL_AL_LABEL": "AL",
+  "LBL_AL": "Analysenliste",
+  "LBL_MIGEL_LABEL": "MiGeL",
+  "LBL_MIGEL": "Mittel und Gegenständeliste",
+  "LBL_AMB_GROUP_LABEL": "Ambulante Pauschalen"
 }
 

@@ -62,9 +62,6 @@
   "LBL_CUMULATION": "Cumulabilità",
   "LBL_FACULTY": "Disciplina di laboratorio",
   "LBL_ACTIVE_SUBSTANCES": "Sostanza attiva",
-  "LBL_LIST_OF_ANALYSES": "EA",
-  "LBL_MIGEL": "EMAp",
-  "LBL_AL": "Insieme elenco delle analisi",
   "LBL_TP_ASSI": "Punti tariffali dell'assistenza",
   "LBL_SWISSMEDIC_NR": "Swissmedic-Code",
   "LBL_UPDATED_AT": "Ultimo aggiornamento su medcodesearch.ch",
@@ -94,5 +91,8 @@
   "LBL_TRUE": "Si",
   "LBL_COST_WEIGHT": "Peso dei costi",
   "LBL_IMPLANTS_INCLUDED": "Impianti inclusie",
-  "LBL_VERSION_NOT_AVAILABLE": "Questa versione non è disponibile nella lingua selezionata."
+  "LBL_VERSION_NOT_AVAILABLE": "Questa versione non è disponibile nella lingua selezionata.",
+  "LBL_AL_LABEL": "EA",
+  "LBL_MIGEL_LABEL": "EMAp",
+  "LBL_AMB_GROUP_LABEL": "Forfait ambulatoriale"
 }

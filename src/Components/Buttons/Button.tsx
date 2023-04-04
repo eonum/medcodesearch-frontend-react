@@ -199,13 +199,13 @@ class Button extends Component<Props,IButton>{
     }
 
     /**
-     * Converts a catalog into a label, s.t. buttons with calendars are displayed in correct language.
+     * Converts a catalog into a label, s.t. buttons are displayed in correct language.
      * Only used for the selected button.
      * @returns label
      */
     convertToLabel() {
         if(this.props.catalog === "SwissDRG" || this.props.catalog === "ICD" || this.props.catalog === "CHOP"
-            || this.props.catalog === "TARMED" || this.props.catalog === "STS"){
+            || this.props.catalog === "TARMED"){
             return this.props.catalog;
         }
         else{
@@ -218,7 +218,7 @@ class Button extends Component<Props,IButton>{
      * @returns label
      */
     extractLabel(btn) {
-        return ["AL", "MIGEL", "DRUG"].includes(btn) ? this.props.labels[btn] : btn
+        return ["AL", "MIGEL", "DRUG", "AmbGroup"].includes(btn) ? this.props.labels[btn] : btn
     }
 
     /**

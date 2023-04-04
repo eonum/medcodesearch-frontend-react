@@ -1,13 +1,13 @@
 import {fetchURL} from "../Utils";
 
 export const languages = ['de', 'fr', 'it', 'en']
-export const versionizedCatalogs = ['ICD', 'SwissDRG', 'CHOP', 'TARMED', 'STS']
+export const versionizedCatalogs = ['ICD', 'SwissDRG', 'CHOP', 'TARMED', 'AmbGroup']
 export const currentCatalogsByButton = {
     'ICD': 'currentICD',
     'SwissDRG': 'currentSwissDRG',
     'CHOP': 'currentCHOP',
     'TARMED': 'currentTARMED',
-    'STS': 'currentSTS'}
+    'AmbGroup': 'currentAmbGroup'}
 
 /**
  * Cuts the catalog from the version, f.e. returns 10-GM-2021 for ICD10-GM-2021.
@@ -25,7 +25,7 @@ export function cutCatalogFromVersion(catalog, version) {
             return version
         case "TARMED":
             return version.substring(7)
-        case "STS":
+        case "AmbGroup":
             return version
         default:
             return
@@ -47,8 +47,8 @@ export function convertCatalogToResourceType(catalog) {
             return "drgs"
         case "TARMED":
             return "tarmeds"
-        case "STS":
-            return "amb_drgs"
+        case "AmbGroup":
+            return "amb_groups"
         default:
             return
     }

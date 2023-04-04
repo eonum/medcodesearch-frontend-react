@@ -69,8 +69,8 @@ class App extends Component<Props, IApp>{
             clickedOnLogo: false,
             reSetPath: false,
             collapseMenu: false,
-            initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'STS': []},
-            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'STS': []},
+            initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': []},
+            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': []},
             isFetching: true
         };
         this.changeSelectedButton = this.changeSelectedButton.bind(this);
@@ -218,8 +218,8 @@ class App extends Component<Props, IApp>{
                 resource_type = button.toLowerCase() + 's'
             } else {
                 code = version;
-                if (['SwissDRG', 'STS'].includes(button)) {
-                    resource_type = button === 'SwissDRG' ? 'mdcs' : 'amb_mdcs'
+                if (['SwissDRG', 'AmbGroup'].includes(button)) {
+                    resource_type = button === 'SwissDRG' ? 'mdcs' : 'capitula'
                 } else {
                     resource_type = button.toLowerCase() + '_chapters'
                 }
@@ -274,30 +274,13 @@ class App extends Component<Props, IApp>{
      * Returns the labels for the buttons depending on the chosen language.
      * @returns labels
      */
-    getLabels(language) {
-        switch (language) {
-            case "fr":
-                return {'MIGEL': 'LiMA', 'AL': 'LA', 'DRUG': 'Med'}
-            case "it":
-                return {'MIGEL': 'EMAp', 'AL': 'EA', 'DRUG': 'Med'}
-            default:
-                return  {'MIGEL': 'MiGeL', 'AL': 'AL', 'DRUG': 'Med'}
-        }
-    }
-
-    /**
-     * Changes the full labels language.
-     * @param language
-     * @returns {string[]}
-     */
-    getFullLabels(language) {
-        switch (language) {
-            case "fr":
-                return ['Liste des moyens et appareils', 'Liste des analyses', 'médicaments']
-            case "it":
-                return ['Elenco dei mezzi e degli apparecchi', 'Insieme elenco delle analisi', 'droga']
-            default:
-                return ['Mittel und Gegenständeliste', 'Analysenliste', 'Medikamente']
+    getLabels() {
+        let translationHash = getTranslationHash(this.state.language);
+        return {
+            'MIGEL': translationHash["LBL_MIGEL_LABEL"],
+            'AL': translationHash["LBL_AL_LABEL"],
+            'DRUG': 'Med',
+            'AmbGroup': translationHash['LBL_AMB_GROUP_LABEL']
         }
     }
 
@@ -403,9 +386,8 @@ class App extends Component<Props, IApp>{
                         changeSelectedButton={this.changeSelectedButton}
                         changeSelectedVersion={this.changeSelectedVersion}
                         changeSelectedDate={this.changeSelectedDate}
-                        labels={this.getLabels(this.state.language)}
-                        fullLabels={this.getFullLabels(this.state.language)}
-                        buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'STS'], ['MIGEL', 'AL', 'DRUG']]}
+                        labels={this.getLabels()}
+                        buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup'], ['MIGEL', 'AL', 'DRUG']]}
                     />
                 </div>
                 <div key={"app_body"} className="row">
