@@ -8,7 +8,7 @@ import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import { ReactComponent as Arrow } from './assets/arrow-up.svg';
 import {useNavigate} from "react-router-dom";
-import CatalogButtons from "./Components/Buttons/Buttons";
+import Buttons from "./Components/Buttons/Buttons";
 import RouterService from "./Services/router.service";
 import React, {Component, useState} from "react";
 import {Collapse} from "react-bootstrap";
@@ -390,7 +390,7 @@ class App extends Component<Props, IApp>{
                         updateSearchResults={this.updateSearchResults}/>
                 </div>
                 <div key={"app_buttons"} className="row">
-                    <CatalogButtons
+                    <Buttons
                         initialVersions={this.state.initialVersions}
                         currentVersions={this.state.currentVersions}
                         clickedOnLogo={this.state.clickedOnLogo}

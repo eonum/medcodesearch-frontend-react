@@ -2,7 +2,7 @@ import PopUp from "../PopUp/PopUp";
 import {Dropdown} from "react-bootstrap";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
-import {convertCatalogToResourceType, cutCatalogFromVersion, findCatalog} from "../../Services/catalog-version.service";
+import {convertCatalogToResourceType, cutCatalogFromVersion} from "../../Services/catalog-version.service";
 import React, {Component} from "react";
 import DatePicker from "./DatePicker";
 import {IVersions, IButtonLabels, IUpdateStateByArg, IUpdateButton, IUnversionizedLabels} from "../../interfaces";
@@ -108,7 +108,7 @@ class Button extends Component<Props,IButton>{
         if(!dropdown.classList.contains('disabled')) {
             this.props.updateOnButtonClick(version, btn)
         } else {
-            this.setState({disabledCatalog: findCatalog(version)})
+            this.setState({disabledCatalog: btn})
             this.setState({showPopUp: true})
             this.setState({disabledVersion: version})
         }

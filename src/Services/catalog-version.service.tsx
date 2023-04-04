@@ -33,25 +33,6 @@ export function cutCatalogFromVersion(catalog, version) {
 }
 
 /**
- * Returns catalog matching the version.
- * @param version
- * @returns {string}
- */
-export function findCatalog(version) {
-    if (version.includes("ICD")) {
-        return "ICD"
-    } else if (version.includes("CHOP")) {
-        return "CHOP"
-    } else if (version.includes("TARMED")) {
-        return "TARMED"
-    } else if (version.includes("STS")) {
-        return "STS"
-    } else {
-        return "SwissDRG"
-    }
-}
-
-/**
  * Returns ressource type matching the catalog.
  * @param catalog
  * @returns {string}
