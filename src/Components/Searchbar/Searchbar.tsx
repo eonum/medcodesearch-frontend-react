@@ -164,6 +164,7 @@ class Searchbar extends Component<Props,ISearchbar> {
                         defaultValue={this.state.searchTerm}
                         className="me-2"
                         aria-label="Search"
+                        id={"searchbarInput"}
                     />
                     <Button id="btn-go">
                         <BsSearch/>

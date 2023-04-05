@@ -360,6 +360,8 @@ class App extends Component<Props, IApp>{
      * Reset everything back to the default but stay in current language.
      */
     reNavigateToHome(){
+        // Clear current searchbar input.
+        document.getElementById('searchbarInput').value = ""
         this.setState({clickedOnLogo: true});
         let latestICD = this.state.initialVersions['ICD'].at(-1);
         this.changeSelectedButton('ICD')
@@ -398,7 +400,6 @@ class App extends Component<Props, IApp>{
                         />
                         <div className={"searchbarItem"} onClick={this.showSearchResults}>
                             <Searchbar
-
                                 language={this.state.language}
                                 selectedButton={this.state.selectedButton}
                                 version={this.state.selectedVersion}
