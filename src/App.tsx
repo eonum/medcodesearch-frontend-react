@@ -8,7 +8,7 @@ import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import { ReactComponent as Arrow } from './assets/arrow-up.svg';
 import {useNavigate} from "react-router-dom";
-import Buttons from "./Components/Buttons/Buttons";
+import Buttons from "./Components/Buttons/ButtonGroup";
 import RouterService from "./Services/router.service";
 import React, {Component, useState} from "react";
 import {Collapse} from "react-bootstrap";

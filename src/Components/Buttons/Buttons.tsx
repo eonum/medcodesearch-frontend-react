@@ -1,190 +1,316 @@
+import PopUp from "../PopUp/PopUp";
+import {Dropdown} from "react-bootstrap";
+import DropdownToggle from "react-bootstrap/DropdownToggle";
+import DropdownMenu from "react-bootstrap/DropdownMenu";
+import {convertCatalogToResourceType, cutCatalogFromVersion} from "../../Services/catalog-version.service";
 import React, {Component} from "react";
-import "./Buttons.css"
-import {useParams} from "react-router-dom";
-import RouterService from "../../Services/router.service";
-import Button from "./Button";
-import {
-    IVersions,
-    IButtonLabels,
-    IParamTypes,
-    INoArgsFunction,
-    IUpdateStateByArg,
-    IUnversionizedLabels
-} from "../../interfaces";
-import {currentCatalogsByButton, versionizedCatalogs} from "../../Services/catalog-version.service";
-import dateFormat from "dateformat"
+import DatePicker from "./DatePicker";
+import {IVersions, IButtonLabels, IUpdateStateByArg, IUpdateButton, IUnversionizedLabels} from "../../interfaces";
+import {fetchURL} from "../../Utils";
 
 interface Props {
-    params: IParamTypes,
+    selectedCatalog: string
     initialVersions: IVersions,
-    currentVersions: IVersions,
-    clickedOnLogo: boolean,
-    selectedButton: string,
+    selectedDate: string,
     version: string,
-    reSetClickOnLogo: INoArgsFunction,
-    reSetButton: INoArgsFunction,
-    changeLanguage: IUpdateStateByArg,
+    selectedVersion: string,
+    reRender: boolean,
+    catalog: string,
     language: string,
-    changeSelectedButton: IUpdateStateByArg,
+    changeLanguage: IUpdateStateByArg,
     changeSelectedVersion: IUpdateStateByArg,
-    changeSelectedDate: IUpdateStateByArg,
+    changeSelectedButton: IUpdateStateByArg,
+    buttons: IButtonLabels,
     labels: IUnversionizedLabels,
-    buttons: IButtonLabels
+    updateOnButtonClick: IUpdateButton
 }
 
-interface IButtons {
-    selectedButton: string,
-    activeVersion: string,
-    currentICD: string,
-    currentSwissDRG: string,
-    currentCHOP: string,
-    currentTARMED: string,
-    currentAmbGroup: string
-    selectedDate: string,
+export interface IButton {
+    showPopUp: boolean,
+    disabledVersion: string,
+    disabledCatalog: string,
+    allVersions: string[], // All possible versions in language 'de' of one catalog in an array, f.e. ["CHOP_2011", "CHOP_2012", ...].
+    availableVersions: string[], // All available version in a specific language (used to enable / disable versions in dropdown.
+    buttons: string[],
+    selectedButton: string
 }
 
 /**
- * Responsible for all buttons to render
+ * Creates the catalog and version dropdown buttons.
  * @component
  */
-class Buttons extends Component<Props,IButtons>{
+class Buttons extends Component<Props,IButton>{
+
     /**
-     * Sets the default state values and binds the buttons.
+     * sets the default state values and bind the popup
      * @param props
      */
     constructor(props) {
         super(props);
-        this.state = {
-            selectedButton: RouterService.initializeCatalogFromURL(),
-            activeVersion: this.props.params.version,
-            currentICD: this.props.initialVersions['ICD'].at(-1),
-            currentSwissDRG: this.props.initialVersions['SwissDRG'].at(-1),
-            currentCHOP: this.props.initialVersions['CHOP'].at(-1),
-            currentTARMED: this.props.initialVersions['TARMED'].at(-1),
-            currentAmbGroup: this.props.initialVersions['AmbGroup'].at(-1),
-            selectedDate: dateFormat(new Date(), "dd.mm.yyyy"),
+        this.state={
+            showPopUp: false,
+            disabledVersion: "",
+            disabledCatalog: "",
+            allVersions: [],
+            availableVersions: [],
+            buttons: this.convertButtons(),
+            selectedButton: this.props.catalog
         }
-        this.updateOnButtonClick = this.updateOnButtonClick.bind(this);
+        this.updatePopUp = this.updatePopUp.bind(this);
     }
 
     /**
-     * Updates the button with the new params.
-     * @param version
-     * @param btn
-     * @param isCalendarType
-     * @param date
+     * converts button-arrays to one button array
+     * @returns {[]}
      */
-    // TODO: If choosing different version from different button, should old button version jump back to default or stay where it was?
-    //  F.e. if clicking from ICD10-GM-2014 to SwissDRG V9.0, should version button of icd stay at GM-2014 or jump back to GM-2022?
-    updateOnButtonClick = (version, btn, isCalendarType, date) => {
-        // If empty version, get it using btn.
-        // Set
-        let selectedVersion;
-        if (isCalendarType) {
-            selectedVersion = ''
-        } else {
-            selectedVersion = version === '' ? this.getVersionFromButton(btn) : version;
-            // Update currentVersion.
-            let currentCatalogs = {}
-            currentCatalogs['current' + btn] = selectedVersion
-            this.setState(currentCatalogs)
+    convertButtons(){
+        let buttons= [];
+        for(let i =0 ; i < this.props.buttons[0].length; i++){
+            buttons[i]= this.props.buttons[0][i]
         }
-
-        if (date === ''){
-            date = dateFormat(new Date(), "dd.mm.yyyy")
+        for(let j=0 ; j < this.props.buttons[1].length; j++){
+            buttons[j+ this.props.buttons[0].length]=this.props.buttons[1][j];
         }
-        this.props.changeSelectedDate(date);
-        this.setState({selectedButton: btn, activeVersion: selectedVersion});
-        this.props.changeSelectedVersion(selectedVersion);
-        this.props.changeSelectedButton(btn);
+        return buttons;
     }
 
     /**
-     * Takes a button name and compares it to the selected button to reset the button.
-     * @param btn
-     */
-    reRender(btn) {
-        if (this.state.selectedButton === btn) {
-            this.props.reSetButton()
-        }
-    }
-
-    /**
-     * Take a button name and return the version of the button.
-     * @param btn
-     * @returns {string|string|*}
-     */
-    getVersionFromButton(btn) {
-        let currentVersion = versionizedCatalogs.includes(btn) ? this.state[currentCatalogsByButton[btn]] : ""
-        return currentVersion
-    }
-
-    /**
-     * Sets the catalog version of the state.
-     */
-    setCurrentVersionBySelectedButton() {
-        if (versionizedCatalogs.includes(this.props.selectedButton)) {
-            let currentCatalogs = {}
-            currentCatalogs['current' + this.props.selectedButton] = this.props.version
-            this.setState(currentCatalogs)
-        }
-    }
-
-    /**
-     * Calls setCurrentVersionBySelectedButton() if successful mounted.
-     */
-    componentDidMount() {
-        this.setCurrentVersionBySelectedButton()
-    }
-
-    /**
-     * Calls setCurrentVersionBySelectedButton() if version has changed or resets if clicked on logo.
+     * Fetches base and available versions after component did update.
      * @param prevProps
      * @param prevState
      * @param snapshot
+     * @returns {Promise<void>}
      */
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.version !== this.props.version) {
-            this.setCurrentVersionBySelectedButton()
-        }
-        if (this.props.clickedOnLogo){
-            this.setState({selectedButton: prevProps.catalog})
-            this.props.reSetClickOnLogo()
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        if(prevProps.language !== this.props.language || prevProps.catalog !== this.props.catalog
+            || this.props.reRender) {
+            await this.fechtBaseVersions()
+            await this.fetchAvailableVersions()
         }
     }
 
     /**
-     * Render the button group.
-     * @returns {JSX.Element}
+     * Initializes the base and available versions after mount.
+     * @returns {Promise<void>}
      */
-    render() {
-        return (
-            <Button
-                selectedCatalog={this.props.params.catalog}
-                initialVersions={this.props.initialVersions}
-                selectedDate={this.state.selectedDate}
-                version={this.getVersionFromButton(this.state.selectedButton)}
-                selectedVersion={this.props.params.version}
-                reRender={this.props.clickedOnLogo}
-                catalog={this.props.selectedButton}
-                language={this.props.language}
-                changeLanguage={this.props.changeLanguage}
-                changeSelectedVersion={this.props.changeSelectedVersion}
-                changeSelectedButton={this.props.changeSelectedButton}
-                buttons={this.props.buttons}
-                labels={this.props.labels}
-                updateOnButtonClick={(version, catalog, isCalendar, date) => {
-                    this.updateOnButtonClick(version, catalog, isCalendar, date)
-                }}
-            />
-        )
+    async componentDidMount() {
+        await this.fechtBaseVersions()
+        await this.fetchAvailableVersions()
     }
 
+    /**
+     * Set the clicked version and button.
+     * @param version
+     * @param btn
+     */
+    handleVersionClick(version, btn) {
+        const dropdown = document.getElementById(version.replace(/\./g, ''));
+        if(!dropdown.classList.contains('disabled')) {
+            this.props.updateOnButtonClick(version, btn)
+        } else {
+            this.setState({disabledCatalog: btn})
+            this.setState({showPopUp: true})
+            this.setState({disabledVersion: version})
+        }
+
+    }
+
+    /**
+     * Update state if a catalog gets clicked.
+     * @param catalog
+     */
+    handleCatalogClick(catalog) {
+        const cat = document.getElementById(catalog + "_button");
+        if(!cat.classList.contains('disabled')) {
+            this.props.updateOnButtonClick('', catalog, false, "")
+        } else {
+            this.setState({disabledCatalog: catalog})
+            this.setState({showPopUp: true})
+            if(catalog === "MIGEL" || catalog === "AL" || catalog === "DRUG") {
+                this.setState({disabledVersion: ""})
+            } else {
+                this.setState({disabledVersion: this.props.initialVersions[catalog].at(-1)})
+            }
+        }
+    }
+
+    /**
+     * Uses 'de' language to fetch base versions.
+     * @returns {Promise<void>}
+     */
+    async fechtBaseVersions() {
+        if (!this.isCalBut()) {
+            await fetch([fetchURL, 'de', convertCatalogToResourceType(this.props.catalog), 'versions'].join("/"))
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({
+                        allVersions: json,
+                        availableVersions: json
+                    })
+                })
+        } else {
+            this.setState({allVersions: [], availableVersions: []})
+        }
+    }
+
+    /**
+     * Uses language from props to fetch available versions for this language.
+     * @returns {Promise<void>}
+     */
+    async fetchAvailableVersions() {
+        if (!this.isCalBut()) {
+            let versionsString = [fetchURL, this.props.language, convertCatalogToResourceType(this.props.catalog), 'versions'].join("/")
+            await fetch(versionsString)
+                .then((res) => res.json())
+                .then((json) => {
+                    this.setState({availableVersions: json})
+                })
+        } else {
+            this.setState({availableVersions: []})
+        }
+    }
+
+    /**
+     * Returns the current version without the catalog prefix.
+     * @returns {*|string} currently used version
+     */
+    getVersion() {
+        if(this.props.selectedVersion) {
+            return cutCatalogFromVersion(this.props.catalog, this.props.selectedVersion)
+        } else {
+            return cutCatalogFromVersion(this.props.catalog, this.props.version)
+        }
+    }
+
+    /**
+     * Set show popup boolean.
+     * @param value
+     */
+    updatePopUp = (value) => {
+        this.setState({showPopUp: value})
+    }
+
+    /**
+     * Looks if the catalog uses a calendar (true or false).
+     * @returns {boolean}
+     */
+    isCalBut() {
+        return ['AL', 'MIGEL', 'DRUG'].includes(this.props.catalog)
+    }
+
+    /**
+     * Converts a catalog into a label, s.t. buttons are displayed in correct language.
+     * Only used for the selected button.
+     * @returns label
+     */
+    convertToLabel() {
+        if(this.props.catalog === "SwissDRG" || this.props.catalog === "ICD" || this.props.catalog === "CHOP"
+            || this.props.catalog === "TARMED"){
+            return this.props.catalog;
+        }
+        else{
+            return this.props.labels[this.props.catalog]
+        }
+    }
+
+    /**
+     * Extracts label by button s.t. buttons with calendars are displayed in the correct language.
+     * @returns label
+     */
+    extractLabel(btn) {
+        return ["AL", "MIGEL", "DRUG", "AmbGroup"].includes(btn) ? this.props.labels[btn] : btn
+    }
+
+    /**
+     * Returns the class name of a button.
+     * @param btn
+     * @returns {string}
+     */
+    getClassName(btn) {
+        let name = "dropdown-item"
+        if(this.props.language === "en" && btn !== "ICD") {
+            name += "-disabled"
+        }
+        return name
+    }
+
+    /**
+     * Render the button.
+     * @returns {JSX.Element}
+     */
+    render(){
+        return(
+            <div key={"buttons"} className="btn-group">
+                <PopUp
+                    language={this.props.language}
+                    changeLanguage={this.props.changeLanguage}
+                    selectedVersion={this.props.changeSelectedVersion}
+                    changeSelectedButton={this.props.changeSelectedButton}
+                    show={this.state.showPopUp}
+                    updatePopUpState={this.updatePopUp}
+                    version={this.state.disabledVersion}
+                    catalog={this.state.disabledCatalog}
+                />
+                <Dropdown key={"dropdown_catalog"} className={"dropdownButton"}>
+                    <DropdownToggle
+                        key={"dropdown_catalog_toggle"}
+                        className={"customButton"}
+                        variant=""
+                        type="button"
+                        id={"catalog_button"}>
+                        {this.convertToLabel()}
+                    </DropdownToggle>
+                    <DropdownMenu className="dropdown" >
+                        {this.state.buttons.map((btn) => (
+                                <Dropdown.Item className={this.getClassName(btn)}
+                                               eventKey={btn}
+                                               key={"button_dropdown_catalog_" + btn}
+                                               id={btn + "_button"}
+                                               onClick={() => {
+                                    this.handleCatalogClick(btn)
+                                }}>
+                                    {this.extractLabel(btn)}
+                                </Dropdown.Item>
+                            )
+                        )}
+                    </DropdownMenu>
+                </Dropdown>
+                {this.isCalBut() ?
+                    <DatePicker
+                        selectedCatalog={this.props.selectedCatalog}
+                        selectedDate= {this.props.selectedDate}
+                        clickDate={(date) => {
+                            this.props.updateOnButtonClick('',this.props.catalog, true, date)
+                        }}
+                    /> :
+                    <Dropdown key={"dropdown_versions"} className="dropdownButton">
+                        <Dropdown.Toggle
+                            key={"dropdown_versions_toggle"}
+                            className="customButton"
+                            variant=""
+                            type="button"
+                            id={"version_button"}>
+                            {this.getVersion()}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="dropdown">
+                            {this.state.allVersions.reverse().map(
+                                (version) => (
+                                    <Dropdown.Item
+                                        className={this.state.availableVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
+                                        eventKey={version}
+                                        key={"button_dropdown_versions_" + version}
+                                        id={version.replace(/\./g, '')}
+                                        onClick={() => {
+                                            this.handleVersionClick(version, this.props.catalog)
+                                        }}
+                                    >{cutCatalogFromVersion(this.props.catalog, version)}</Dropdown.Item>
+                                )
+                            )}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                }
+        </div>
+        )
+    }
 }
-
-function addProps(Component) {
-    return props => <Component {...props} params={useParams()}/>;
-}
-
-export default addProps(Buttons);
-
+export default Buttons;

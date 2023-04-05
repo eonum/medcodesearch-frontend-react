@@ -1,12 +1,6 @@
 .dropdownButton{
     margin: auto;
-    padding-right: 2px;
     border-radius: 5px;
-}
-
-/* Ensure vertical alignment synced with catalogButtons */
-.react-datepicker-wrapper {
-    margin: auto
 }
 
 .customButton.customButton {
@@ -46,10 +40,6 @@
     display: flex;
 }
 
-#desktopAlignment {
-    display: flex;
-}
-
 .dropdown-item {
     font-size: 14px;
     font-weight: 400;
@@ -64,4 +54,12 @@
 .disabled {
     cursor: not-allowed !important;
     pointer-events: all !important;
+}
+
+#desktopAlignment {
+    display: flex;
+}
+
+#catalog_button{
+    margin-right: 10px;
 }
