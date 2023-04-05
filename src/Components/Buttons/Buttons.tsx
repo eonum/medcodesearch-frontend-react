@@ -159,26 +159,24 @@ class Buttons extends Component<Props,IButtons>{
      */
     render() {
         return (
-            <div key={"buttons"} className={"alignButtons"}>
-                <Button
-                    selectedCatalog={this.props.params.catalog}
-                    initialVersions={this.props.initialVersions}
-                    selectedDate={this.state.selectedDate}
-                    version={this.getVersionFromButton(this.state.selectedButton)}
-                    selectedVersion={this.props.params.version}
-                    reRender={this.props.clickedOnLogo}
-                    catalog={this.props.selectedButton}
-                    language={this.props.language}
-                    changeLanguage={this.props.changeLanguage}
-                    changeSelectedVersion={this.props.changeSelectedVersion}
-                    changeSelectedButton={this.props.changeSelectedButton}
-                    buttons={this.props.buttons}
-                    labels={this.props.labels}
-                    updateOnButtonClick={(version, catalog, isCalendar, date) => {
-                        this.updateOnButtonClick(version, catalog, isCalendar, date)
-                    }}
-                />
-            </div>
+            <Button
+                selectedCatalog={this.props.params.catalog}
+                initialVersions={this.props.initialVersions}
+                selectedDate={this.state.selectedDate}
+                version={this.getVersionFromButton(this.state.selectedButton)}
+                selectedVersion={this.props.params.version}
+                reRender={this.props.clickedOnLogo}
+                catalog={this.props.selectedButton}
+                language={this.props.language}
+                changeLanguage={this.props.changeLanguage}
+                changeSelectedVersion={this.props.changeSelectedVersion}
+                changeSelectedButton={this.props.changeSelectedButton}
+                buttons={this.props.buttons}
+                labels={this.props.labels}
+                updateOnButtonClick={(version, catalog, isCalendar, date) => {
+                    this.updateOnButtonClick(version, catalog, isCalendar, date)
+                }}
+            />
         )
     }
 

@@ -40,13 +40,24 @@
 .text-start {
   padding: 10px;
 }
+
 .breadLink a {
   color: #337ab7;
   text-decoration: none;
   cursor: pointer;
 }
+
 .breadLink a:hover {
   color: #23527c;
   text-decoration: underline;
+}
+
+.catalogAndSearchbarContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.searchbarItem {
+  flex-grow: 1;
 }
 

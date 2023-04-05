@@ -67,11 +67,11 @@ describe('Default test suite, testing general navigation via clicks', function (
         // Catalogs other than the selected one shouldn't be visible if not clicked on versions button.
         var element = await page.$("#ICD10-GM-2018");
         await expect(element).toBeNull();
-        await page.click("#version_button");
+        await page.click("#version_button", {visible: true});
         await page.click("#ICD10-GM-2018")
         await expect(page).toMatch('ICD10-GM-2018')
         await expect(page).toMatch('XV: Schwangerschaft, Geburt und Wochenbett')
-        await page.click("#version_button");
+        await page.click("#version_button", {visible: true});
         await page.click("#ICD10-GM-2022");
         await expect(page).toMatch('ICD10-GM-2022')
         await expect(page).toMatch('XXII: Schlüsselnummern für besondere Zwecke')

@@ -151,8 +151,7 @@ class Searchbar extends Component<Props,ISearchbar> {
     render() {
         let translateJson = getTranslationHash(this.props.language)
         return (
-            <div>
-                <Form className="d-flex search-center">
+                <Form className="d-flex">
                     <FormControl
                         onKeyDown={(e) =>{
                             if (e.key === 'Enter'){
@@ -170,7 +169,6 @@ class Searchbar extends Component<Props,ISearchbar> {
                         <BsSearch/>
                     </Button>
                 </Form>
-            </div>
         )
     }
 }

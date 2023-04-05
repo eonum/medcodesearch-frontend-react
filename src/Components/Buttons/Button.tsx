@@ -251,7 +251,7 @@ class Button extends Component<Props,IButton>{
                     version={this.state.disabledVersion}
                     catalog={this.state.disabledCatalog}
                 />
-                <Dropdown key={"dropdown_catalog"} className={"catalogButton"}>
+                <Dropdown key={"dropdown_catalog"} className={"dropdownButton"}>
                     <DropdownToggle
                         key={"dropdown_catalog_toggle"}
                         className={"customButton"}
@@ -283,7 +283,7 @@ class Button extends Component<Props,IButton>{
                             this.props.updateOnButtonClick('',this.props.catalog, true, date)
                         }}
                     /> :
-                    <Dropdown key={"dropdown_versions"} className="catalogButton">
+                    <Dropdown key={"dropdown_versions"} className="dropdownButton">
                         <Dropdown.Toggle
                             key={"dropdown_versions_toggle"}
                             className="customButton"

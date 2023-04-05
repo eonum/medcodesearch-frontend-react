@@ -122,12 +122,12 @@ class PopUp extends Component<Props, IPopUp>{
                     </Modal.Header>
                     <Modal.Body>{getTranslationHash(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
                     <Modal.Footer>
-                            <button className="customButton" onClick={() => this.handleShow(false)}>
+                            <button className="PopUpBtn" onClick={() => this.handleShow(false)}>
                                 {getTranslationHash(this.props.language)['LBL_BACK']}
                             </button>
                         <div className="float-end">
                         {this.state.availableLanguages.map((language, i) => (
-                            <button key={i} className="customButton langBtn" onClick={() => this.handleLanguageClick(language)}>
+                            <button key={i} className="PopUpBtn" onClick={() => this.handleLanguageClick(language)}>
                                 {language}
                             </button>
                         ))}

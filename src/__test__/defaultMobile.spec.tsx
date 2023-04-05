@@ -20,44 +20,40 @@ describe('Default test suite for mobile version, testing general navigation via 
         await page.goto(baseUrl + '/de/SwissDRG/V4.0/mdcs/V4.0', {waitUntil: 'networkidle0'});
         await expect(page).toMatch("SwissDRG 4.0");
         await page.click("#logo");
-        // TODO: Adapt if seeded new ics version
+        // TODO: Adapt when new ICD version seeded.
         await expect(page).toMatch("ICD10-GM-2022");
     })
 
     it('click through mobile buttons (de)', async function() {
         // Load base URL
         await page.goto(baseUrl, {waitUntil: 'networkidle0'})
-        // Click on catalog button and select CHOP from dropdown.
-        await page.click("#catalog_button")
+        // Change to CHOP 2016.
+        await page.click("#catalog_button", {visible: true})
         await page.click("#CHOP_button");
-        await page.waitForSelector("#version_button", {visible: true});
-        // Click on version button and select 2016 from dropdown.
-        await page.click("#version_button");
+        await page.click("#version_button", {visible: true});
         await page.waitForSelector("#CHOP_2016", {visible: true});
         await page.click("#CHOP_2016");
         await page.waitForTimeout(n);
         await expect(page).toMatch("CHOP 2016")
         await expect(page.url()).toBe(baseUrl + '/de/CHOP/CHOP_2016/chop_chapters/CHOP_2016')
-        // Click on version button and select 2020 from dropdown.
-        await page.click("#version_button")
+        // Change to CHOP 2020.
+        await page.click("#version_button", {visible: true});
         await page.waitForSelector("#CHOP_2020", {visible: true});
-        await page.click("#CHOP_2020")
+        await page.click("#CHOP_2020");
         await page.waitForTimeout(n);
         await expect(page).toMatch("CHOP 2020")
         await expect(page.url()).toBe(baseUrl + '/de/CHOP/CHOP_2020/chop_chapters/CHOP_2020')
         // Change to Swissdrg V7.0.
-        await page.click("#catalog_button")
-        await page.click("#SwissDRG_button")
-        await page.waitForSelector("#version_button", {visible: true});
-        // Click on version button and select V7.0 from dropdown.
-        await page.click("#version_button")
-        await page.waitForTimeout(n);
+        await page.click("#catalog_button", {visible: true})
+        await page.click("#SwissDRG_button", {visible: true})
+        await page.click("#version_button", {visible: true});
+        await page.waitForSelector("#V70", {visible: true})
         await page.click("#V70")
         await page.waitForTimeout(n);
         await expect(page).toMatch("SwissDRG 7.0")
         await expect(page.url()).toBe(baseUrl + '/de/SwissDRG/V7.0/mdcs/V7.0')
-        // Click on version button and select V7.0 from dropdown.
-        await page.click("#catalog_button")
+        // Change to TARMED.
+        await page.click("#catalog_button", {visible: true})
         await page.click("#TARMED_button")
         await page.waitForTimeout(n);
         await expect(page).toMatch("TARMED")

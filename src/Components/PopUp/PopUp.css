@@ -2,6 +2,11 @@
     justify-content: normal!important;
     display: inline-block !important;
 }
-.langBtn {
+
+.PopUpBtn {
+    background-color: white;
+    color: rgb(0, 0, 0);
     margin-left: 5px !important;
+    border-radius: 5px;
+    border: 1.5px solid rgba(24, 24, 24, 0.195);
 }

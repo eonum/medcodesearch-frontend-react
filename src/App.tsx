@@ -50,7 +50,8 @@ interface IApp {
     collapseMenu: boolean,
     initialVersions: IVersions,
     currentVersions: IVersions,
-    isFetching: boolean
+    isFetching: boolean,
+    isDesktop: boolean
 }
 
 class App extends Component<Props, IApp>{
@@ -71,7 +72,8 @@ class App extends Component<Props, IApp>{
             collapseMenu: false,
             initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': []},
             currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': []},
-            isFetching: true
+            isFetching: true,
+            isDesktop: true
         };
         this.changeSelectedButton = this.changeSelectedButton.bind(this);
         this.changeSelectedDate = this.changeSelectedDate.bind(this);
@@ -81,6 +83,7 @@ class App extends Component<Props, IApp>{
         this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
         this.showHide = this.showHide.bind(this);
         this.showSearchResults = this.showSearchResults.bind(this);
+        this.changeIsDesktop = this.changeIsDesktop.bind(this)
     }
 
     /**
@@ -249,6 +252,8 @@ class App extends Component<Props, IApp>{
      * @returns {Promise<void>}
      */
     async componentDidMount() {
+        this.changeIsDesktop();
+        window.addEventListener("resize", this.changeIsDesktop);
         let translationHash = getTranslationHash(this.state.language);
         await this.setState({initialVersions: await getVersionsByLanguage('de')})
         await this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
@@ -261,6 +266,14 @@ class App extends Component<Props, IApp>{
             await this.navigateToLatestIcd(translationHash);
         }
         await this.setState({isFetching: false})
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.changeIsDesktop);
+    }
+
+    changeIsDesktop() {
+        this.setState({ isDesktop: window.innerWidth >= 1200 });
     }
 
     /**
@@ -362,34 +375,70 @@ class App extends Component<Props, IApp>{
     }
 
     renderAfterFetch() {
+        const isDesktop = this.state.isDesktop;
         return(
             <div key={"app_content"}>
-                <div key={"app_searchbar"} className="row" onClick={this.showSearchResults}>
-                    <Searchbar
-                        language={this.state.language}
-                        selectedButton={this.state.selectedButton}
-                        version={this.state.selectedVersion}
-                        selectedDate={this.state.selectedDate}
-                        updateSearchResults={this.updateSearchResults}/>
-                </div>
-                <div key={"app_buttons"} className="row">
-                    <Buttons
-                        initialVersions={this.state.initialVersions}
-                        currentVersions={this.state.currentVersions}
-                        clickedOnLogo={this.state.clickedOnLogo}
-                        selectedButton={this.state.selectedButton}
-                        version={this.state.selectedVersion}
-                        reSetClickOnLogo={this.reSetClickedOnLogo}
-                        reSetButton={this.reRenderButton}
-                        changeLanguage={this.changeLanguage}
-                        language={this.state.language}
-                        changeSelectedButton={this.changeSelectedButton}
-                        changeSelectedVersion={this.changeSelectedVersion}
-                        changeSelectedDate={this.changeSelectedDate}
-                        labels={this.getLabels()}
-                        buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup'], ['MIGEL', 'AL', 'DRUG']]}
-                    />
-                </div>
+                {isDesktop ?
+                    <div className={"catalogAndSearchbarContainer"}>
+                        <Buttons
+                            initialVersions={this.state.initialVersions}
+                            currentVersions={this.state.currentVersions}
+                            clickedOnLogo={this.state.clickedOnLogo}
+                            selectedButton={this.state.selectedButton}
+                            version={this.state.selectedVersion}
+                            reSetClickOnLogo={this.reSetClickedOnLogo}
+                            reSetButton={this.reRenderButton}
+                            changeLanguage={this.changeLanguage}
+                            language={this.state.language}
+                            changeSelectedButton={this.changeSelectedButton}
+                            changeSelectedVersion={this.changeSelectedVersion}
+                            changeSelectedDate={this.changeSelectedDate}
+                            labels={this.getLabels()}
+                            buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup'], ['MIGEL', 'AL', 'DRUG']]}
+                        />
+                        <div className={"searchbarItem"} onClick={this.showSearchResults}>
+                            <Searchbar
+
+                                language={this.state.language}
+                                selectedButton={this.state.selectedButton}
+                                version={this.state.selectedVersion}
+                                selectedDate={this.state.selectedDate}
+                                updateSearchResults={this.updateSearchResults}/>
+                        </div>
+                    </div> :
+                    <>
+                        <div key={"app_searchbar"} className="row">
+                            <div className={"search-mobile"} onClick={this.showSearchResults}>
+                                <Searchbar
+                                    language={this.state.language}
+                                    selectedButton={this.state.selectedButton}
+                                    version={this.state.selectedVersion}
+                                    selectedDate={this.state.selectedDate}
+                                    updateSearchResults={this.updateSearchResults}/>
+                            </div>
+                        </div>
+                        <div key={"app_buttons"} className="row">
+                            <div className={"alignMobileButtons"}>
+                                <Buttons
+                                    initialVersions={this.state.initialVersions}
+                                    currentVersions={this.state.currentVersions}
+                                    clickedOnLogo={this.state.clickedOnLogo}
+                                    selectedButton={this.state.selectedButton}
+                                    version={this.state.selectedVersion}
+                                    reSetClickOnLogo={this.reSetClickedOnLogo}
+                                    reSetButton={this.reRenderButton}
+                                    changeLanguage={this.changeLanguage}
+                                    language={this.state.language}
+                                    changeSelectedButton={this.changeSelectedButton}
+                                    changeSelectedVersion={this.changeSelectedVersion}
+                                    changeSelectedDate={this.changeSelectedDate}
+                                    labels={this.getLabels()}
+                                    buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup'], ['MIGEL', 'AL', 'DRUG']]}
+                                />
+                            </div>
+                        </div>
+                    </>
+                }
                 <div key={"app_body"} className="row">
                     <div className="Wrapper">
                         <div className="row">

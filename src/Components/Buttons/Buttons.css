@@ -1,21 +1,21 @@
-.catalogButton{
-    padding: 5px;
+.dropdownButton{
+    margin: auto;
+    padding-right: 2px;
+    border-radius: 5px;
 }
 
 /* Ensure vertical alignment synced with catalogButtons */
-.react-datepicker__input-container {
-    padding: 5px;
-    border-radius: 5px;
+.react-datepicker-wrapper {
+    margin: auto
 }
 
 .customButton.customButton {
-    border-radius: 5px;
     background-color: white;
     color: rgb(0, 0, 0);
     border: 1.5px solid rgba(24, 24, 24, 0.195);
     cursor: pointer;
     font-size: 14px;
-    padding: 7.5px 12px;
+    padding: 7.5px 2px;
 }
 
 .customButton:hover.customButton {
@@ -34,12 +34,20 @@
     border-color: #adadad !important;
 }
 
-.alignButtons {
+.alignMobileButtons {
     letter-spacing: 0.5px;
     display: flex;
     justify-content: center;
     text-align: center;
     margin-top: 5px;
+}
+
+.alignDesktopButtons {
+    display: flex;
+}
+
+#desktopAlignment {
+    display: flex;
 }
 
 .dropdown-item {

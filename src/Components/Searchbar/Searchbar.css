@@ -1,8 +1,10 @@
-.search-center {
+.search-mobile {
     max-width: 983px;
     margin: auto;
     text-align: center;
+    padding: 5px;
 }
+
 #btn-go {
     border-radius: 5px;
     background-color: #24add3;
