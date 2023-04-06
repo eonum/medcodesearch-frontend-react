@@ -9,7 +9,7 @@
     border: 1.5px solid rgba(24, 24, 24, 0.195);
     cursor: pointer;
     font-size: 14px;
-    padding: 7.5px 2px;
+    padding: 7.5px 12px;
 }
 
 .customButton:hover.customButton {
