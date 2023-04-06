@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {INavigationHook} from "../../interfaces";
-import getTranslationHash from "../../Services/translation.service";
 import {useNavigate} from "react-router-dom";
 import {getNavParams} from "../../Utils";
+import {useTranslation} from "react-i18next";
 
 interface Props {
     codesArray: any,
@@ -11,28 +11,25 @@ interface Props {
     catalog: string,
     navigation: INavigationHook,
     resource_type?: string
+    translation: any
 }
 
 /**
  * Returns a unordered list of clickable codes (used for children or sibling, i.e. similar codes).
  * */
 class ClickableCodesArray extends Component<Props>{
-    constructor(props) {
-        super(props);
-    }
-
     /**
      * Render the ClickableCodesArray component
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = getTranslationHash(this.props.language);
+        const {t} = this.props.translation
         let {navigation, language, catalog, resource_type} = this.props;
         let attribute = this.props.codesType
         let attributeValue = this.props.codesArray
         return (
             <div key={attribute}>
-                <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+                <h5>{t("LBL_" + attribute.toUpperCase())}</h5>
                 <ul>
                     {attributeValue.map((currElement, j) => (
                         <li key={j}>
@@ -54,7 +51,7 @@ class ClickableCodesArray extends Component<Props>{
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} />;
+    return props => <Component {...props} navigation={useNavigate()} translation={useTranslation()} />;
 }
 
 export default addProps(ClickableCodesArray);

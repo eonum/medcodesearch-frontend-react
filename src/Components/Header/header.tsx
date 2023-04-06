@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import './header.css'
 import {IUpdateStateByArg} from "../../interfaces";
+import {useTranslation} from "react-i18next";
 
 interface Props {
     changeLanguage: IUpdateStateByArg,
-    activeLanguage: string
+    activeLanguage: string,
+    translation: any
 }
 
 interface IHeader {
@@ -39,8 +41,11 @@ class Header extends Component<Props, IHeader> {
      */
     // TODO: I don't really get the use of this function.
     updateLanguage(lang) {
+        const {i18n} = this.props.translation;
+
         this.props.changeLanguage(lang)
         this.setState({languagePrev: this.state.language, language: lang})
+        i18n.changeLanguage(lang)
     }
 
     /**
@@ -75,4 +80,8 @@ class Header extends Component<Props, IHeader> {
 }
 
 
-export default Header;
+function addProps(Component) {
+    return props => <Component {...props} translation={useTranslation()}/>;
+}
+
+export default addProps(Header);

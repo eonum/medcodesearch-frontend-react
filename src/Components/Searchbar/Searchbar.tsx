@@ -4,10 +4,10 @@ import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useNavigate} from "react-router-dom";
 import RouterService from "../../Services/router.service";
-import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
 import {INavigationHook} from "../../interfaces";
 import dateFormat from "dateformat"
+import {useTranslation} from "react-i18next";
 
 const resourceTypeByBtn = {
     "SwissDRG": 'drgs',
@@ -27,6 +27,7 @@ interface Props {
     selectedDate: string,
     updateSearchResults: { (searchResult: string | object): void },
     navigation: INavigationHook
+    translation: any
 }
 
 interface ISearchbar  {
@@ -149,7 +150,7 @@ class Searchbar extends Component<Props,ISearchbar> {
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = getTranslationHash(this.props.language)
+        const {t} = this.props.translation
         return (
                 <Form className="d-flex">
                     <FormControl
@@ -160,7 +161,7 @@ class Searchbar extends Component<Props,ISearchbar> {
                         }}
                         onChange={this.updateSearch}
                         type="search"
-                        placeholder={translateJson["LBL_SEARCH_PLACEHOLDER"]}
+                        placeholder={t("LBL_SEARCH_PLACEHOLDER")}
                         defaultValue={this.state.searchTerm}
                         className="me-2"
                         aria-label="Search"
@@ -175,7 +176,7 @@ class Searchbar extends Component<Props,ISearchbar> {
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()}/>;
+    return props => <Component {...props} navigation={useNavigate()} translation={useTranslation()}/>;
 }
 
 export default addProps(Searchbar);

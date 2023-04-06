@@ -10,17 +10,16 @@ import { ReactComponent as Arrow } from './assets/arrow-up.svg';
 import {useNavigate} from "react-router-dom";
 import ButtonGroup from "./Components/Buttons/ButtonGroup";
 import RouterService from "./Services/router.service";
-import React, {Component, useState} from "react";
+import React, {Component} from "react";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/catalog-version.service";
-import getTranslationHash from "./Services/translation.service";
 import {INavigationHook, IParamTypes, IVersions} from "./interfaces";
 import loadingSpinner from "./Components/Spinner/spinner";
 import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
 import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
 import dateFormat from "dateformat";
 import {toast} from "react-toastify";
-
+import { useTranslation } from 'react-i18next';
 
 /**
  * App.js calls all the component to combine them and render the website
@@ -30,6 +29,7 @@ import {toast} from "react-toastify";
 interface Props {
     navigation: INavigationHook
     params: IParamTypes
+    translation: any
 }
 
 interface ISearchResult {
@@ -178,7 +178,8 @@ class App extends Component<Props, IApp>{
         })
     }
 
-    async navigateToLatestIcd(translationHash) {
+    async navigateToLatestIcd() {
+        const {t} = this.props.translation;
         let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" +
             RouterService.getQueryVariable('query');
         let latestICD = this.state.initialVersions['ICD'].at(-1);
@@ -187,7 +188,7 @@ class App extends Component<Props, IApp>{
         this.changeSelectedButton("ICD")
         // Adding toastId avoids toast getting rendered multiple times (since we're firing this in component did mount
         // and update. This want be necessary if we rewrite everythin into functional components and use effect hook.
-        toast.warning(translationHash["LBL_VERSION_NOT_AVAILABLE"], {
+        toast.warning(t("LBL_VERSION_NOT_AVAILABLE"), {
             position: toast.POSITION.TOP_RIGHT,
             toastId: 'no_version_toast',
         });
@@ -200,7 +201,6 @@ class App extends Component<Props, IApp>{
      * @param snapshot
      */
     async componentDidUpdate(prevProps, prevState, snapshot) {
-        let translationHash = getTranslationHash(this.state.language);
         // version is empty for non versionized catalogs.
         let version = this.state.selectedVersion;
         let button = this.state.selectedButton;
@@ -241,7 +241,7 @@ class App extends Component<Props, IApp>{
                 this.navigateTo(this.state.language + "/" + button + '/' + version +
                     (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
             } else {
-                await this.navigateToLatestIcd(translationHash);
+                await this.navigateToLatestIcd();
             }
             this.setState({reSetPath: false})
         }
@@ -254,7 +254,6 @@ class App extends Component<Props, IApp>{
     async componentDidMount() {
         this.changeIsDesktop();
         window.addEventListener("resize", this.changeIsDesktop);
-        let translationHash = getTranslationHash(this.state.language);
         await this.setState({initialVersions: await getVersionsByLanguage('de')})
         await this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
         // If medcodesearch is accessed via root url, i.e. medcodesearch.ch, there is no version from url, i.e. the
@@ -263,7 +262,7 @@ class App extends Component<Props, IApp>{
             await this.setState({selectedVersion:  this.state.initialVersions['ICD'].at(-1)})
         }
         if (!this.isValidVersion(this.state.selectedButton, this.state.selectedVersion, this.state.language)) {
-            await this.navigateToLatestIcd(translationHash);
+            await this.navigateToLatestIcd();
         }
         await this.setState({isFetching: false})
     }
@@ -288,12 +287,12 @@ class App extends Component<Props, IApp>{
      * @returns labels
      */
     getLabels() {
-        let translationHash = getTranslationHash(this.state.language);
+        const {t} = this.props.translation;
         return {
-            'MIGEL': translationHash["LBL_MIGEL_LABEL"],
-            'AL': translationHash["LBL_AL_LABEL"],
+            'MIGEL': t("LBL_MIGEL_LABEL"),
+            'AL': t("LBL_AL_LABEL"),
             'DRUG': 'Med',
-            'AmbGroup': translationHash['LBL_AMB_GROUP_LABEL']
+            'AmbGroup': t('LBL_AMB_GROUP_LABEL')
         }
     }
 
@@ -302,10 +301,10 @@ class App extends Component<Props, IApp>{
      * @returns {JSX.Element}
      */
     searchResults() {
-        let translationHash = getTranslationHash(this.state.language);
+        const {t} = this.props.translation;
         const searchResults =
             this.state.searchResults[0] === "empty" ?
-                <div className="searchResult">{translationHash["LBL_NO_RESULTS"]}</div> :
+                <div className="searchResult">{t("LBL_NO_RESULTS")}</div> :
                 this.state.searchResults.map(function (searchResult) {
                     return <SearchResult result={searchResult} key={searchResult.code}/>
                 })
@@ -505,7 +504,7 @@ class App extends Component<Props, IApp>{
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()}/>;
+    return props => <Component {...props} navigation={useNavigate()} translation={useTranslation()}/>;
 }
 
 export default addProps(App);

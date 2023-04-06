@@ -84,11 +84,11 @@ export function getNavParams(code, language, catalog, resource_type?) {
     return {pathname, searchString}
 }
 
-export function collectAttributesSl(attributes, translateJson) {
+export function collectAttributesSl(attributes, translation) {
     const attributesSl = ["public_price", "date_added_in_sl", "date_deleted_from_sl",
         "date_compulsatory_until", "has_limitation", "is_generica", "limitation_points"]
     return {
-        status: translateJson["LBL_" + (attributes["is_ggsl"] ? "GGSL" : "SL")],
+        status: translation("LBL_" + (attributes["is_ggsl"] ? "GGSL" : "SL")),
         ...Object.keys(attributes)
             .filter((key) => (
                 attributesSl.includes(key) &&
@@ -161,12 +161,12 @@ function collectEnabledAttributes(attributes) {
         }, {});
 }
 
-export function commonCodeInfos(attributes, translateJson, versionized, navigate) {
+export function commonCodeInfos(attributes, translation, versionized, navigate) {
     const enabledAttributes = collectEnabledAttributes(attributes)
     const noCodeError = Object.keys(enabledAttributes).includes("error")
     const codeInfos = noCodeError ? [] : Object.keys(enabledAttributes).map(attribute => (
         <div key={attribute}>
-            <h5>{translateJson["LBL_" + attribute.toUpperCase()]}</h5>
+            <h5>{translation("LBL_" + attribute.toUpperCase())}</h5>
             {typeof enabledAttributes[attribute] === 'object' ?
                 <ul id={attribute + "_attribute_value"}>
                     {enabledAttributes[attribute].map((val, j) => (
@@ -178,7 +178,7 @@ export function commonCodeInfos(attributes, translateJson, versionized, navigate
                 </ul> :
                 <div key={attribute} id={attribute + "_attribute_value"}>
                     {typeof enabledAttributes[attribute] === 'boolean' ?
-                        <p>{translateJson["LBL_" + enabledAttributes[attribute].toString().toUpperCase()]}</p> :
+                        <p>{translation("LBL_" + enabledAttributes[attribute].toString().toUpperCase())}</p> :
                         <p dangerouslySetInnerHTML={{__html: attributes[attribute]}}/>
                     }
                 </div>

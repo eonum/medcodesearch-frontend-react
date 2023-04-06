@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {IAttributes, INavigationHook, IShortEntry} from "../../interfaces";
-import getTranslationHash from "../../Services/translation.service";
 import {commonCodeInfos, versionsWithoutMappingInfos} from "../../Utils";
 import {useNavigate} from "react-router-dom";
 import ClickableCodesArray from "./ClickableCodesArray";
+import {useTranslation} from "react-i18next";
 
 interface Props {
     attributes: IAttributes,
@@ -11,28 +11,24 @@ interface Props {
     version: string,
     siblings: IShortEntry[],
     language: string,
-    navigation: INavigationHook
+    navigation: INavigationHook,
+    translation: any
 }
 
 /**
  * Responsible for the attributes of a code, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED).
  */
 class CodeAttributesVersionized extends Component<Props>{
-    constructor(props) {
-        super(props);
-    }
-
-
     /**
      * Render the CodeAttributesVersionized component
      * @returns {JSX.Element}
      */
     render() {
-        let translateJson = getTranslationHash(this.props.language);
         let attributes = this.props.attributes;
         let children = attributes.children;
         let siblings = this.props.siblings;
-        const { noCodeError, codeInfos } = commonCodeInfos(attributes, translateJson, true,
+        const {t} = this.props.translation
+        const { noCodeError, codeInfos } = commonCodeInfos(attributes, t, true,
             this.props.navigation)
         // Define mapping fields for predecessor & new code code info.
         let mappingFields = ['predecessors', 'successors'];
@@ -44,7 +40,7 @@ class CodeAttributesVersionized extends Component<Props>{
 
         return (
             noCodeError ?
-                <div>{translateJson["LBL_NO_CODE_VERSIONIZED"]}</div> :
+                <div>{t("LBL_NO_CODE_VERSIONIZED")}</div> :
                 <>
                     {// Render enabled attributes (they can be lists, date and strings.
                         codeInfos }
@@ -56,7 +52,7 @@ class CodeAttributesVersionized extends Component<Props>{
                                     (attributes[field][0]['code'] != attributes['code'] ||
                                         attributes[field][0]['text'] != attributes['text']))) &&
                             <div key={"mapping_pre_succ" + j}>
-                                <h5>{translateJson["LBL_" + field.toUpperCase()]}</h5>
+                                <h5>{t("LBL_" + field.toUpperCase())}</h5>
                                 <ul>
                                     {attributes[field].map((child, i) => (
                                         <li key={child + "_" + i}><b>{child.code}</b>{" " + child.text}</li>
@@ -67,7 +63,7 @@ class CodeAttributesVersionized extends Component<Props>{
                     {// Add new code information.
                         showNewCodeInfo &&
                         <div className="vertical-spacer alert alert-warning">
-                            <h5>{translateJson["LBL_NEW_CODE"]}</h5>
+                            <h5>{t("LBL_NEW_CODE")}</h5>
                         </div>
                     }
                     {children &&
@@ -90,7 +86,7 @@ class CodeAttributesVersionized extends Component<Props>{
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} />;
+    return props => <Component {...props} navigation={useNavigate()} translation={useTranslation()} />;
 }
 
 export default addProps(CodeAttributesVersionized);

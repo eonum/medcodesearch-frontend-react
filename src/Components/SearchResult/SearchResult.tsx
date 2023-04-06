@@ -3,13 +3,14 @@ import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
 import RouterService from "../../Services/router.service";
 import {ILocation, INavigationHook} from "../../interfaces";
-import getTranslationHash from "../../Services/translation.service";
+import {useTranslation} from "react-i18next";
 
 interface Props {
     navigation: INavigationHook,
     location: ILocation,
     result: ISearchResult,
-    language: string
+    language: string,
+    translation: any
 }
 
 interface ISearchResult {
@@ -53,7 +54,7 @@ class SearchResult extends Component<Props, ISearchResult> {
     }
 
     collectSearchHighlights() {
-        let translateJson = getTranslationHash(this.props.language)
+        const {t} = this.props.translation
         let text = this.props.result.text;
         let highlight = this.props.result.highlight;
         if (highlight != null) {
@@ -69,7 +70,7 @@ class SearchResult extends Component<Props, ISearchResult> {
                     var field = alternative_fields[i];
                     if (field == 'code') { continue; }
                     if (highlight[field]) {
-                        text += '<div class="alternative_search_highlight"><strong>' + translateJson["LBL_" + field.toUpperCase()] + ': </strong>';
+                        text += '<div class="alternative_search_highlight"><strong>' + t("LBL_" + field.toUpperCase()) + ': </strong>';
                         for (var j = 0; j < highlight[field].length; j++) {
                             text += highlight[field][j] + '<br/>';
                         }
@@ -98,7 +99,6 @@ class SearchResult extends Component<Props, ISearchResult> {
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} location={useLocation()}/>;
+    return props => <Component {...props} navigation={useNavigate()} location={useLocation()} translation={useTranslation()}/>;
 }
-
 export default addProps(SearchResult);

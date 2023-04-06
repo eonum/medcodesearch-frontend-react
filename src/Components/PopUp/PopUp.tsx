@@ -1,12 +1,10 @@
-import {useNavigate} from "react-router-dom";
 import React, {Component} from "react";
 import "./PopUp.css"
 import {Modal} from "react-bootstrap";
-import deJson from "../../assets/translations/de.json";
 import {convertCatalogToResourceType, languages} from "../../Services/catalog-version.service";
-import getTranslationHash from "../../Services/translation.service";
 import {fetchURL} from "../../Utils";
 import {IUpdateStateByArg} from "../../interfaces";
+import {useTranslation} from "react-i18next";
 
 interface Props {
     language: string,
@@ -17,11 +15,11 @@ interface Props {
     updatePopUpState: { (boolean_value: boolean): void },
     version: string,
     catalog: string
+    translation: any
 }
 
 interface IPopUp {
     show: boolean,
-    translateJson: object,
     availableLanguages: string[]
 }
 
@@ -34,7 +32,6 @@ class PopUp extends Component<Props, IPopUp>{
         super(props);
         this.state = {
             show: false,
-            translateJson: deJson,
             availableLanguages: ['de']
         }
     }
@@ -114,16 +111,17 @@ class PopUp extends Component<Props, IPopUp>{
      * @returns {JSX.Element}
      */
     render() {
+        const {t} = this.props.translation
         return (
             <>
                 <Modal size="sm" show={this.state.show} onHide={() => this.handleShow(false)}>
                     <Modal.Header closeButton>
-                        <Modal.Title className="pull-left">{getTranslationHash(this.props.language)['LBL_SELECT_LANGUAGE']}</Modal.Title>
+                        <Modal.Title className="pull-left">{t('LBL_SELECT_LANGUAGE')}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>{getTranslationHash(this.props.language)['LBL_CATALOG_LANGUAGE_NOT_AVAILABLE']}</Modal.Body>
+                    <Modal.Body>{t('LBL_CATALOG_LANGUAGE_NOT_AVAILABLE')}</Modal.Body>
                     <Modal.Footer>
                             <button className="PopUpBtn" onClick={() => this.handleShow(false)}>
-                                {getTranslationHash(this.props.language)['LBL_BACK']}
+                                {t('LBL_BACK')}
                             </button>
                         <div className="float-end">
                         {this.state.availableLanguages.map((language, i) => (
@@ -138,5 +136,8 @@ class PopUp extends Component<Props, IPopUp>{
         );
     }
 }
+function addProps(Component) {
+    return props => <Component {...props} translation={useTranslation()}/>;
+}
 
-export default PopUp;
+export default addProps(PopUp);
