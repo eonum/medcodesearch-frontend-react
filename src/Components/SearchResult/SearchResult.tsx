@@ -39,13 +39,14 @@ class SearchResult extends Component<Props, ISearchResult> {
         let path = location.pathname.split("/")
 
         let pathname;
-        if (path[2] === "MIGEL" || path[2] === "AL" || path[2] === "DRUG"){
-                pathname= "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + this.props.result.code
-        }
-        else if(path[2] === "SwissDRG") {
-                pathname= "/" + path[1] + "/" + path[2] + "/" + path[3] + "/drgs/" + this.props.result.code
+        if (path[2] === "MIGEL" || path[2] === "AL" || path[2] === "DRUG") {
+            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + this.props.result.code
+        } else if (path[2] === "SwissDRG") {
+            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/drgs/" + this.props.result.code
+        } else if (path[2] === "AmbGroup") {
+            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/amb_groups/" + this.props.result.code
         } else {
-                pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + path[2].toLowerCase() + "s/" + this.props.result.code
+            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + path[2].toLowerCase() + "s/" + this.props.result.code
         }
         navigate({
             pathname: pathname,

@@ -37,7 +37,8 @@ describe('PopUp test suite', function () {
     await expect(page.url()).toBe(baseUrl + '/fr/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022');
     // Again click ICD 2021 but now choose 'de' and check if correct forwarded.
     await page.click("#version_button", {visible: true});
-    await page.click("#ICD10-GM-2021", {visible: true})
+    await page.waitForSelector("#ICD10-GM-2021", {visible: true});
+    await page.click("#ICD10-GM-2021")
     // 'de' should be first button.
     await page.click(".modal-footer>div>.PopUpBtn:nth-child(1)", {visible:true});
     await page.waitForTimeout(2*n);
