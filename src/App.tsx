@@ -8,7 +8,7 @@ import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import { ReactComponent as Arrow } from './assets/arrow-up.svg';
 import {useNavigate} from "react-router-dom";
-import Buttons from "./Components/Buttons/ButtonGroup";
+import ButtonGroup from "./Components/Buttons/ButtonGroup";
 import RouterService from "./Services/router.service";
 import React, {Component, useState} from "react";
 import {Collapse} from "react-bootstrap";
@@ -284,7 +284,7 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * Returns the labels for the buttons depending on the chosen language.
+     * Returns the labels for the catalog buttons depending on the chosen language.
      * @returns labels
      */
     getLabels() {
@@ -382,7 +382,7 @@ class App extends Component<Props, IApp>{
             <div key={"app_content"}>
                 {isDesktop ?
                     <div className={"catalogAndSearchbarContainer"}>
-                        <Buttons
+                        <ButtonGroup
                             initialVersions={this.state.initialVersions}
                             currentVersions={this.state.currentVersions}
                             clickedOnLogo={this.state.clickedOnLogo}
@@ -420,7 +420,7 @@ class App extends Component<Props, IApp>{
                         </div>
                         <div key={"app_buttons"} className="row">
                             <div className={"alignMobileButtons"}>
-                                <Buttons
+                                <ButtonGroup
                                     initialVersions={this.state.initialVersions}
                                     currentVersions={this.state.currentVersions}
                                     clickedOnLogo={this.state.clickedOnLogo}
