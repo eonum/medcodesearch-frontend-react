@@ -229,7 +229,7 @@ class Buttons extends Component<Props,IButton>{
     getClassName(btn) {
         let name = "dropdown-item"
         if(this.props.language === "en" && btn !== "ICD") {
-            name += "-disabled"
+            name += " disabled"
         }
         return name
     }

@@ -187,7 +187,7 @@ class App extends Component<Props, IApp>{
         this.changeSelectedVersion(latestICD)
         this.changeSelectedButton("ICD")
         // Adding toastId avoids toast getting rendered multiple times (since we're firing this in component did mount
-        // and update. This want be necessary if we rewrite everythin into functional components and use effect hook.
+        // and update. This want be necessary if we rewrite everything into functional components and use effect hook.
         toast.warning(t("LBL_VERSION_NOT_AVAILABLE"), {
             position: toast.POSITION.TOP_RIGHT,
             toastId: 'no_version_toast',
