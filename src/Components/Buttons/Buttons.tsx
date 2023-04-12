@@ -1,7 +1,5 @@
 import PopUp from "../PopUp/PopUp";
-import {Dropdown} from "react-bootstrap";
-import DropdownToggle from "react-bootstrap/DropdownToggle";
-import DropdownMenu from "react-bootstrap/DropdownMenu";
+import {Dropdown, DropdownButton} from "react-bootstrap";
 import {convertCatalogToResourceType, cutCatalogFromVersion} from "../../Services/catalog-version.service";
 import React, {Component} from "react";
 import DatePicker from "./DatePicker";
@@ -222,25 +220,12 @@ class Buttons extends Component<Props,IButton>{
     }
 
     /**
-     * Returns the class name of a button.
-     * @param btn
-     * @returns {string}
-     */
-    getClassName(btn) {
-        let name = "dropdown-item"
-        if(this.props.language === "en" && btn !== "ICD") {
-            name += " disabled"
-        }
-        return name
-    }
-
-    /**
      * Render the button.
      * @returns {JSX.Element}
      */
     render(){
         return(
-            <div key={"buttons"} className="btn-group">
+            <>
                 <PopUp
                     language={this.props.language}
                     changeLanguage={this.props.changeLanguage}
@@ -251,65 +236,60 @@ class Buttons extends Component<Props,IButton>{
                     version={this.state.disabledVersion}
                     catalog={this.state.disabledCatalog}
                 />
-                <Dropdown key={"dropdown_catalog"} className={"dropdownButton"}>
-                    <DropdownToggle
-                        key={"dropdown_catalog_toggle"}
-                        className={"customButton"}
-                        variant=""
-                        type="button"
-                        id={"catalog_button"}>
-                        {this.convertToLabel()}
-                    </DropdownToggle>
-                    <DropdownMenu className="dropdown" >
-                        {this.state.buttons.map((btn) => (
-                                <Dropdown.Item className={this.getClassName(btn)}
-                                               eventKey={btn}
-                                               key={"button_dropdown_catalog_" + btn}
-                                               id={btn + "_button"}
-                                               onClick={() => {
-                                    this.handleCatalogClick(btn)
-                                }}>
-                                    {this.extractLabel(btn)}
-                                </Dropdown.Item>
-                            )
-                        )}
-                    </DropdownMenu>
-                </Dropdown>
-                {this.isCalBut() ?
-                    <DatePicker
-                        selectedCatalog={this.props.selectedCatalog}
-                        selectedDate= {this.props.selectedDate}
-                        clickDate={(date) => {
-                            this.props.updateOnButtonClick('',this.props.catalog, true, date)
-                        }}
-                    /> :
-                    <Dropdown key={"dropdown_versions"} className="dropdownButton">
-                        <Dropdown.Toggle
-                            key={"dropdown_versions_toggle"}
-                            className="customButton"
-                            variant=""
-                            type="button"
-                            id={"version_button"}>
-                            {this.getVersion()}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="dropdown">
-                            {this.state.allVersions.reverse().map(
-                                (version) => (
+                <div key={"buttons"} className="btn-group">
+                    <div className={"me-2"}>
+                        <DropdownButton
+                            title={this.convertToLabel()}
+                            key={"dropdown_catalog"}
+                            id={"catalog_button"}
+                            bsPrefix={'form-control'} // Use bsPrefix to change underlying CSS base class name.
+                        >
+                            {this.state.buttons.map((btn) => (
                                     <Dropdown.Item
-                                        className={this.state.availableVersions.includes(version) ? "dropdown-item" : "dropdown-item disabled"}
-                                        eventKey={version}
-                                        key={"button_dropdown_versions_" + version}
-                                        id={version.replace(/\./g, '')}
-                                        onClick={() => {
-                                            this.handleVersionClick(version, this.props.catalog)
-                                        }}
-                                    >{cutCatalogFromVersion(this.props.catalog, version)}</Dropdown.Item>
+                                        className={this.props.language === "en" && btn !== "ICD" ? "disabled" : ""}
+                                        eventKey={btn}
+                                        key={"button_dropdown_catalog_" + btn}
+                                        id={btn + "_button"}
+                                        onClick={() => {this.handleCatalogClick(btn)}}>
+                                        {this.extractLabel(btn)}
+                                    </Dropdown.Item>
                                 )
                             )}
-                        </Dropdown.Menu>
-                    </Dropdown>
-                }
-        </div>
+                        </DropdownButton>
+                    </div>
+                    <div className={"me-2"}>
+                        {this.isCalBut() ?
+                            <DatePicker
+                                selectedCatalog={this.props.selectedCatalog}
+                                selectedDate= {this.props.selectedDate}
+                                clickDate={(date) => {
+                                    this.props.updateOnButtonClick('',this.props.catalog, true, date)
+                                }}
+                            /> :
+                            <DropdownButton
+                                title={this.getVersion()}
+                                key={"dropdown_versions"}
+                                id={"version_button"}
+                                bsPrefix={'form-control'} // Use bsPrefix to change underlying CSS base class name.
+                            >
+                                {this.state.allVersions.reverse().map(
+                                    (version) => (
+                                        <Dropdown.Item
+                                            className={this.state.availableVersions.includes(version) ? "" : "disabled"}
+                                            eventKey={version}
+                                            key={"button_dropdown_versions_" + version}
+                                            id={version.replace(/\./g, '')}
+                                            onClick={() => {
+                                                this.handleVersionClick(version, this.props.catalog)
+                                            }}
+                                        >{cutCatalogFromVersion(this.props.catalog, version)}</Dropdown.Item>
+                                    )
+                                )}
+                            </DropdownButton>
+                        }
+                    </div>
+                </div>
+            </>
         )
     }
 }

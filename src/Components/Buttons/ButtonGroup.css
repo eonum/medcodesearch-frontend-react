@@ -1,50 +1,15 @@
-.dropdownButton{
-    margin: auto;
-    border-radius: 5px;
-}
-
-.customButton.customButton {
-    background-color: white;
-    color: rgb(0, 0, 0);
-    border: 1.5px solid rgba(24, 24, 24, 0.195);
-    cursor: pointer;
-    font-size: 14px;
-    padding: 7.5px 12px;
-}
-
-.customButton:hover.customButton {
+#catalog_button:hover, #version_button:hover {
     background-color: rgb(234, 231, 231);
     color: black;
 }
 
-.customButton:focus.customButton{
+#catalog_button:focus, #version_button:focus {
     outline-style: none;
     box-shadow: none;
 }
 
-.activeCatalog{
-    background-color: #e6e6e6 !important;
-    box-shadow: inset 1px -1px 5px rgb(0 0 0 / 13%) !important;
-    border-color: #adadad !important;
-}
-
-.alignMobileButtons {
-    letter-spacing: 0.5px;
-    display: flex;
-    justify-content: center;
+.centerMobileButtons {
     text-align: center;
-    margin-top: 5px;
-}
-
-.alignDesktopButtons {
-    display: flex;
-}
-
-.dropdown-item {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
-    display: block;
 }
 
 .dropdown-item:hover {
@@ -54,12 +19,4 @@
 .disabled {
     cursor: not-allowed !important;
     pointer-events: all !important;
-}
-
-#desktopAlignment {
-    display: flex;
-}
-
-#catalog_button{
-    margin-right: 10px;
 }

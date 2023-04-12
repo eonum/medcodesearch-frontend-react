@@ -54,7 +54,6 @@
 
 .catalogAndSearchbarContainer {
   display: flex;
-  gap: 10px;
 }
 
 .searchbarItem {

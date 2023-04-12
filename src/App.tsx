@@ -418,7 +418,7 @@ class App extends Component<Props, IApp>{
                             </div>
                         </div>
                         <div key={"app_buttons"} className="row">
-                            <div className={"alignMobileButtons"}>
+                            <div className={"centerMobileButtons"}>
                                 <ButtonGroup
                                     initialVersions={this.state.initialVersions}
                                     currentVersions={this.state.currentVersions}
@@ -466,15 +466,15 @@ class App extends Component<Props, IApp>{
         return (
             <div>
                 <div className="container">
-                    <div key={"app_header"} className="row col-sm-12">
+                    <div key={"app_header"} className="row col">
                             <Header changeLanguage={this.changeLanguage} activeLanguage={this.state.language}/>
                     </div>
-                    <div key={"app_logo"} className="row col-sm-12">
+                    <div key={"app_logo"} className="row col">
                             <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
                     </div>
                     {this.state.isFetching ? loadingSpinner() : this.renderAfterFetch()}
-                    <div key={"app_footer"} className="navbar row">
-                        <div key={"app_footer_0"} className="col">
+                    <div key={"app_footer"} className="navbar row col">
+                        <div key={"app_footer_0"}>
                             <Footer/>
                         </div>
                     </div>
