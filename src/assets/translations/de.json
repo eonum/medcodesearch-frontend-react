@@ -96,10 +96,9 @@
   "LBL_COST_WEIGHT": "Kostengewicht",
   "LBL_IMPLANTS_INCLUDED": "Inklusive Implantate",
   "LBL_VERSION_NOT_AVAILABLE": "Diese Version ist in der ausgewählten Sprache nicht verfügbar.",
-  "LBL_AL_LABEL": "AL",
-  "LBL_AL": "Analysenliste",
+  "LBL_AL_LABEL": "Analysenliste",
   "LBL_MIGEL_LABEL": "MiGeL",
-  "LBL_MIGEL": "Mittel und Gegenständeliste",
-  "LBL_AMB_GROUP_LABEL": "Ambulante Pauschalen"
+  "LBL_AMB_GROUP_LABEL": "Ambulante Pauschalen",
+  "LBL_MED_LABEL": "Medikamente"
 }
 

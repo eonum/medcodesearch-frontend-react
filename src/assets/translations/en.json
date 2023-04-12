@@ -66,5 +66,6 @@
   "LBL_TRUE": "Yes",
   "LBL_COST_WEIGHT": "Cost weight",
   "LBL_IMPLANTS_INCLUDED": "Inklusive Implantate",
-  "LBL_VERSION_NOT_AVAILABLE": "This version is not available in the selected language."
+  "LBL_VERSION_NOT_AVAILABLE": "This version is not available in the selected language.",
+  "LBL_MED_LABEL": "Drugs"
 }

@@ -131,6 +131,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @param code
      * @returns {string|*}
      */
+    // TODO: Use I18n instead instead of switch case.
     extractLabel(code){
         let language = this.props.params.language;
         switch (true) {

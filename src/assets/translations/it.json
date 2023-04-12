@@ -92,7 +92,8 @@
   "LBL_COST_WEIGHT": "Peso dei costi",
   "LBL_IMPLANTS_INCLUDED": "Impianti inclusie",
   "LBL_VERSION_NOT_AVAILABLE": "Questa versione non è disponibile nella lingua selezionata.",
-  "LBL_AL_LABEL": "EA",
+  "LBL_AL_LABEL": "Elenco delle analisi",
   "LBL_MIGEL_LABEL": "EMAp",
-  "LBL_AMB_GROUP_LABEL": "Forfait ambulatoriale"
+  "LBL_AMB_GROUP_LABEL": "Forfait ambulatoriale",
+  "LBL_MED_LABEL": "Farmaci"
 }
