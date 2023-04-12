@@ -291,7 +291,7 @@ class App extends Component<Props, IApp>{
         return {
             'MIGEL': t("LBL_MIGEL_LABEL"),
             'AL': t("LBL_AL_LABEL"),
-            'DRUG': t("LBL_MED_LABEL"),
+            'DRUG': t("LBL_DRUG_LABEL"),
             'AmbGroup': t('LBL_AMB_GROUP_LABEL')
         }
     }

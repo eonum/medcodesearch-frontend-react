@@ -93,7 +93,9 @@
   "LBL_IMPLANTS_INCLUDED": "Implants inclus",
   "LBL_VERSION_NOT_AVAILABLE": "Cette version n'est pas disponible dans la langue sélectionnée.",
   "LBL_AL_LABEL": "Liste des analyses",
+  "LBL_AL_LABEL_SHORT": "LA",
   "LBL_MIGEL_LABEL": "LiMA",
   "LBL_AMB_GROUP_LABEL": "Forfaites ambulatoires",
-  "LBL_MED_LABEL": "Médicaments"
+  "LBL_DRUG_LABEL": "Médicaments",
+  "LBL_DRUG_LABEL_SHORT": "Méd"
 }

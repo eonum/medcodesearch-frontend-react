@@ -4,11 +4,13 @@ import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
 import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
 import {fetchURL, getNavParams, initialCodeState} from "../../Utils";
 import CodeAttributesUnversionized from "../CodeAttributes/CodeAttributesUnversionized";
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     params: IParamTypes,
     navigation: INavigationHook,
-    selectedDate: string
+    selectedDate: string,
+    translation: any
 }
 
 /**
@@ -132,25 +134,14 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @returns {string|*}
      */
     // TODO: Use I18n instead instead of switch case.
-    extractLabel(code){
-        let language = this.props.params.language;
-        switch (true) {
-            case ((code === "MIGEL") && (language === "de")):
-                return "MiGeL"
-            case ((code === "MIGEL") && (language === "fr")):
-                return "LiMA"
-            case ((code === "MIGEL") && (language === "it")):
-                return "EMAp"
-            case ((code === "AL") && (language === "de")):
-                return code
-            case ((code === "AL") && (language === "fr")):
-                return "LA"
-            case ((code === "AL") && (language === "it")):
-                return "EA"
-            case (code === "DRUG"):
-                return "Med"
-            default:
-                return code
+    extractLabel(code, isBreadcrumbLabel){
+        const {t} = this.props.translation
+        if (code === "MIGEL") {
+            return t(`LBL_${code}_LABEL`)
+        } else if (code === "AL" || code === "DRUG") {
+            return isBreadcrumbLabel ? t(`LBL_${code}_LABEL_SHORT`) : t(`LBL_${code}_LABEL`)
+        } else {
+            return code
         }
     }
 
@@ -174,12 +165,12 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                                     navigate({pathname: pathname, search: searchString})
                                 }
                             }} className="breadLink">
-                                {this.extractLabel(currElement.code)}
+                                {this.extractLabel(currElement.code, true)}
                             </Breadcrumb.Item>
                         )})}
-                    <BreadcrumbItem active>{this.extractLabel(this.state.attributes["code"])}</BreadcrumbItem>
+                    <BreadcrumbItem active>{this.extractLabel(this.state.attributes["code"], true)}</BreadcrumbItem>
                 </Breadcrumb>
-                <h3>{this.extractLabel(this.state.attributes["code"])}</h3>
+                <h3>{this.extractLabel(this.state.attributes["code"], false)}</h3>
                 <p dangerouslySetInnerHTML={{__html: this.state.attributes["text"]}} />
                 <CodeAttributesUnversionized
                     attributes={this.state.attributes}
@@ -195,7 +186,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
 }
 
 function withProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} key={"unversionized_body"} params={useParams() }/>;
+    return props => <Component {...props} navigation={useNavigate()} key={"unversionized_body"} params={useParams()} translation={useTranslation()}/>;
 }
 
 export default withProps(CodeBodyUnversionized);

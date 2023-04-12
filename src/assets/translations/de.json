@@ -97,8 +97,10 @@
   "LBL_IMPLANTS_INCLUDED": "Inklusive Implantate",
   "LBL_VERSION_NOT_AVAILABLE": "Diese Version ist in der ausgewählten Sprache nicht verfügbar.",
   "LBL_AL_LABEL": "Analysenliste",
+  "LBL_AL_LABEL_SHORT": "AL",
   "LBL_MIGEL_LABEL": "MiGeL",
   "LBL_AMB_GROUP_LABEL": "Ambulante Pauschalen",
-  "LBL_MED_LABEL": "Medikamente"
+  "LBL_DRUG_LABEL": "Medikamente",
+  "LBL_DRUG_LABEL_SHORT": "Med"
 }
 
