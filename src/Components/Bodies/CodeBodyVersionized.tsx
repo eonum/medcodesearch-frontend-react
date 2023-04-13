@@ -4,10 +4,12 @@ import {Breadcrumb} from "react-bootstrap";
 import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
 import {fetchURL, getNavParams, initialCodeState} from "../../Utils";
 import CodeAttributesVersionized from "../CodeAttributes/CodeAttributesVersionized";
+import {useTranslation} from "react-i18next";
 
 interface Props {
     params: IParamTypes,
     navigation: INavigationHook,
+    translation: any
 }
 
 /**
@@ -119,6 +121,11 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         this.setState({parents: parents})
     }
 
+    internationalizeIcdBaseCode(code) {
+        const {t} = this.props.translation
+        return code.replace("ICD10-GM", t("LBL_ICD_LABEL"))
+    }
+
     /**
      * Render the body component
      * @returns {JSX.Element}
@@ -127,7 +134,14 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         let {language, catalog, version} = this.props.params
         let siblings = this.state.siblings;
         let navigate = this.props.navigation;
-        let title = this.state.attributes.code ? this.state.attributes.code.replace("_", " ") : "";
+        let title;
+        if (this.state.attributes.code) {
+            title = this.state.attributes.code.includes("ICD10") ?
+                this.internationalizeIcdBaseCode(this.state.attributes.code) :
+                this.state.attributes.code.replace("_", " ")
+        } else {
+            title = "";
+        }
         return (
             <div>
                 <Breadcrumb>
@@ -137,7 +151,8 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                                 let {pathname, searchString} = getNavParams(currElement, language, catalog)
                                 navigate({pathname: pathname, search: searchString})
                             }} className="breadLink">
-                                {currElement.code}
+                                {currElement.code.includes("ICD10") ?
+                                    this.internationalizeIcdBaseCode(currElement.code) : currElement.code}
                             </Breadcrumb.Item>);
                     })}
                     <Breadcrumb.Item active>{title}</Breadcrumb.Item>
@@ -157,7 +172,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} key={"versionized_body"} params={useParams()}/>;
+    return props => <Component {...props} navigation={useNavigate()} key={"versionized_body"} params={useParams()} translation={useTranslation()}/>;
 }
 
 export default addProps(CodeBodyVersionized);
