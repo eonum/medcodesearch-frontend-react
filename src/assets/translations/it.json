@@ -97,5 +97,6 @@
   "LBL_MIGEL_LABEL": "EMAp",
   "LBL_AMB_GROUP_LABEL": "Forfait ambulatoriale",
   "LBL_DRUG_LABEL": "Medicinali",
-  "LBL_DRUG_LABEL_SHORT": "Med"
+  "LBL_DRUG_LABEL_SHORT": "Med",
+  "LBL_ICD_LABEL": "ICD-10-GM"
 }

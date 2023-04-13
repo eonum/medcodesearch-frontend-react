@@ -64,11 +64,7 @@ export interface IVersions {
     [index: string]: string[];
 }
 
-export interface IButtonLabels {
-    [index: number]: string[];
-}
-
-export interface IUnversionizedLabels {
+export interface ILabelHash {
     [index: string]: string;
 }
 

@@ -3,7 +3,7 @@ import {Dropdown, DropdownButton} from "react-bootstrap";
 import {convertCatalogToResourceType, cutCatalogFromVersion} from "../../Services/catalog-version.service";
 import React, {Component} from "react";
 import DatePicker from "./DatePicker";
-import {IVersions, IButtonLabels, IUpdateStateByArg, IUpdateButton, IUnversionizedLabels} from "../../interfaces";
+import {IVersions, IUpdateStateByArg, IUpdateButton, ILabelHash} from "../../interfaces";
 import {fetchURL} from "../../Utils";
 
 interface Props {
@@ -18,8 +18,8 @@ interface Props {
     changeLanguage: IUpdateStateByArg,
     changeSelectedVersion: IUpdateStateByArg,
     changeSelectedButton: IUpdateStateByArg,
-    buttons: IButtonLabels,
-    labels: IUnversionizedLabels,
+    buttons: string[]
+    labels: ILabelHash,
     updateOnButtonClick: IUpdateButton
 }
 
@@ -29,7 +29,6 @@ export interface IButton {
     disabledCatalog: string,
     allVersions: string[], // All possible versions in language 'de' of one catalog in an array, f.e. ["CHOP_2011", "CHOP_2012", ...].
     availableVersions: string[], // All available version in a specific language (used to enable / disable versions in dropdown.
-    buttons: string[],
     selectedButton: string
 }
 
@@ -51,25 +50,9 @@ class Buttons extends Component<Props,IButton>{
             disabledCatalog: "",
             allVersions: [],
             availableVersions: [],
-            buttons: this.convertButtons(),
             selectedButton: this.props.catalog
         }
         this.updatePopUp = this.updatePopUp.bind(this);
-    }
-
-    /**
-     * converts button-arrays to one button array
-     * @returns {[]}
-     */
-    convertButtons(){
-        let buttons= [];
-        for(let i =0 ; i < this.props.buttons[0].length; i++){
-            buttons[i]= this.props.buttons[0][i]
-        }
-        for(let j=0 ; j < this.props.buttons[1].length; j++){
-            buttons[j+ this.props.buttons[0].length]=this.props.buttons[1][j];
-        }
-        return buttons;
     }
 
     /**
@@ -197,29 +180,6 @@ class Buttons extends Component<Props,IButton>{
     }
 
     /**
-     * Converts a catalog into a label, s.t. buttons are displayed in correct language.
-     * Only used for the selected button.
-     * @returns label
-     */
-    convertToLabel() {
-        if(this.props.catalog === "SwissDRG" || this.props.catalog === "ICD" || this.props.catalog === "CHOP"
-            || this.props.catalog === "TARMED"){
-            return this.props.catalog;
-        }
-        else{
-            return this.props.labels[this.props.catalog]
-        }
-    }
-
-    /**
-     * Extracts label by button s.t. buttons with calendars are displayed in the correct language.
-     * @returns label
-     */
-    extractLabel(btn) {
-        return ["AL", "MIGEL", "DRUG", "AmbGroup"].includes(btn) ? this.props.labels[btn] : btn
-    }
-
-    /**
      * Render the button.
      * @returns {JSX.Element}
      */
@@ -239,19 +199,19 @@ class Buttons extends Component<Props,IButton>{
                 <div key={"buttons"} className="btn-group">
                     <div className={"me-2"}>
                         <DropdownButton
-                            title={this.convertToLabel()}
+                            title={this.props.labels[this.props.catalog]}
                             key={"dropdown_catalog"}
                             id={"catalog_button"}
                             bsPrefix={'form-control'} // Use bsPrefix to change underlying CSS base class name.
                         >
-                            {this.state.buttons.map((btn) => (
+                            {this.props.buttons.map((btn) => (
                                     <Dropdown.Item
                                         className={this.props.language === "en" && btn !== "ICD" ? "disabled" : ""}
                                         eventKey={btn}
                                         key={"button_dropdown_catalog_" + btn}
                                         id={btn + "_button"}
                                         onClick={() => {this.handleCatalogClick(btn)}}>
-                                        {this.extractLabel(btn)}
+                                        {this.props.labels[btn]}
                                     </Dropdown.Item>
                                 )
                             )}

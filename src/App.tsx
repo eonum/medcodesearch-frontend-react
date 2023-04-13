@@ -286,13 +286,17 @@ class App extends Component<Props, IApp>{
      * Returns the labels for the catalog buttons depending on the chosen language.
      * @returns labels
      */
-    getLabels() {
+    labelHash() {
         const {t} = this.props.translation;
         return {
+            'ICD': t("LBL_ICD_LABEL"),
+            'CHOP': 'CHOP',
+            'SwissDRG': 'SwissDRG',
+            'TARMED': 'TARMED',
+            'AmbGroup': t("LBL_AMB_GROUP_LABEL"),
             'MIGEL': t("LBL_MIGEL_LABEL"),
             'AL': t("LBL_AL_LABEL"),
-            'DRUG': t("LBL_DRUG_LABEL"),
-            'AmbGroup': t('LBL_AMB_GROUP_LABEL')
+            'DRUG': t("LBL_DRUG_LABEL")
         }
     }
 
@@ -394,8 +398,8 @@ class App extends Component<Props, IApp>{
                             changeSelectedButton={this.changeSelectedButton}
                             changeSelectedVersion={this.changeSelectedVersion}
                             changeSelectedDate={this.changeSelectedDate}
-                            labels={this.getLabels()}
-                            buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup'], ['MIGEL', 'AL', 'DRUG']]}
+                            labels={this.labelHash()}
+                            buttons={['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
                         />
                         <div className={"searchbarItem"} onClick={this.showSearchResults}>
                             <Searchbar
@@ -432,8 +436,8 @@ class App extends Component<Props, IApp>{
                                     changeSelectedButton={this.changeSelectedButton}
                                     changeSelectedVersion={this.changeSelectedVersion}
                                     changeSelectedDate={this.changeSelectedDate}
-                                    labels={this.getLabels()}
-                                    buttons={[['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup'], ['MIGEL', 'AL', 'DRUG']]}
+                                    labels={this.labelHash()}
+                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
                                 />
                             </div>
                         </div>

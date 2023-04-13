@@ -5,11 +5,10 @@ import RouterService from "../../Services/router.service";
 import Buttons from "./Buttons";
 import {
     IVersions,
-    IButtonLabels,
     IParamTypes,
     INoArgsFunction,
     IUpdateStateByArg,
-    IUnversionizedLabels
+    ILabelHash
 } from "../../interfaces";
 import {currentCatalogsByButton, versionizedCatalogs} from "../../Services/catalog-version.service";
 import dateFormat from "dateformat"
@@ -28,8 +27,8 @@ interface Props {
     changeSelectedButton: IUpdateStateByArg,
     changeSelectedVersion: IUpdateStateByArg,
     changeSelectedDate: IUpdateStateByArg,
-    labels: IUnversionizedLabels,
-    buttons: IButtonLabels
+    labels: ILabelHash,
+    buttons: string[]
 }
 
 interface IButtons {
