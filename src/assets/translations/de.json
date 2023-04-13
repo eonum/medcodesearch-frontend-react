@@ -100,7 +100,7 @@
   "LBL_AL_LABEL_SHORT": "AL",
   "LBL_MIGEL_LABEL": "MiGeL",
   "LBL_AMB_GROUP_LABEL": "Ambulante Pauschalen",
-  "LBL_DRUG_LABEL": "Medikamente",
+  "LBL_DRUG_LABEL": "Medikamente GTIN",
   "LBL_DRUG_LABEL_SHORT": "Med",
   "LBL_ICD_LABEL": "ICD10-GM"
 }

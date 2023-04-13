@@ -96,7 +96,7 @@
   "LBL_AL_LABEL_SHORT": "LA",
   "LBL_MIGEL_LABEL": "LiMA",
   "LBL_AMB_GROUP_LABEL": "Forfaites ambulatoires",
-  "LBL_DRUG_LABEL": "Médicaments",
+  "LBL_DRUG_LABEL": "Médicaments GTIN",
   "LBL_DRUG_LABEL_SHORT": "Méd",
   "LBL_ICD_LABEL": "CIM10-GM"
 }

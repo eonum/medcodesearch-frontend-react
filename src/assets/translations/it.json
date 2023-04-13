@@ -96,7 +96,7 @@
   "LBL_AL_LABEL_SHORT": "EA",
   "LBL_MIGEL_LABEL": "EMAp",
   "LBL_AMB_GROUP_LABEL": "Forfait ambulatoriale",
-  "LBL_DRUG_LABEL": "Medicinali",
+  "LBL_DRUG_LABEL": "Medicinali GTIN",
   "LBL_DRUG_LABEL_SHORT": "Med",
   "LBL_ICD_LABEL": "ICD10-GM"
 }
