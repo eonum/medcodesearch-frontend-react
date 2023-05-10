@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
 import RouterService from "../../Services/router.service";
@@ -28,25 +28,24 @@ interface IHighlight {
 /**
  * Handle the search result and check the text for any flags
  */
-class SearchResult extends Component<Props, ISearchResult> {
-
+const SearchResult: React.FunctionComponent<Props> = props =>  {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const {t} = useTranslation();
     /**
      * looks for change in the button selection and updates the fetchresult.
      */
-    handleClick = () => {
-        let navigate = this.props.navigation
-        let location = this.props.location
+    function handleClick() {
         let path = location.pathname.split("/")
-
         let pathname;
         if (path[2] === "MIGEL" || path[2] === "AL" || path[2] === "DRUG") {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + this.props.result.code
+            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + props.result.code
         } else if (path[2] === "SwissDRG") {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/drgs/" + this.props.result.code
+            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/drgs/" + props.result.code
         } else if (path[2] === "AmbGroup") {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/amb_groups/" + this.props.result.code
+            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/amb_groups/" + props.result.code
         } else {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + path[2].toLowerCase() + "s/" + this.props.result.code
+            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + path[2].toLowerCase() + "s/" + props.result.code
         }
         navigate({
             pathname: pathname,
@@ -54,10 +53,9 @@ class SearchResult extends Component<Props, ISearchResult> {
         })
     }
 
-    collectSearchHighlights() {
-        const {t} = this.props.translation
-        let text = this.props.result.text;
-        let highlight = this.props.result.highlight;
+    function collectSearchHighlights() {
+        let text = props.result.text;
+        let highlight = props.result.highlight;
         if (highlight != null) {
             let highlight_text = highlight['text'];
             if (highlight_text) {
@@ -83,23 +81,14 @@ class SearchResult extends Component<Props, ISearchResult> {
         return text
     }
 
-    /**
-     * render the search results
-     * @returns {JSX.Element}
-     */
-    render() {
-        return (
-            <div className="searchResult" onClick={this.handleClick}>
-                <dl>
-                    <dt><span className="link">{this.props.result.code}</span></dt>
-                    <dd id="noMargin" dangerouslySetInnerHTML={{__html: this.collectSearchHighlights()}}/>
-                </dl>
-            </div>
-        )
-    }
+    // Return the search results JSX.
+    return (
+        <div className="searchResult" onClick={handleClick}>
+            <dl>
+                <dt><span className="link">{props.result.code}</span></dt>
+                <dd id="noMargin" dangerouslySetInnerHTML={{__html: collectSearchHighlights()}}/>
+            </dl>
+        </div>
+    )
 }
-
-function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} location={useLocation()} translation={useTranslation()}/>;
-}
-export default addProps(SearchResult);
+export default SearchResult;
