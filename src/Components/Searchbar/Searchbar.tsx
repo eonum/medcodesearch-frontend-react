@@ -26,8 +26,6 @@ interface Props {
     version: string,
     selectedDate: string,
     updateSearchResults: { (searchResult: string | object): void },
-    navigation: INavigationHook
-    translation: any
 }
 
 /**
@@ -56,9 +54,9 @@ const Searchbar: React.FunctionComponent<Props> = props =>  {
             convertButtonToBackendVersion(props.selectedButton),
             'search?' + date + 'highlight=1&search='+ searchTerm
         ].join("/")
-        // Fetch an update search results.
+        // Named async function to fetch an update search results.
         const fetchData = async () => {
-            fetch(searchURL)
+            await fetch(searchURL)
                 .then((res) => {
                     if(res.ok) {
                         return res.json()
@@ -75,8 +73,8 @@ const Searchbar: React.FunctionComponent<Props> = props =>  {
                     }
                 })
         }
-        // call the function
-        fetchData()
+        // Call above async function.
+        fetchData();
     },[props.language, props.selectedButton, props.version, props.selectedDate, searchTerm])
 
     /**
