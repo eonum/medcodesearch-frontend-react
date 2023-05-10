@@ -30,18 +30,13 @@ interface Props {
     translation: any
 }
 
-interface ISearchbar  {
-    searchTerm: string,
-    reSearch: boolean
-}
-
 /**
  * Searchbar of the website. Responsible for fetching and updating search results by input query.
  * @component
  */
 const Searchbar: React.FunctionComponent<Props> = props =>  {
-    // Init searchTerm and reSearch state.
-    const [searchTerm, setSearchTerm] = useState(RouterService.getQueryVariable('query'));
+    // Init searchTerm.
+    const [searchTerm, setSearchTerm] = useState<string>(RouterService.getQueryVariable('query'));
     const navigate = useNavigate();
     const {t} = useTranslation();
 
