@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
@@ -36,51 +36,72 @@ interface ISearchbar  {
 }
 
 /**
- * is the searchbar of the website, which is responsible to take a string and and hand it off to the correct component
+ * Searchbar of the website. Responsible for fetching and updating search results by input query.
  * @component
  */
-class Searchbar extends Component<Props,ISearchbar> {
+const Searchbar: React.FunctionComponent<Props> = props =>  {
+    // Init searchTerm and reSearch state.
+    const [searchTerm, setSearchTerm] = useState(RouterService.getQueryVariable('query'));
+    const navigate = useNavigate();
+    const {t} = useTranslation();
 
-    /**
-     * set the state searchTerm to null
-     * @param props
-     */
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchTerm: "",
-            reSearch: false
-        }
-    }
-
-    /**
-     * set the state for searchTerm and calls the fetch
-     */
-    async componentDidMount() {
-        this.setState({
-            searchTerm: RouterService.getQueryVariable('query')
-        })
-        await this.fetchForSearchTerm(RouterService.getQueryVariable('query'));
-    }
-
-    /**
-     * changes the url to the search
-     * @param e
-     */
-    updateSearch = async (e) => {
+    // Set search term and update search results when first mounted or whenever search term, lang, selected button,
+    // version or selected date changes.
+    useEffect(() => {
         let date = '';
-        let navigate = this.props.navigation
-        if (e.target.value === "") {
+        if (props.selectedButton === 'MIGEL' || props.selectedButton === 'AL'){
+            if(props.selectedDate !== dateFormat(new Date(), "dd.mm.yyyy")){
+                date = 'date=' + props.selectedDate + '&'
+            }
+        }
+        let searchURL = [
+            fetchURL,
+            props.language,
+            resourceTypeByBtn[props.selectedButton],
+            convertButtonToBackendVersion(props.selectedButton),
+            'search?' + date + 'highlight=1&search='+ searchTerm
+        ].join("/")
+        // Fetch an update search results.
+        const fetchData = async () => {
+            fetch(searchURL)
+                .then((res) => {
+                    if(res.ok) {
+                        return res.json()
+                    }
+                })
+                .then((json) => {
+                    props.updateSearchResults("reset") //reset parent array
+                    if(json.length === 0 && searchTerm !== "") {
+                        props.updateSearchResults("empty")
+                    }
+                    for(let i = 0; i < json.length; i++) {
+                        let obj = json[i];
+                        props.updateSearchResults(obj);
+                    }
+                })
+        }
+        // call the function
+        fetchData()
+    },[props.language, props.selectedButton, props.version, props.selectedDate, searchTerm])
+
+    /**
+     * Navigate to new url and update search term depending on query input.
+     * @param queryString
+     */
+    function handleSeearch(queryString) {
+        let date = '';
+        if (queryString.target.value === "") {
             navigate({search: ""});
         } else {
-            if (this.props.selectedButton === 'MIGEL' || this.props.selectedButton === 'AL'
-                || this.props.selectedButton === 'DRUG') {
-                if (this.props.selectedDate !==  dateFormat(new Date(), "dd.mm.yyyy")) {
-                    date = 'date=' + this.props.selectedDate + '&'
+            if (props.selectedButton === 'MIGEL' || props.selectedButton === 'AL'
+                || props.selectedButton === 'DRUG') {
+                if (props.selectedDate !==  dateFormat(new Date(), "dd.mm.yyyy")) {
+                    date = 'date=' + props.selectedDate + '&'
                 }
             }
-            navigate({search: date + createSearchParams({query: e.target.value.replace(/\+/g, ' ')}).toString()});
+            navigate({search: date + createSearchParams({query: queryString.target.value.replace(/\+/g, ' ')}).toString()});
         }
+        setSearchTerm(RouterService.getQueryVariable('query'));
     }
 
     /**
@@ -88,95 +109,33 @@ class Searchbar extends Component<Props,ISearchbar> {
      * @param chosenBtn
      * @returns {string}
      */
-    convertButtonToBackendVersion(chosenBtn) {
+    function convertButtonToBackendVersion(chosenBtn) {
         let versionized = ['MIGEL', 'AL', 'DRUG'].includes(chosenBtn) ? false : true
-        return versionized ? this.props.version : chosenBtn
+        return versionized ? props.version : chosenBtn
     }
 
-    /**
-     * sets the correct url
-     * @param prevProps
-     * @param prevState
-     * @param snapshot
-     */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.state.searchTerm !== RouterService.getQueryVariable('query')) {
-            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
-        }
-        if(prevProps.language !== this.props.language
-            || prevProps.selectedButton !== this.props.selectedButton
-            || prevProps.version !== this.props.version
-            || prevProps.selectedDate !== this.props.selectedDate) {
-            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
-        }
-    }
-
-    /**
-     * looks for the current button and manipulate the search results
-     * @param searchTerm
-     * @returns {Promise<void>}
-     */
-    async fetchForSearchTerm(searchTerm){
-        this.setState({searchTerm: searchTerm})
-        let date = '';
-        if (this.props.selectedButton === 'MIGEL' || this.props.selectedButton === 'AL'){
-            if(this.props.selectedDate !== dateFormat(new Date(), "dd.mm.yyyy")){
-                date = 'date=' + this.props.selectedDate + '&'
-            }
-        }
-        let searchURL = [fetchURL, this.props.language,
-            resourceTypeByBtn[this.props.selectedButton],
-            this.convertButtonToBackendVersion(this.props.selectedButton),
-        'search?' + date + 'highlight=1&search='+ searchTerm].join("/")
-        await fetch(searchURL)
-            .then((res) => {
-                if(res.ok) {
-                    return res.json()
-                }
-            })
-            .then((json) => {
-                this.props.updateSearchResults("reset") //reset parent array
-                if(json.length === 0 && searchTerm !== "") {
-                    this.props.updateSearchResults("empty")
-                }
-                for(let i = 0; i < json.length; i++) {
-                    let obj = json[i];
-                    this.props.updateSearchResults(obj);
-                }
-            })
-    }
-    /**
-     * renders the searchbar
-     * @returns {JSX.Element}
-     */
-    render() {
-        const {t} = this.props.translation
-        return (
-                <Form className="d-flex">
-                    <FormControl
-                        onKeyDown={(e) =>{
-                            if (e.key === 'Enter'){
-                                e.preventDefault()
-                            }
-                        }}
-                        onChange={this.updateSearch}
-                        type="search"
-                        placeholder={t("LBL_SEARCH_PLACEHOLDER")}
-                        defaultValue={this.state.searchTerm}
-                        className="me-2"
-                        aria-label="Search"
-                        id={"searchbarInput"}
-                    />
-                    <Button id="btn-go">
-                        <BsSearch/>
-                    </Button>
-                </Form>
-        )
-    }
+    // Return the searchbar JSX.
+    return (
+        <Form className="d-flex">
+            <FormControl
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault()
+                    }
+                }}
+                onChange={handleSeearch}
+                type="search"
+                placeholder={t("LBL_SEARCH_PLACEHOLDER")}
+                defaultValue={searchTerm}
+                className="me-2"
+                aria-label="Search"
+                id={"searchbarInput"}
+            />
+            <Button id="btn-go">
+                <BsSearch/>
+            </Button>
+        </Form>
+    )
 }
 
-function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} translation={useTranslation()}/>;
-}
-
-export default addProps(Searchbar);
+export default Searchbar;
