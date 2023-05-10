@@ -88,7 +88,7 @@ const Searchbar: React.FunctionComponent<Props> = props =>  {
      * Navigate to new url and update search term depending on query input.
      * @param queryString
      */
-    function handleSeearch(queryString) {
+    function handleSearch(queryString) {
         let date = '';
         if (queryString.target.value === "") {
             navigate({search: ""});
@@ -123,7 +123,7 @@ const Searchbar: React.FunctionComponent<Props> = props =>  {
                         e.preventDefault()
                     }
                 }}
-                onChange={handleSeearch}
+                onChange={handleSearch}
                 type="search"
                 placeholder={t("LBL_SEARCH_PLACEHOLDER")}
                 defaultValue={searchTerm}
