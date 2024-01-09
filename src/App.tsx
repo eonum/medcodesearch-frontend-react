@@ -178,20 +178,15 @@ class App extends Component<Props, IApp>{
         })
     }
 
-    async navigateToLatestIcd() {
+    async notAvailableToast(lang) {
         const {t} = this.props.translation;
-        let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" +
-            RouterService.getQueryVariable('query');
-        let latestICD = this.state.initialVersions['ICD'].at(-1);
-        this.navigateTo(this.state.language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD, searchString)
-        this.changeSelectedVersion(latestICD)
-        this.changeSelectedButton("ICD")
         // Adding toastId avoids toast getting rendered multiple times (since we're firing this in component did mount
         // and update. This want be necessary if we rewrite everything into functional components and use effect hook.
         toast.warning(t("LBL_VERSION_NOT_AVAILABLE"), {
             position: toast.POSITION.TOP_RIGHT,
             toastId: 'no_version_toast',
         });
+        await this.changeLanguage(lang);
     }
 
     /**
@@ -241,7 +236,7 @@ class App extends Component<Props, IApp>{
                 this.navigateTo(this.state.language + "/" + button + '/' + version +
                     (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
             } else {
-                await this.navigateToLatestIcd();
+                await this.notAvailableToast(prevState.language);
             }
             this.setState({reSetPath: false})
         }
@@ -262,7 +257,7 @@ class App extends Component<Props, IApp>{
             await this.setState({selectedVersion:  this.state.initialVersions['ICD'].at(-1)})
         }
         if (!this.isValidVersion(this.state.selectedButton, this.state.selectedVersion, this.state.language)) {
-            await this.navigateToLatestIcd();
+            await this.reNavigateToHome();
         }
         await this.setState({isFetching: false})
     }
@@ -471,7 +466,10 @@ class App extends Component<Props, IApp>{
             <div>
                 <div className="container">
                     <div key={"app_header"} className="row col">
-                            <Header changeLanguage={this.changeLanguage} activeLanguage={this.state.language}/>
+                            <Header
+                                changeLanguage={this.changeLanguage}
+                                activeLanguage={this.state.language}
+                            />
                     </div>
                     <div key={"app_logo"} className="row col">
                             <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>

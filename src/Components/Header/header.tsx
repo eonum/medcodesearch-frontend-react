@@ -39,7 +39,6 @@ class Header extends Component<Props, IHeader> {
      * Change the languagePrev state to the current language
      * @param lang
      */
-    // TODO: I don't really get the use of this function.
     updateLanguage(lang) {
         const {i18n} = this.props.translation;
 
@@ -49,7 +48,7 @@ class Header extends Component<Props, IHeader> {
     }
 
     /**
-     * If the compounent mounted componentDidMount() looks for a change in the language
+     * If the component mounted componentDidMount() looks for a change in the language
      */
     componentDidMount() {
         if(this.state.language !== this.props.activeLanguage){
