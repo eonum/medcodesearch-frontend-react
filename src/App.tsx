@@ -364,7 +364,8 @@ class App extends Component<Props, IApp>{
         let latestICD = this.state.initialVersions['ICD'].at(-1);
         this.changeSelectedButton('ICD')
         this.changeSelectedVersion(latestICD)
-        this.props.navigation({pathname: "/",search: ''});
+        this.props.navigation(
+            {pathname: "/" + this.state.language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD,search: ''});
     }
 
     /**
