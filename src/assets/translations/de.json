@@ -102,6 +102,13 @@
   "LBL_AMB_GROUP_LABEL": "Ambulante Pauschalen",
   "LBL_DRUG_LABEL": "Medikamente GTIN",
   "LBL_DRUG_LABEL_SHORT": "Med",
-  "LBL_ICD_LABEL": "ICD10-GM"
+  "LBL_ICD_LABEL": "ICD10-GM",
+  "LBL_PARTITION_LETTER": "Partition",
+  "LBL_LINK_TO_SWISSDRG_MANUAL": "SwissDRG Online Definitionshandbuch zu diesem Eintrag",
+  "LBL_LINK_TO_DRGDYNAMICS": "Umbauten dieser DRG in Vor- und Nachversionen",
+  "LBL_NO_COST_WEIGHT": "Unbewertete Fallpauschale",
+  "LBL_DRG_CATALOGUE": "Eintrag aus dem Fallpauschalenkatalog",
+  "LBL_TRANSFER_DISCOUNT": "Verlegungsfallpauschale",
+  "LBL_EXCEPTION_FROM_REUPTAKE": "Ausnahme von Wiederaufnahme"
 }
 

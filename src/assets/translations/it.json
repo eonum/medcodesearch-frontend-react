@@ -98,5 +98,12 @@
   "LBL_AMB_GROUP_LABEL": "Forfait ambulatoriale",
   "LBL_DRUG_LABEL": "Medicinali GTIN",
   "LBL_DRUG_LABEL_SHORT": "Med",
-  "LBL_ICD_LABEL": "ICD10-GM"
+  "LBL_ICD_LABEL": "ICD10-GM",
+  "LBL_PARTITION_LETTER": "Partizione",
+  "LBL_LINK_TO_SWISSDRG_MANUAL": "Questa voce del manuale delle definizioni online di SwissDRG",
+  "LBL_LINK_TO_DRGDYNAMICS": "DRG Dynamics",
+  "LBL_NO_COST_WEIGHT": "Importo forfettario per caso non valutato",
+  "LBL_DRG_CATALOGUE": "Record del catalogo dei forfait per caso",
+  "LBL_TRANSFER_DISCOUNT": "Forfait per caso di trasferimento",
+  "LBL_EXCEPTION_FROM_REUPTAKE": "Eccezione alla ripresa"
 }

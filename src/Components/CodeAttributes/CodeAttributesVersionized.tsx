@@ -3,6 +3,7 @@ import {IAttributes, INavigationHook, IShortEntry} from "../../interfaces";
 import {commonCodeInfos, versionsWithoutMappingInfos} from "../../Utils";
 import {useNavigate} from "react-router-dom";
 import ClickableCodesArray from "./ClickableCodesArray";
+import DrgAttributes from "./DrgAttributes"
 import {useTranslation} from "react-i18next";
 
 interface Props {
@@ -12,7 +13,8 @@ interface Props {
     siblings: IShortEntry[],
     language: string,
     navigation: INavigationHook,
-    translation: any
+    translation: any,
+    resourceType: string
 }
 
 /**
@@ -23,6 +25,19 @@ class CodeAttributesVersionized extends Component<Props>{
      * Render the CodeAttributesVersionized component
      * @returns {JSX.Element}
      */
+
+    renderSwitch(resourceType, codeInfos) {
+        switch(resourceType) {
+            case 'drgs':
+                return <DrgAttributes
+                    attributes={this.props.attributes}
+                />
+
+            default:
+                return codeInfos;
+        }
+    }
+
     render() {
         let attributes = this.props.attributes;
         let children = attributes.children;
@@ -37,13 +52,13 @@ class CodeAttributesVersionized extends Component<Props>{
             attributes.predecessors &&
             attributes.predecessors.length == 0 &&
             !attributes['children']
-
         return (
             noCodeError ?
                 <div>{t("LBL_NO_CODE_VERSIONIZED")}</div> :
                 <>
                     {// Render enabled attributes (they can be lists, date and strings.
-                        codeInfos }
+                        this.renderSwitch(this.props.resourceType, codeInfos)
+                    }
                     {// Add mapping information (predecessor / successor information.
                         mappingFields.map((field, j) => (
                             attributes[field] != null &&

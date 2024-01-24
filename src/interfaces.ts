@@ -54,6 +54,24 @@ export interface IAttributes {
     updated_at?: string
 }
 
+export interface IDrgAttributes {
+    code: string,
+    text: string,
+    parent: IShortEntry,
+    children: IShortEntry[],
+    version: string,
+    cost_weight: number,
+    partition_letter: string,
+    average_stay_duration: number,
+    first_day_discount: number,
+    discount_per_day: number,
+    first_day_surcharge: number,
+    surcharge_per_day: number,
+    exception_from_reuptake: number,
+    transfer_discount: number,
+    relevant_codes: string,
+}
+
 export interface ICode {
     attributes: IAttributes
     parents: IShortEntry[],

@@ -98,5 +98,12 @@
   "LBL_AMB_GROUP_LABEL": "Forfaites ambulatoires",
   "LBL_DRUG_LABEL": "Médicaments GTIN",
   "LBL_DRUG_LABEL_SHORT": "Méd",
-  "LBL_ICD_LABEL": "CIM10-GM"
+  "LBL_ICD_LABEL": "CIM10-GM",
+  "LBL_PARTITION_LETTER": "Partition",
+  "LBL_LINK_TO_SWISSDRG_MANUAL": "Cette entrée dans le manuel de définitions en ligne de SwissDRG",
+  "LBL_LINK_TO_DRGDYNAMICS": "DRG Dynamics",
+  "LBL_NO_COST_WEIGHT": "DRG non évalué",
+  "LBL_DRG_CATALOGUE":  "Entrée dans le catalogue des forfaits par cas",
+  "LBL_TRANSFER_DISCOUNT": "DRG avec réduction pour transfert",
+  "LBL_EXCEPTION_FROM_REUPTAKE": "Exception de réadmission"
 }

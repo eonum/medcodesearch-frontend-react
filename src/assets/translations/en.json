@@ -68,5 +68,12 @@
   "LBL_IMPLANTS_INCLUDED": "Inklusive Implantate",
   "LBL_VERSION_NOT_AVAILABLE": "This version is not available in the selected language.",
   "LBL_MED_LABEL": "Drugs GTIN",
-  "LBL_MED_LABEL_SHORT": "Drugs"
+  "LBL_MED_LABEL_SHORT": "Drugs",
+  "LBL_PARTITION_LETTER": "Partition",
+  "LBL_LINK_TO_SWISSDRG_MANUAL": "SwissDRG Online definition manual to this entry",
+  "LBL_LINK_TO_DRGDYNAMICS": "Open in DRG Dynamics",
+  "LBL_NO_COST_WEIGHT": "Unweighted DRG",
+  "LBL_DRG_CATALOGUE": "Entry from the DRG catalog",
+  "LBL_TRANSFER_DISCOUNT": "Transfer case flat rate",
+  "LBL_EXCEPTION_FROM_REUPTAKE": "Exception from reuptake"
 }
