@@ -13,7 +13,7 @@ interface Props {
 }
 
 /**
- * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED).
+ * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED, REHA).
  */
 class CodeBodyVersionized extends Component<Props, ICode> {
     constructor(props) {
@@ -54,7 +54,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param language
      * @param resource_type ('icd_chapters', 'icd_groups', 'icds', 'chop_chapters', ...)
      * @param code (equal to version if base code, (non-)terminal code else)
-     * @param catalog ('ICD', 'CHOP', 'DRG', 'TARMED')
+     * @param catalog ('ICD', 'CHOP', 'DRG', 'TARMED', REHA)
      * @param version ('ICD10-GM-2022', 'ICD10-GM-2021', ...)
      * @returns {Promise<null|any>}
      */
@@ -75,7 +75,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         let {language, catalog, resource_type, code, version} = this.props.params;
         let codeForFetch = code;
         // Set base code for mdcs, since this is not equal to version but equal to 'ALL'.
-        if (resource_type === 'mdcs' && code === version) {
+        if (resource_type === 'mdcs' && code === version || resource_type === 'arcgs' && code === version) {
             codeForFetch = 'ALL'
         }
         detailedCode = await this.fetchHelper(language, resource_type, codeForFetch, catalog, version)

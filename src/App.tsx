@@ -70,8 +70,8 @@ class App extends Component<Props, IApp>{
             clickedOnLogo: false,
             reSetPath: false,
             collapseMenu: false,
-            initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': []},
-            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': []},
+            initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'STReha': []},
+            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'STReha': []},
             isFetching: true,
             isDesktop: true
         };
@@ -211,16 +211,28 @@ class App extends Component<Props, IApp>{
             prevState.selectedDate !== this.state.selectedDate ||
             this.state.reSetPath) {
             navigationWithoutLanguageChange = true;
-            if (['MIGEL', 'AL', 'DRUG'].includes(button)) {
-                code = 'all';
-                resource_type = button.toLowerCase() + 's'
-            } else {
-                code = version;
-                if (['SwissDRG', 'AmbGroup'].includes(button)) {
-                    resource_type = button === 'SwissDRG' ? 'mdcs' : 'capitula'
-                } else {
-                    resource_type = button.toLowerCase() + '_chapters'
-                }
+            switch(button) {
+                case 'MIGEL':
+                case 'AL':
+                case 'DRUG':
+                    code = 'all';
+                    resource_type = button.toLowerCase() + 's';
+                    break;
+                case 'SwissDRG':
+                    code = version;
+                    resource_type = 'mdcs';
+                    break;
+                case 'AmbGroup':
+                    code = version;
+                    resource_type = 'capitula';
+                    break;
+                case 'STReha':
+                    code = version;
+                    resource_type = 'arcgs';
+                    break;
+                default:
+                    code = version;
+                    resource_type = button.toLowerCase() + '_chapters';
             }
         }
 
@@ -228,7 +240,6 @@ class App extends Component<Props, IApp>{
         if (prevState.language !== this.state.language) {
             this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
         }
-
 
         // Navigate to new path.
         if (navigationWithoutLanguageChange || prevState.language !== this.state.language) {
@@ -291,7 +302,8 @@ class App extends Component<Props, IApp>{
             'AmbGroup': t("LBL_AMB_GROUP_LABEL"),
             'MIGEL': t("LBL_MIGEL_LABEL"),
             'AL': t("LBL_AL_LABEL"),
-            'DRUG': t("LBL_DRUG_LABEL")
+            'DRUG': t("LBL_DRUG_LABEL"),
+            'STReha': 'STReha'
         }
     }
 
@@ -395,7 +407,7 @@ class App extends Component<Props, IApp>{
                             changeSelectedVersion={this.changeSelectedVersion}
                             changeSelectedDate={this.changeSelectedDate}
                             labels={this.labelHash()}
-                            buttons={['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
+                            buttons={['ICD', 'CHOP', 'SwissDRG', 'STReha', 'TARMED', 'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
                         />
                         <div className={"searchbarItem"} onClick={this.showSearchResults}>
                             <Searchbar
@@ -433,7 +445,7 @@ class App extends Component<Props, IApp>{
                                     changeSelectedVersion={this.changeSelectedVersion}
                                     changeSelectedDate={this.changeSelectedDate}
                                     labels={this.labelHash()}
-                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'TARMED', 'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
+                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'STReha', 'TARMED', 'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
                                 />
                             </div>
                         </div>

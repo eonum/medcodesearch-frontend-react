@@ -17,7 +17,8 @@ const resourceTypeByBtn = {
     "MIGEL": 'migels',
     "AL": 'laboratory_analyses',
     "DRUG": 'drugs',
-    'AmbGroup': 'amb_groups'
+    'AmbGroup': 'amb_groups',
+    'STReha': 'rcgs'
 }
 
 interface Props {

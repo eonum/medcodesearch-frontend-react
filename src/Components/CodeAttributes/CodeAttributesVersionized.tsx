@@ -4,6 +4,7 @@ import {commonCodeInfos, versionsWithoutMappingInfos} from "../../Utils";
 import {useNavigate} from "react-router-dom";
 import ClickableCodesArray from "./ClickableCodesArray";
 import DrgAttributes from "./DrgAttributes"
+import RcgAttributes from "./RcgAttributes";
 import {useTranslation} from "react-i18next";
 
 interface Props {
@@ -32,7 +33,10 @@ class CodeAttributesVersionized extends Component<Props>{
                 return <DrgAttributes
                     attributes={this.props.attributes}
                 />
-
+            case 'rcgs':
+                return <RcgAttributes
+                    attributes={this.props.attributes}
+                />
             default:
                 return codeInfos;
         }

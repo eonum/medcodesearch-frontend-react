@@ -75,5 +75,9 @@
   "LBL_NO_COST_WEIGHT": "Unweighted DRG",
   "LBL_DRG_CATALOGUE": "Entry from the DRG catalog",
   "LBL_TRANSFER_DISCOUNT": "Transfer case flat rate",
-  "LBL_EXCEPTION_FROM_REUPTAKE": "Exception from reuptake"
+  "LBL_EXCEPTION_FROM_REUPTAKE": "Exception from reuptake",
+  "LBL_RCG_CATALOGUE":  "Entry from the RCG catalog",
+  "LBL_NUM_PHASES": "Number of phases",
+  "LBL_DAILY_PHASE_COSTS": "Daily cost weight of phase",
+  "LBL_UPPER_PHASE_LIMIT": "Upper limit of phase"
 }

@@ -105,5 +105,9 @@
   "LBL_NO_COST_WEIGHT": "Importo forfettario per caso non valutato",
   "LBL_DRG_CATALOGUE": "Record del catalogo dei forfait per caso",
   "LBL_TRANSFER_DISCOUNT": "Forfait per caso di trasferimento",
-  "LBL_EXCEPTION_FROM_REUPTAKE": "Eccezione alla ripresa"
+  "LBL_EXCEPTION_FROM_REUPTAKE": "Eccezione alla ripresa",
+  "LBL_RCG_CATALOGUE":  "Voce del catalogo RCG",
+  "LBL_NUM_PHASES": "Numero di fasi",
+  "LBL_DAILY_PHASE_COSTS": "Peso dei costi giornaliero della fase",
+  "LBL_UPPER_PHASE_LIMIT": "Limite superiore della durata di degenza della fase"
 }

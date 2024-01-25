@@ -38,7 +38,8 @@ interface IButtons {
     currentSwissDRG: string,
     currentCHOP: string,
     currentTARMED: string,
-    currentAmbGroup: string
+    currentAmbGroup: string,
+    currentSTReha: string,
     selectedDate: string,
 }
 
@@ -61,6 +62,7 @@ class ButtonGroup extends Component<Props,IButtons>{
             currentCHOP: this.props.initialVersions['CHOP'].at(-1),
             currentTARMED: this.props.initialVersions['TARMED'].at(-1),
             currentAmbGroup: this.props.initialVersions['AmbGroup'].at(-1),
+            currentSTReha: this.props.initialVersions['STReha'].at(-1),
             selectedDate: dateFormat(new Date(), "dd.mm.yyyy"),
         }
         this.updateOnButtonClick = this.updateOnButtonClick.bind(this);

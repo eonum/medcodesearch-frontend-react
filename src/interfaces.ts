@@ -72,6 +72,20 @@ export interface IDrgAttributes {
     relevant_codes: string,
 }
 
+export interface IRcgAttributes {
+    code: string,
+    text: string,
+    parent: IShortEntry,
+    children: IShortEntry[],
+    version: string,
+    phases: IPhase[],
+}
+
+interface IPhase {
+    cost_weight: number,
+    limit: number
+}
+
 export interface ICode {
     attributes: IAttributes
     parents: IShortEntry[],

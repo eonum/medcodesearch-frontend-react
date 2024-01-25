@@ -66,7 +66,7 @@ class DrgAttributes extends Component<Props> {
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td><b>Partition</b></td>
+                                        <td><b>{t('LBL_PARTITION_LETTER')}</b></td>
                                         <td>{attributes.partition_letter}</td>
                                     </tr>
                                     <tr>

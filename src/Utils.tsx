@@ -35,9 +35,6 @@ const skippableAttributes = [
     "created_at",
     'updated_at',
     'valid_from',
-    'relevant_codes',
-    'transfer_discount',
-    'exception_from_reuptake',
     "public_price",
     "date_added_in_sl",
     "date_deleted_from_sl",
@@ -62,7 +59,7 @@ export const versionsWithoutMappingInfos = [
     "CHOP 2014",
     "CHOP 2015"]
 
-export const fetchURL = 'https://search.eonum.ch'
+export const fetchURL = 'http://localhost:3001/'
 
 // Get frontend url for navigation from backend code url.
 export function getNavParams(code, language, catalog, resource_type?) {
@@ -70,7 +67,7 @@ export function getNavParams(code, language, catalog, resource_type?) {
     let backendResourceType = backendUrlComponents[1];
     let backendVersion = backendUrlComponents[2];
     let backendCode = backendUrlComponents[3];
-    // Convert base code 'ALL' from SwissDrg to version.
+    // Convert base code 'ALL' from SwissDrg / STReha to version.
     let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
     let pathname;
     let searchString;

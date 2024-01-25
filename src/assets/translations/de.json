@@ -109,6 +109,10 @@
   "LBL_NO_COST_WEIGHT": "Unbewertete Fallpauschale",
   "LBL_DRG_CATALOGUE": "Eintrag aus dem Fallpauschalenkatalog",
   "LBL_TRANSFER_DISCOUNT": "Verlegungsfallpauschale",
-  "LBL_EXCEPTION_FROM_REUPTAKE": "Ausnahme von Wiederaufnahme"
+  "LBL_EXCEPTION_FROM_REUPTAKE": "Ausnahme von Wiederaufnahme",
+  "LBL_RCG_CATALOGUE":  "Eintrag aus dem RCG Katalog",
+  "LBL_NUM_PHASES": "Anzahl Phasen",
+  "LBL_DAILY_PHASE_COSTS": "Tageskostengewicht von Phase",
+  "LBL_UPPER_PHASE_LIMIT": "Obere Grenzverweildauer von Phase"
 }
 
