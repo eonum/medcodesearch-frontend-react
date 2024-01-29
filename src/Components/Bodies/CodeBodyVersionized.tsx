@@ -136,9 +136,17 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         let navigate = this.props.navigation;
         let title;
         if (this.state.attributes.code) {
-            title = this.state.attributes.code.includes("ICD10") ?
-                this.internationalizeIcdBaseCode(this.state.attributes.code) :
-                this.state.attributes.code.replace("_", " ")
+            if (catalog == "SwissDRG") {
+                title = this.state.attributes.code.replace("_", " ")
+                title = this.state.attributes.code == version ? "SwissDRG " + title.substring(1) : title
+            } else if (this.state.attributes.code.includes("ICD10")) {
+                title = this.internationalizeIcdBaseCode(this.state.attributes.code)
+            } else if (catalog == "STReha") {
+                title = this.state.attributes.code.split("_").slice(-1)
+                title = this.state.attributes.code == version ? "STReha " + title : title
+            } else {
+                title = this.state.attributes.code.replace("_", " ")
+            }
         } else {
             title = "";
         }
@@ -158,7 +166,8 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                     <Breadcrumb.Item active>{title}</Breadcrumb.Item>
                 </Breadcrumb>
                 <h3>{title}</h3>
-                <p>{this.state.attributes.text}</p>
+                {version == this.state.attributes.code || this.state.attributes.code == "ALL" ?
+                    <p></p> : <p>{this.state.attributes.text}</p>}
                 <CodeAttributesVersionized
                     attributes={this.state.attributes}
                     catalog={catalog}
