@@ -14,7 +14,7 @@ interface Props {
  * */
 class DrgAttributes extends Component<Props> {
     /**
-     * Render the DRG code component
+     * Render the DRG code attributes.
      * @returns {JSX.Element}
      */
 

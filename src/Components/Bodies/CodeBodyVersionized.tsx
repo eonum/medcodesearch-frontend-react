@@ -13,7 +13,7 @@ interface Props {
 }
 
 /**
- * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED, REHA).
+ * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED, REHA, ZE).
  */
 class CodeBodyVersionized extends Component<Props, ICode> {
     constructor(props) {
@@ -54,11 +54,10 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @param language
      * @param resource_type ('icd_chapters', 'icd_groups', 'icds', 'chop_chapters', ...)
      * @param code (equal to version if base code, (non-)terminal code else)
-     * @param catalog ('ICD', 'CHOP', 'DRG', 'TARMED', REHA)
      * @param version ('ICD10-GM-2022', 'ICD10-GM-2021', ...)
      * @returns {Promise<null|any>}
      */
-    async fetchHelper(language, resource_type, code, catalog, version) {
+    async fetchHelper(language, resource_type, code, version) {
         let fetchString = [fetchURL, language, resource_type, version, code].join("/") + "?show_detail=1";
         return await fetch(fetchString)
             .then((res) => {
@@ -78,7 +77,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         if (resource_type === 'mdcs' && code === version || resource_type === 'arcgs' && code === version) {
             codeForFetch = 'ALL'
         }
-        detailedCode = await this.fetchHelper(language, resource_type, codeForFetch, catalog, version)
+        detailedCode = await this.fetchHelper(language, resource_type, codeForFetch, version)
         if (detailedCode !== null) {
             this.setState({attributes: detailedCode})
         }
@@ -131,21 +130,30 @@ class CodeBodyVersionized extends Component<Props, ICode> {
      * @returns {JSX.Element}
      */
     render() {
+        const {t} = this.props.translation;
+        const code = this.state.attributes.code;
         let {language, catalog, version, resource_type} = this.props.params
         let siblings = this.state.siblings;
         let navigate = this.props.navigation;
         let title;
-        if (this.state.attributes.code) {
+        let currentItem;
+        let breadcrumRoot;
+
+        if (code) {
+            breadcrumRoot = version.replace("_", " ")
+            currentItem = this.state.attributes.code.includes("ICD10") ?
+                this.internationalizeIcdBaseCode(code) : code.replace("_", " ")
             if (catalog == "SwissDRG") {
-                title = this.state.attributes.code.replace("_", " ")
-                title = this.state.attributes.code == version ? "SwissDRG " + title.substring(1) : title
-            } else if (this.state.attributes.code.includes("ICD10")) {
-                title = this.internationalizeIcdBaseCode(this.state.attributes.code)
-            } else if (catalog == "STReha") {
-                title = this.state.attributes.code.split("_").slice(-1)
-                title = this.state.attributes.code == version ? "STReha " + title : title
+                breadcrumRoot = "SwissDRG " + version.substring(1)
+                title = code == version ? breadcrumRoot : code
+            } else if (catalog == "Supplements") {
+                breadcrumRoot = t('LBL_SUPPLEMENTS_LABEL') + ' ' + version.substring(1)
+                title = code == version ? breadcrumRoot : code
+            } else if (catalog == "Reha") {
+                breadcrumRoot = "ST Reha " + version
+                title = code == version ? breadcrumRoot : code
             } else {
-                title = this.state.attributes.code.replace("_", " ")
+                title = currentItem;
             }
         } else {
             title = "";
@@ -159,11 +167,13 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                                 let {pathname, searchString} = getNavParams(currElement, language, catalog)
                                 navigate({pathname: pathname, search: searchString})
                             }} className="breadLink">
-                                {currElement.code.includes("ICD10") ?
-                                    this.internationalizeIcdBaseCode(currElement.code) : currElement.code}
+                                {currElement.code == version ?
+                                    breadcrumRoot :
+                                    (currElement.code.includes("ICD10") ?
+                                        this.internationalizeIcdBaseCode(currElement.code) : currElement.code)}
                             </Breadcrumb.Item>);
                     })}
-                    <Breadcrumb.Item active>{title}</Breadcrumb.Item>
+                    <Breadcrumb.Item active>{version == code ? breadcrumRoot : currentItem}</Breadcrumb.Item>
                 </Breadcrumb>
                 <h3>{title}</h3>
                 {version == this.state.attributes.code || this.state.attributes.code == "ALL" ?

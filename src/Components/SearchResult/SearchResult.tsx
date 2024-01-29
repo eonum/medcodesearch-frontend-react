@@ -43,7 +43,7 @@ class SearchResult extends Component<Props, ISearchResult> {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + this.props.result.code
         } else if (path[2] === "SwissDRG") {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/drgs/" + this.props.result.code
-        } else if (path[2] === "STReha") {
+        } else if (path[2] === "Reha") {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/rcgs/" + this.props.result.code
         } else if (path[2] === "AmbGroup") {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/amb_groups/" + this.props.result.code

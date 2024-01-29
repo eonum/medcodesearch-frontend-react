@@ -14,7 +14,7 @@ interface Props {
  * */
 class RcgAttributes extends Component<Props> {
     /**
-     * Render the RCG code component
+     * Render the RCG code attributes.
      * @returns {JSX.Element}
      */
 

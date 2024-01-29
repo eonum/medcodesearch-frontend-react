@@ -6,6 +6,7 @@ import ClickableCodesArray from "./ClickableCodesArray";
 import DrgAttributes from "./DrgAttributes"
 import RcgAttributes from "./RcgAttributes";
 import {useTranslation} from "react-i18next";
+import SupplementsAttributes from "./SupplementsAttributes";
 
 interface Props {
     attributes: IAttributes,
@@ -27,10 +28,14 @@ class CodeAttributesVersionized extends Component<Props>{
      * @returns {JSX.Element}
      */
 
-    renderSwitch(resourceType, codeInfos) {
+    renderSwitch(resourceType, codeInfos, terminal) {
         switch(resourceType) {
             case 'drgs':
                 return <DrgAttributes
+                    attributes={this.props.attributes}
+                />
+            case 'supplements':
+                return <SupplementsAttributes
                     attributes={this.props.attributes}
                 />
             case 'rcgs':

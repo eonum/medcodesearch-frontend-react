@@ -18,7 +18,8 @@ const resourceTypeByBtn = {
     "AL": 'laboratory_analyses',
     "DRUG": 'drugs',
     'AmbGroup': 'amb_groups',
-    'STReha': 'rcgs'
+    'Reha': 'rcgs',
+    'Supplements': 'supplements'
 }
 
 interface Props {

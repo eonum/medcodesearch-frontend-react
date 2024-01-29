@@ -81,6 +81,36 @@ export interface IRcgAttributes {
     phases: IPhase[],
 }
 
+export interface ISupplementsAttributes {
+    code: string,
+    text: string,
+    parent: IShortEntry,
+    children: IShortEntry[],
+    version: string,
+    terminal: boolean,
+    ze_type: string,
+    relevant_codes: IRelevantCode[],
+    excluded_drgs: string[],
+    constraint_icds: string[],
+    constraint_chops: string[],
+    dose_min: number,
+    dose_max: number,
+    dosage: number,
+    dose_unit: string,
+    va: string,
+    za: string,
+    age_higher_than: number,
+    age_lower_than: number,
+    amount: number,
+}
+
+interface IRelevantCode {
+    code: string,
+    text?: string,
+    terminal?: boolean,
+    url?: string
+}
+
 interface IPhase {
     cost_weight: number,
     limit: number

@@ -79,5 +79,8 @@
   "LBL_RCG_CATALOGUE":  "Entry from the RCG catalog",
   "LBL_NUM_PHASES": "Number of phases",
   "LBL_DAILY_PHASE_COSTS": "Daily cost weight of phase",
-  "LBL_UPPER_PHASE_LIMIT": "Upper limit of phase"
+  "LBL_UPPER_PHASE_LIMIT": "Upper limit of phase",
+  "LBL_SUPPLEMENTS_LABEL": "AF",
+  "LBL_SUPPLEMENTS": "Additional charge catalogue",
+  "LBL_REL_CODES_SUPPLEMENTS": "Relevant codes"
 }

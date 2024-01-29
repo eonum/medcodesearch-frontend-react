@@ -1,14 +1,15 @@
 import {fetchURL} from "../Utils";
 
 export const languages = ['de', 'fr', 'it', 'en']
-export const versionizedCatalogs = ['ICD', 'SwissDRG', 'CHOP', 'TARMED', 'AmbGroup', 'STReha']
+export const versionizedCatalogs = ['ICD', 'SwissDRG', 'CHOP', 'TARMED', 'AmbGroup', 'Reha', 'Supplements']
 export const currentCatalogsByButton = {
     'ICD': 'currentICD',
     'SwissDRG': 'currentSwissDRG',
     'CHOP': 'currentCHOP',
     'TARMED': 'currentTARMED',
     'AmbGroup': 'currentAmbGroup',
-    'STReha': 'currentSTReha'
+    'Reha': 'currentReha',
+    'Supplements': 'currentSupplements'
 }
 
 /**
@@ -22,15 +23,14 @@ export function cutCatalogFromVersion(catalog, version) {
         case "ICD":
             return version.substring(3)
         case "CHOP":
+        case "Reha":
             return version.substring(5)
         case "SwissDRG":
+        case "Supplements":
+        case "AmbGroup":
             return version
         case "TARMED":
             return version.substring(7)
-        case "AmbGroup":
-            return version
-        case "STReha":
-            return version.substring(5)
         default:
             return
     }
@@ -49,12 +49,16 @@ export function convertCatalogToResourceType(catalog) {
             return "chops"
         case "SwissDRG":
             return "drgs"
+        case "Supplements":
+            return "supplements"
         case "TARMED":
             return "tarmeds"
         case "AmbGroup":
             return "amb_groups"
-        case "STReha":
+        case "Reha":
             return "rcgs"
+        case "Supplements":
+            return "supplements"
         default:
             return
     }

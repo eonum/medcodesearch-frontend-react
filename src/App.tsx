@@ -70,8 +70,12 @@ class App extends Component<Props, IApp>{
             clickedOnLogo: false,
             reSetPath: false,
             collapseMenu: false,
-            initialVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'STReha': []},
-            currentVersions: {'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'STReha': []},
+            initialVersions: {
+                'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
+            },
+            currentVersions: {
+                'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [],  'Supplements': []
+            },
             isFetching: true,
             isDesktop: true
         };
@@ -222,11 +226,15 @@ class App extends Component<Props, IApp>{
                     code = version;
                     resource_type = 'mdcs';
                     break;
+                case 'Supplements':
+                    code = version;
+                    resource_type = 'supplements';
+                    break;
                 case 'AmbGroup':
                     code = version;
                     resource_type = 'capitula';
                     break;
-                case 'STReha':
+                case 'Reha':
                     code = version;
                     resource_type = 'arcgs';
                     break;
@@ -303,7 +311,8 @@ class App extends Component<Props, IApp>{
             'MIGEL': t("LBL_MIGEL_LABEL"),
             'AL': t("LBL_AL_LABEL"),
             'DRUG': t("LBL_DRUG_LABEL"),
-            'STReha': 'STReha'
+            'Reha': 'ST Reha',
+            'Supplements': t("LBL_SUPPLEMENTS_LABEL")
         }
     }
 
@@ -407,7 +416,8 @@ class App extends Component<Props, IApp>{
                             changeSelectedVersion={this.changeSelectedVersion}
                             changeSelectedDate={this.changeSelectedDate}
                             labels={this.labelHash()}
-                            buttons={['ICD', 'CHOP', 'SwissDRG', 'STReha', 'TARMED', 'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
+                            buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'AmbGroup', 'MIGEL',
+                                'AL', 'DRUG']}
                         />
                         <div className={"searchbarItem"} onClick={this.showSearchResults}>
                             <Searchbar
@@ -445,7 +455,8 @@ class App extends Component<Props, IApp>{
                                     changeSelectedVersion={this.changeSelectedVersion}
                                     changeSelectedDate={this.changeSelectedDate}
                                     labels={this.labelHash()}
-                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'STReha', 'TARMED', 'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
+                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'AmbGroup',
+                                        'MIGEL', 'AL', 'DRUG']}
                                 />
                             </div>
                         </div>
