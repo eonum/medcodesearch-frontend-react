@@ -24,7 +24,7 @@ class RcgAttributes extends Component<Props> {
         const baseLink = 'https://manual.swissdrg.org/'
         // TODO: add version mapping instead of just usin 'r2.3'
         const versionMapping = {
-            'REHA_1.0_2022': 's1.3', 'REHA_1.0_2023': 's1.4', 'REHA_2.0_2024': 'r2.3'
+            'REHA_1.0': 's1.4','REHA_2.0': 'r2.3'
         }
         return baseLink + language + '/' + versionMapping[version] + '/rcgs/' + code
     }
