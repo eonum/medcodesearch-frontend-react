@@ -114,7 +114,7 @@
   "LBL_NUM_PHASES": "Anzahl Phasen",
   "LBL_DAILY_PHASE_COSTS": "Tageskostengewicht von Phase",
   "LBL_UPPER_PHASE_LIMIT": "Obere Grenzverweildauer von Phase",
-  "LBL_SUPPLEMENTS_LABEL": "ZE",
+  "LBL_SUPPLEMENTS_LABEL": "Zusatzentgelt",
   "LBL_SUPPLEMENTS": "Zusatzentgeltkatalog",
   "LBL_REL_CODES_SUPPLEMENTS": "Relevante Codes",
   "LBL_EXCLUDED_DRGS": "(Basis-)DRGs, welche die Abrechnung des ZE ausschliessen",

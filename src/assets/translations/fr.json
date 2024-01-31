@@ -110,7 +110,7 @@
   "LBL_NUM_PHASES": "Nombre de phases",
   "LBL_DAILY_PHASE_COSTS": "Cost-weight journalier de la phase",
   "LBL_UPPER_PHASE_LIMIT": "Borne supérieure en jours de la phase",
-  "LBL_SUPPLEMENTS_LABEL": "RS",
+  "LBL_SUPPLEMENTS_LABEL": "Rémunérations supplémentaires",
   "LBL_SUPPLEMENTS": "Catalogue des rémunérations supplémentaires",
   "LBL_REL_CODES_SUPPLEMENTS": "Codes pertinents",
   "LBL_EXCLUDED_DRGS": "DRG (de base) excluant une tarification de la rémunération supplémentaire",

@@ -110,7 +110,7 @@
   "LBL_NUM_PHASES": "Numero di fasi",
   "LBL_DAILY_PHASE_COSTS": "Peso dei costi giornaliero della fase",
   "LBL_UPPER_PHASE_LIMIT": "Limite superiore della durata di degenza della fase",
-  "LBL_SUPPLEMENTS_LABEL": "RS",
+  "LBL_SUPPLEMENTS_LABEL": "Rimunerazioni supplementari",
   "LBL_SUPPLEMENTS": "Catalogo delle rimunerazioni supplementari",
   "LBL_REL_CODES_SUPPLEMENTS": "Codici rilevanti",
   "LBL_EXCLUDED_DRGS": "DRG (di base) che escludono il conteggio della remunerazione supplementare",
