@@ -23,25 +23,25 @@ class RcgAttributes extends Component<Props> {
         const {language} = this.props.params
         const baseLink = 'https://manual.swissdrg.org/'
         // TODO: add version mapping instead of just usin 'r2.3'
-        return baseLink + language + '/r2.3/rcgs/' + code
+        const versionMapping = {
+            'REHA_1.0_2022': 's1.3', 'REHA_1.0_2023': 's1.4', 'REHA_2.0_2024': 'r2.3'
+        }
+        return baseLink + language + '/' + versionMapping[version] + '/rcgs/' + code
     }
 
     render() {
         const attributes = this.props.attributes;
         const {t} = this.props.translation;
         const {code, version} = attributes
-        const versionToNumber = version ? Number(version.replace("V", "")) : 0
         const onlineManualLink = version ? this.onlineManualLink(code, version) : '';
         return (
             <>
                 <div className="row vertical-spacer">
                     <div className="col-lg-12">
-                        {versionToNumber >= 10 &&
-                            <a href={onlineManualLink} target='online_manual'
-                               className="btn btn-outline-secondary me-1" id={"externalLinkButton"}>
-                                {t('LBL_LINK_TO_SWISSDRG_MANUAL')}
-                            </a>
-                        }
+                        <a href={onlineManualLink} target='online_manual' className="btn btn-outline-secondary me-1"
+                           id={"externalLinkButton"}>
+                            {t('LBL_LINK_TO_SWISSDRG_MANUAL')}
+                        </a>
                     </div>
                 </div>
                 {attributes.phases && <div className="row vertical-spacer">

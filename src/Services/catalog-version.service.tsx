@@ -24,7 +24,7 @@ export function cutCatalogFromVersion(catalog, version) {
             return version.substring(3)
         case "CHOP":
         case "Reha":
-            return version.substring(5)
+            return version.substring(5).replace("_", " ")
         case "SwissDRG":
         case "Supplements":
         case "AmbGroup":

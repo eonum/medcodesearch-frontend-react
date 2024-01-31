@@ -150,7 +150,7 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                 breadcrumRoot = t('LBL_SUPPLEMENTS_LABEL') + ' ' + version.substring(1)
                 title = code == version ? breadcrumRoot : code
             } else if (catalog == "Reha") {
-                breadcrumRoot = "ST Reha " + version
+                breadcrumRoot = "ST Reha " + version.substring(5).replace("_", " ")
                 title = code == version ? breadcrumRoot : code
             } else {
                 title = currentItem;
