@@ -112,5 +112,16 @@
   "LBL_UPPER_PHASE_LIMIT": "Limite superiore della durata di degenza della fase",
   "LBL_SUPPLEMENTS_LABEL": "RS",
   "LBL_SUPPLEMENTS": "Catalogo delle rimunerazioni supplementari",
-  "LBL_REL_CODES_SUPPLEMENTS": "Codici rilevanti"
+  "LBL_REL_CODES_SUPPLEMENTS": "Codici rilevanti",
+  "LBL_EXCLUDED_DRGS": "DRG (di base) che escludono il conteggio della remunerazione supplementare",
+  "LBL_CONSTRAINT_ICDS": "Codici ICD presupposti",
+  "LBL_CONSTRAINT_CHOPS": "Codici CHOP presupposti",
+  "LBL_CONSTRAINT_INFO": "Affinché la remunerazione supplementare possa essere conteggiata, il caso deve contenere almeno una diagnosi dellʼelenco.",
+  "LBL_AGE_HIGHER_THAN": "L'età del caso in anni deve essere superiore a",
+  "LBL_AGE_LOWER_THAN": "L'età del caso in anni deve essere inferiore a",
+  "LBL_DOSE_MIN": "Limite inferiore dell'intervallo di dose (incluso)",
+  "LBL_DOSE_MAX": "Limite superiore dell'intervallo di dose (esclusivo)",
+  "LBL_ZA": "Informazioni aggiuntive",
+  "LBL_VA": "Metodo di somministrazione",
+  "LBL_AMOUNT": "Importo in CHF"
 }

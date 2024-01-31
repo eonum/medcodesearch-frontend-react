@@ -1,3 +1,4 @@
+import './Attributes.css';
 import React, {Component} from "react";
 import {IRcgAttributes, IParamTypes} from "../../interfaces";
 import {useParams} from "react-router-dom";
@@ -37,7 +38,7 @@ class RcgAttributes extends Component<Props> {
                     <div className="col-lg-12">
                         {versionToNumber >= 10 &&
                             <a href={onlineManualLink} target='online_manual'
-                               className="btn btn-outline-secondary me-1">
+                               className="btn btn-outline-secondary me-1" id={"externalLinkButton"}>
                                 {t('LBL_LINK_TO_SWISSDRG_MANUAL')}
                             </a>
                         }
@@ -50,7 +51,7 @@ class RcgAttributes extends Component<Props> {
                         </div> :
                         <div className="col-lg-6">
                             <div className="table-responsive">
-                                <table className="table table-striped table-hover table-bordered">
+                                <table className="table table-striped table-hover" id={"attributesTable"}>
                                     <thead>
                                     <tr>
                                         <th colSpan={2}>{t('LBL_RCG_CATALOGUE')}</th>

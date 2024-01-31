@@ -112,5 +112,16 @@
   "LBL_UPPER_PHASE_LIMIT": "Borne supérieure en jours de la phase",
   "LBL_SUPPLEMENTS_LABEL": "RS",
   "LBL_SUPPLEMENTS": "Catalogue des rémunérations supplémentaires",
-  "LBL_REL_CODES_SUPPLEMENTS": "Codes pertinents"
+  "LBL_REL_CODES_SUPPLEMENTS": "Codes pertinents",
+  "LBL_EXCLUDED_DRGS": "DRG (de base) excluant une tarification de la rémunération supplémentaire",
+  "LBL_CONSTRAINT_ICDS": "Codes CIM présupposés",
+  "LBL_CONSTRAINT_CHOPS": "Codes CHOP présupposés",
+  "LBL_CONSTRAINT_INFO": "Le cas de traitement doit contenir au moins une procédure dans la liste pour que la rémunération supplémentaire puisse faire l’objet d’une tarification.",
+  "LBL_AGE_HIGHER_THAN": "L'âge du cas en années doit être supérieur à",
+  "LBL_AGE_LOWER_THAN": "L'âge du cas en années doit être inférieur à",
+  "LBL_DOSE_MIN": "Limite inférieure de l'intervalle de dose (inclus)",
+  "LBL_DOSE_MAX": "Limite supérieure de l'intervalle de dose (exclusive)",
+  "LBL_ZA": "Informations complémentaires",
+  "LBL_VA": "Mode d'administration",
+  "LBL_AMOUNT": "Montant en CHF"
 }

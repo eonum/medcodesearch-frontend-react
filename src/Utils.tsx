@@ -59,7 +59,8 @@ export const versionsWithoutMappingInfos = [
     "CHOP 2014",
     "CHOP 2015"]
 
-export const fetchURL = 'https://search.eonum.ch/'
+export const fetchURL = 'http://localhost:3001'
+// export const fetchURL = 'https://search.eonum.ch'
 
 // Get frontend url for navigation from backend code url.
 export function getNavParams(code, language, catalog, resource_type?) {
@@ -67,7 +68,7 @@ export function getNavParams(code, language, catalog, resource_type?) {
     let backendResourceType = backendUrlComponents[1];
     let backendVersion = backendUrlComponents[2];
     let backendCode = backendUrlComponents[3];
-    // Convert base code 'ALL' from SwissDrg / STReha to version.
+    // Convert base code 'ALL' from SwissDrg / Reha to version.
     let codeToNavigate = backendCode === 'ALL' ? backendVersion : backendCode;
     let pathname;
     let searchString;

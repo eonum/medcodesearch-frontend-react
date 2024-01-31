@@ -28,7 +28,7 @@ class CodeAttributesVersionized extends Component<Props>{
      * @returns {JSX.Element}
      */
 
-    renderSwitch(resourceType, codeInfos, terminal) {
+    renderSwitch(resourceType, codeInfos) {
         switch(resourceType) {
             case 'drgs':
                 return <DrgAttributes

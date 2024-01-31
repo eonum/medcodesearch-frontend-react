@@ -116,6 +116,17 @@
   "LBL_UPPER_PHASE_LIMIT": "Obere Grenzverweildauer von Phase",
   "LBL_SUPPLEMENTS_LABEL": "ZE",
   "LBL_SUPPLEMENTS": "Zusatzentgeltkatalog",
-  "LBL_REL_CODES_SUPPLEMENTS": "Relevante Codes"
+  "LBL_REL_CODES_SUPPLEMENTS": "Relevante Codes",
+  "LBL_EXCLUDED_DRGS": "(Basis-)DRGs, welche die Abrechnung des ZE ausschliessen",
+  "LBL_CONSTRAINT_ICDS": "Vorausgesetzte ICD-Codes",
+  "LBL_CONSTRAINT_CHOPS": "Vorausgesetzte CHOP-Codes",
+  "LBL_CONSTRAINT_INFO": "Behandlungsfall muss mindestens eine Diagnose aus Liste enthalten, damit das ZE abgerechnet werden kann.",
+  "LBL_AGE_HIGHER_THAN": "Alter des Falles in Jahren muss höher sein als",
+  "LBL_AGE_LOWER_THAN": "Alter des Falles in Jahren muss niedriger sein als",
+  "LBL_DOSE_MIN": "Untere Schranke des Dosisintervalls (inklusiv)",
+  "LBL_DOSE_MAX": "Obere Schranke des Dosisintervalls (exklusiv)",
+  "LBL_ZA": "Zusatzangaben",
+  "LBL_VA": "Verabreichungsart",
+  "LBL_AMOUNT": "Betrag in CHF"
 }
 
