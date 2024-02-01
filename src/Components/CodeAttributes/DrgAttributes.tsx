@@ -27,7 +27,7 @@ class DrgAttributes extends Component<Props> {
 
     drgDynamicsLink(code, version) {
         const {language} = this.props.params
-        return "http://drgdynamics.eonum.ch/drgs/name?code=" + code + '&version=' + version + '&locale=' + language;
+        return "https://drgdynamics.eonum.ch/drgs/name?code=" + code + '&version=' + version + '&locale=' + language;
     }
 
     render() {
