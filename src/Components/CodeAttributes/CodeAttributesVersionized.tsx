@@ -103,6 +103,7 @@ class CodeAttributesVersionized extends Component<Props>{
                             codesType={'siblings'}
                             language={this.props.language}
                             catalog={this.props.catalog}
+                            id={"siblings"}
                         />}
                 </>
         );

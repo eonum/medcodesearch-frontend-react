@@ -9,7 +9,6 @@ interface Props {
     translation: any
     params: IParamTypes
     navigation: INavigationHook
-    params: IParamTypes
 }
 
 /**
@@ -29,6 +28,7 @@ class SupplementsAttributes extends Component<Props> {
                 codesType={'REL_CODES_SUPPLEMENTS'}
                 language={this.props.params.language}
                 catalog={'CHOP'}
+                id={'relevantChopCodes'}
             /> :
             relevantCodes.map((el) =>
                 (<>
@@ -44,6 +44,7 @@ class SupplementsAttributes extends Component<Props> {
             codesType={codesType}
             language={this.props.params.language}
             catalog={catalog}
+            id={codesType}
         />
     };
 
@@ -112,14 +113,14 @@ class SupplementsAttributes extends Component<Props> {
                         </table>
                     </div>
                 </div>
+                {attributes.relevant_codes && attributes.relevant_codes.length > 0 && attributes.relevant_codes[0].code &&
+                    this.renderRelevantCodes(attributes.relevant_codes, this.props.attributes.ze_type)}
                 {attributes.excluded_drgs && attributes.excluded_drgs.length > 0 &&
                     this.renderCodesArray(attributes.excluded_drgs, 'SwissDrg', 'EXCLUDED_DRGS')}
                 {attributes.constraint_icds && attributes.constraint_icds.length > 0 &&
-                    this.renderCodesArray(attributes.constraint_icds.length, 'ICD', 'CONSTRAINT_ICDS')}
+                    this.renderCodesArray(attributes.constraint_icds, 'ICD', 'CONSTRAINT_ICDS')}
                 {attributes.constraint_chops && attributes.constraint_chops.length > 0 &&
                     this.renderCodesArray(attributes.constraint_chops, 'CHOP', 'CONSTRAINT_CHOPS')}
-                {attributes.relevant_codes && attributes.relevant_codes.length > 0 && attributes.relevant_codes[0].code &&
-                    this.renderRelevantCodes(attributes.relevant_codes, this.props.attributes.ze_type)}
             </div>
         )
     }

@@ -10,8 +10,9 @@ interface Props {
     language: string,
     catalog: string,
     navigation: INavigationHook,
-    resource_type?: string
-    translation: any
+    resource_type?: string,
+    translation: any,
+    id?: string,
 }
 
 /**
@@ -22,13 +23,24 @@ class ClickableCodesArray extends Component<Props>{
      * Render the ClickableCodesArray component
      * @returns {JSX.Element}
      */
+
+    triggeringCodes(shortEntries) {
+        if (shortEntries && this.props.catalog == 'Supplements') {
+            return shortEntries[0].triggering_code ? shortEntries.map((c) => c.triggering_code) : undefined
+        } else {
+            return undefined
+        }
+    }
+
     render() {
         const {t} = this.props.translation
         let {navigation, language, catalog, resource_type} = this.props;
         let attribute = this.props.codesType
         let attributeValue = this.props.codesArray
+        const triggeringCodes = this.triggeringCodes(this.props.codesArray)
+
         return (
-            <div key={attribute}>
+            <div key={attribute} id={this.props.id}>
                 <h5>{t("LBL_" + attribute.toUpperCase())}</h5>
                 <ul>
                     {attributeValue.map((currElement, j) => (
@@ -39,7 +51,7 @@ class ClickableCodesArray extends Component<Props>{
                                     navigation({pathname: pathname, search: searchString})
                                 }
                             }}>
-                                {currElement.code + ": "}
+                                {currElement.code + (triggeringCodes ? " (" + triggeringCodes[j] + ")" : "") + ": "}
                             </a>
                             <span key={"code_text"} dangerouslySetInnerHTML={{__html: currElement.text}}/>
                         </li>

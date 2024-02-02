@@ -3,6 +3,7 @@ export interface IShortEntry {
     text: string,
     url: string,
     terminal?: boolean
+    triggering_code?: string
 }
 
 export interface IAttributes {
