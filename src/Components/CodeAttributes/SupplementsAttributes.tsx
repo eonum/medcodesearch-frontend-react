@@ -20,25 +20,20 @@ class SupplementsAttributes extends Component<Props> {
      * @returns {JSX.Element}
      */
 
-    renderRelevantCodes(relevantCodes, zeType) {
-        const {t} = this.props.translation
+    renderRelevantCodes(codes) {
+        const zeType = this.props.attributes.ze_type;
         return (zeType == "C" ?
             <ClickableCodesArray
-                codesArray={relevantCodes}
+                codesArray={codes}
                 codesType={'REL_CODES_SUPPLEMENTS'}
                 language={this.props.params.language}
                 catalog={'CHOP'}
                 id={'relevantChopCodes'}
-            /> :
-            relevantCodes.map((el) =>
-                (<>
-                        <h5>{t("LBL_REL_CODES_SUPPLEMENTS")}</h5>
-                        <p>{el.code}</p>
-                    </>
-                )))
+            /> : this.renderCodesArray(codes, "LBL_REL_CODES_SUPPLEMENTS")
+        )
     }
 
-    renderCodesArray(codes, catalog, codesType) {
+    renderClickableCodesArray(codes, catalog, codesType) {
         return <ClickableCodesArray
             codesArray={codes}
             codesType={codesType}
@@ -47,6 +42,31 @@ class SupplementsAttributes extends Component<Props> {
             id={codesType}
         />
     };
+
+    transformRelevantCodesTitle(title, zeType) {
+        let transformedTitle = title
+        if (zeType == 'C') {
+            transformedTitle += " (CHOP)"
+        }
+        if (zeType == 'A') {
+            transformedTitle += " (ATC)"
+        }
+        return transformedTitle
+    }
+
+    renderCodesArray(codes, title) {
+        const zeType = this.props.attributes.ze_type;
+        const {t} = this.props.translation;
+        return (
+            <div>
+                <h5>{this.transformRelevantCodesTitle(t(title), zeType)}</h5>
+                <ul>
+                    {codes.map((c) => (
+                        <li>{c.code + (c.text ? ": " + c.text : "")}</li>
+                    ))}
+                </ul>
+            </div>
+        )}
 
 
     tableRow(key, value) {
@@ -75,6 +95,7 @@ class SupplementsAttributes extends Component<Props> {
         )
     }
 
+    // TODO: Render clickable codes array as soon as linking into codes from different catalogs is properly implemented.
     render() {
         const attributes = this.props.attributes;
         const {t} = this.props.translation;
@@ -114,13 +135,13 @@ class SupplementsAttributes extends Component<Props> {
                     </div>
                 </div>
                 {attributes.relevant_codes && attributes.relevant_codes.length > 0 && attributes.relevant_codes[0].code &&
-                    this.renderRelevantCodes(attributes.relevant_codes, this.props.attributes.ze_type)}
+                    this.renderCodesArray(attributes.relevant_codes, 'LBL_REL_CODES_SUPPLEMENTS')}
                 {attributes.excluded_drgs && attributes.excluded_drgs.length > 0 &&
-                    this.renderCodesArray(attributes.excluded_drgs, 'SwissDrg', 'EXCLUDED_DRGS')}
+                    this.renderCodesArray(attributes.excluded_drgs, 'LBL_EXCLUDED_DRGS')}
                 {attributes.constraint_icds && attributes.constraint_icds.length > 0 &&
-                    this.renderCodesArray(attributes.constraint_icds, 'ICD', 'CONSTRAINT_ICDS')}
+                    this.renderCodesArray(attributes.constraint_icds, 'LBL_CONSTRAINT_ICDS')}
                 {attributes.constraint_chops && attributes.constraint_chops.length > 0 &&
-                    this.renderCodesArray(attributes.constraint_chops, 'CHOP', 'CONSTRAINT_CHOPS')}
+                    this.renderCodesArray(attributes.constraint_chops, 'LBL_CONSTRAINT_CHOPS')}
             </div>
         )
     }
