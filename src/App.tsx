@@ -307,12 +307,12 @@ class App extends Component<Props, IApp>{
             'CHOP': 'CHOP',
             'SwissDRG': 'SwissDRG',
             'TARMED': 'TARMED',
-            'AmbGroup': t("LBL_AMB_GROUP_LABEL"),
+            'AmbGroup': t("LBL_AMB_GROUP"),
             'MIGEL': t("LBL_MIGEL_LABEL"),
-            'AL': t("LBL_AL_LABEL"),
-            'DRUG': t("LBL_DRUG_LABEL"),
+            'AL': t("LBL_AL"),
+            'DRUG': t("LBL_DRUG"),
             'Reha': 'ST Reha',
-            'Supplements': t("LBL_SUPPLEMENTS_LABEL")
+            'Supplements': t("LBL_SUPPLEMENTS")
         }
     }
 

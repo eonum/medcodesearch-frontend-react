@@ -133,13 +133,10 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
      * @param code
      * @returns {string|*}
      */
-    // TODO: Use I18n instead instead of switch case.
-    extractLabel(code, isBreadcrumbLabel){
+    displayCode(code, isBreadcrumbLabel){
         const {t} = this.props.translation
-        if (code === "MIGEL") {
-            return t(`LBL_${code}_LABEL`)
-        } else if (code === "AL" || code === "DRUG") {
-            return isBreadcrumbLabel ? t(`LBL_${code}_LABEL_SHORT`) : t(`LBL_${code}_LABEL`)
+        if (["AL", "MIGEL", "DRUG"].includes(code)) {
+            return isBreadcrumbLabel ? t(`LBL_${code}_LABEL`) : t(`LBL_${code}`)
         } else {
             return code
         }
@@ -153,24 +150,33 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
         let navigate = this.props.navigation;
         let {language, catalog, resource_type, code} = this.props.params;
         let siblings = this.state.siblings;
+        const titleTag = ["MIGEL", "AL"].includes(catalog) ? this.displayCode(catalog, false) : "";
 
         return (
             <div>
                 <Breadcrumb>
                     {this.state.parents.reverse().map((currElement, i) => {
                         return (
-                            <Breadcrumb.Item key={i} onClick={() => {
-                                let {pathname, searchString} = getNavParams(currElement, language, catalog, resource_type)
-                                if (["MIGEL", "AL"].includes(catalog)) {
-                                    navigate({pathname: pathname, search: searchString})
-                                }
-                            }} className="breadLink">
-                                {this.extractLabel(currElement.code, true)}
+                            <Breadcrumb.Item
+                                title={["MIGEL", "AL"].includes(currElement.code) ? titleTag : ""}
+                                key={i}
+                                className="breadLink"
+                                onClick={() => {
+                                    let {
+                                        pathname,
+                                        searchString
+                                    } = getNavParams(currElement, language, catalog, resource_type)
+                                    // No breadcrumb for DRUG catalog
+                                    if (["MIGEL", "AL"].includes(catalog)) {
+                                        navigate({pathname: pathname, search: searchString})
+                                    }
+                                }}>
+                                {this.displayCode(currElement.code, true)}
                             </Breadcrumb.Item>
                         )})}
-                    <BreadcrumbItem active>{this.extractLabel(this.state.attributes["code"], true)}</BreadcrumbItem>
+                    <BreadcrumbItem active>{this.displayCode(this.state.attributes["code"], true)}</BreadcrumbItem>
                 </Breadcrumb>
-                <h3>{this.extractLabel(this.state.attributes["code"], false)}</h3>
+                <h3>{this.displayCode(this.state.attributes["code"], false)}</h3>
                 <p dangerouslySetInnerHTML={{__html: this.state.attributes["text"]}} />
                 <CodeAttributesUnversionized
                     attributes={this.state.attributes}

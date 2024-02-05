@@ -125,39 +125,40 @@ class CodeBodyVersionized extends Component<Props, ICode> {
         return code.replace("ICD10-GM", t("LBL_ICD_LABEL"))
     }
 
+    displayCode(code, version, catalog) {
+        let currentItem;
+        let breadcrumbRoot;
+        const {t} = this.props.translation;
+        if (code) {
+            breadcrumbRoot = version.replace("_", " ")
+            currentItem = this.state.attributes.code.includes("ICD10") ?
+                this.internationalizeIcdBaseCode(code) : code.replace("_", " ")
+            if (catalog == "SwissDRG") {
+                breadcrumbRoot = "SwissDRG " + version.substring(1)
+            } else if (catalog == "Supplements") {
+                breadcrumbRoot = t('LBL_SUPPLEMENTS') + ' ' + version.substring(1)
+            } else if (catalog == "Reha") {
+                breadcrumbRoot = "ST Reha " + version.substring(5).replace("_", " ")
+            } else if (catalog == "AmbGroup"){
+                breadcrumbRoot = t('LBL_AMB_GROUP') + " " + version.substring(1)
+            }
+        } else {
+            breadcrumbRoot = '';
+            currentItem = '';
+        }
+        return code == version ? breadcrumbRoot : currentItem
+    }
+
     /**
      * Render the body component
      * @returns {JSX.Element}
      */
     render() {
-        const {t} = this.props.translation;
         const code = this.state.attributes.code;
         let {language, catalog, version, resource_type} = this.props.params
         let siblings = this.state.siblings;
         let navigate = this.props.navigation;
-        let title;
-        let currentItem;
-        let breadcrumRoot;
 
-        if (code) {
-            breadcrumRoot = version.replace("_", " ")
-            currentItem = this.state.attributes.code.includes("ICD10") ?
-                this.internationalizeIcdBaseCode(code) : code.replace("_", " ")
-            if (catalog == "SwissDRG") {
-                breadcrumRoot = "SwissDRG " + version.substring(1)
-                title = code == version ? breadcrumRoot : code
-            } else if (catalog == "Supplements") {
-                breadcrumRoot = t('LBL_SUPPLEMENTS_LABEL') + ' ' + version.substring(1)
-                title = code == version ? breadcrumRoot : code
-            } else if (catalog == "Reha") {
-                breadcrumRoot = "ST Reha " + version.substring(5).replace("_", " ")
-                title = code == version ? breadcrumRoot : code
-            } else {
-                title = currentItem;
-            }
-        } else {
-            title = "";
-        }
         return (
             <div>
                 <Breadcrumb>
@@ -167,15 +168,14 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                                 let {pathname, searchString} = getNavParams(currElement, language, catalog)
                                 navigate({pathname: pathname, search: searchString})
                             }} className="breadLink">
-                                {currElement.code == version ?
-                                    breadcrumRoot :
-                                    (currElement.code.includes("ICD10") ?
-                                        this.internationalizeIcdBaseCode(currElement.code) : currElement.code)}
+                                {this.displayCode(currElement.code, version, catalog)}
                             </Breadcrumb.Item>);
                     })}
-                    <Breadcrumb.Item active>{version == code ? breadcrumRoot : currentItem}</Breadcrumb.Item>
+                    <Breadcrumb.Item active>
+                        {this.displayCode(code, version, catalog)}
+                    </Breadcrumb.Item>
                 </Breadcrumb>
-                <h3>{title}</h3>
+                <h3>{this.displayCode(code, version, catalog)}</h3>
                 {version == this.state.attributes.code || this.state.attributes.code == "ALL" ?
                     <p></p> : <p>{this.state.attributes.text}</p>}
                 <CodeAttributesVersionized

@@ -58,7 +58,7 @@ describe('Code attributes test suite for desktop version and components with cus
         let value = await page.evaluate(el => el.textContent, activeElement);
         await expect(value).toBe("ZE-2024-04.10");
         let otherElements = await page.$$eval(".breadcrumb-item.breadLink", (list) => list.map((el) => el.textContent));
-        await expect(otherElements[0]).toBe("Zusatzentgelt 13.0");
+        await expect(otherElements[0]).toBe("Zusatzentgelte 13.0");
         await expect(otherElements[1]).toBe("ZE-2024-04");
         let element = await page.$("h3");
         value = await page.evaluate(el => el.textContent, element);

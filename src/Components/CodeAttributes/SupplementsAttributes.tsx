@@ -109,7 +109,7 @@ class SupplementsAttributes extends Component<Props> {
                         <table className="table table-striped table-hover" id={'attributesTable'}>
                             <thead>
                             <tr>
-                                <th colSpan={2}>{t('LBL_SUPPLEMENTS')}</th>
+                                <th colSpan={2}>{t('LBL_SUPPLEMENTS_CATALOG')}</th>
                             </tr>
                             </thead>
                             <tbody>

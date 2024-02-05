@@ -34,14 +34,17 @@ class CodeAttributesVersionized extends Component<Props>{
                 return <DrgAttributes
                     attributes={this.props.attributes}
                 />
+                break;
             case 'supplements':
                 return <SupplementsAttributes
                     attributes={this.props.attributes}
                 />
+                break;
             case 'rcgs':
                 return <RcgAttributes
                     attributes={this.props.attributes}
                 />
+                break;
             default:
                 return codeInfos;
         }
