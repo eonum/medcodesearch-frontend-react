@@ -29,7 +29,7 @@ class SupplementsAttributes extends Component<Props> {
                 language={this.props.params.language}
                 catalog={'CHOP'}
                 id={'relevantChopCodes'}
-            /> : this.renderCodesArray(codes, "LBL_REL_CODES_SUPPLEMENTS")
+            /> : this.renderCodesArray(codes, "LBL_REL_CODES_SUPPLEMENTS", "C", 'relevantCodes')
         )
     }
 
@@ -46,20 +46,20 @@ class SupplementsAttributes extends Component<Props> {
     transformRelevantCodesTitle(title, zeType) {
         let transformedTitle = title
         if (zeType == 'C') {
-            transformedTitle += " (CHOP)"
+            return (transformedTitle += " (CHOP)")
         }
         if (zeType == 'A') {
-            transformedTitle += " (ATC)"
+            return (transformedTitle += " (ATC)")
+        } else {
+            return transformedTitle
         }
-        return transformedTitle
     }
 
-    renderCodesArray(codes, title) {
-        const zeType = this.props.attributes.ze_type;
+    renderCodesArray(codes, title, codeType, id) {
         const {t} = this.props.translation;
         return (
-            <div>
-                <h5>{this.transformRelevantCodesTitle(t(title), zeType)}</h5>
+            <div id={id}>
+                <h5>{this.transformRelevantCodesTitle(t(title), codeType)}</h5>
                 <ul>
                     {codes.map((c) => (
                         <li>{c.code + (c.text ? ": " + c.text : "")}</li>
@@ -100,6 +100,8 @@ class SupplementsAttributes extends Component<Props> {
         const attributes = this.props.attributes;
         const {t} = this.props.translation;
         const {terminal} = attributes
+        console.log(attributes.excluded_drgs)
+        console.log(attributes)
         return (
             // If not terminal, there is only text info which is rendered in parent component.
             terminal &&
@@ -135,13 +137,29 @@ class SupplementsAttributes extends Component<Props> {
                     </div>
                 </div>
                 {attributes.relevant_codes && attributes.relevant_codes.length > 0 && attributes.relevant_codes[0].code &&
-                    this.renderCodesArray(attributes.relevant_codes, 'LBL_REL_CODES_SUPPLEMENTS')}
+                    this.renderCodesArray(
+                        attributes.relevant_codes,
+                        'LBL_REL_CODES_SUPPLEMENTS',
+                        this.props.attributes.ze_type,
+                        "RELEVANT_CODES")}
                 {attributes.excluded_drgs && attributes.excluded_drgs.length > 0 &&
-                    this.renderCodesArray(attributes.excluded_drgs, 'LBL_EXCLUDED_DRGS')}
+                    this.renderCodesArray(
+                        attributes.excluded_drgs,
+                        'LBL_EXCLUDED_DRGS',
+                        null,
+                        'EXCLUDED_DRGS')}
                 {attributes.constraint_icds && attributes.constraint_icds.length > 0 &&
-                    this.renderCodesArray(attributes.constraint_icds, 'LBL_CONSTRAINT_ICDS')}
+                    this.renderCodesArray(
+                        attributes.constraint_icds,
+                        'LBL_CONSTRAINT_ICDS',
+                        null,
+                        'CONSTRAINT_ICDS')}
                 {attributes.constraint_chops && attributes.constraint_chops.length > 0 &&
-                    this.renderCodesArray(attributes.constraint_chops, 'LBL_CONSTRAINT_CHOPS')}
+                    this.renderCodesArray(
+                        attributes.constraint_chops,
+                        'LBL_CONSTRAINT_CHOPS',
+                        null,
+                        'CONSTRAINT_CHOPS')}
             </div>
         )
     }
