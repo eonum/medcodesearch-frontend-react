@@ -89,7 +89,7 @@
   "LBL_IS_GENERICA": "Generika",
   "LBL_LIMITATION_POINTS": "Limitationspunkte",
   "LBL_STATUS": "Status",
-  "LBL_REMOVED_FROM_SL": "Diese Packung wurde aus der Spezialitätenliste gestrichen. Die angezeigten Daten entsprechen dem letzten Stand.",
+  "LBL_REMOVED_FROM_SL": "Diese Packung ist aktuell nicht in der Spezialitätenliste.",
   "LBL_SL_INFOS": "Informationen aus der Spezialitätenliste (SL)",
   "LBL_FALSE": "Nein",
   "LBL_TRUE": "Ja",

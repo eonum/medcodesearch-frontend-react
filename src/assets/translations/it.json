@@ -85,7 +85,7 @@
   "LBL_IS_GENERICA": "Generico",
   "LBL_LIMITATION_POINTS": "Punti di limitazione",
   "LBL_STATUS": "Stato",
-  "LBL_REMOVED_FROM_SL": "Questa confezione è stata rimossa dall'elenco delle specialità. I dati indicati corrispondono allo stato più recente.",
+  "LBL_REMOVED_FROM_SL": "Questa confezione non è attualmente presente nell'elenco delle specialità.",
   "LBL_SL_INFOS": "Informazioni dall'elenco delle specialità (ES)",
   "LBL_FALSE": "No",
   "LBL_TRUE": "Si",

@@ -59,30 +59,29 @@ class CodeAttributesUnversionized extends Component<Props>{
                     {this.props.catalog === "DRUG" && this.props.code != 'all' &&
                         <>
                             <h5>{t("LBL_SL_INFOS")}</h5>
-                            {// Add SL deprecation warning.
-                                !attributes["is_currently_in_sl"] &&
-                                <div className="vertical-spacer alert alert-warning" key={"is_currently_in_sl"}>
-                                    {t("LBL_REMOVED_FROM_SL")}
-                                </div>}
-                            { // Add SL infos.
-                                <ul id={"SL_infos"}>
-                                    {Object.keys(slAttributes).map(attributeName => (
-                                        <li key={attributeName} id={"SL_" + attributeName}>
-                                            {attributeName.match(/date/i) ?
-                                                <p>{t("LBL_" + attributeName.toUpperCase()) + ": "
-                                                    + dateFormat(new Date(slAttributes[attributeName]), "dd.mm.yyyy")}
-                                                </p> :
-                                                <p>{t("LBL_" + attributeName.toUpperCase()) + ": "
-                                                    + (typeof slAttributes[attributeName] === 'boolean' ?
-                                                        t("LBL_" + slAttributes[attributeName]
-                                                            .toString().toUpperCase()):
-                                                        slAttributes[attributeName])}
-                                                </p>
-                                            }
-                                        </li>
-                                    ))}
-                                </ul>
-                            }
+                            {!attributes["is_currently_in_sl"] ?
+                                    // Add SL deprecation warning.
+                                    <div className="vertical-spacer alert alert-warning" key={"is_currently_in_sl"}>
+                                        {t("LBL_REMOVED_FROM_SL")}
+                                    </div> :
+                                    // Add SL infos.
+                                    <ul id={"SL_infos"}>
+                                        {Object.keys(slAttributes).map(attributeName => (
+                                            <li key={attributeName} id={"SL_" + attributeName}>
+                                                {attributeName.match(/date/i) ?
+                                                    <p>{t("LBL_" + attributeName.toUpperCase()) + ": "
+                                                        + dateFormat(new Date(slAttributes[attributeName]), "dd.mm.yyyy")}
+                                                    </p> :
+                                                    <p>{t("LBL_" + attributeName.toUpperCase()) + ": "
+                                                        + (typeof slAttributes[attributeName] === 'boolean' ?
+                                                            t("LBL_" + slAttributes[attributeName]
+                                                                .toString().toUpperCase()) :
+                                                            slAttributes[attributeName])}
+                                                    </p>
+                                                }
+                                            </li>
+                                        ))}
+                                    </ul>}
                         </>
                     }
                     {children &&
@@ -101,13 +100,13 @@ class CodeAttributesUnversionized extends Component<Props>{
                             catalog={this.props.catalog}
                             resource_type={this.props.resource_type}
                         />}
-            </>
+                </>
         );
     }
 }
 
 function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} translation={useTranslation()} />;
+    return props => <Component {...props} navigation={useNavigate()} translation={useTranslation()}/>;
 }
 
 export default addProps(CodeAttributesUnversionized);

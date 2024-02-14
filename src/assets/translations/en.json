@@ -60,7 +60,7 @@
   "LBL_IS_GENERICA": "Generic",
   "LBL_LIMITATION_POINTS": "Limitation points",
   "LBL_STATUS": "Status",
-  "LBL_REMOVED_FROM_SL": "This package has been removed from the list of specialties. The displayed data correspond to the latest status.",
+  "LBL_REMOVED_FROM_SL": "This package is currently not on the list of specialties.",
   "LBL_SL_INFOS": "Information from specialities list (SL/LS)",
   "LBL_FALSE": "No",
   "LBL_TRUE": "Yes",
