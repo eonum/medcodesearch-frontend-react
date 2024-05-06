@@ -82,22 +82,21 @@ describe('Code attributes test suite for desktop version', function () {
     })
 
     it ('SL code information', async function() {
+        // If drug currently not in SL, show corresponding message.
         await page.goto(baseUrl + '/de/DRUG/drugs/7680650440086?', {waitUntil: 'networkidle0'})
-        await expect(page).toMatch("Diese Packung wurde aus der Spezialitätenliste gestrichen. " +
-            "Die angezeigten Daten entsprechen dem letzten Stand.")
+        await expect(page).toMatch("Diese Packung ist aktuell nicht in der Spezialitätenliste.")
+        
+        // If drug currently in SL, show corresponding information.
+        await page.goto(baseUrl + '/de/DRUG/drugs/7680517950673?', {waitUntil: 'networkidle0'})
         expect(await page.$eval("#SL_status", (e) => e.textContent)).toContain(
             "Status: SL");
         expect(await page.$eval("#SL_public_price", (e) => e.textContent)).toContain(
-            "Publikumspreis (CHF): 56.25");
+            "Publikumspreis (CHF): 16.15");
         expect(await page.$eval("#SL_date_added_in_sl", (e) => e.textContent)).toContain(
-            "Zur SL hinzugefügt: 01.09.2014");
-        expect(await page.$eval("#SL_date_deleted_from_sl", (e) => e.textContent)).toContain(
-            "Datum der Streichung aus SL: 01.02.2023");
-        expect(await page.$eval("#SL_date_compulsatory_until", (e) => e.textContent)).toContain(
-            "Kassenpflichtig bis: 30.04.2023");
+            "Zur SL hinzugefügt: 15.03.1997");
         expect(await page.$eval("#SL_has_limitation", (e) => e.textContent)).toContain(
             "Limitation: Nein");
         expect(await page.$eval("#SL_is_generica", (e) => e.textContent)).toContain(
-            "Generika: Ja");
+            "Generika: Nein");
     })
 })

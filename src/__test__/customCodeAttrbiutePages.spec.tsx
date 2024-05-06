@@ -36,7 +36,7 @@ describe('Code attributes test suite for desktop version and components with cus
         await expect(tds[2]).toBe("Kostengewicht");
         await expect(tds[3]).toBe("8.137");
         await expect(tds[4]).toBe("Durchschnittliche Verweildauer (Tage)");
-        await expect(tds[5]).toBe("17.0");
+        await expect(tds[5]).toBe("18.9");
         await expect(tds[6]).toBe("Erster Tag mit Abschlag");
         await expect(tds[7]).toBe("5");
         await expect(tds[8]).toBe("Abschlag pro Tag");
