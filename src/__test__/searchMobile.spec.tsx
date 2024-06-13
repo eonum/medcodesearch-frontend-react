@@ -87,14 +87,23 @@ describe('Search test suite for mobile version', function () {
     expect(search_result).toMatch("ASPIRIN");
   })
 
-  it('search result is clickable', async function() {
-    await page.goto(baseUrl, {waitUntil: 'networkidle0'});
+  it('search result is clickable (after expanding search results)', async function() {
+    await page.goto(baseUrl, { waitUntil: 'networkidle0' });
     // Focus search field and send search chars all in once (avoiding speed issues).
-    await page.focus(".me-2.form-control")
-    await page.keyboard.sendCharacter( "A15");
-    await page.waitForTimeout(2*n);
-    await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15')
+    await page.focus(".me-2.form-control");
+    await page.keyboard.sendCharacter("A15");
+    await page.waitForTimeout(2 * n);
+    await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15');
+
+    // Click the collapse-button button to show search results
+    await page.waitForSelector("#collapse-button", {visible: true});
+    const initialButtonText = await page.$eval('#collapse-button', (button) => button.textContent);
+    expect(initialButtonText).toMatch("Suchresultate einblenden");
+    await page.click("#collapse-button")
+    const expandedButtonText = await page.$eval('#collapse-button', (button) => button.textContent);
+    expect(expandedButtonText).toMatch("Suchresultate ausblenden");
+    // Click the first search result
     await page.click(".searchResult:nth-child(1)");
-    await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A15?query=A15')
-  })
+    await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A15?query=A15');
+  });
 })

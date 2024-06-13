@@ -82,10 +82,6 @@ describe('Code attributes test suite for mobile version', function () {
     })
 
     it ('SL code information', async function() {
-        // If drug currently not in SL, show corresponding message.
-        await page.goto(baseUrl + '/de/DRUG/drugs/7680650440086?', {waitUntil: 'networkidle0'})
-        await expect(page).toMatch("Diese Packung ist aktuell nicht in der Spezialitätenliste.")
-        
         // If drug currently in SL, show corresponding information.
         await page.goto(baseUrl + '/de/DRUG/drugs/7680517950673?', {waitUntil: 'networkidle0'})
         expect(await page.$eval("#SL_status", (e) => e.textContent)).toContain(

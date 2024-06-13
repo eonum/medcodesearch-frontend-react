@@ -10,7 +10,8 @@ interface Props {
     location: ILocation,
     result: ISearchResult,
     language: string,
-    translation: any
+    translation: any,
+    showHide: () => void;
 }
 
 interface ISearchResult {
@@ -56,6 +57,8 @@ class SearchResult extends Component<Props, ISearchResult> {
             pathname: pathname,
             search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
         })
+        // Call the showHide function
+        this.props.showHide();
     }
 
     collectSearchHighlights() {

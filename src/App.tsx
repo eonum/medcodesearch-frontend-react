@@ -6,7 +6,6 @@ import {Navigate, Routes, Route, Outlet} from "react-router-dom";
 import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
-import { ReactComponent as Arrow } from './assets/arrow-up.svg';
 import {useNavigate} from "react-router-dom";
 import ButtonGroup from "./Components/Buttons/ButtonGroup";
 import RouterService from "./Services/router.service";
@@ -87,7 +86,6 @@ class App extends Component<Props, IApp>{
         this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
         this.showHide = this.showHide.bind(this);
         this.showSearchResults = this.showSearchResults.bind(this);
-        this.changeIsDesktop = this.changeIsDesktop.bind(this)
     }
 
     /**
@@ -266,8 +264,8 @@ class App extends Component<Props, IApp>{
      * @returns {Promise<void>}
      */
     async componentDidMount() {
-        this.changeIsDesktop();
-        window.addEventListener("resize", this.changeIsDesktop);
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize(); // Call the handleResize method initially
         await this.setState({initialVersions: await getVersionsByLanguage('de')})
         await this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
         // If medcodesearch is accessed via root url, i.e. medcodesearch.ch, there is no version from url, i.e. the
@@ -282,11 +280,7 @@ class App extends Component<Props, IApp>{
     }
 
     componentWillUnmount() {
-        window.removeEventListener("resize", this.changeIsDesktop);
-    }
-
-    changeIsDesktop() {
-        this.setState({ isDesktop: window.innerWidth >= 1200 });
+        window.removeEventListener("resize", this.handleResize);
     }
 
     /**
@@ -320,13 +314,13 @@ class App extends Component<Props, IApp>{
      * Render search results from the backend.
      * @returns {JSX.Element}
      */
-    searchResults() {
+    searchResults = () => {
         const {t} = this.props.translation;
         const searchResults =
             this.state.searchResults[0] === "empty" ?
                 <div className="searchResult">{t("LBL_NO_RESULTS")}</div> :
-                this.state.searchResults.map(function (searchResult) {
-                    return <SearchResult result={searchResult} key={searchResult.code}/>
+                this.state.searchResults.map((searchResult) => {
+                    return <SearchResult result={searchResult} key={searchResult.code} showHide={this.showHide}/>
                 })
 
         return(
@@ -334,14 +328,14 @@ class App extends Component<Props, IApp>{
                 <p className="text-center mt-3">
                     <button
                         onClick={this.showHide}
-                        className="btn d-lg-none"
-                        id={this.state.collapseMenu ? 'arrow-rotate': null}
+                        className={"btn d-lg-none"}
                         type="button"
+                        id={"collapse-button"}
                         data-target="#collapseExample"
                         aria-expanded="false"
                         aria-controls="collapseExample"
                     >
-                        <Arrow />
+                        {this.state.collapseMenu ? t("LBL_SHOW_SEARCH_RESULTS") : t("LBL_HIDE_SEARCH_RESULTS")}
                     </button>
                 </p>
                 <Collapse in={!this.state.collapseMenu}>
@@ -357,14 +351,25 @@ class App extends Component<Props, IApp>{
      * Hide the catalog div if the window is too small.
      * @param e
      */
-    showHide(e) {
+    showHide = () => {
         if (window.innerWidth <= 991) {
-            e.preventDefault();
             this.setState({
                 collapseMenu: !this.state.collapseMenu
             });
         }
     }
+
+    /**
+     * Handles the collapseMenu state attribute according to the screen size.
+     * If the screen is mobile-sized, the `collapseMenu` state is set to `false`. Otherwise, the `collapseMenu` state
+     * is left unchanged.
+     */
+    handleResize = () => {
+        this.setState({
+            isDesktop: window.innerWidth >= 1200,
+            collapseMenu: window.innerWidth <= 991 ? true : false,
+        });
+    };
 
     /**
      * set the collapseMenu state to false and open it

@@ -124,5 +124,7 @@
   "LBL_DOSE_MAX": "Limite superiore dell'intervallo di dose (esclusivo)",
   "LBL_ZA": "Informazioni aggiuntive",
   "LBL_VA": "Metodo di somministrazione",
-  "LBL_AMOUNT": "Importo in CHF"
+  "LBL_AMOUNT": "Importo in CHF",
+  "LBL_SHOW_SEARCH_RESULTS": "Mostra i risultati della ricerca",
+  "LBL_HIDE_SEARCH_RESULTS": "Nascondi i risultati della ricerca"
 }

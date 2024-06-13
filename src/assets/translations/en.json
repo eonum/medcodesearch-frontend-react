@@ -93,5 +93,7 @@
   "LBL_DOSE_MAX": "Upper bound of the dose interval (exclusive)",
   "LBL_ZA": "Additional information",
   "LBL_VA": "Mode of administration",
-  "LBL_AMOUNT": "Amount in CHF"
+  "LBL_AMOUNT": "Amount in CHF",
+  "LBL_SHOW_SEARCH_RESULTS": "Show search results",
+  "LBL_HIDE_SEARCH_RESULTS": "Collapse search results"
 }

@@ -128,6 +128,8 @@
   "LBL_DOSE_MAX": "Obere Schranke des Dosisintervalls (exklusiv)",
   "LBL_ZA": "Zusatzangaben",
   "LBL_VA": "Verabreichungsart",
-  "LBL_AMOUNT": "Betrag in CHF"
+  "LBL_AMOUNT": "Betrag in CHF",
+  "LBL_SHOW_SEARCH_RESULTS": "Suchresultate einblenden",
+  "LBL_HIDE_SEARCH_RESULTS": "Suchresultate ausblenden"
 }
 
