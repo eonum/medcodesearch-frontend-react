@@ -106,4 +106,49 @@ describe('Search test suite for mobile version', function () {
     await page.click(".searchResult:nth-child(1)");
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A15?query=A15');
   });
+
+  it('load more and reset search results', async function() {
+    await page.goto(baseUrl, { waitUntil: 'networkidle0' });
+    // Focus search field and send search term
+    await page.focus(".me-2.form-control")
+    await page.keyboard.sendCharacter( "neubildung");
+    // Wait for the initial search results to be present
+    await page.waitForTimeout(2 * n);
+    // Get the initial number of search results
+    const initialResultCount = await page.$$eval('.searchResult', results => results.length);
+    // Verify that 10 results are loaded.
+    expect(initialResultCount).toBe(10);
+    // Click the "Load More" button after scrolling it into view.
+    await page.evaluate(() => {
+      document.querySelector('#load-more-button').scrollIntoView();
+    });
+    // Wait for any animations to complete
+    await page.waitForTimeout(500);
+    await page.click('#load-more-button');
+    // Wait for the additional search results to be present
+    await page.waitForFunction(
+        `document.querySelectorAll('.searchResult').length > ${initialResultCount}`,
+        { timeout: 10000 }
+    );
+    // Get the number of search results after clicking "Load More"
+    const loadMoreResultCount = await page.$$eval('.searchResult', results => results.length);
+    // Verify that 10 more results are loaded
+    expect(loadMoreResultCount).toBe(initialResultCount + 10);
+    // Click the "reset" button after scrolling it into view.
+    await page.evaluate(() => {
+      document.querySelector('#reset-button').scrollIntoView();
+    });
+    // Wait for any animations to complete
+    await page.waitForTimeout(500);
+    await page.click('#reset-button');
+    // Wait for the search results to be reset to the initial 10 results
+    await page.waitForFunction(
+        `document.querySelectorAll('.searchResult').length === 10`,
+        { timeout: 10000 }
+    );
+    // Get the number of search results after clicking "Reset"
+    const resetResultCount = await page.$$eval('.searchResult', results => results.length);
+    // Verify that the search results are reset to the initial 10 results
+    expect(resetResultCount).toBe(10);
+  });
 })
