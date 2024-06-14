@@ -60,8 +60,12 @@
   flex-grow: 1;
 }
 
-#collapse-button {
+#collapse-button, #load-more-button, #reset-button {
   outline: 1px solid #ccc; /* Add an outline */
-  background-color: rgba(255,255,255,1);
+  background-color: rgba(255, 255, 255, 1) !important;
 }
 
+#collapse-button:hover, #load-more-button:hover, #reset-button:hover {
+  background-color: rgb(234, 231, 231) !important;
+  color: black !important;
+}

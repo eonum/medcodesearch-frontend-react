@@ -51,6 +51,7 @@ interface IApp {
     currentVersions: IVersions,
     isFetching: boolean,
     isDesktop: boolean
+    maxResults: number;
 }
 
 class App extends Component<Props, IApp>{
@@ -76,7 +77,8 @@ class App extends Component<Props, IApp>{
                 'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [],  'Supplements': []
             },
             isFetching: true,
-            isDesktop: true
+            isDesktop: true,
+            maxResults: 10
         };
         this.changeSelectedButton = this.changeSelectedButton.bind(this);
         this.changeSelectedDate = this.changeSelectedDate.bind(this);
@@ -86,6 +88,7 @@ class App extends Component<Props, IApp>{
         this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
         this.showHide = this.showHide.bind(this);
         this.showSearchResults = this.showSearchResults.bind(this);
+        this.toggleLoadMoreResults = this.toggleLoadMoreResults.bind(this);
     }
 
     /**
@@ -179,6 +182,17 @@ class App extends Component<Props, IApp>{
             search: searchString
         })
     }
+
+    /**
+     * Toggles the state of the `loadMoreResults` flag.
+     *
+     * Triggered by button click and triggers 10 more search results to show.
+     */
+    toggleLoadMoreResults = () => {
+        this.setState((prevState) => ({
+            maxResults: prevState.maxResults + 10,
+        }));
+    };
 
     async notAvailableToast(lang) {
         const {t} = this.props.translation;
@@ -430,7 +444,9 @@ class App extends Component<Props, IApp>{
                                 selectedButton={this.state.selectedButton}
                                 version={this.state.selectedVersion}
                                 selectedDate={this.state.selectedDate}
-                                updateSearchResults={this.updateSearchResults}/>
+                                updateSearchResults={this.updateSearchResults}
+                                maxResults={this.state.maxResults}
+                            />
                         </div>
                     </div> :
                     <>
@@ -441,7 +457,9 @@ class App extends Component<Props, IApp>{
                                     selectedButton={this.state.selectedButton}
                                     version={this.state.selectedVersion}
                                     selectedDate={this.state.selectedDate}
-                                    updateSearchResults={this.updateSearchResults}/>
+                                    updateSearchResults={this.updateSearchResults}
+                                    maxResults={this.state.maxResults}
+                                />
                             </div>
                         </div>
                         <div key={"app_buttons"} className="row">
@@ -473,6 +491,24 @@ class App extends Component<Props, IApp>{
                             {this.state.searchResults.length > 0 &&
                                 <div key={"search_results"} className="col-12 col-lg">
                                     {this.searchResults()}
+                                    {isDesktop || !this.state.collapseMenu ? (
+                                        <div className="d-flex justify-content-between">
+                                            <button
+                                                className={"btn"}
+                                                id={"load-more-button"}
+                                                onClick={this.toggleLoadMoreResults}
+                                            >
+                                                Load More
+                                            </button>
+                                            <button
+                                                className={"btn"}
+                                                id={"reset-button"}
+                                                onClick={() => this.setState({ maxResults: 10 })}
+                                            >
+                                                Reset
+                                            </button>
+                                        </div>
+                                    ) : null}
                                 </div>}
                             <div key={"code_body"} className="col">
                                 <div id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">

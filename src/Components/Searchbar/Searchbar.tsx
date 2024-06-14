@@ -30,6 +30,7 @@ interface Props {
     updateSearchResults: { (searchResult: string | object): void },
     navigation: INavigationHook
     translation: any
+    maxResults: number
 }
 
 interface ISearchbar  {
@@ -102,7 +103,8 @@ class Searchbar extends Component<Props,ISearchbar> {
      * @param snapshot
      */
     async componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.state.searchTerm !== RouterService.getQueryVariable('query')) {
+        if(this.state.searchTerm !== RouterService.getQueryVariable('query') ||
+            prevProps.maxResults !== this.props.maxResults) {
             await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
         }
         if(prevProps.language !== this.props.language
@@ -119,6 +121,7 @@ class Searchbar extends Component<Props,ISearchbar> {
      * @returns {Promise<void>}
      */
     async fetchForSearchTerm(searchTerm){
+        const maxResults = this.props.maxResults;
         this.setState({searchTerm: searchTerm})
         let date = '';
         if (this.props.selectedButton === 'MIGEL' || this.props.selectedButton === 'AL'){
@@ -129,7 +132,7 @@ class Searchbar extends Component<Props,ISearchbar> {
         let searchURL = [fetchURL, this.props.language,
             resourceTypeByBtn[this.props.selectedButton],
             this.convertButtonToBackendVersion(this.props.selectedButton),
-        'search?' + date + 'highlight=1&search='+ searchTerm].join("/")
+        'search?' + date + 'highlight=1&max_results=' + maxResults +  '&search='+ searchTerm].join("/")
         await fetch(searchURL)
             .then((res) => {
                 if(res.ok) {
