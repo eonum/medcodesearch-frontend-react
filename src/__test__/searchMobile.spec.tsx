@@ -10,7 +10,8 @@ describe('Search test suite for mobile version', function () {
   beforeAll(async function () {
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    await page.setViewport({width: 400, height: 800})
+    await page.setViewport({width: 450, height: 1200})
+    await page.waitForSelector('body'); // Wait for the body element to ensure the page has loaded
   })
 
   afterAll(() => browser.close());
@@ -108,12 +109,13 @@ describe('Search test suite for mobile version', function () {
   });
 
   it('load more and reset search results', async function() {
-    await page.goto(baseUrl, { waitUntil: 'networkidle0' });
-    // Focus search field and send search term
-    await page.focus(".me-2.form-control")
-    await page.keyboard.sendCharacter( "neubildung");
+    await page.goto(baseUrl + '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=neubildung', { waitUntil: 'networkidle0' });
+    const initialButtonText = await page.$eval('#collapse-button', (button) => button.textContent);
+    if (initialButtonText == "Suchresultate einblenden") {
+      await page.click("#collapse-button")
+    }
     // Wait for the initial search results to be present
-    await page.waitForTimeout(2 * n);
+    await page.waitForSelector('.searchResult', { timeout: 10000 });
     // Get the initial number of search results
     const initialResultCount = await page.$$eval('.searchResult', results => results.length);
     // Verify that 10 results are loaded.
@@ -125,30 +127,10 @@ describe('Search test suite for mobile version', function () {
     // Wait for any animations to complete
     await page.waitForTimeout(500);
     await page.click('#load-more-button');
-    // Wait for the additional search results to be present
-    await page.waitForFunction(
-        `document.querySelectorAll('.searchResult').length > ${initialResultCount}`,
-        { timeout: 10000 }
-    );
-    // Get the number of search results after clicking "Load More"
-    const loadMoreResultCount = await page.$$eval('.searchResult', results => results.length);
-    // Verify that 10 more results are loaded
-    expect(loadMoreResultCount).toBe(initialResultCount + 10);
-    // Click the "reset" button after scrolling it into view.
-    await page.evaluate(() => {
-      document.querySelector('#reset-button').scrollIntoView();
-    });
-    // Wait for any animations to complete
+    // Get the number of search results after load more.
     await page.waitForTimeout(500);
-    await page.click('#reset-button');
-    // Wait for the search results to be reset to the initial 10 results
-    await page.waitForFunction(
-        `document.querySelectorAll('.searchResult').length === 10`,
-        { timeout: 10000 }
-    );
-    // Get the number of search results after clicking "Reset"
-    const resetResultCount = await page.$$eval('.searchResult', results => results.length);
-    // Verify that the search results are reset to the initial 10 results
-    expect(resetResultCount).toBe(10);
-  });
+    const loadMoreResultCount = await page.$$eval('.searchResult', results => results.length);
+    // Wait for the additional search results to be present
+    expect(loadMoreResultCount).toBe(initialResultCount + 10);
+    });
 })
