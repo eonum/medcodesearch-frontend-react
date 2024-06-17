@@ -9,8 +9,8 @@ Backend which is used is: [search.eonum.ch](https://search.eonum.ch/documentatio
 
 ### Setup
 #### Development
-For the local installation go into the folder `medcodesearch-frontend-react` and run `npm install`. 
-To start the local app run `npm start`. It will open at [http://localhost:3000](http://localhost:3000) in your browser.
+For the local installation go into the folder `medcodesearch-frontend-react` and run ` install`. 
+To start the local app run `yarn start`. It will open at [http://localhost:3000](http://localhost:3000) in your browser.
 #### Production
 Run deploy script `deploy.sh`.
 
@@ -29,20 +29,20 @@ Every method has its own documentation written in Javadoc.
 ### Testing
 We use jest and puppeteer for our tests. Since we use typescript, we also need babel for transformation.
 #### Prerequisites
-If not already installed from  `npm install` execute <br />
-`npm install --save-dev jest puppeteer jest-puppeteer` <br />
-`npm install --save-dev @testing-library/react`<br />
-`npm install --save-dev start-server-and-test`<br />
-`npm install --save-dev @babel/preset-typescript`<br />
+If not already installed from  `yarn install` execute <br />
+`yarn install --save-dev jest puppeteer jest-puppeteer` <br />
+`yarn install --save-dev @testing-library/react`<br />
+`yarn install --save-dev start-server-and-test`<br />
+`yarn install --save-dev @babel/preset-typescript`<br />
 #### Config
 All the configuration for jest, puppeteer and babel are specified in the  files jest.config.js, jest-puppeteer.config.js 
 and babel.config.js in the root folder and can be adapted to your needs. Since we do UI tests, we need a running server.
-This is implemented via jest-puppeteer config file server block `server: { command: "npm run startHeadlessTestPort"}` and 
+This is implemented via jest-puppeteer config file server block `server: { command: "yarn run startHeadlessTestPort"}` and 
 corresponding scripts in package.json
-`"test": "jest --runInBand"` and `"startHeadlessOnTestPort": "BROWSER=none PORT=$npm_package_config_testPort npm start"`.
+`"test": "jest --runInBand"` and `"startHeadlessOnTestPort": "BROWSER=none PORT=$yarn_package_config_testPort yarn start"`.
 #### Run tests
-Use `npm test` to start headless server and tests. You can also just test single suites using 
-`npm test /path/to/test/file`. Currently the port is set to `localhost:8080` in package.json.
+Use `yarn test` to start headless server and tests. You can also just test single suites using 
+`yarn test /path/to/test/file`. Currently the port is set to `localhost:8080` in package.json.
 
 ### Contact
 For further question: 

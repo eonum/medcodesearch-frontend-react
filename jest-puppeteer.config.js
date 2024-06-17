@@ -14,7 +14,7 @@ module.exports = {
         ],
     },
     server: {
-        command: "npm run startHeadlessOnTestPort",
+        command: "yarn run startHeadlessOnTestPort",
     },
     browserContext: 'default',
 };

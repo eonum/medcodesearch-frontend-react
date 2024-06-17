@@ -11,7 +11,6 @@ describe('Search test suite for mobile version', function () {
     browser = await puppeteer.launch();
     page = await browser.newPage();
     await page.setViewport({width: 450, height: 1200})
-    await page.waitForSelector('body'); // Wait for the body element to ensure the page has loaded
   })
 
   afterAll(() => browser.close());
@@ -105,6 +104,7 @@ describe('Search test suite for mobile version', function () {
     expect(expandedButtonText).toMatch("Suchresultate ausblenden");
     // Click the first search result
     await page.click(".searchResult:nth-child(1)");
+    await page.waitForTimeout(n);
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A15?query=A15');
   });
 
