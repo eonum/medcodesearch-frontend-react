@@ -95,5 +95,7 @@
   "LBL_VA": "Mode of administration",
   "LBL_AMOUNT": "Amount in CHF",
   "LBL_SHOW_SEARCH_RESULTS": "Show search results",
-  "LBL_HIDE_SEARCH_RESULTS": "Collapse search results"
+  "LBL_HIDE_SEARCH_RESULTS": "Collapse search results",
+  "LBL_LOAD_MORE_RESULTS": "Show more search results",
+  "LBL_RESET_RESULTS": "Reset search results"
 }

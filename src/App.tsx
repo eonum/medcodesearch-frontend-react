@@ -417,6 +417,7 @@ class App extends Component<Props, IApp>{
 
     renderAfterFetch() {
         const isDesktop = this.state.isDesktop;
+        const {t} = this.props.translation;
         return(
             <div key={"app_content"}>
                 {isDesktop ?
@@ -498,14 +499,14 @@ class App extends Component<Props, IApp>{
                                                 id={"load-more-button"}
                                                 onClick={this.toggleLoadMoreResults}
                                             >
-                                                Load More
+                                                {t("LBL_LOAD_MORE_RESULTS")}
                                             </button>
                                             <button
                                                 className={"btn"}
                                                 id={"reset-button"}
                                                 onClick={() => this.setState({ maxResults: 10 })}
                                             >
-                                                Reset
+                                                {t("LBL_RESET_RESULTS")}
                                             </button>
                                         </div>
                                     ) : null}

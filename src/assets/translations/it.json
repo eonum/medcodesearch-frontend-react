@@ -126,5 +126,7 @@
   "LBL_VA": "Metodo di somministrazione",
   "LBL_AMOUNT": "Importo in CHF",
   "LBL_SHOW_SEARCH_RESULTS": "Mostra i risultati della ricerca",
-  "LBL_HIDE_SEARCH_RESULTS": "Nascondi i risultati della ricerca"
+  "LBL_HIDE_SEARCH_RESULTS": "Nascondi i risultati della ricerca",
+  "LBL_LOAD_MORE_RESULTS": "Mostra più risultati di ricerca",
+  "LBL_RESET_RESULTS": "Reimposta i risultati della ricerca"
 }

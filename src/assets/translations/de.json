@@ -130,6 +130,8 @@
   "LBL_VA": "Verabreichungsart",
   "LBL_AMOUNT": "Betrag in CHF",
   "LBL_SHOW_SEARCH_RESULTS": "Suchresultate einblenden",
-  "LBL_HIDE_SEARCH_RESULTS": "Suchresultate ausblenden"
+  "LBL_HIDE_SEARCH_RESULTS": "Suchresultate ausblenden",
+  "LBL_LOAD_MORE_RESULTS": "Weitere Suchresultate anzeigen",
+  "LBL_RESET_RESULTS": "Suchresultate zurücksetzen"
 }
 
