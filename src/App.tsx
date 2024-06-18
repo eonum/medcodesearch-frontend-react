@@ -47,6 +47,7 @@ interface IApp {
     clickedOnLogo: boolean,
     reSetPath: boolean,
     collapseMenu: boolean,
+    hasCollapsedBefore: boolean,
     initialVersions: IVersions,
     currentVersions: IVersions,
     isFetching: boolean,
@@ -69,7 +70,8 @@ class App extends Component<Props, IApp>{
             searchResults: [],
             clickedOnLogo: false,
             reSetPath: false,
-            collapseMenu: false,
+            collapseMenu: window.innerWidth <= 991,
+            hasCollapsedBefore: false,
             initialVersions: {
                 'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
             },
@@ -379,10 +381,25 @@ class App extends Component<Props, IApp>{
      * is left unchanged.
      */
     handleResize = () => {
-        this.setState({
-            isDesktop: window.innerWidth >= 1200,
-            collapseMenu: window.innerWidth <= 991 ? true : false,
-        });
+        if (window.innerWidth >= 1200) {
+            this.setState({
+                isDesktop: true,
+                collapseMenu: false,
+                hasCollapsedBefore: false}
+            )
+        } else if (window.innerWidth > 991 && window.innerWidth < 1200) {
+            this.setState({
+                isDesktop: false,
+                collapseMenu: false,
+                hasCollapsedBefore: false }
+            )
+        } else {
+            this.setState((prevState) => ({
+                isDesktop: false,
+                collapseMenu: prevState.hasCollapsedBefore ? prevState.collapseMenu : true,
+                hasCollapsedBefore: prevState.hasCollapsedBefore ? prevState.hasCollapsedBefore : true
+            }));
+        }
     };
 
     /**

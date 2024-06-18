@@ -104,7 +104,9 @@ describe('Search test suite for mobile version', function () {
     expect(expandedButtonText).toMatch("Suchresultate ausblenden");
     // Click the first search result
     await page.click(".searchResult:nth-child(1)");
-    await page.waitForTimeout(n);
+    await page.waitForTimeout(2*n);
+    const afterSearchResultClickButtonText = await page.$eval('#collapse-button', (button) => button.textContent);
+    expect(afterSearchResultClickButtonText).toMatch("Suchresultate einblenden");
     await expect(page.url()).toBe(baseUrl + '/de/ICD/ICD10-GM-2022/icds/A15?query=A15');
   });
 
