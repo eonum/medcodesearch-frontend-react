@@ -61,7 +61,7 @@ export const versionsWithoutMappingInfos = [
 
 export const fetchURL = 'https://search.eonum.ch'
 
-// Get frontend url for navigation from backend code url.
+// Get e2e url for navigation from backend code url.
 export function getNavParams(code, language, catalog, resource_type?) {
     let backendUrlComponents = code.url.split("/").filter(e => e);
     let backendResourceType = backendUrlComponents[1];

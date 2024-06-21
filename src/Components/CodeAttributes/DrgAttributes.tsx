@@ -43,14 +43,14 @@ class DrgAttributes extends Component<Props> {
                     <div className="col-lg-12">
                         {versionToNumber >= 10 &&
                             <a href={onlineManualLink} target='online_manual'
-                               className="btn btn-outline-secondary me-1 " id={"externalLinkButton"}>
+                               className="btn btn-outline-secondary me-1 external-link-button" id={"drgOnlineManualLink"}>
                                 {t('LBL_LINK_TO_SWISSDRG_MANUAL')}
                             </a>
                         }
                     </div>
                     <div className="col-lg-12">
-                        <a href={drgDynamicsLink} target='drgdynamics' className="btn btn-outline-secondary"
-                           id={"externalLinkButton"}>
+                        <a href={drgDynamicsLink} target='drgdynamics' className="btn btn-outline-secondary external-link-button"
+                           id={"drgDynamicLink"}>
                             {t('LBL_LINK_TO_DRGDYNAMICS')}
                         </a>
                     </div>

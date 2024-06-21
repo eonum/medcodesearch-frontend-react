@@ -431,7 +431,10 @@ class App extends Component<Props, IApp>{
      */
     reNavigateToHome(){
         // Clear current searchbar input.
-        document.getElementById('searchbarInput').value = ""
+        const searchbarInput = document.getElementById('searchbarInput') as HTMLInputElement;
+        if (searchbarInput) {
+            searchbarInput.value = "";
+        }
         this.setState({clickedOnLogo: true});
         let latestICD = this.state.initialVersions['ICD'].at(-1);
         this.changeSelectedButton('ICD')

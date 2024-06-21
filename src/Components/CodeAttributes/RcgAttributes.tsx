@@ -39,7 +39,7 @@ class RcgAttributes extends Component<Props> {
                 <div className="row vertical-spacer">
                     <div className="col-lg-12">
                         <a href={onlineManualLink} target='online_manual' className="btn btn-outline-secondary me-1"
-                           id={"externalLinkButton"}>
+                           id={"rcgOnlineManualLink"}>
                             {t('LBL_LINK_TO_SWISSDRG_MANUAL')}
                         </a>
                     </div>
