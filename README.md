@@ -27,22 +27,29 @@ All test-suites reside in their own subdirectory in `/src/__test_`. \
 Every method has its own documentation written in Javadoc. 
 
 ### Testing
-We use jest and puppeteer for our tests. Since we use typescript, we also need babel for transformation.
-#### Prerequisites
-If not already installed from  `yarn install` execute <br />
-`yarn install --save-dev jest puppeteer jest-puppeteer` <br />
-`yarn install --save-dev @testing-library/react`<br />
-`yarn install --save-dev start-server-and-test`<br />
-`yarn install --save-dev @babel/preset-typescript`<br />
+We use cypress for our tests. Since we use typescript, we also need babel for transformation.
 #### Config
-All the configuration for jest, puppeteer and babel are specified in the  files jest.config.js, jest-puppeteer.config.js 
-and babel.config.js in the root folder and can be adapted to your needs. Since we do UI tests, we need a running server.
-This is implemented via jest-puppeteer config file server block `server: { command: "yarn run startHeadlessTestPort"}` and 
-corresponding scripts in package.json
-`"test": "jest --runInBand"` and `"startHeadlessOnTestPort": "BROWSER=none PORT=$yarn_package_config_testPort yarn start"`.
+The configuration for babel and cypress are stored in babel.config.js and cypress.config.ts in the root folder and can 
+be adapted to your needs. We do frontend tests that can be run headless in terminal or, useful for debugging, run in 
+cypress GUI. To do so, we specified some custom commands in package.json under scripts section, namely
+
+```json
+{
+  "test": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run'", 
+  "test:search": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/searchMobile.cy.ts,cypress/e2e/search.cy.ts'", 
+  "test:breadcrumbs": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/breadcrumbsMobile.cy.ts,cypress/e2e/breadcrumbs.cy.ts'", 
+  "test:codeAttributes": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/codeAttributesMobile.cy.ts,cypress/e2e/codeAttributes.cy.ts,cypress/e2e/customCodeAttributes.cy.ts'", 
+  "test:default": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/defaultMobile.cy.ts,cypress/e2e/default.cy.ts'", 
+  "test:popUp": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/popUpMobile.cy.ts,cypress/e2e/popUp.cy.ts'", 
+  "test-with-gui": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress open'", 
+  "start-test-server": "BROWSER=none PORT=$npm_package_config_testPort react-scripts start"
+}
+```
+
 #### Run tests
-Use `yarn test` to start headless server and tests. You can also just test single suites using 
-`yarn test /path/to/test/file`. Currently the port is set to `localhost:8080` in package.json.
+Use `yarn test` to start headless server and tests or, for example `test:breadcrumbs` to run breadcrumbs tests only.
+Currently the port for test server is set to `localhost:8080` in package.json. To start graphical tests use 
+`yarn test-with-gui`.
 
 ### Contact
 For further question: 

@@ -128,3 +128,6 @@ yarn-error.log*
 
 # rubymine
 .idea/
+
+# screenshots from tests
+cypress/screenshots/*
