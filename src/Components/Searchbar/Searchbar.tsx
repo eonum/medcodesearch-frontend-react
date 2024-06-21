@@ -27,10 +27,11 @@ interface Props {
     selectedButton: string,
     version: string,
     selectedDate: string,
-    updateSearchResults: { (searchResult: string | object): void },
+    updateSearchResults: { (searchResult: object): void },
     navigation: INavigationHook
     translation: any
     maxResults: number
+    updateDisplayNoSearchResultsMessage: { (displayMessage: boolean): void }
 }
 
 interface ISearchbar  {
@@ -140,13 +141,11 @@ class Searchbar extends Component<Props,ISearchbar> {
                 }
             })
             .then((json) => {
-                this.props.updateSearchResults("reset") //reset parent array
                 if(json.length === 0 && searchTerm !== "") {
-                    this.props.updateSearchResults("empty")
-                }
-                for(let i = 0; i < json.length; i++) {
-                    let obj = json[i];
-                    this.props.updateSearchResults(obj);
+                    this.props.updateDisplayNoSearchResultsMessage(true)
+                } else {
+                    this.props.updateSearchResults(json)
+                    this.props.updateDisplayNoSearchResultsMessage(false)
                 }
             })
     }
