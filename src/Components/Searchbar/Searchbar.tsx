@@ -32,6 +32,7 @@ interface Props {
     translation: any
     maxResults: number
     updateDisplayNoSearchResultsMessage: { (displayMessage: boolean): void }
+    updateMaximumResultsReached: { (maxResultsReached: boolean): void }
 }
 
 interface ISearchbar  {
@@ -146,6 +147,7 @@ class Searchbar extends Component<Props,ISearchbar> {
                 } else {
                     this.props.updateSearchResults(json)
                     this.props.updateDisplayNoSearchResultsMessage(false)
+                    this.props.updateMaximumResultsReached(json.length < maxResults || json.length == 100 ? true : false)
                 }
             })
     }

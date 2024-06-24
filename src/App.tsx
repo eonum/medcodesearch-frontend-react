@@ -53,6 +53,7 @@ interface IApp {
     isFetching: boolean,
     maxResults: number,
     displayNoSearchResultsMessage: boolean
+    maxResultsReached: boolean
 }
 
 class App extends Component<Props, IApp>{
@@ -80,7 +81,8 @@ class App extends Component<Props, IApp>{
             },
             isFetching: true,
             maxResults: 10,
-            displayNoSearchResultsMessage: false
+            displayNoSearchResultsMessage: false,
+            maxResultsReached: false
         };
         this.changeSelectedButton = this.changeSelectedButton.bind(this);
         this.changeSelectedDate = this.changeSelectedDate.bind(this);
@@ -152,6 +154,10 @@ class App extends Component<Props, IApp>{
 
     updateDisplayNoSearchResultsMessage = (displayMessage) => {
         this.setState({displayNoSearchResultsMessage: displayMessage})
+    }
+
+    updateMaximumResultsReached = (maxResultsReached) => {
+        this.setState({maxResultsReached: maxResultsReached})
     }
 
     /**
@@ -326,8 +332,10 @@ class App extends Component<Props, IApp>{
      * Render search results from the backend.
      * @returns {JSX.Element}
      */
-    searchResults = (showMoreResultsButton) => {
+    searchResults = (showButtons) => {
         const {t} = this.props.translation;
+        console.log(this.state.maxResultsReached)
+        console.log(this.state.searchResults.length)
         const searchResults =
             this.state.displayNoSearchResultsMessage ?
                 <div className="searchResult">{t("LBL_NO_RESULTS")}</div> :
@@ -358,26 +366,34 @@ class App extends Component<Props, IApp>{
                         </div>
                     </Collapse>
                 </div>
-                {showMoreResultsButton &&
+                {showButtons &&
                     <div className="d-flex justify-content-between">
-                        <button
-                            className={"btn"}
-                            id={"load-more-button"}
-                            onClick={this.toggleLoadMoreResults}
-                        >
-                            {t("LBL_LOAD_MORE_RESULTS")}
-                        </button>
-                        <button
-                            className={"btn"}
-                            id={"reset-button"}
-                            onClick={() => this.setState({maxResults: 10})}
-                        >
-                            {t("LBL_RESET_RESULTS")}
-                        </button>
+                        <div className="d-flex">
+                            {!this.state.maxResultsReached &&
+                                <button
+                                    className={"btn ml-0"}
+                                    id={"load-more-button"}
+                                    onClick={this.toggleLoadMoreResults}
+                                >
+                                    {t("LBL_LOAD_MORE_RESULTS")}
+                                </button>
+                            }
+                        </div>
+                        <div className="d-flex">
+                            {this.state.maxResults > 10 &&
+                                <button
+                                    className={"btn mr-0"}
+                                    id={"reset-button"}
+                                    onClick={() => this.setState({maxResults: 10})}
+                                >
+                                    {t("LBL_RESET_RESULTS")}
+                                </button>
+                            }
+                        </div>
                     </div>
                 }
             </div> : null
-    )
+        )
     }
 
     /**
@@ -452,7 +468,7 @@ class App extends Component<Props, IApp>{
 
     renderAfterFetch() {
         const isDesktop = window.innerWidth >= 1200;
-        const showMoreResultsButton = (isDesktop || !this.state.collapseMenu) && this.state.searchResults.length != 0;
+        const showSearchResultButtons = (isDesktop || !this.state.collapseMenu) && this.state.searchResults.length != 0;
         return(
             <div key={"app_content"}>
                 {isDesktop ?
@@ -483,6 +499,7 @@ class App extends Component<Props, IApp>{
                                 updateSearchResults={this.updateSearchResults}
                                 maxResults={this.state.maxResults}
                                 updateDisplayNoSearchResultsMessage={this.updateDisplayNoSearchResultsMessage}
+                                updateMaximumResultsReached={this.updateMaximumResultsReached}
                             />
                         </div>
                     </div> :
@@ -497,6 +514,7 @@ class App extends Component<Props, IApp>{
                                     updateSearchResults={this.updateSearchResults}
                                     maxResults={this.state.maxResults}
                                     updateDisplayNoSearchResultsMessage={this.updateDisplayNoSearchResultsMessage}
+                                    updateMaximumResultsReached={this.updateMaximumResultsReached}
                                 />
                             </div>
                         </div>
@@ -526,7 +544,7 @@ class App extends Component<Props, IApp>{
                 <div key={"app_body"} className="row">
                     <div className="Wrapper">
                         <div className="row">
-                            {this.searchResults(showMoreResultsButton)}
+                            {this.searchResults(showSearchResultButtons)}
                             <div key={"code_body"} className="col">
                                 <div id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
                                     <div className="col" id="codeBody">
