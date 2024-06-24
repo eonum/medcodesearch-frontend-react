@@ -51,6 +51,10 @@ Use `yarn test` to start headless server and tests or, for example `test:breadcr
 Currently the port for test server is set to `localhost:8080` in package.json. To start graphical tests use 
 `yarn test-with-gui`.
 
+With cypress, there is no need to use hard coded timeouts to wait for. If using `.should`, cypress automatically retries
+the assertion for up to default timeout, before considering it a failure. The deault timeout is 4 seconds, but could be 
+changed in cypress.config.ts.
+
 ### Contact
 For further question: 
 - +41 (0)31 311 17 06 -> eonum contact
