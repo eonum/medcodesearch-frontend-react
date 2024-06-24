@@ -134,7 +134,8 @@ class Searchbar extends Component<Props,ISearchbar> {
         let searchURL = [fetchURL, this.props.language,
             resourceTypeByBtn[this.props.selectedButton],
             this.convertButtonToBackendVersion(this.props.selectedButton),
-        'search?' + date + 'highlight=1&max_results=' + maxResults +  '&search='+ searchTerm].join("/")
+        'search?' + date + 'highlight=1&skip_sort_by_code=1&max_results=' + maxResults +  '&search='+ searchTerm]
+            .join("/")
         await fetch(searchURL)
             .then((res) => {
                 if(res.ok) {
