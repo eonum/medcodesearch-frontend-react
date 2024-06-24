@@ -50,7 +50,7 @@ class DrgAttributes extends Component<Props> {
                     </div>
                     <div className="col-lg-12">
                         <a href={drgDynamicsLink} target='drgdynamics' className="btn btn-outline-secondary external-link-button"
-                           id={"drgDynamicLink"}>
+                           id={"drgDynamicsLink"}>
                             {t('LBL_LINK_TO_DRGDYNAMICS')}
                         </a>
                     </div>

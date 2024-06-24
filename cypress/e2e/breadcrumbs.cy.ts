@@ -1,6 +1,5 @@
 describe('Breadcrumb test suite for mobile version', function () {
     const baseUrl = Cypress.config("baseUrl");
-    const n = 1000;
 
     beforeEach(() => {
         cy.viewport(400, 800);

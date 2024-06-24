@@ -14,16 +14,18 @@ describe('Code attributes test suite for desktop version and components with cus
         cy.get('#drgOnlineManualLink')
             // Check href attribute value
             .should('have.attr', 'href', 'https://manual.swissdrg.org/de/13.3/drgs/I06A')
-        cy.get('#drgDynamicLink')
+        cy.get('#drgDynamicsLink')
             // Check href attribute value
             .should('have.attr', 'href', 'https://drgdynamics.eonum.ch/drgs/name?code=I06A&version=V13.0&locale=de')
 
         cy.get("#attributesTable tr th").then(($ths) => {
+            // @ts-ignore
             const ths = [...$ths].map((th) => th.innerText);
             expect(ths[0]).to.equal("Eintrag aus dem Fallpauschalenkatalog");
         });
 
         cy.get("#attributesTable tr td").then(($tds) => {
+            // @ts-ignore
             const tds = [...$tds].map((td) => td.innerText);
             expect(tds[0]).to.equal("Partition");
             expect(tds[1]).to.equal("O");
@@ -53,6 +55,7 @@ describe('Code attributes test suite for desktop version and components with cus
         cy.get(".breadcrumb-item.active").should('have.text', "ZE-2024-04.10");
 
         cy.get(".breadcrumb-item.breadLink").then(($elements) => {
+            // @ts-ignore
             const elements = [...$elements].map((el) => el.textContent);
             expect(elements[0]).to.equal("Zusatzentgelte 13.0");
             expect(elements[1]).to.equal("ZE-2024-04");
@@ -61,6 +64,7 @@ describe('Code attributes test suite for desktop version and components with cus
         cy.get("h3").should('have.text', "ZE-2024-04.10");
 
         cy.get("#siblings a").then(($links) => {
+            // @ts-ignore
             const links = [...$links].map((el) => el.innerText);
             expect(links.sort()).to.deep.equal([
                 "ZE-2024-04.01 (37.52): ",
@@ -95,11 +99,13 @@ describe('Code attributes test suite for desktop version and components with cus
             .should('have.attr', 'href', 'https://manual.swissdrg.org/de/r2.3/rcgs/TR19A')
 
         cy.get("#attributesTable tr th").then(($ths) => {
+            // @ts-ignore
             const ths = [...$ths].map((th) => th.innerText);
             expect(ths[0]).to.equal("Eintrag aus dem RCG Katalog");
         });
 
         cy.get("#attributesTable tr td").then(($tds) => {
+            // @ts-ignore
             const tds = [...$tds].map((td) => td.innerText);
             expect(tds[0]).to.equal("Anzahl Phasen");
             expect(tds[1]).to.equal("1");
@@ -108,6 +114,7 @@ describe('Code attributes test suite for desktop version and components with cus
         });
 
         cy.get("#siblings a").then(($links) => {
+            // @ts-ignore
             const links = [...$links].map((el) => el.innerText);
             expect(links.sort()).to.deep.equal(["TR19B: "]);
         });

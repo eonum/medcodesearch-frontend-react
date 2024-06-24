@@ -1,6 +1,5 @@
 describe('PopUp test suite for mobile version', function () {
     const baseUrl = Cypress.config("baseUrl");
-    const n = 1000;
 
     beforeEach(() => {
         cy.viewport(400, 800);
@@ -11,10 +10,10 @@ describe('PopUp test suite for mobile version', function () {
         cy.visit(`${baseUrl}/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022`);
         // Change language to 'it'.
         cy.get(".language-btn:nth-child(3)").click();
-        cy.wait(2 * n);
         cy.url().should('eq', `${baseUrl}/it/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022`);
         // Click on versions button for icds.
         cy.get("#version_button").should('be.visible').click();
+        cy.wait(2000)
         // Select ICD 2019 (which is not available in 'it').
         cy.get("#ICD10-GM-2019").should('be.visible').click();
         // PopUp for language selection or go back should appear.
@@ -30,7 +29,6 @@ describe('PopUp test suite for mobile version', function () {
         cy.get("#ICD10-GM-2019").should('be.visible').click();
         // 'de' should be first button.
         cy.get(".modal-footer > div > .PopUpBtn:nth-child(1)").should('be.visible').click();
-        cy.wait(3 * n);
         cy.url().should('eq', `${baseUrl}/de/ICD/ICD10-GM-2019/icd_chapters/ICD10-GM-2019`);
     });
 
