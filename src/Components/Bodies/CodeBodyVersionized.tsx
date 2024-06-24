@@ -163,13 +163,18 @@ class CodeBodyVersionized extends Component<Props, ICode> {
             <div>
                 <Breadcrumb>
                     {this.state.parents.reverse().map((currElement, i) => {
-                        return(
-                            <Breadcrumb.Item key={i} onClick={() => {
-                                let {pathname, searchString} = getNavParams(currElement, language, catalog)
-                                navigate({pathname: pathname, search: searchString})
-                            }} className="breadLink">
+                        return (
+                            <Breadcrumb.Item
+                                key={i}
+                                onClick={() => {
+                                    let {pathname, searchString} = getNavParams(currElement, language, catalog)
+                                    navigate({pathname: pathname, search: searchString})
+                                }}
+                                className="breadLink"
+                            >
                                 {this.displayCode(currElement.code, version, catalog)}
-                            </Breadcrumb.Item>);
+                            </Breadcrumb.Item>
+                        );
                     })}
                     <Breadcrumb.Item active>
                         {this.displayCode(code, version, catalog)}
