@@ -334,8 +334,6 @@ class App extends Component<Props, IApp>{
      */
     searchResults = (showButtons) => {
         const {t} = this.props.translation;
-        console.log(this.state.maxResultsReached)
-        console.log(this.state.searchResults.length)
         const searchResults =
             this.state.displayNoSearchResultsMessage ?
                 <div className="searchResult">{t("LBL_NO_RESULTS")}</div> :

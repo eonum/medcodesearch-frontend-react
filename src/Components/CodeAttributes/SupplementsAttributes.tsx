@@ -100,8 +100,6 @@ class SupplementsAttributes extends Component<Props> {
         const attributes = this.props.attributes;
         const {t} = this.props.translation;
         const {terminal} = attributes
-        console.log(attributes.excluded_drgs)
-        console.log(attributes)
         return (
             // If not terminal, there is only text info which is rendered in parent component.
             terminal &&
