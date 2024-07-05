@@ -20,7 +20,7 @@ interface Props {
 }
 
 /**
- * Responsible for the attributes of a code, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED).
+ * Responsible for the attributes of a code, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED, TARDOC).
  */
 class CodeAttributesVersionized extends Component<Props>{
     /**

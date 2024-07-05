@@ -1,12 +1,22 @@
 import {fetchURL} from "../Utils";
 
 export const languages = ['de', 'fr', 'it', 'en']
-export const versionizedCatalogs = ['ICD', 'SwissDRG', 'CHOP', 'TARMED', 'AmbGroup', 'Reha', 'Supplements']
+export const versionizedCatalogs = [
+    'ICD',
+    'SwissDRG',
+    'CHOP',
+    'TARMED',
+    'TARDOC',
+    'AmbGroup',
+    'Reha',
+    'Supplements'
+]
 export const currentCatalogsByButton = {
     'ICD': 'currentICD',
     'SwissDRG': 'currentSwissDRG',
     'CHOP': 'currentCHOP',
     'TARMED': 'currentTARMED',
+    'TARDOC': 'currentTARDOC',
     'AmbGroup': 'currentAmbGroup',
     'Reha': 'currentReha',
     'Supplements': 'currentSupplements'
@@ -30,6 +40,7 @@ export function cutCatalogFromVersion(catalog, version) {
         case "AmbGroup":
             return version
         case "TARMED":
+        case "TARDOC":
             return version.substring(7)
         default:
             return
@@ -53,6 +64,8 @@ export function convertCatalogToResourceType(catalog) {
             return "supplements"
         case "TARMED":
             return "tarmeds"
+        case "TARDOC":
+            return "tardocs"
         case "AmbGroup":
             return "amb_groups"
         case "Reha":

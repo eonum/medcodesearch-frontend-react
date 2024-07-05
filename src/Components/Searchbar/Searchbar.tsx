@@ -14,6 +14,7 @@ const resourceTypeByBtn = {
     "ICD": 'icds',
     "CHOP": 'chops',
     "TARMED": 'tarmeds',
+    "TARDOC": 'tardocs',
     "MIGEL": 'migels',
     "AL": 'laboratory_analyses',
     "DRUG": 'drugs',

@@ -74,10 +74,10 @@ class App extends Component<Props, IApp>{
             collapseMenu: window.innerWidth <= 991,
             hasCollapsedBefore: false,
             initialVersions: {
-                'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
+                'ICD': [], 'CHOP:': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
             },
             currentVersions: {
-                'ICD': [], 'CHOP:': [], 'TARMED': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [],  'Supplements': []
+                'ICD': [], 'CHOP:': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [],  'Supplements': []
             },
             isFetching: true,
             maxResults: 10,
@@ -319,6 +319,7 @@ class App extends Component<Props, IApp>{
             'CHOP': 'CHOP',
             'SwissDRG': 'SwissDRG',
             'TARMED': 'TARMED',
+            'TARDOC': 'TARDOC',
             'AmbGroup': t("LBL_AMB_GROUP"),
             'MIGEL': t("LBL_MIGEL_LABEL"),
             'AL': t("LBL_AL"),
@@ -485,8 +486,8 @@ class App extends Component<Props, IApp>{
                             changeSelectedVersion={this.changeSelectedVersion}
                             changeSelectedDate={this.changeSelectedDate}
                             labels={this.labelHash()}
-                            buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'AmbGroup', 'MIGEL',
-                                'AL', 'DRUG']}
+                            buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
+                                'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
                         />
                         <div className={"searchbarItem"} onClick={this.showSearchResults}>
                             <Searchbar
@@ -532,8 +533,8 @@ class App extends Component<Props, IApp>{
                                     changeSelectedVersion={this.changeSelectedVersion}
                                     changeSelectedDate={this.changeSelectedDate}
                                     labels={this.labelHash()}
-                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'AmbGroup',
-                                        'MIGEL', 'AL', 'DRUG']}
+                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
+                                        'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
                                 />
                             </div>
                         </div>

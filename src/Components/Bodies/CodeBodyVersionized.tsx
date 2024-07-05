@@ -13,7 +13,7 @@ interface Props {
 }
 
 /**
- * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED, REHA, ZE).
+ * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED, TARDOC, REHA, ZE).
  */
 class CodeBodyVersionized extends Component<Props, ICode> {
     constructor(props) {
