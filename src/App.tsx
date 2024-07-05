@@ -373,6 +373,7 @@ class App extends Component<Props, IApp>{
                                     className={"btn ml-0"}
                                     id={"load-more-button"}
                                     onClick={this.toggleLoadMoreResults}
+                                    style={{marginRight: '10px'}} // Add a right margin
                                 >
                                     {t("LBL_LOAD_MORE_RESULTS")}
                                 </button>
@@ -384,6 +385,7 @@ class App extends Component<Props, IApp>{
                                     className={"btn mr-0"}
                                     id={"reset-button"}
                                     onClick={() => this.setState({maxResults: 10})}
+                                    style={{marginLeft: '10px'}} // Add a left margin
                                 >
                                     {t("LBL_RESET_RESULTS")}
                                 </button>
@@ -421,8 +423,9 @@ class App extends Component<Props, IApp>{
             )
         } else if (window.innerWidth > 991 && window.innerWidth < 1200) {
             this.setState({
-                collapseMenu: false,
-                hasCollapsedBefore: false }
+                    collapseMenu: false,
+                    hasCollapsedBefore: false
+                }
             )
         } else {
             this.setState((prevState) => ({
