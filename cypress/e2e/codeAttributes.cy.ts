@@ -65,7 +65,7 @@ describe('Code attributes test suite for mobile version', function () {
     it('SL code information', function () {
         cy.visit(baseUrl + '/de/DRUG/drugs/7680517950673?');
         cy.get("#SL_status").should('contain.text', "Status: SL");
-        cy.get("#SL_public_price").should('contain.text', "Publikumspreis (CHF): 16.15");
+        cy.get("#SL_public_price").should('contain.text', "Publikumspreis (CHF): 16.75");
         cy.get("#SL_date_added_in_sl").should('contain.text', "Zur SL hinzugefügt: 15.03.1997");
         cy.get("#SL_has_limitation").should('contain.text', "Limitation: Nein");
         cy.get("#SL_is_generica").should('contain.text', "Generika: Nein");
