@@ -53,12 +53,12 @@ export const versionsWithoutMappingInfos = [
     "ICD10-GM-2008",
     "ICD10-GM-2010",
     "ICD10-GM-2011",
-    "CHOP 2011",
-    "CHOP 2012",
-    "CHOP 2013",
-    "CHOP 2014",
-    "CHOP 2015",
-    "CHOP 2025"]
+    "CHOP_2011",
+    "CHOP_2012",
+    "CHOP_2013",
+    "CHOP_2014",
+    "CHOP_2015",
+    "CHOP_2025"]
 
 export const fetchURL = 'https://search.eonum.ch'
 
