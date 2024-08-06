@@ -14,9 +14,9 @@ describe('Default test suite, testing general navigation via clicks', function (
         cy.get('#catalog_button').click();
         cy.get('#CHOP_button').click();
         cy.contains('CHOP');
-        cy.contains('C14: Operationen an den Bewegungsorganen (76–84)');
+        cy.contains('C14: Operationen am Bewegungsapparat (76–84)');
         cy.contains('Untergeordnete Codes');
-        cy.url().should('eq', baseUrl + "/de/CHOP/CHOP_2024/chop_chapters/CHOP_2024");
+        cy.url().should('eq', baseUrl + "/de/CHOP/CHOP_2025/chop_chapters/CHOP_2025");
         cy.get('#catalog_button').click();
         cy.get('#SwissDRG_button').click();
         cy.contains('SwissDRG');
