@@ -57,7 +57,8 @@ export const versionsWithoutMappingInfos = [
     "CHOP 2012",
     "CHOP 2013",
     "CHOP 2014",
-    "CHOP 2015"]
+    "CHOP 2015",
+    "CHOP 2025"]
 
 export const fetchURL = 'https://search.eonum.ch'
 
