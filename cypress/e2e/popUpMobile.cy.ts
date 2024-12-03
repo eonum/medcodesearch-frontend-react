@@ -7,10 +7,10 @@ describe('PopUp test suite for mobile version', function () {
 
     // Testing the same functionality for mobile screen (with different language and version).
     it('PopUp mobile', function () {
-        cy.visit(`${baseUrl}/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022`);
+        cy.visit(`${baseUrl}/de/ICD/ICD10-GM-2024/icd_chapters/ICD10-GM-2024`);
         // Change language to 'it'.
         cy.get(".language-btn:nth-child(3)").click();
-        cy.url().should('eq', `${baseUrl}/it/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022`);
+        cy.url().should('eq', `${baseUrl}/it/ICD/ICD10-GM-2024/icd_chapters/ICD10-GM-2024`);
         // Click on versions button for icds.
         cy.get("#version_button").should('be.visible').click();
         cy.wait(2000)
@@ -23,7 +23,7 @@ describe('PopUp test suite for mobile version', function () {
         });
         // Click retour button, i.e. stay on page with same URL.
         cy.get(".modal-footer > .PopUpBtn").should('be.visible').click();
-        cy.url().should('eq', `${baseUrl}/it/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022`);
+        cy.url().should('eq', `${baseUrl}/it/ICD/ICD10-GM-2024/icd_chapters/ICD10-GM-2024`);
         // Again click ICD 2021 but now choose 'de' and check if correct forwarded.
         cy.get("#version_button").should('be.visible').click();
         cy.get("#ICD10-GM-2019").should('be.visible').click();

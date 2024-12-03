@@ -8,7 +8,7 @@ describe('Search test suite', function () {
   it('search de icd code (A15.3)', () => {
     cy.visit(baseUrl);
     cy.get('.me-2.form-control').type('A15.3');
-    cy.url().should('include', '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15.3');
+    cy.url().should('include', '/de/ICD/ICD10-GM-2024/icd_chapters/ICD10-GM-2024?query=A15.3');
     cy.get('.searchResult:nth-child(1)').should('contain.text', 'A15.3');
   });
 
@@ -50,9 +50,9 @@ describe('Search test suite', function () {
   it('search result is clickable', () => {
     cy.visit(baseUrl);
     cy.get('.me-2.form-control').type('A15');
-    cy.url().should('include', '/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15');
+    cy.url().should('include', '/de/ICD/ICD10-GM-2024/icd_chapters/ICD10-GM-2024?query=A15');
     cy.get('.searchResult:nth-child(1)').click();
-    cy.url().should('include', '/de/ICD/ICD10-GM-2022/icds/A15?query=A15');
+    cy.url().should('include', '/de/ICD/ICD10-GM-2024/icds/A15?query=A15');
   });
 
   it('load more and reset search results', () => {
