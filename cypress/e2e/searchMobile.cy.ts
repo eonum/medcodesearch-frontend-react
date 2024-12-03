@@ -9,7 +9,7 @@ describe('Search test suite for mobile version', function () {
         cy.visit(baseUrl);
         cy.get(".me-2.form-control").type("A15.3");
         cy.get('#searchResults').should('be.visible');
-        cy.url().should('eq', `${baseUrl}/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15.3`);
+        cy.url().should('eq', `${baseUrl}/de/ICD/ICD10-GM-2024/icd_chapters/ICD10-GM-2024?query=A15.3`);
         cy.get(".searchResult:nth-child(1)").should('contain.text', "A15.3");
     });
 
@@ -59,18 +59,18 @@ describe('Search test suite for mobile version', function () {
         cy.visit(baseUrl);
         cy.get(".me-2.form-control").type("A15");
         cy.get('#searchResults').should('be.visible');
-        cy.url().should('eq', `${baseUrl}/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=A15`);
+        cy.url().should('eq', `${baseUrl}/de/ICD/ICD10-GM-2024/icd_chapters/ICD10-GM-2024?query=A15`);
         // Check the collapse button text (should be expanded and thus show "Suchresultate einblenden").
         cy.get("#collapse-button").should('be.visible').and('have.text', "Suchresultate ausblenden")
         // Click the first search result
         cy.get(".searchResult:nth-child(1)").click();
         cy.get('#searchResults').should('be.visible');
         cy.get("#collapse-button").should('have.text', "Suchresultate einblenden");
-        cy.url().should('eq', `${baseUrl}/de/ICD/ICD10-GM-2022/icds/A15?query=A15`);
+        cy.url().should('eq', `${baseUrl}/de/ICD/ICD10-GM-2024/icds/A15?query=A15`);
     });
 
     it('load more and reset search results', function() {
-        cy.visit(`${baseUrl}/de/ICD/ICD10-GM-2022/icd_chapters/ICD10-GM-2022?query=neubildung`);
+        cy.visit(`${baseUrl}/de/ICD/ICD10-GM-2024/icd_chapters/ICD10-GM-2024?query=neubildung`);
         cy.get("#collapse-button").then(($btn) => {
             if ($btn.text() === "Suchresultate einblenden") {
                 cy.wrap($btn).click();

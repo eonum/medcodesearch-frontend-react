@@ -127,7 +127,7 @@ describe('Code attributes test suite for desktop version and components with cus
         cy.get("#CONSTRAINT_ICDS > h5").should('have.text', "Vorausgesetzte ICD-Codes");
         // Uncomment and fix once the code linking is implemented
         // cy.get("#CONSTRAINT_ICDS ul>li:nth-child(3)> a").click();
-        // cy.url().should('eq', baseUrl + "/de/ICD/ICD10-GM-2022/icds/D65.2");
+        // cy.url().should('eq', baseUrl + "/de/ICD/ICD10-GM-2024/icds/D65.2");
     });
 
     it('test constraint chop linking for supplements', function () {
