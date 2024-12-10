@@ -34,6 +34,7 @@ export function cutCatalogFromVersion(catalog, version) {
         case "SwissDRG":
         case "Supplements":
         case "TARMED":
+            return version
         default:
             return
     }
