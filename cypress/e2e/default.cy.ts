@@ -23,7 +23,7 @@ describe('Default test suite, testing general navigation via clicks', function (
         cy.contains('MDC 22:');
         cy.contains('Verbrennungen');
         cy.contains('Untergeordnete Codes');
-        cy.url().should('eq', baseUrl + "/de/SwissDRG/V13.0/mdcs/V13.0");
+        cy.url().should('eq', baseUrl + "/de/SwissDRG/V14.0/mdcs/V14.0");
         cy.get('#catalog_button').click();
         cy.get("#TARMED_button").click();
         cy.contains('TARMED');
