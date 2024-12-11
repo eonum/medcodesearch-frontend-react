@@ -23,7 +23,7 @@ Variable-names are lowercase if only "oneword"-word, otherwise the first letter 
 Constants are always uppercase. \
 All components reside in their own subdirectory in `/src/Components`. \
 All services reside in their own subdirectory in `/src/Services`. \
-All test-suites reside in their own subdirectory in `/src/__test_`. \
+All test-suites reside in their own directory in `cypress/e2e`. \
 Every method has its own documentation written in Javadoc. 
 
 ### Testing
