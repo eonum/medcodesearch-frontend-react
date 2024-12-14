@@ -139,8 +139,6 @@ class CodeBodyVersionized extends Component<Props, ICode> {
                 breadcrumbRoot = t('LBL_SUPPLEMENTS') + ' ' + version.substring(1)
             } else if (catalog == "Reha") {
                 breadcrumbRoot = "ST Reha " + version.substring(5).replace("_", " ")
-            } else if (catalog == "AmbGroup"){
-                breadcrumbRoot = t('LBL_AMB_GROUP') + " " + version.substring(1)
             }
         } else {
             breadcrumbRoot = '';
