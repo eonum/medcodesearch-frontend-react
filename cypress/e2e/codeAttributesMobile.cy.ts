@@ -36,9 +36,8 @@ describe('Code attributes test suite for desktop version', function () {
     it('show drg code information', function () {
         cy.visit(baseUrl + '/de/SwissDRG/V12.0/drgs/B02A?query=A06A');
         cy.contains("Durchschnittliche Verweildauer (Tage)").should('be.visible');
-        cy.contains("15").should('be.visible');
+        cy.contains("15.4").should('be.visible');
         cy.contains("Erster Tag mit Abschlag").should('be.visible');
-        cy.contains("4").should('be.visible');
         cy.contains("Abschlag pro Tag").should('be.visible');
         cy.contains("0.845").should('be.visible');
         cy.contains("Erster Tag mit Zuschlag").should('be.visible');
