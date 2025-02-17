@@ -338,9 +338,12 @@ class App extends Component<Props, IApp>{
         const searchResults =
             this.state.displayNoSearchResultsMessage ?
                 <div className="searchResult">{t("LBL_NO_RESULTS")}</div> :
-                this.state.searchResults.map((searchResult) => {
-                    return <SearchResult result={searchResult} key={searchResult.code} showHide={this.showHide}/>
-                })
+                this.state.searchResults.map((searchResult) => (
+                    <SearchResult
+                        result={searchResult}
+                        language={this.state.language}
+                        showHide={this.showHide}/>
+                    ));
 
         return (
             this.state.searchResults.length > 0  || this.state.displayNoSearchResultsMessage ?

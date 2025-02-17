@@ -1,18 +1,8 @@
-import React, {Component} from "react";
+import React from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
 import {RouterService} from "../../Services/router.service";
-import {ILocation, INavigationHook} from "../../interfaces";
 import {useTranslation} from "react-i18next";
-
-interface Props {
-    navigation: INavigationHook,
-    location: ILocation,
-    result: ISearchResult,
-    language: string,
-    translation: any,
-    showHide: () => void;
-}
 
 interface ISearchResult {
     code: string
@@ -21,92 +11,91 @@ interface ISearchResult {
 }
 
 interface IHighlight {
-    text: string,
+    text: string[],
     synonyms: string[],
     inclusions: string[]
+}
+
+interface Props {
+    result: ISearchResult,
+    language: string,
+    showHide: () => void;
 }
 
 /**
  * Handle the search result and check the text for any flags
  */
-class SearchResult extends Component<Props, ISearchResult> {
+const SearchResult: React.FC<Props> = ({ result, language, showHide }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { t } = useTranslation();
 
     /**
-     * looks for change in the button selection and updates the fetchresult.
+     * Handles change in the button selection and updates the fetchresult.
      */
-    handleClick = () => {
-        let navigate = this.props.navigation
-        let location = this.props.location
-        let path = location.pathname.split("/")
+    const handleClick = () => {
+        const path = location.pathname.split("/")
 
         let pathname;
         if (path[2] === "MIGEL" || path[2] === "AL" || path[2] === "DRUG") {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + this.props.result.code
+            pathname = `/${path[1]}/${path[2]}/${path[3]}/${result.code}`;
         } else if (path[2] === "SwissDRG") {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/drgs/" + this.props.result.code
+            pathname = `/${path[1]}/${path[2]}/${path[3]}/drgs/${result.code}`;
         } else if (path[2] === "Reha") {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/rcgs/" + this.props.result.code
+            pathname = `/${path[1]}/${path[2]}/${path[3]}/rcgs/${result.code}`;
         } else if (path[2] === "AmbGroup") {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/amb_groups/" + this.props.result.code
+            pathname = `/${path[1]}/${path[2]}/${path[3]}/amb_groups/${result.code}`;
         } else if (path[2] === "Supplements") {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/supplements/" + this.props.result.code
+            pathname = `/${path[1]}/${path[2]}/${path[3]}/supplements/${result.code}`;
         } else {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + path[2].toLowerCase() + "s/" + this.props.result.code
+            pathname = `/${path[1]}/${path[2]}/${path[3]}/${path[2].toLowerCase()}s/${result.code}`;
         }
+
         navigate({
             pathname: pathname,
             search: RouterService.getParamValue('query') === "" ? "" : "?query=" + RouterService.getParamValue('query')
         })
-        // Call the showHide function
-        this.props.showHide();
+        // Call the showHide function.
+        showHide();
     }
 
-    collectSearchHighlights() {
-        const {t} = this.props.translation
-        let text = this.props.result.text;
-        let highlight = this.props.result.highlight;
+    const collectSearchHighlights = () => {
+        let text = result.text;
+        const highlight = result.highlight;
+
         if (highlight != null) {
-            let highlight_text = highlight['text'];
-            if (highlight_text) {
-                for (var i = 0; i < highlight_text.length; i++) {
-                    let text_original = highlight_text[i].replace(/<em>/g, '').replace(/<\/em>/g, '');
-                    text = text.replace(text_original, highlight_text[i]);
-                }
+            const highlightText = highlight['text'];
+            if (highlightText) {
+                highlightText.forEach(textItem => {
+                    const text_original = textItem.replace(/<em>/g, '').replace(/<\/em>/g, '');
+                    text = text.replace(text_original, textItem);
+                });
             } else {
-                let alternative_fields = Object.keys(highlight);
-                for (var i = 0; i < alternative_fields.length; i++) {
-                    var field = alternative_fields[i];
-                    if (field == 'code') { continue; }
+                const alternative_fields = Object.keys(highlight);
+                alternative_fields.forEach(field => {
+                    if (field === 'code') return;
+
                     if (highlight[field]) {
-                        text += '<div class="alternative_search_highlight"><strong>' + t("LBL_" + field.toUpperCase()) + ': </strong>';
-                        for (var j = 0; j < highlight[field].length; j++) {
-                            text += highlight[field][j] + '<br/>';
-                        }
+                        text += `<div class="alternative_search_highlight"><strong>${t("LBL_" + field.toUpperCase())}: </strong>`;
+                        highlight[field].forEach(item => {
+                            text += `${item}<br/>`;
+                        });
                         text += '</div>';
                     }
-                }
+                });
             }
         }
         return text
     }
 
-    /**
-     * render the search results
-     * @returns {JSX.Element}
-     */
-    render() {
-        return (
-            <div className="searchResult" onClick={this.handleClick}>
-                <dl>
-                    <dt><span className="link">{this.props.result.code}</span></dt>
-                    <dd id="noMargin" dangerouslySetInnerHTML={{__html: this.collectSearchHighlights()}}/>
-                </dl>
-            </div>
-        )
-    }
+    return (
+        <div className="searchResult" onClick={handleClick}>
+            <dl>
+                <dt><span className="link">{result.code}</span></dt>
+                <dd id="noMargin" dangerouslySetInnerHTML={{__html: collectSearchHighlights()}}/>
+            </dl>
+        </div>
+    );
 }
 
-function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} location={useLocation()} translation={useTranslation()}/>;
-}
-export default addProps(SearchResult);
+export default SearchResult;
