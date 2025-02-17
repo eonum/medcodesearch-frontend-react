@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {IAttributes, INavigationHook, IShortEntry} from "../../interfaces";
+import {IAttributes, ISupplementsAttributes, INavigationHook, IShortEntry} from "../../interfaces";
 import {commonCodeInfos, versionsWithoutMappingInfos} from "../../Utils";
 import {useNavigate} from "react-router-dom";
 import ClickableCodesArray from "./ClickableCodesArray";
@@ -37,7 +37,7 @@ class CodeAttributesVersionized extends Component<Props>{
                 break;
             case 'supplements':
                 return <SupplementsAttributes
-                    attributes={this.props.attributes}
+                    attributes={this.props.attributes as ISupplementsAttributes}
                 />
                 break;
             case 'rcgs':
