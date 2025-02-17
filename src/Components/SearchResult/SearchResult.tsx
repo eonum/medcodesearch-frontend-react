@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
-import RouterService from "../../Services/router.service";
+import {RouterService} from "../../Services/router.service";
 import {ILocation, INavigationHook} from "../../interfaces";
 import {useTranslation} from "react-i18next";
 
@@ -55,7 +55,7 @@ class SearchResult extends Component<Props, ISearchResult> {
         }
         navigate({
             pathname: pathname,
-            search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+            search: RouterService.getParamValue('query') === "" ? "" : "?query=" + RouterService.getParamValue('query')
         })
         // Call the showHide function
         this.props.showHide();

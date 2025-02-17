@@ -1,4 +1,4 @@
-import RouterService from "./Services/router.service";
+import {RouterService} from "./Services/router.service";
 import React from "react";
 
 export const initialCodeState = {
@@ -74,9 +74,9 @@ export function getNavParams(code, language, catalog, resource_type?) {
     let searchString;
     if (['MIGEL', 'AL'].includes(catalog)) {
         pathname = "/" + [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : resource_type, code.code].join("/")
-        searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+        searchString = RouterService.getParamValue('query') === "" ? "" : "?query=" + RouterService.getParamValue('query');
     } else {
-        searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+        searchString = RouterService.getParamValue('query') === "" ? "" : "?query=" + RouterService.getParamValue('query');
         pathname = "/" + [language, catalog, backendVersion, backendResourceType, codeToNavigate].join("/")
     }
     return {pathname, searchString}

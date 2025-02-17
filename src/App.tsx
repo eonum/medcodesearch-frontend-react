@@ -8,7 +8,7 @@ import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import {useNavigate} from "react-router-dom";
 import ButtonGroup from "./Components/Buttons/ButtonGroup";
-import RouterService from "./Services/router.service";
+import {RouterService} from "./Services/router.service";
 import React, {Component} from "react";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/catalog-version.service";
@@ -64,8 +64,8 @@ class App extends Component<Props, IApp>{
     constructor(props) {
         super(props);
         this.state = {
-            language: RouterService.initializeLanguageFromURL(),
-            selectedButton: RouterService.initializeCatalogFromURL(),
+            language: RouterService.getLanguage(),
+            selectedButton: RouterService.getCatalog(),
             selectedVersion: this.initializeVersionFromURL(),
             selectedDate: dateFormat(new Date(), "dd.mm.yyyy"),
             searchResults: [],
@@ -219,10 +219,10 @@ class App extends Component<Props, IApp>{
         // version is empty for non versionized catalogs.
         let version = this.state.selectedVersion;
         let button = this.state.selectedButton;
-        let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" +
-            RouterService.getQueryVariable('query');
-        let resource_type = RouterService.initializeResourceTypeFromURL();
-        let code = RouterService.initializeCodeFromURL();
+        let searchString = RouterService.getParamValue('query') === "" ? "" : "?query=" +
+            RouterService.getParamValue('query');
+        let resource_type = RouterService.getResourceType();
+        let code = RouterService.getCode();
 
         // Check for navigation other than language change.
         let navigationWithoutLanguageChange = false;

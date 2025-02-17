@@ -1,52 +1,56 @@
-import {Component} from "react";
-
 /**
- * Responsible for the url route
+ * Service to retrieve Information from the URL.
  */
-class RouterService extends Component {
-
+export const RouterService = {
     /**
-     * get the query variable and compares it
-     * @param variable
-     * @returns {string}
+     * Extracts and decodes the parameter value for a provided param name from the current URL's query string.
+     * @param {string} paramName - The name of the URL parameter to retrieve
+     * @returns {string} The decoded parameter value if found, empty string otherwise (default).
+     * @example
+     * // URL: http://example.com?search=term
+     * getParamValue('search') // returns 'term'
      */
-    static getQueryVariable(variable) {
-        let query = window.location.search.substring(1);
-        let vars = query.split('&');
+    getParamValue: (paramName: string): string => {
+        const query = window.location.search.substring(1);
+        const vars = query.split('&');
         for (let i = 0; i < vars.length; i++) {
-            let pair = vars[i].split('=');
-            if (decodeURIComponent(pair[0]) === variable) {
+            const pair = vars[i].split('=');
+            if (decodeURIComponent(pair[0]) === paramName) {
                 return decodeURIComponent(pair[1]);
             }
         }
         return "";
-    }
+    },
 
     /**
-     * get the language defined in the url and if it isn't defined set it to 'de'
-     * @returns {string|*}
+     * Extracts the language from the URL.
+     * @returns {string} The language if found, 'de' otherwise (default).
      */
-    static initializeLanguageFromURL() {
+    getLanguage: (): string => {
         if(window.location.pathname !== '/') {
             return window.location.pathname.split("/")[1]
         }
         return 'de'
-    }
+    },
 
     /**
-     * get the catalog defined in the url and if it isn't defined set it to 'ICD'
-     * @returns {string|*}
+     * Extracts the catalog from the URL.
+     * @returns {string} The catalog if found, 'ICD' otherwise (default).
      */
-    static initializeCatalogFromURL() {
+    getCatalog: (): string => {
         if(window.location.pathname !== '/') {
             return window.location.pathname.split("/")[2]
         }
         return 'ICD'
-    }
+    },
 
-    static initializeResourceTypeFromURL() {
+    /**
+     * Extracts the resource type from the URL.
+     * @returns {string} The resource type if found, 'icd_chapters' otherwise (default).
+     */
+    getResourceType: (): string => {
         if(window.location.pathname !== '/') {
-            let arr = window.location.pathname.split("/")
+            const arr = window.location.pathname.split("/")
             if(arr.length === 6) {
                 // Versionized code.
                 return arr[4]
@@ -56,11 +60,15 @@ class RouterService extends Component {
             }
         }
         return 'icd_chapters'
-    }
+    },
 
-    static initializeCodeFromURL() {
+    /**
+     * Extracts the code from the URL.
+     * @returns {string} The code if found, empty string otherwise (default).
+     */
+    getCode: (): string => {
         if(window.location.pathname !== '/') {
-            let arr = window.location.pathname.split("/")
+            const arr = window.location.pathname.split("/")
             if(arr.length === 6) {
                 // Versionized code.
                 return arr[5]
@@ -71,6 +79,4 @@ class RouterService extends Component {
         }
         return ''
     }
-
 }
-export default RouterService

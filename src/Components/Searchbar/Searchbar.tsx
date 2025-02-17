@@ -3,7 +3,7 @@ import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useNavigate} from "react-router-dom";
-import RouterService from "../../Services/router.service";
+import {RouterService} from "../../Services/router.service";
 import {fetchURL} from "../../Utils";
 import {INavigationHook} from "../../interfaces";
 import dateFormat from "dateformat"
@@ -64,9 +64,9 @@ class Searchbar extends Component<Props,ISearchbar> {
      */
     async componentDidMount() {
         this.setState({
-            searchTerm: RouterService.getQueryVariable('query')
+            searchTerm: RouterService.getParamValue('query')
         })
-        await this.fetchForSearchTerm(RouterService.getQueryVariable('query'));
+        await this.fetchForSearchTerm(RouterService.getParamValue('query'));
     }
 
     /**
@@ -106,15 +106,15 @@ class Searchbar extends Component<Props,ISearchbar> {
      * @param snapshot
      */
     async componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.state.searchTerm !== RouterService.getQueryVariable('query') ||
+        if(this.state.searchTerm !== RouterService.getParamValue('query') ||
             prevProps.maxResults !== this.props.maxResults) {
-            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
+            await this.fetchForSearchTerm(RouterService.getParamValue('query'))
         }
         if(prevProps.language !== this.props.language
             || prevProps.selectedButton !== this.props.selectedButton
             || prevProps.version !== this.props.version
             || prevProps.selectedDate !== this.props.selectedDate) {
-            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
+            await this.fetchForSearchTerm(RouterService.getParamValue('query'))
         }
     }
 

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import "./ButtonGroup.css"
 import {useParams} from "react-router-dom";
-import RouterService from "../../Services/router.service";
+import {RouterService} from "../../Services/router.service";
 import Buttons from "./Buttons";
 import {
     IVersions,
@@ -57,7 +57,7 @@ class ButtonGroup extends Component<Props,IButtons>{
     constructor(props) {
         super(props);
         this.state = {
-            selectedButton: RouterService.initializeCatalogFromURL(),
+            selectedButton: RouterService.getCatalog(),
             activeVersion: this.props.params.version,
             currentICD: this.props.initialVersions['ICD'].at(-1),
             currentSwissDRG: this.props.initialVersions['SwissDRG'].at(-1),
