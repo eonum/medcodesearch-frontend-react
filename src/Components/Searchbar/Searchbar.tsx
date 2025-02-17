@@ -1,13 +1,12 @@
-import React, {Component} from "react";
-import {Button, Form, FormControl} from "react-bootstrap";
+import React, { useState, useEffect, useCallback } from "react";
+import { Button, Form, FormControl } from "react-bootstrap";
 import './Searchbar.css';
-import {BsSearch} from "react-icons/bs";
-import {createSearchParams, useNavigate} from "react-router-dom";
-import {RouterService} from "../../Services/router.service";
-import {fetchURL} from "../../Utils";
-import {INavigationHook} from "../../interfaces";
-import dateFormat from "dateformat"
-import {useTranslation} from "react-i18next";
+import { BsSearch } from "react-icons/bs";
+import { createSearchParams, useNavigate, useLocation } from "react-router-dom";
+import { RouterService } from "../../Services/router.service";
+import { fetchURL } from "../../Utils";
+import dateFormat from "dateformat";
+import { useTranslation } from "react-i18next";
 
 const resourceTypeByBtn = {
     "SwissDRG": 'drgs',
@@ -24,167 +23,138 @@ const resourceTypeByBtn = {
 }
 
 interface Props {
-    language: string,
-    selectedButton: string,
-    version: string,
-    selectedDate: string,
-    updateSearchResults: { (searchResult: object): void },
-    navigation: INavigationHook
-    translation: any
-    maxResults: number
-    updateDisplayNoSearchResultsMessage: { (displayMessage: boolean): void }
-    updateMaximumResultsReached: { (maxResultsReached: boolean): void }
+    language: string;
+    selectedButton: string;
+    version: string;
+    selectedDate: string;
+    updateSearchResults: (searchResult: object) => void;
+    maxResults: number;
+    updateDisplayNoSearchResultsMessage: (displayMessage: boolean) => void;
+    updateMaximumResultsReached: (maxResultsReached: boolean) => void;
 }
 
-interface ISearchbar  {
-    searchTerm: string,
-    reSearch: boolean
-}
+const Searchbar: React.FC<Props> = ({
+                                        language,
+                                        selectedButton,
+                                        version,
+                                        selectedDate,
+                                        updateSearchResults,
+                                        maxResults,
+                                        updateDisplayNoSearchResultsMessage,
+                                        updateMaximumResultsReached
+                                    }) => {
 
-/**
- * is the searchbar of the website, which is responsible to take a string and and hand it off to the correct component
- * @component
- */
-class Searchbar extends Component<Props,ISearchbar> {
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    /**
-     * set the state searchTerm to null
-     * @param props
-     */
-    constructor(props) {
-        super(props);
-        this.state = {
-            searchTerm: "",
-            reSearch: false
-        }
-    }
+    const { t } = useTranslation();
+    // Init empty searchTerm.
+    const [searchTerm, setSearchTerm] = useState("");
 
-    /**
-     * set the state for searchTerm and calls the fetch
-     */
-    async componentDidMount() {
-        this.setState({
-            searchTerm: RouterService.getParamValue('query')
-        })
-        await this.fetchForSearchTerm(RouterService.getParamValue('query'));
-    }
+    // Define function to retrieve the current version from the chosen btn.
+    // If the catalog is versionized, current version for the chosen button is returned, else we just return the button.
+    // The function is recreated if the version changes.
+    const getCurrentVersionFromButton = useCallback((chosenBtn: string) => {
+        const versionized = !['MIGEL', 'AL', 'DRUG'].includes(chosenBtn);
+        return versionized ? version : chosenBtn;
+    }, [version]);
 
-    /**
-     * changes the url to the search
-     * @param e
-     */
-    updateSearch = async (e) => {
+    // Define function to fetch the search results from the backend.
+    // The function is recreated if any of the dependencies change, i.e. language, selectedButton, selectedDate,
+    // maxResults, getCurrentVersionFromButton, updateSearchResults, updateDisplayNoSearchResultsMessage and
+    // updateMaximumResultsReached.
+    const performSearch = useCallback(async (term: string) => {
+        setSearchTerm(term);
         let date = '';
-        let navigate = this.props.navigation
-        if (e.target.value === "") {
-            navigate({search: ""});
-        } else {
-            if (this.props.selectedButton === 'MIGEL' || this.props.selectedButton === 'AL'
-                || this.props.selectedButton === 'DRUG') {
-                if (this.props.selectedDate !==  dateFormat(new Date(), "dd.mm.yyyy")) {
-                    date = 'date=' + this.props.selectedDate + '&'
-                }
-            }
-            navigate({search: date + createSearchParams({query: e.target.value.replace(/\+/g, ' ')}).toString()});
-        }
-    }
 
-    /**
-     * takes the chosen button name and returns the corresponding resource_type and version joined by "/".
-     * @param chosenBtn
-     * @returns {string}
-     */
-    convertButtonToBackendVersion(chosenBtn) {
-        let versionized = ['MIGEL', 'AL', 'DRUG'].includes(chosenBtn) ? false : true
-        return versionized ? this.props.version : chosenBtn
-    }
+        if ((selectedButton === 'MIGEL' || selectedButton === 'AL') &&
+            selectedDate !== dateFormat(new Date(), "dd.mm.yyyy")) {
+            date = `date=${selectedDate}&`;
+        }
 
-    /**
-     * sets the correct url
-     * @param prevProps
-     * @param prevState
-     * @param snapshot
-     */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.state.searchTerm !== RouterService.getParamValue('query') ||
-            prevProps.maxResults !== this.props.maxResults) {
-            await this.fetchForSearchTerm(RouterService.getParamValue('query'))
-        }
-        if(prevProps.language !== this.props.language
-            || prevProps.selectedButton !== this.props.selectedButton
-            || prevProps.version !== this.props.version
-            || prevProps.selectedDate !== this.props.selectedDate) {
-            await this.fetchForSearchTerm(RouterService.getParamValue('query'))
-        }
-    }
+        const searchURL = [
+            fetchURL,
+            language,
+            resourceTypeByBtn[selectedButton],
+            getCurrentVersionFromButton(selectedButton),
+            `search?${date}highlight=1&skip_sort_by_code=1&max_results=${maxResults}&search=${term}`
+        ].join("/");
 
-    /**
-     * looks for the current button and manipulate the search results
-     * @param searchTerm
-     * @returns {Promise<void>}
-     */
-    async fetchForSearchTerm(searchTerm){
-        const maxResults = this.props.maxResults;
-        this.setState({searchTerm: searchTerm})
-        let date = '';
-        if (this.props.selectedButton === 'MIGEL' || this.props.selectedButton === 'AL'){
-            if(this.props.selectedDate !== dateFormat(new Date(), "dd.mm.yyyy")){
-                date = 'date=' + this.props.selectedDate + '&'
-            }
-        }
-        let searchURL = [fetchURL, this.props.language,
-            resourceTypeByBtn[this.props.selectedButton],
-            this.convertButtonToBackendVersion(this.props.selectedButton),
-        'search?' + date + 'highlight=1&skip_sort_by_code=1&max_results=' + maxResults +  '&search='+ searchTerm]
-            .join("/")
-        await fetch(searchURL)
-            .then((res) => {
-                if(res.ok) {
-                    return res.json()
-                }
-            })
-            .then((json) => {
-                if(json.length === 0 && searchTerm !== "") {
-                    this.props.updateDisplayNoSearchResultsMessage(true)
+        try {
+            const res = await fetch(searchURL);
+            if (res.ok) {
+                const json = await res.json();
+                if (json.length === 0 && term !== "") {
+                    updateDisplayNoSearchResultsMessage(true);
                 } else {
-                    this.props.updateSearchResults(json)
-                    this.props.updateDisplayNoSearchResultsMessage(false)
-                    this.props.updateMaximumResultsReached(json.length < maxResults || json.length == 100 ? true : false)
+                    updateSearchResults(json);
+                    updateDisplayNoSearchResultsMessage(false);
+                    updateMaximumResultsReached(json.length < maxResults || json.length === 100);
                 }
-            })
-    }
-    /**
-     * renders the searchbar
-     * @returns {JSX.Element}
-     */
-    render() {
-        const {t} = this.props.translation
-        return (
-                <Form className="d-flex">
-                    <FormControl
-                        onKeyDown={(e) =>{
-                            if (e.key === 'Enter'){
-                                e.preventDefault()
-                            }
-                        }}
-                        onChange={this.updateSearch}
-                        type="search"
-                        placeholder={t("LBL_SEARCH_PLACEHOLDER")}
-                        defaultValue={this.state.searchTerm}
-                        className="me-2"
-                        aria-label="Search"
-                        id={"searchbarInput"}
-                    />
-                    <Button id="btn-go">
-                        <BsSearch/>
-                    </Button>
-                </Form>
-        )
-    }
-}
+            }
+        } catch (error) {
+            console.error('Search fetch error:', error);
+        }
+    }, [
+        language,
+        selectedButton,
+        selectedDate,
+        maxResults,
+        getCurrentVersionFromButton,
+        updateSearchResults,
+        updateDisplayNoSearchResultsMessage,
+        updateMaximumResultsReached
+    ]);
 
-function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} translation={useTranslation()}/>;
-}
+    // Define function to handle the searchbar input change.
+    // The function is recreated if dependencies selectedButton or selectedDate change.
+    // navigate needs to be in the dependencies array because React's dependency rules require including all external
+    // values used inside useCallback.
+    const handleSearchInputChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        let date = '';
+        if (e.target.value === "") {
+            navigate({ search: "" });
+        } else {
+            if ((selectedButton === 'MIGEL' || selectedButton === 'AL' || selectedButton === 'DRUG') &&
+                selectedDate !== dateFormat(new Date(), "dd.mm.yyyy")) {
+                date = `date=${selectedDate}&`;
+            }
+            navigate({
+                search: date + createSearchParams({
+                    query: e.target.value.replace(/\+/g, ' ')
+                }).toString()
+            });
+        }
+    }, [navigate, selectedButton, selectedDate]);
 
-export default addProps(Searchbar);
+// Add effect to watch for URL search parameter changes
+    useEffect(() => {
+        const query = RouterService.getParamValue('query');
+        setSearchTerm(query);
+        performSearch(query);
+    }, [location.search, performSearch]); // Add location.search as dependency
+
+    return (
+        <Form className="d-flex">
+            <FormControl
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                    }
+                }}
+                onChange={handleSearchInputChange}
+                type="search"
+                placeholder={t("LBL_SEARCH_PLACEHOLDER")}
+                defaultValue={searchTerm}
+                className="me-2"
+                aria-label="Search"
+                id="searchbarInput"
+            />
+            <Button id="btn-go">
+                <BsSearch />
+            </Button>
+        </Form>
+    );
+};
+
+export default Searchbar;
