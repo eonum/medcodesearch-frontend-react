@@ -1,6 +1,7 @@
 import {fetchURL} from "../Utils";
 
 export const languages = ['de', 'fr', 'it', 'en']
+
 export const versionizedCatalogs = [
     'ICD',
     'SwissDRG',
