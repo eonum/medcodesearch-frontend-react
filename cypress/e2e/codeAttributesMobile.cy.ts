@@ -1,4 +1,4 @@
-describe('Code attributes test suite for desktop version', function () {
+describe('Code attributes test suite for mobile version', function () {
     const baseUrl = Cypress.config("baseUrl");
 
     beforeEach(() => {

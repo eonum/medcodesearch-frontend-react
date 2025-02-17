@@ -1,5 +1,12 @@
 import React, {Component} from "react";
-import {IAttributes, ISupplementsAttributes, INavigationHook, IShortEntry} from "../../interfaces";
+import {
+    IAttributes,
+    ISupplementsAttributes,
+    IRcgAttributes,
+    INavigationHook,
+    IShortEntry,
+    IDrgAttributes
+} from "../../interfaces";
 import {commonCodeInfos, versionsWithoutMappingInfos} from "../../Utils";
 import {useNavigate} from "react-router-dom";
 import ClickableCodesArray from "./ClickableCodesArray";
@@ -32,7 +39,7 @@ class CodeAttributesVersionized extends Component<Props>{
         switch(resourceType) {
             case 'drgs':
                 return <DrgAttributes
-                    attributes={this.props.attributes}
+                    attributes={this.props.attributes as IDrgAttributes}
                 />
                 break;
             case 'supplements':
@@ -42,7 +49,7 @@ class CodeAttributesVersionized extends Component<Props>{
                 break;
             case 'rcgs':
                 return <RcgAttributes
-                    attributes={this.props.attributes}
+                    attributes={this.props.attributes as IRcgAttributes}
                 />
                 break;
             default:

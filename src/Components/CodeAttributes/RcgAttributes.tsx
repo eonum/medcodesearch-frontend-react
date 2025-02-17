@@ -1,107 +1,97 @@
+import React from "react";
+import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { IRcgAttributes } from "../../interfaces";
 import './Attributes.css';
-import React, {Component} from "react";
-import {IRcgAttributes, IParamTypes} from "../../interfaces";
-import {useParams} from "react-router-dom";
-import {useTranslation} from "react-i18next";
 
 interface Props {
     attributes: IRcgAttributes
-    translation: any
-    params: IParamTypes
 }
 
 /**
- * Returns a unordered list of clickable codes (used for children or sibling, i.e. similar codes).
+ * Returns the rcg specific attributes.
  * */
-class RcgAttributes extends Component<Props> {
-    /**
-     * Render the RCG code attributes.
-     * @returns {JSX.Element}
-     */
+const RcgAttributes: React.FC<Props> = ({ attributes }) => {
+    const params = useParams();
+    const {t} = useTranslation();
+    const {code, version, phases} = attributes;
 
-    onlineManualLink(code, version) {
-        const {language} = this.props.params
+    const getOnlineManualLink = (code: string, version: string) => {
         const baseLink = 'https://manual.swissdrg.org/'
         // TODO: add version mapping instead of just usin 'r2.3'
         const versionMapping = {
-            'REHA_1.0': 's1.4','REHA_2.0': 'r2.3'
+            'REHA_1.0': 's1.4', 'REHA_2.0': 'r2.3', 'REHA_3.0': 'r3.3'
         }
-        return baseLink + language + '/' + versionMapping[version] + '/rcgs/' + code
+        return `${baseLink}${params.language}/${versionMapping[version]}/rcgs/${code}`;
     }
 
-    render() {
-        const attributes = this.props.attributes;
-        const {t} = this.props.translation;
-        const {code, version} = attributes
-        const onlineManualLink = version ? this.onlineManualLink(code, version) : '';
-        return (
-            <>
-                <div className="row vertical-spacer">
-                    <div className="col-lg-12">
-                        <a href={onlineManualLink} target='online_manual' className="btn btn-outline-secondary me-1"
-                           id={"rcgOnlineManualLink"}>
-                            {t('LBL_LINK_TO_SWISSDRG_MANUAL')}
-                        </a>
-                    </div>
+    const onlineManualLink = version ? getOnlineManualLink(code, version) : '';
+
+    return (
+        <>
+            <div className="row vertical-spacer">
+                <div className="col-lg-12">
+                    <a href={onlineManualLink}
+                       target='online_manual'
+                       className="btn btn-outline-secondary me-1"
+                       id={"rcgOnlineManualLink"}>
+                        {t('LBL_LINK_TO_SWISSDRG_MANUAL')}
+                    </a>
                 </div>
-                {attributes.phases && <div className="row vertical-spacer">
-                    {(attributes.phases.length == 0 || attributes.phases == null) ?
-                        <div className="col-lg-12">
-                            {t('LBL_NO_COST_WEIGHT')}
-                        </div> :
-                        <div className="col-lg-6">
-                            <div className="table-responsive">
-                                <table className="table table-striped table-hover" id={"attributesTable"}>
-                                    <thead>
+            </div>
+            {phases && <div className="row vertical-spacer">
+                {(phases.length == 0 || phases == null) ?
+                    <div className="col-lg-12">
+                        {t('LBL_NO_COST_WEIGHT')}
+                    </div> :
+                    <div className="col-lg-6">
+                        <div className="table-responsive">
+                            <table className="table table-striped table-hover" id={"attributesTable"}>
+                                <thead>
+                                <tr>
+                                    <th colSpan={2}>{t('LBL_RCG_CATALOGUE')}</th>
+                                </tr>
+                                </thead>
+                                {phases.length == 1 ?
+                                    <tbody>
                                     <tr>
-                                        <th colSpan={2}>{t('LBL_RCG_CATALOGUE')}</th>
+                                        <td><b>{t('LBL_NUM_PHASES')}</b></td>
+                                        <td>{1}</td>
                                     </tr>
-                                    </thead>
-                                    {attributes.phases.length == 1 ?
-                                        <tbody>
-                                        <tr>
-                                            <td><b>{t('LBL_NUM_PHASES')}</b></td>
-                                            <td>{1}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>{t('LBL_DAILY_PHASE_COSTS') + ' 1'}</b></td>
-                                            <td>{attributes.phases[0].cost_weight.toFixed(3)}</td>
-                                        </tr>
-                                        </tbody> :
-                                        <tbody>
-                                        <tr>
-                                            <td><b>{t('LBL_NUM_PHASES')}</b></td>
-                                            <td>{attributes.phases.length}</td>
-                                        </tr>
-                                        {attributes.phases.map((phase, i) => (
-                                            <>
+                                    <tr>
+                                        <td><b>{t('LBL_DAILY_PHASE_COSTS') + ' 1'}</b></td>
+                                        <td>{phases[0].cost_weight.toFixed(3)}</td>
+                                    </tr>
+                                    </tbody> :
+                                    <tbody>
+                                    <tr>
+                                        <td><b>{t('LBL_NUM_PHASES')}</b></td>
+                                        <td>{phases.length}</td>
+                                    </tr>
+                                    {phases.map((phase, i) => (
+                                        <>
                                             <tr>
                                                 <td><b>{t('LBL_DAILY_PHASE_COSTS') + ' ' + (i + 1)}</b></td>
                                                 <td>{phase.cost_weight.toFixed(3)}</td>
                                             </tr>
                                             {phase.limit != 0 &&
-                                            <tr>
-                                            <td><b>{t('LBL_UPPER_PHASE_LIMIT') + ' ' + (i + 1)}</b></td>
-                                        <td>{phase.limit}</td>
-                                            </tr>}
-                                            </>
-                            ))}
-                        </tbody>
-                    }
-                </table>
-                            </div>
+                                                <tr>
+                                                    <td><b>{t('LBL_UPPER_PHASE_LIMIT') + ' ' + (i + 1)}</b></td>
+                                                    <td>{phase.limit}</td>
+                                                </tr>}
+                                        </>
+                                    ))}
+                                    </tbody>
+                                }
+                            </table>
                         </div>
-                    }
-                </div>}
-            </>
+                    </div>
+                }
+            </div>}
+        </>
 
-        )
-    }
-}
+    )
+};
 
-function addProps(Component) {
-    return props => <Component {...props} params={useParams()} translation={useTranslation()}/>;
-}
-
-export default addProps(RcgAttributes);
+export default RcgAttributes;
 
