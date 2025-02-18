@@ -183,7 +183,7 @@ class CodeBodyUnversionized extends Component<Props, ICode> {
                     catalog={catalog}
                     siblings={siblings}
                     language={language}
-                    resource_type={resource_type}
+                    resourceType={resource_type}
                     code={code}
                 />
             </div>
