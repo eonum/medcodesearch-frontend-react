@@ -1,198 +1,143 @@
 import {useNavigate, useParams} from "react-router-dom";
-import React, {Component} from "react";
+import React, { useState, useEffect } from "react";
 import {Breadcrumb, BreadcrumbItem} from "react-bootstrap";
-import {ICode, INavigationHook, IParamTypes} from "../../interfaces";
-import {fetchURL, getNavParams, initialCodeState} from "../../Utils";
+import { ICode, IShortEntry } from "../../interfaces";
+import { fetchURL, getNavParams, initialCodeState } from "../../Utils";
 import CodeAttributesUnversionized from "../CodeAttributes/CodeAttributesUnversionized";
 import { useTranslation } from 'react-i18next';
 
 interface Props {
-    params: IParamTypes,
-    navigation: INavigationHook,
     selectedDate: string,
-    translation: any
 }
 
 /**
  * Responsible for the body of the website, for catalogs without versions (i.e. MIGEL, AL, DRUG)
  */
-
-class CodeBodyUnversionized extends Component<Props, ICode> {
-    constructor(props) {
-        super(props);
-        this.state = initialCodeState
-    }
-
-    /**
-     * Calls for the fetch, sibling and grandparents methods
-     * @returns {Promise<void>}
-     */
-    async componentDidMount() {
-        await this.fetchInformations()
-        if (this.state.attributes["parent"]) {
-            await this.fetchSiblings(this.state.attributes["parent"])
-        }
-        await this.fetchGrandparents(this.state.attributes["parent"])
-    }
+const CodeBodyUnversionized: React.FC<Props> = ({ selectedDate }) => {
+    const [codeState, setCodeState] = useState<ICode>(initialCodeState);
+    const navigate = useNavigate();
+    const params = useParams();
+    const { t } = useTranslation();
 
     /**
-     * Set the new state after every update and calls for the fetch, sibling and grandparents methods
-     * @param prevProps
-     * @param prevState
-     * @param snapshot
-     * @returns {Promise<void>}
-     */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
-            if (prevProps.params.language !== this.props.params.language ||
-                prevProps.params.code !== this.props.params.code ||
-                prevProps.params.catalog !== this.props.params.catalog ||
-                prevProps.selectedDate !== this.props.selectedDate) {
-                this.setState(initialCodeState)
-                await this.fetchInformations()
-                if (this.state.attributes["parent"]) {
-                    await this.fetchSiblings(this.state.attributes["parent"])
-                }
-                await this.fetchGrandparents(this.state.attributes["parent"])
-            }
-    }
+     * Fetches information from the backend and does case distinction for top level code (which is given by 'DRUG',
+     * 'MIGEL' or 'AL', i.e. the catalog).
+     * */
+    const fetchInformation = async () => {
+        const { language, code, resource_type, catalog } = params;
+        const codeForFetch = code === 'all' ? catalog : code;
 
-    /**
-     * Does a case distinction for all the catalogs and set the string ready for fetching
-     * @param language
-     * @param resource_type ('migels', 'als', 'drugs')
-     * @param code ('all' if base code, (non-)terminal code else)
-     * @param catalog ('MIGEL', 'AL', 'DRUG')
-     * @returns {Promise<null|any>}
-     */
-    async fetchHelper(language, resource_type, code, catalog) {
-        let fetchString = [fetchURL, language, resource_type, catalog, code].join("/") +
-            "?show_detail=1&date=" + this.props.selectedDate;
-        return await fetch(fetchString)
-            .then((res) => {
-                return res.json()
-            })
-    }
-
-    /**
-     * Fetch the information from the backend and does a case distinction for all the catalogs
-     * @returns {Promise<void>}
-     */
-    async fetchInformations() {
-        let newAttributes;
-        const {language, code, resource_type, catalog} = this.props.params;
-        let codeForFetch = code === 'all' ? catalog : code;
-        newAttributes = await this.fetchHelper(
+        const fetchString = [
+            fetchURL,
             language,
             catalog === 'AL' ? 'laboratory_analyses' : resource_type,
-            codeForFetch,
-            catalog)
+            catalog,
+            codeForFetch
+        ].join("/") + "?show_detail=1&date=" + selectedDate;
+
+        const response = await fetch(fetchString);
+        const newAttributes = await response.json();
+
         if (newAttributes !== null) {
-            this.setState({attributes: newAttributes})
+            setCodeState(prev => ({ ...prev, attributes: newAttributes }));
         }
     }
 
+
     /**
-     * fetch the grandparent of the component
+     * Fetches the grandparent(s) of the component, i.e. the whole parent(s) chain up to the base code.
      * @param parent
-     * @returns {Promise<void>}
      */
-    async fetchGrandparents(parent) {
-        let parents = []
-        while(parent) {
-            parents = [...parents, parent]
-            await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
-                .then((res) => res.json())
-                .then((json) => {
-                    parent = json["parent"]
-                })
+    const fetchParentChain = async (parent: IShortEntry) => {
+        let parents = [];
+        let currentParent = parent;
+
+        while (currentParent) {
+            parents = [...parents, currentParent];
+            const response = await fetch([fetchURL, currentParent.url].join("/") + "?show_detail=1");
+            const json = await response.json();
+            currentParent = json["parent"];
         }
-        this.setState({parents: parents})
-    }
+
+        setCodeState(prev => ({ ...prev, parents }));
+    };
 
     /**
-     * fetch the sibling of the component
+     * Fetches code siblings, i.e. similar codes.
      * @param parent
-     * @returns {Promise<void>}
      */
-    async fetchSiblings(parent) {
-        const code = this.props.params.code
-        let fetchString = [fetchURL, parent.url].join("/") + "?show_detail=1&date=" + this.props.selectedDate;
-        await fetch(fetchString)
-            .then((res) => res.json())
-            .then((json) => {
-                let siblings = json.children.filter(function(child) {
-                    return child.code !== code;
-                })
-                this.setState({siblings: siblings})
-            })
-    }
+    const fetchSiblings = async (parent: any) => {
+        if (!parent) return;
+
+        const fetchString = [fetchURL, parent.url].join("/") + "?show_detail=1&date=" + selectedDate;
+        const response = await fetch(fetchString);
+        const json = await response.json();
+        const siblings = json.children.filter(child => child.code !== params.code);
+        setCodeState(prev => ({ ...prev, siblings }));
+    };
 
     /**
-     * If input is a base code ('MIGEL', 'AL', 'DRUG'), the method returns the base code in the given language,
-     *  otherwise just returns input.
+     * Converts the code into the given language if it is a base code, i.e. if 'MIGEL', 'AL', 'DRUG'.
+     * Use label or full translation, based on if it is used for the breadcrumb or not.
+     * If not a base code, return the code as is.
      * @param code
-     * @returns {string|*}
      */
-    displayCode(code, isBreadcrumbLabel){
-        const {t} = this.props.translation
+    const displayCode = (code: string, isBreadcrumbLabel: boolean) => {
         if (["AL", "MIGEL", "DRUG"].includes(code)) {
-            return isBreadcrumbLabel ? t(`LBL_${code}_LABEL`) : t(`LBL_${code}`)
-        } else {
-            return code
+            return isBreadcrumbLabel ? t(`LBL_${code}_LABEL`) : t(`LBL_${code}`);
         }
-    }
+        return code;
+    };
 
-    /**
-     * Render the CodeBodyUnversionized component
-     * @returns {JSX.Element}
-     */
-    render() {
-        let navigate = this.props.navigation;
-        let {language, catalog, resource_type, code} = this.props.params;
-        let siblings = this.state.siblings;
-        const titleTag = ["MIGEL", "AL"].includes(catalog) ? this.displayCode(catalog, false) : "";
+    useEffect(() => {
+        const fetchData = async () => {
+            setCodeState(initialCodeState);
+            await fetchInformation();
+            await fetchSiblings(codeState.attributes["parent"]);
+            await fetchParentChain(codeState.attributes["parent"]);
+        };
+        fetchData();
+    }, [params.language, params.code, params.catalog, selectedDate]);
 
-        return (
-            <div>
-                <Breadcrumb>
-                    {this.state.parents.reverse().map((currElement, i) => {
-                        return (
-                            <Breadcrumb.Item
-                                title={["MIGEL", "AL"].includes(currElement.code) ? titleTag : ""}
-                                key={i}
-                                className="breadLink"
-                                onClick={() => {
-                                    let {
-                                        pathname,
-                                        searchString
-                                    } = getNavParams(currElement, language, catalog, resource_type)
-                                    // No breadcrumb for DRUG catalog
-                                    if (["MIGEL", "AL"].includes(catalog)) {
-                                        navigate({pathname: pathname, search: searchString})
-                                    }
-                                }}>
-                                {this.displayCode(currElement.code, true)}
-                            </Breadcrumb.Item>
-                        )})}
-                    <BreadcrumbItem active>{this.displayCode(this.state.attributes["code"], true)}</BreadcrumbItem>
-                </Breadcrumb>
-                <h3>{this.displayCode(this.state.attributes["code"], false)}</h3>
-                <p dangerouslySetInnerHTML={{__html: this.state.attributes["text"]}} />
-                <CodeAttributesUnversionized
-                    attributes={this.state.attributes}
-                    catalog={catalog}
-                    siblings={siblings}
-                    language={language}
-                    resourceType={resource_type}
-                    code={code}
-                />
-            </div>
-        )
-    }
-}
+    const { attributes, siblings, parents } = codeState;
+    const { language, catalog, resource_type, code } = params;
+    const titleTag = ["MIGEL", "AL"].includes(catalog) ? displayCode(catalog, false) : "";
 
-function withProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} key={"unversionized_body"} params={useParams()} translation={useTranslation()}/>;
-}
+    return (
+        <div>
+            <Breadcrumb>
+                {parents.reverse().map((element, i) => (
+                        <Breadcrumb.Item
+                            title={["MIGEL", "AL"].includes(element.code) ? titleTag : ""}
+                            key={i}
+                            className="breadLink"
+                            onClick={() => {
+                                let {
+                                    pathname,
+                                    searchString
+                                } = getNavParams(element, language, catalog, resource_type)
+                                // No breadcrumb for DRUG catalog
+                                if (["MIGEL", "AL"].includes(catalog)) {
+                                    navigate({pathname: pathname, search: searchString})
+                                }
+                            }}>
+                            {displayCode(element.code, true)}
+                        </Breadcrumb.Item>
+                    ))}
+                <BreadcrumbItem active>{displayCode(attributes["code"], true)}</BreadcrumbItem>
+            </Breadcrumb>
+            <h3>{displayCode(attributes["code"], false)}</h3>
+            <p dangerouslySetInnerHTML={{ __html: attributes["text"] }} />
+            <CodeAttributesUnversionized
+                attributes={attributes}
+                catalog={catalog}
+                siblings={siblings}
+                language={language}
+                resourceType={resource_type}
+                code={code}
+            />
+        </div>
+    );
+};
 
-export default withProps(CodeBodyUnversionized);
+export default CodeBodyUnversionized;
