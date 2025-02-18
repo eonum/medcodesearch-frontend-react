@@ -3,6 +3,24 @@
  */
 export const RouterService = {
     /**
+     * Extracts the version from the URL (or initializes a placeholder if path is empty).
+     * @returns {string|*}
+     */
+    getVersion: (): string => {
+        if(window.location.pathname !== '/') {
+            let arr = window.location.pathname.split("/")
+            if(arr.length === 6) {
+                return arr[3]
+            } else {
+                return ''
+            }
+        }
+        // Base version placeholder for ICD when visiting medcodesearch.ch.
+        // Will be set in App first call to useEffect.
+        return 'ICD10-GM-XXXX'
+    },
+
+    /**
      * Extracts and decodes the parameter value for a provided param name from the current URL's query string.
      * @param {string} paramName - The name of the URL parameter to retrieve
      * @returns {string} The decoded parameter value if found, empty string otherwise (default).
