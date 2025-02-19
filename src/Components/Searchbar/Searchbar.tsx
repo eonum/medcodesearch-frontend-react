@@ -34,6 +34,7 @@ interface Props {
     maxResults: number
     updateDisplayNoSearchResultsMessage: { (displayMessage: boolean): void }
     updateMaximumResultsReached: { (maxResultsReached: boolean): void }
+    setIsSearching: { (isSearching: boolean): void }
 }
 
 interface ISearchbar  {
@@ -46,6 +47,7 @@ interface ISearchbar  {
  * @component
  */
 class Searchbar extends Component<Props,ISearchbar> {
+    searchTimeout: NodeJS.Timeout | null = null;
 
     /**
      * set the state searchTerm to null
@@ -59,33 +61,74 @@ class Searchbar extends Component<Props,ISearchbar> {
         }
     }
 
+    debouncedSearch = (searchTerm: string) => {
+        if(this.searchTimeout) {
+            clearTimeout(this.searchTimeout);
+        }
+        this.props.setIsSearching(true);
+
+        this.searchTimeout = setTimeout(() => {
+            this.fetchForSearchTerm(searchTerm);
+        }, 300);
+    }
+
     /**
      * set the state for searchTerm and calls the fetch
      */
     async componentDidMount() {
-        this.setState({
-            searchTerm: RouterService.getQueryVariable('query')
-        })
-        await this.fetchForSearchTerm(RouterService.getQueryVariable('query'));
+        const query = RouterService.getQueryVariable('query');
+        this.setState({ searchTerm: query });
+        await this.fetchForSearchTerm(query);
     }
 
     /**
      * changes the url to the search
      * @param e
      */
-    updateSearch = async (e) => {
+    updateSearch = (e) => {
         let date = '';
-        let navigate = this.props.navigation
-        if (e.target.value === "") {
-            navigate({search: ""});
+        const value = e.target.value;
+
+        if (value === "") {
+            this.props.navigation({search: ""});
         } else {
-            if (this.props.selectedButton === 'MIGEL' || this.props.selectedButton === 'AL'
-                || this.props.selectedButton === 'DRUG') {
-                if (this.props.selectedDate !==  dateFormat(new Date(), "dd.mm.yyyy")) {
-                    date = 'date=' + this.props.selectedDate + '&'
-                }
+            if (['MIGEL', 'AL', 'DRUG'].includes(this.props.selectedButton) &&
+                this.props.selectedDate !== dateFormat(new Date(), "dd.mm.yyyy")) {
+                date = 'date=' + this.props.selectedDate + '&';
             }
-            navigate({search: date + createSearchParams({query: e.target.value.replace(/\+/g, ' ')}).toString()});
+            this.props.navigation({
+                search: date + createSearchParams({query: value.replace(/\+/g, ' ')}).toString()
+            });
+        }
+    }
+
+    /**
+     * sets the correct url
+     * @param prevProps
+     * @param prevState
+     * @param snapshot
+     */
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        const query = RouterService.getQueryVariable('query');
+
+        if(prevProps.selectedButton !== this.props.selectedButton
+            || prevProps.version !== this.props.version
+            || prevProps.language !== this.props.language
+            || prevProps.selectedDate !== this.props.selectedDate) {
+            this.props.updateSearchResults([]);
+            this.debouncedSearch(this.state.searchTerm);
+            return;
+        }
+
+        if(this.state.searchTerm !== query || prevProps.maxResults !== this.props.maxResults) {
+            this.setState({ searchTerm: query });
+            this.debouncedSearch(query);
+        }
+    }
+
+    componentWillUnmount() {
+        if(this.searchTimeout) {
+            clearTimeout(this.searchTimeout);
         }
     }
 
@@ -97,30 +140,6 @@ class Searchbar extends Component<Props,ISearchbar> {
     convertButtonToBackendVersion(chosenBtn) {
         let versionized = ['MIGEL', 'AL', 'DRUG'].includes(chosenBtn) ? false : true
         return versionized ? this.props.version : chosenBtn
-    }
-
-    /**
-     * sets the correct url
-     * @param prevProps
-     * @param prevState
-     * @param snapshot
-     */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
-        // If catalog or version changed, prioritize this update
-        if(prevProps.selectedButton !== this.props.selectedButton
-            || prevProps.version !== this.props.version
-            || prevProps.language !== this.props.language
-            || prevProps.selectedDate !== this.props.selectedDate) {
-            this.props.updateSearchResults([]); // Clear results first
-            await this.fetchForSearchTerm(this.state.searchTerm);
-            return;
-        }
-
-        // Handle search term or max results changes
-        if(this.state.searchTerm !== RouterService.getQueryVariable('query') ||
-            prevProps.maxResults !== this.props.maxResults) {
-            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'));
-        }
     }
 
     /**
@@ -140,7 +159,7 @@ class Searchbar extends Component<Props,ISearchbar> {
         let searchURL = [fetchURL, this.props.language,
             resourceTypeByBtn[this.props.selectedButton],
             this.convertButtonToBackendVersion(this.props.selectedButton),
-        'search?' + date + 'highlight=1&skip_sort_by_code=1&max_results=' + maxResults +  '&search='+ searchTerm]
+            'search?' + date + 'highlight=1&skip_sort_by_code=1&max_results=' + maxResults +  '&search='+ searchTerm]
             .join("/")
         await fetch(searchURL)
             .then((res) => {
@@ -149,6 +168,7 @@ class Searchbar extends Component<Props,ISearchbar> {
                 }
             })
             .then((json) => {
+                this.props.setIsSearching(false);
                 if(json.length === 0 && searchTerm !== "") {
                     this.props.updateDisplayNoSearchResultsMessage(true)
                 } else {

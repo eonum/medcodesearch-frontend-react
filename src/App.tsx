@@ -51,6 +51,7 @@ interface IApp {
     initialVersions: IVersions,
     currentVersions: IVersions,
     isFetching: boolean,
+    isSearching: boolean,
     maxResults: number,
     displayNoSearchResultsMessage: boolean
     maxResultsReached: boolean
@@ -80,6 +81,7 @@ class App extends Component<Props, IApp>{
                 'ICD': [], 'CHOP:': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [],  'Supplements': []
             },
             isFetching: true,
+            isSearching: false,
             maxResults: 10,
             displayNoSearchResultsMessage: false,
             maxResultsReached: false
@@ -149,7 +151,7 @@ class App extends Component<Props, IApp>{
      * @param searchResult
      */
     updateSearchResults = (searchResults) => {
-        this.setState({searchResults: searchResults})
+        this.setState({searchResults: searchResults, isSearching: false})
     }
 
     updateDisplayNoSearchResultsMessage = (displayMessage) => {
@@ -343,7 +345,7 @@ class App extends Component<Props, IApp>{
                 })
 
         return (
-            this.state.searchResults.length > 0  || this.state.displayNoSearchResultsMessage ?
+            (this.state.searchResults.length > 0 || this.state.displayNoSearchResultsMessage || this.state.isSearching) &&
             <div key={"search_results"} className="col-12 col-lg">
                 <div className="container" id="searchResults">
                     <p className="text-center mt-3">
@@ -361,39 +363,42 @@ class App extends Component<Props, IApp>{
                     </p>
                     <Collapse in={!this.state.collapseMenu}>
                         <div>
-                            {searchResults}
+                            {this.state.isSearching ?
+                                loadingSpinner() :
+                                searchResults
+                            }
                         </div>
                     </Collapse>
                 </div>
-                {showButtons &&
+                {showButtons && (
                     <div className="d-flex justify-content-between">
                         <div className="d-flex">
-                            {!this.state.maxResultsReached &&
+                            {!this.state.maxResultsReached && (
                                 <button
                                     className={"btn ml-0"}
                                     id={"load-more-button"}
                                     onClick={this.toggleLoadMoreResults}
-                                    style={{marginRight: '10px'}} // Add a right margin
+                                    style={{marginRight: '10px'}}
                                 >
                                     {t("LBL_LOAD_MORE_RESULTS")}
                                 </button>
-                            }
+                            )}
                         </div>
                         <div className="d-flex">
-                            {this.state.maxResults > 10 &&
+                            {this.state.maxResults > 10 && (
                                 <button
                                     className={"btn mr-0"}
                                     id={"reset-button"}
                                     onClick={() => this.setState({maxResults: 10})}
-                                    style={{marginLeft: '10px'}} // Add a left margin
+                                    style={{marginLeft: '10px'}}
                                 >
                                     {t("LBL_RESET_RESULTS")}
                                 </button>
-                            }
+                            )}
                         </div>
                     </div>
-                }
-            </div> : null
+                )}
+            </div>
         )
     }
 
@@ -502,6 +507,7 @@ class App extends Component<Props, IApp>{
                                 maxResults={this.state.maxResults}
                                 updateDisplayNoSearchResultsMessage={this.updateDisplayNoSearchResultsMessage}
                                 updateMaximumResultsReached={this.updateMaximumResultsReached}
+                                setIsSearching={(isSearching) => this.setState({ isSearching: isSearching })}
                             />
                         </div>
                     </div> :
@@ -517,6 +523,7 @@ class App extends Component<Props, IApp>{
                                     maxResults={this.state.maxResults}
                                     updateDisplayNoSearchResultsMessage={this.updateDisplayNoSearchResultsMessage}
                                     updateMaximumResultsReached={this.updateMaximumResultsReached}
+                                    setIsSearching={(isSearching) => this.setState({ isSearching: isSearching })}
                                 />
                             </div>
                         </div>

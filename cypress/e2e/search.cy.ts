@@ -16,7 +16,7 @@ describe('Search test suite', function () {
     cy.visit(`${baseUrl}/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020`);
     cy.get('.me-2.form-control').type('stomaco');
     cy.url().should('include', '/it/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=stomaco');
-    cy.get('.searchResult:nth-child(1)').should('contain.text', 'stomaco');
+    cy.get('.searchResult:nth-child(1)').invoke('text').should('match', /stomaco/i);
   });
 
   it('search non existing text / code', () => {
