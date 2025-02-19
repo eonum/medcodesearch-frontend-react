@@ -104,15 +104,20 @@ class Searchbar extends Component<Props,ISearchbar> {
      * @param snapshot
      */
     async componentDidUpdate(prevProps, prevState, snapshot) {
+        // If catalog or version changed, prioritize this update
+        if(prevProps.selectedButton !== this.props.selectedButton
+            || prevProps.version !== this.props.version
+            || prevProps.language !== this.props.language
+            || prevProps.selectedDate !== this.props.selectedDate) {
+            this.props.updateSearchResults([]); // Clear results first
+            await this.fetchForSearchTerm(this.state.searchTerm);
+            return;
+        }
+
+        // Handle search term or max results changes
         if(this.state.searchTerm !== RouterService.getQueryVariable('query') ||
             prevProps.maxResults !== this.props.maxResults) {
-            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
-        }
-        if(prevProps.language !== this.props.language
-            || prevProps.selectedButton !== this.props.selectedButton
-            || prevProps.version !== this.props.version
-            || prevProps.selectedDate !== this.props.selectedDate) {
-            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'))
+            await this.fetchForSearchTerm(RouterService.getQueryVariable('query'));
         }
     }
 
