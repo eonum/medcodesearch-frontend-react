@@ -15,9 +15,15 @@ interface Props {
  */
 const CodeBodyUnversionized: React.FC<Props> = ({ selectedDate }) => {
     const [codeState, setCodeState] = useState<ICode>(initialCodeState);
+    const [breadcrumbParents, setBreadcrumbParents] = useState([]);
+
     const navigate = useNavigate();
     const params = useParams();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(params.language);
+    }, [params.language]);
 
     /**
      * Fetches information from the backend and does case distinction for top level code (which is given by 'DRUG',
@@ -43,6 +49,18 @@ const CodeBodyUnversionized: React.FC<Props> = ({ selectedDate }) => {
         }
     }
 
+    /**
+     * Fetches code siblings, i.e. similar codes.
+     * @param parent
+     */
+    const fetchSiblings = async (parent: any) => {
+        if (!parent) return;
+        const fetchString = [fetchURL, parent.url].join("/") + "?show_detail=1&date=" + selectedDate;
+        const response = await fetch(fetchString);
+        const json = await response.json();
+        const siblings = json.children.filter(child => child.code !== params.code);
+        setCodeState(prev => ({ ...prev, siblings }));
+    };
 
     /**
      * Fetches the grandparent(s) of the component, i.e. the whole parent(s) chain up to the base code.
@@ -63,20 +81,6 @@ const CodeBodyUnversionized: React.FC<Props> = ({ selectedDate }) => {
     };
 
     /**
-     * Fetches code siblings, i.e. similar codes.
-     * @param parent
-     */
-    const fetchSiblings = async (parent: any) => {
-        if (!parent) return;
-
-        const fetchString = [fetchURL, parent.url].join("/") + "?show_detail=1&date=" + selectedDate;
-        const response = await fetch(fetchString);
-        const json = await response.json();
-        const siblings = json.children.filter(child => child.code !== params.code);
-        setCodeState(prev => ({ ...prev, siblings }));
-    };
-
-    /**
      * Converts the code into the given language if it is a base code, i.e. if 'MIGEL', 'AL', 'DRUG'.
      * Use label or full translation, based on if it is used for the breadcrumb or not.
      * If not a base code, return the code as is.
@@ -89,15 +93,29 @@ const CodeBodyUnversionized: React.FC<Props> = ({ selectedDate }) => {
         return code;
     };
 
+    // First useEffect to fetch initial information
+        useEffect(() => {
+            const fetchData = async () => {
+                setCodeState(initialCodeState);
+                await fetchInformation();
+            };
+            fetchData();
+        }, [params.language, params.code, params.catalog, selectedDate]);
+
+    // Second useEffect to handle parent and sibling fetching
+        useEffect(() => {
+            const fetchParentAndSiblings = async () => {
+                if (codeState.attributes?.parent) {
+                    await fetchSiblings(codeState.attributes.parent);
+                    await fetchParentChain(codeState.attributes.parent);
+                }
+            };
+            fetchParentAndSiblings();
+        }, [codeState.attributes]);
+
     useEffect(() => {
-        const fetchData = async () => {
-            setCodeState(initialCodeState);
-            await fetchInformation();
-            await fetchSiblings(codeState.attributes["parent"]);
-            await fetchParentChain(codeState.attributes["parent"]);
-        };
-        fetchData();
-    }, [params.language, params.code, params.catalog, selectedDate]);
+        setBreadcrumbParents([...codeState.parents].reverse());
+    }, [codeState.parents]);
 
     const { attributes, siblings, parents } = codeState;
     const { language, catalog, resource_type, code } = params;
@@ -106,7 +124,7 @@ const CodeBodyUnversionized: React.FC<Props> = ({ selectedDate }) => {
     return (
         <div>
             <Breadcrumb>
-                {parents.reverse().map((element, i) => (
+                {breadcrumbParents.map((element, i) => (
                         <Breadcrumb.Item
                             title={["MIGEL", "AL"].includes(element.code) ? titleTag : ""}
                             key={i}

@@ -11,15 +11,19 @@ import {useTranslation} from "react-i18next";
  */
 const CodeBodyVersionized: React.FC = () => {
     const [codeState, setCodeState] = useState<ICode>(initialCodeState);
+    const [breadcrumbParents, setBreadcrumbParents] = useState([]);
     const navigate = useNavigate();
     const params = useParams();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(params.language);
+    }, [params.language]);
 
     /**
      * Fetches information from the backend and does case distinction for top level code ('ALL' for arcgs and mdcs).
      */
     const fetchInformation = async () => {
-        let detailedCode;
         let { language, resource_type, code, version } = params;
         let codeForFetch = code;
 
@@ -29,7 +33,7 @@ const CodeBodyVersionized: React.FC = () => {
 
         // Fetch the detailed code information from the backend.
         const fetchString = [fetchURL, language, resource_type, version, codeForFetch].join("/") + "?show_detail=1";
-        detailedCode = await fetch(fetchString).then(res => res.json());
+        const detailedCode = await fetch(fetchString).then(res => res.json());
 
         // Update the attributes state with the fetched information.
         if (detailedCode !== null) {
@@ -90,23 +94,38 @@ const CodeBodyVersionized: React.FC = () => {
         return code == version ? breadcrumbRoot : currentItem
     }
 
+    // First useEffect for initial data fetch
     useEffect(() => {
         const fetchData = async () => {
-            setCodeState(initialCodeState);  // Reset state first
+            setCodeState(initialCodeState);
             await fetchInformation();
-            await fetchSiblings(codeState.attributes.parent)
-            await fetchParentsChain(codeState.attributes.parent)
         };
         fetchData();
     }, [params.language, params.version, params.code]);
 
-    const { attributes, siblings, parents } = codeState;
+    // Second useEffect for parent and sibling fetching
+    useEffect(() => {
+        const fetchParentAndSiblings = async () => {
+            if (codeState.attributes?.parent) {
+                await fetchSiblings(codeState.attributes.parent);
+                await fetchParentsChain(codeState.attributes.parent);
+            }
+        };
+        fetchParentAndSiblings();
+    }, [codeState.attributes]);
+
+    // Third useEffect for breadcrumb updates
+    useEffect(() => {
+        setBreadcrumbParents([...codeState.parents].reverse());
+    }, [codeState.parents]);
+
+    const { attributes, siblings } = codeState;
     const { catalog, version, language, resource_type } = params;
 
     return (
         <div>
             <Breadcrumb>
-                {parents.reverse().map((element, i) => (
+                {breadcrumbParents.map((element, i) => (
                     <Breadcrumb.Item
                         key={i}
                         onClick={() => {

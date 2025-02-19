@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
 import {RouterService} from "../../Services/router.service";
@@ -19,16 +19,20 @@ interface IHighlight {
 interface Props {
     result: ISearchResult,
     language: string,
-    showHide: () => void;
+    toggleCollapse: () => void;
 }
 
 /**
  * Handle the search result and check the text for any flags
  */
-const SearchResult: React.FC<Props> = ({ result, language, showHide }) => {
+const SearchResult: React.FC<Props> = ({ result, language, toggleCollapse }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(language);
+    }, [language]);
 
     /**
      * Handles change in the button selection and updates the fetchresult.
@@ -56,7 +60,7 @@ const SearchResult: React.FC<Props> = ({ result, language, showHide }) => {
             search: RouterService.getParamValue('query') === "" ? "" : "?query=" + RouterService.getParamValue('query')
         })
         // Call the showHide function.
-        showHide();
+        toggleCollapse();
     }
 
     const collectSearchHighlights = () => {

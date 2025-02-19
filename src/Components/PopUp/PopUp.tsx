@@ -33,7 +33,11 @@ const PopUp: React.FC<Props> = ({
                                 }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [availableLanguages, setAvailableLanguages] = useState(['de']);
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(language);
+    }, [language]);
 
     // Find all available languages for current catalog and version.
     // Function is recreated if language, version or catalog changes.

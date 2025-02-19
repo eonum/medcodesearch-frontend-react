@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IDrgAttributes } from "../../interfaces";
@@ -13,8 +13,11 @@ interface Props {
  * */
 const DrgAttributes: React.FC<Props> = ({ attributes }) => {
     const params = useParams();
-    const { t } = useTranslation();
-    const { code, version } = attributes;
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(params.language);
+    }, [params.language]);    const { code, version } = attributes;
     const versionToNumber = version ? Number(version.replace("V","")) : 0;
 
     const getOnlineManualLink = (code: string, version: string) => {

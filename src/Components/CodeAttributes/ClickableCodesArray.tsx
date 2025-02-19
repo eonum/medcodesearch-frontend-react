@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getNavParams} from "../../Utils";
 import {useTranslation} from "react-i18next";
@@ -24,7 +24,11 @@ const ClickableCodesArray: React.FC<Props> = ({
                                                   id
                                               }) => {
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(language);
+    }, [language]);
 
     const getTriggeringCodes = (shortEntries: any[])=> {
         if (shortEntries && catalog == 'Supplements') {

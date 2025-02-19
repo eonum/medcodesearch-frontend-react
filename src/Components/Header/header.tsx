@@ -13,7 +13,7 @@ interface Props {
  * @component
  */
 const Header: React.FC<Props> = ({ changeLanguage, activeLanguage }) => {
-    const { i18n, t } = useTranslation();
+    const { i18n } = useTranslation();
     const buttons = ['de', 'fr', 'it', 'en']
 
     const handleLanguageChange = (lang: string) => {

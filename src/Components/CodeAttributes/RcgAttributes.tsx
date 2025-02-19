@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { IRcgAttributes } from "../../interfaces";
@@ -13,7 +13,11 @@ interface Props {
  * */
 const RcgAttributes: React.FC<Props> = ({ attributes }) => {
     const params = useParams();
-    const {t} = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(params.language);
+    }, [params.language]);
     const {code, version, phases} = attributes;
 
     const getOnlineManualLink = (code: string, version: string) => {

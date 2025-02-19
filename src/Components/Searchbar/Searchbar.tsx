@@ -27,10 +27,8 @@ interface Props {
     selectedButton: string;
     version: string;
     selectedDate: string;
-    updateSearchResults: (searchResult: object) => void;
+    updateSearchResultsState: (results: any[], displayNoResults: boolean, maxReached: boolean) => void;
     maxResults: number;
-    updateDisplayNoSearchResultsMessage: (displayMessage: boolean) => void;
-    updateMaximumResultsReached: (maxResultsReached: boolean) => void;
 }
 
 const Searchbar: React.FC<Props> = ({
@@ -38,16 +36,18 @@ const Searchbar: React.FC<Props> = ({
                                         selectedButton,
                                         version,
                                         selectedDate,
-                                        updateSearchResults,
+                                        updateSearchResultsState,
                                         maxResults,
-                                        updateDisplayNoSearchResultsMessage,
-                                        updateMaximumResultsReached
                                     }) => {
 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(language);
+    }, [language]);
     // Init empty searchTerm.
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -84,13 +84,11 @@ const Searchbar: React.FC<Props> = ({
             const res = await fetch(searchURL);
             if (res.ok) {
                 const json = await res.json();
-                if (json.length === 0 && term !== "") {
-                    updateDisplayNoSearchResultsMessage(true);
-                } else {
-                    updateSearchResults(json);
-                    updateDisplayNoSearchResultsMessage(false);
-                    updateMaximumResultsReached(json.length < maxResults || json.length === 100);
-                }
+                updateSearchResultsState(
+                    json,
+                    json.length === 0 && term !== "",
+                    json.length < maxResults || json.length === 100
+                );
             }
         } catch (error) {
             console.error('Search fetch error:', error);
@@ -101,9 +99,7 @@ const Searchbar: React.FC<Props> = ({
         selectedDate,
         maxResults,
         getCurrentVersionFromButton,
-        updateSearchResults,
-        updateDisplayNoSearchResultsMessage,
-        updateMaximumResultsReached
+        updateSearchResultsState
     ]);
 
     // Define function to handle the searchbar input change.

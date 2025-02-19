@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {
@@ -36,7 +36,11 @@ const CodeAttributesVersionized: React.FC<Props> = ({
                                                         resourceType
                                                     }) => {
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(language);
+    }, [language]);
 
     const renderSwitch = (resourceType: string, codeInfos: any) => {
         switch (resourceType) {

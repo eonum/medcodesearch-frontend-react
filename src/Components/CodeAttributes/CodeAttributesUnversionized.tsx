@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {IAttributes, IShortEntry} from "../../interfaces";
 import {collectAttributesSl, commonCodeInfos} from "../../Utils";
 import dateFormat from "dateformat";
@@ -25,7 +25,12 @@ const CodeAttributesUnversionized: React.FC<Props> = ({
                                                           resourceType,
                                                           code
                                                       }) => {
-    const {t} = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(language);
+    }, [language]);
+
     const {noCodeError, codeInfos} = commonCodeInfos(attributes, t, false, undefined);
     const {children, terminal} = attributes;
     const slAttributes = collectAttributesSl(attributes, t);

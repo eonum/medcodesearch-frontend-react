@@ -90,7 +90,7 @@ class App extends Component<Props, IApp>{
         this.reRenderButton = this.reRenderButton.bind(this);
         this.reNavigateToHome = this.reNavigateToHome.bind(this)
         this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
-        this.showHide = this.showHide.bind(this);
+        this.toggleCollapse = this.toggleCollapse.bind(this);
         this.showSearchResults = this.showSearchResults.bind(this);
         this.toggleLoadMoreResults = this.toggleLoadMoreResults.bind(this);
     }
@@ -146,18 +146,14 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * @param searchResult
+     * Updates searchResults (search results array), displayNoResults (boolean) and maxReached (boolean).
      */
-    updateSearchResults = (searchResults) => {
-        this.setState({searchResults: searchResults})
-    }
-
-    updateDisplayNoSearchResultsMessage = (displayMessage) => {
-        this.setState({displayNoSearchResultsMessage: displayMessage})
-    }
-
-    updateMaximumResultsReached = (maxResultsReached) => {
-        this.setState({maxResultsReached: maxResultsReached})
+    updateSearchResultsState = (searchResults: any[], displayNoResults: boolean, maxReached: boolean) => {
+        this.setState({
+            searchResults: searchResults,
+            displayNoSearchResultsMessage: displayNoResults,
+            maxResultsReached: maxReached
+        });
     }
 
     /**
@@ -342,7 +338,7 @@ class App extends Component<Props, IApp>{
                     <SearchResult
                         result={searchResult}
                         language={this.state.language}
-                        showHide={this.showHide}/>
+                        toggleCollapse={this.toggleCollapse}/>
                     ));
 
         return (
@@ -351,7 +347,7 @@ class App extends Component<Props, IApp>{
                 <div className="container" id="searchResults">
                     <p className="text-center mt-3">
                         <button
-                            onClick={this.showHide}
+                            onClick={this.toggleCollapse}
                             className={"btn d-lg-none"}
                             type="button"
                             id={"collapse-button"}
@@ -404,7 +400,7 @@ class App extends Component<Props, IApp>{
      * Hide the catalog div if the window is too small.
      * @param e
      */
-    showHide = () => {
+    toggleCollapse = () => {
         if (window.innerWidth <= 991) {
             this.setState({
                 collapseMenu: !this.state.collapseMenu
@@ -501,10 +497,8 @@ class App extends Component<Props, IApp>{
                                 selectedButton={this.state.selectedButton}
                                 version={this.state.selectedVersion}
                                 selectedDate={this.state.selectedDate}
-                                updateSearchResults={this.updateSearchResults}
+                                updateSearchResultsState={this.updateSearchResultsState}
                                 maxResults={this.state.maxResults}
-                                updateDisplayNoSearchResultsMessage={this.updateDisplayNoSearchResultsMessage}
-                                updateMaximumResultsReached={this.updateMaximumResultsReached}
                             />
                         </div>
                     </div> :
@@ -516,10 +510,8 @@ class App extends Component<Props, IApp>{
                                     selectedButton={this.state.selectedButton}
                                     version={this.state.selectedVersion}
                                     selectedDate={this.state.selectedDate}
-                                    updateSearchResults={this.updateSearchResults}
+                                    updateSearchResultsState={this.updateSearchResultsState}
                                     maxResults={this.state.maxResults}
-                                    updateDisplayNoSearchResultsMessage={this.updateDisplayNoSearchResultsMessage}
-                                    updateMaximumResultsReached={this.updateMaximumResultsReached}
                                 />
                             </div>
                         </div>

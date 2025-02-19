@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {ISupplementsAttributes} from "../../interfaces";
 import {useParams, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
@@ -13,7 +13,11 @@ interface Props {
  * */
 const SupplementsAttributes: React.FC<Props> = ({ attributes }) => {
     const params = useParams();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    // Make translation language aware.
+    useEffect(() => {
+        i18n.changeLanguage(params.language);
+    }, [params.language]);
 
     const { terminal } = attributes;
     // If not terminal, there is only text info which is rendered in parent component.
