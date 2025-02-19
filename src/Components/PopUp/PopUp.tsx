@@ -38,6 +38,8 @@ const PopUp: React.FC<Props> = ({
     // Find all available languages for current catalog and version.
     // Function is recreated if language, version or catalog changes.
     const findAvailableLanguages = useCallback(async () => {
+        if (!catalog) return;
+
         if (catalog === "AL" || catalog === "DRUG" || catalog === "MIGEL") {
             setAvailableLanguages(["de", "fr", "it"]);
         } else {
