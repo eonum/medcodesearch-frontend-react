@@ -21,8 +21,8 @@ describe('Search test suite', function () {
 
   it('search non existing text / code', () => {
     cy.visit(`${baseUrl}/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020`);
-    cy.get('.me-2.form-control').type('$$$');
-    cy.url().should('include', '/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=%24%24%24');
+    cy.get('.me-2.form-control').type('asadsafadfqefqfqcqefqef232425');
+    cy.url().should('include', '/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=asadsafadfqefqfqcqefqef232425');
     cy.get('.searchResult:nth-child(1)').should('contain.text', 'Die Suche erzielte keinen Treffer.');
   });
 
