@@ -23,9 +23,9 @@ describe('Search test suite for mobile version', function () {
 
     it('search non existing text / code', function() {
         cy.visit(`${baseUrl}/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020`);
-        cy.get(".me-2.form-control").type("$$$");
+        cy.get(".me-2.form-control").type("asfdafg24t57z5uerhert34t");
         cy.get('#searchResults').should('be.visible');
-        cy.url().should('eq', `${baseUrl}/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=%24%24%24`);
+        cy.url().should('eq', `${baseUrl}/de/ICD/ICD10-GM-2020/icd_chapters/ICD10-GM-2020?query=asfdafg24t57z5uerhert34t`);
         cy.get(".searchResult:nth-child(1)").should('have.text', "Die Suche erzielte keinen Treffer.");
     });
 
