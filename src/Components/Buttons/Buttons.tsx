@@ -219,6 +219,7 @@ class Buttons extends Component<Props,IButton>{
                     </div>
                     <div className={"me-2"}>
                         {this.isCalBut() ?
+                            this.props.catalog !== 'DRUG' &&
                             <DatePicker
                                 selectedCatalog={this.props.selectedCatalog}
                                 selectedDate= {this.props.selectedDate}
