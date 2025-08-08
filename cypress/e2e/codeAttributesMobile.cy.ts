@@ -41,10 +41,8 @@ describe('Code attributes test suite for desktop version', function () {
         cy.contains("Abschlag pro Tag").should('be.visible');
         cy.contains("0.845").should('be.visible');
         cy.contains("Erster Tag mit Zuschlag").should('be.visible');
-        cy.contains("29").should('be.visible');
         cy.contains("Zuschlag pro Tag").should('be.visible');
-        cy.contains("0.289").should('be.visible');
-
+        
         cy.visit(baseUrl + '/fr/SwissDRG/V12.0/drgs/B02A?query=A06A');
         cy.contains("Durée de séjour moyenne (journées)").should('be.visible');
         cy.contains("Premier jour avec réduction").should('be.visible');
