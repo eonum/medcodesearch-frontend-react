@@ -16,14 +16,14 @@ describe('Default test suite, testing general navigation via clicks', function (
         cy.contains('CHOP');
         cy.contains('C14: Operationen am Bewegungsapparat (76–84)');
         cy.contains('Untergeordnete Codes');
-        cy.url().should('eq', baseUrl + "/de/CHOP/CHOP_2025/chop_chapters/CHOP_2025");
+        cy.url().should('eq', baseUrl + "/de/CHOP/CHOP_2026/chop_chapters/CHOP_2026");
         cy.get('#catalog_button').click();
         cy.get('#SwissDRG_button').click();
         cy.contains('SwissDRG');
         cy.contains('MDC 22:');
         cy.contains('Verbrennungen');
         cy.contains('Untergeordnete Codes');
-        cy.url().should('eq', baseUrl + "/de/SwissDRG/V14.0/mdcs/V14.0");
+        cy.url().should('eq', baseUrl + "/de/SwissDRG/V15.0/mdcs/V15.0");
         cy.get('#catalog_button').click();
         cy.get("#TARMED_button").click();
         cy.contains('TARMED');
