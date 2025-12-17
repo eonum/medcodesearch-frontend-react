@@ -74,7 +74,7 @@
   "LBL_LINK_TO_DRGDYNAMICS": "Open in DRG Dynamics",
   "LBL_NO_COST_WEIGHT": "Unweighted DRG",
   "LBL_DRG_CATALOGUE": "Entry from the DRG catalog",
-  "LBL_TRANSFER_DISCOUNT": "Transfer case flat rate",
+  "LBL_TRANSFER_DISCOUNT": "Daily transfer deduction",
   "LBL_EXCEPTION_FROM_REUPTAKE": "Exception from reuptake",
   "LBL_RCG_CATALOGUE":  "Entry from the RCG catalog",
   "LBL_NUM_PHASES": "Number of phases",

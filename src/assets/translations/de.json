@@ -109,7 +109,7 @@
   "LBL_LINK_TO_DRGDYNAMICS": "Umbauten dieser DRG in Vor- und Nachversionen",
   "LBL_NO_COST_WEIGHT": "Unbewertete Fallpauschale",
   "LBL_DRG_CATALOGUE": "Eintrag aus dem Fallpauschalenkatalog",
-  "LBL_TRANSFER_DISCOUNT": "Verlegungsfallpauschale",
+  "LBL_TRANSFER_DISCOUNT": "Verlegungsabschlag pro Tag",
   "LBL_EXCEPTION_FROM_REUPTAKE": "Ausnahme von Wiederaufnahme",
   "LBL_RCG_CATALOGUE":  "Eintrag aus dem RCG Katalog",
   "LBL_NUM_PHASES": "Anzahl Phasen",
@@ -134,4 +134,3 @@
   "LBL_LOAD_MORE_RESULTS": "Weitere Suchresultate anzeigen",
   "LBL_RESET_RESULTS": "Suchresultate zurücksetzen"
 }
-
