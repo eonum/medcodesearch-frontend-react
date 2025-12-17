@@ -105,7 +105,7 @@
   "LBL_LINK_TO_DRGDYNAMICS": "DRG Dynamics",
   "LBL_NO_COST_WEIGHT": "DRG non évalué",
   "LBL_DRG_CATALOGUE":  "Entrée dans le catalogue des forfaits par cas",
-  "LBL_TRANSFER_DISCOUNT": "DRG avec réduction pour transfert",
+  "LBL_TRANSFER_DISCOUNT": "Réduction pour transfert par jour",
   "LBL_EXCEPTION_FROM_REUPTAKE": "Exception de réadmission",
   "LBL_RCG_CATALOGUE":  "Entrée du catalogue RCG",
   "LBL_NUM_PHASES": "Nombre de phases",

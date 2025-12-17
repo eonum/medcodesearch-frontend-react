@@ -99,7 +99,7 @@ class DrgAttributes extends Component<Props> {
                                     </tr>
                                     <tr>
                                         <td><b>{t('LBL_TRANSFER_DISCOUNT')}</b></td>
-                                        <td>{attributes.transfer_discount == null ? t('LBL_TRUE') : t('LBL_FALSE') + " (" + attributes.transfer_discount?.toFixed(3) + ")"}</td>
+                                        <td>{(attributes.transfer_discount == null || attributes.transfer_discount === 0) ? 0 : attributes.transfer_discount.toFixed(3)}</td>
                                     </tr>
                                     <tr>
                                         <td><b>{t('LBL_EXCEPTION_FROM_REUPTAKE')}</b></td>
@@ -122,4 +122,3 @@ function addProps(Component) {
 }
 
 export default addProps(DrgAttributes);
-
