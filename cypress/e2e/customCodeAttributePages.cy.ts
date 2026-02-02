@@ -41,8 +41,8 @@ describe('Code attributes test suite for desktop version and components with cus
             expect(tds[11]).to.equal("33");
             expect(tds[12]).to.equal("Zuschlag pro Tag");
             expect(tds[13]).to.equal("0.242");
-            expect(tds[14]).to.equal("Verlegungsfallpauschale");
-            expect(tds[15]).to.equal("Nein (0.244)");
+            expect(tds[14]).to.equal("Verlegungsabschlag pro Tag");
+            expect(tds[15]).to.equal("0.244");
             expect(tds[16]).to.equal("Ausnahme von Wiederaufnahme");
             expect(tds[17]).to.equal("Nein");
         });
