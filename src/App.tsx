@@ -205,7 +205,7 @@ class App extends Component<Props, IApp>{
         // Adding toastId avoids toast getting rendered multiple times (since we're firing this in component did mount
         // and update. This want be necessary if we rewrite everything into functional components and use effect hook.
         toast.warning(t("LBL_VERSION_NOT_AVAILABLE"), {
-            position: toast.POSITION.TOP_RIGHT,
+            position: "top-right",
             toastId: 'no_version_toast',
         });
         await this.changeLanguage(lang);
