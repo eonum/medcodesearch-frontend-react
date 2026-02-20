@@ -1,5 +1,17 @@
 describe('Default test suite, testing general navigation via clicks', function () {
     let baseUrl = Cypress.config('baseUrl');
+    const backendUrl = 'https://search.eonum.ch';
+    let latestChop: string;
+    let latestDrg: string;
+
+    before(() => {
+        cy.request(`${backendUrl}/de/chops/versions`).then((res) => {
+            latestChop = res.body[res.body.length - 1];
+        });
+        cy.request(`${backendUrl}/de/drgs/versions`).then((res) => {
+            latestDrg = res.body[res.body.length - 1];
+        });
+    });
 
     beforeEach(() => {
         cy.viewport(1366, 768);
@@ -16,14 +28,14 @@ describe('Default test suite, testing general navigation via clicks', function (
         cy.contains('CHOP');
         cy.contains('C14: Operationen am Bewegungsapparat (76–84)');
         cy.contains('Untergeordnete Codes');
-        cy.url().should('eq', baseUrl + "/de/CHOP/CHOP_2025/chop_chapters/CHOP_2025");
+        cy.url().should('eq', baseUrl + `/de/CHOP/${latestChop}/chop_chapters/${latestChop}`);
         cy.get('#catalog_button').click();
         cy.get('#SwissDRG_button').click();
         cy.contains('SwissDRG');
         cy.contains('MDC 22:');
         cy.contains('Verbrennungen');
         cy.contains('Untergeordnete Codes');
-        cy.url().should('eq', baseUrl + "/de/SwissDRG/V14.0/mdcs/V14.0");
+        cy.url().should('eq', baseUrl + `/de/SwissDRG/${latestDrg}/mdcs/${latestDrg}`);
         cy.get('#catalog_button').click();
         cy.get("#TARMED_button").click();
         cy.contains('TARMED');
