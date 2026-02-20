@@ -2,17 +2,16 @@ import './App.css';
 import './index.css';
 import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';
-import {Navigate, Routes, Route, Outlet} from "react-router-dom";
+import {Navigate, Routes, Route, Outlet, useNavigate} from "react-router-dom";
 import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
-import {useNavigate} from "react-router-dom";
 import ButtonGroup from "./Components/Buttons/ButtonGroup";
 import RouterService from "./Services/router.service";
-import React, {Component} from "react";
+import React, {useState, useEffect, useRef, useCallback} from "react";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/catalog-version.service";
-import {INavigationHook, IParamTypes, IVersions} from "./interfaces";
+import {IVersions} from "./interfaces";
 import loadingSpinner from "./Components/Spinner/spinner";
 import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
 import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
@@ -25,12 +24,6 @@ import { useTranslation } from 'react-i18next';
  * @component
  */
 
-interface Props {
-    navigation: INavigationHook
-    params: IParamTypes
-    translation: any
-}
-
 interface ISearchResult {
     code: string,
     text: string,
@@ -38,284 +31,257 @@ interface ISearchResult {
     url: string,
     highlight: object
 }
-interface IApp {
-    language: string,
-    selectedButton: string,
-    selectedVersion: string,
-    selectedDate: string,
-    searchResults: string[] | ISearchResult[] ,
-    clickedOnLogo: boolean,
-    reSetPath: boolean,
-    collapseMenu: boolean,
-    hasCollapsedBefore: boolean,
-    initialVersions: IVersions,
-    currentVersions: IVersions,
-    isFetching: boolean,
-    isSearching: boolean,
-    maxResults: number,
-    displayNoSearchResultsMessage: boolean
-    maxResultsReached: boolean
+
+const emptyVersions: IVersions = {
+    'ICD': [], 'CHOP': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
 }
 
-class App extends Component<Props, IApp>{
-    /**
-     * gets the language, selected button, selected list, selected date and search results and bind them
-     * @param props
-     */
-    constructor(props) {
-        super(props);
-        this.state = {
-            language: RouterService.initializeLanguageFromURL(),
-            selectedButton: RouterService.initializeCatalogFromURL(),
-            selectedVersion: this.initializeVersionFromURL(),
-            selectedDate: dateFormat(new Date(), "dd.mm.yyyy"),
-            searchResults: [],
-            clickedOnLogo: false,
-            reSetPath: false,
-            collapseMenu: window.innerWidth <= 991,
-            hasCollapsedBefore: false,
-            initialVersions: {
-                'ICD': [], 'CHOP:': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
-            },
-            currentVersions: {
-                'ICD': [], 'CHOP:': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [],  'Supplements': []
-            },
-            isFetching: true,
-            isSearching: false,
-            maxResults: 10,
-            displayNoSearchResultsMessage: false,
-            maxResultsReached: false
-        };
-        this.changeSelectedButton = this.changeSelectedButton.bind(this);
-        this.changeSelectedDate = this.changeSelectedDate.bind(this);
-        this.changeSelectedVersion = this.changeSelectedVersion.bind(this);
-        this.reRenderButton = this.reRenderButton.bind(this);
-        this.reNavigateToHome = this.reNavigateToHome.bind(this)
-        this.reSetClickedOnLogo = this.reSetClickedOnLogo.bind(this)
-        this.showHide = this.showHide.bind(this);
-        this.showSearchResults = this.showSearchResults.bind(this);
-        this.toggleLoadMoreResults = this.toggleLoadMoreResults.bind(this);
+/**
+ * get the version defined in the url and if it isn't defined set it to latest icd version.
+ */
+function initializeVersionFromURL() {
+    if(window.location.pathname !== '/') {
+        let arr = window.location.pathname.split("/")
+        if(arr.length === 6) {
+            return arr[3]
+        } else {
+            return ''
+        }
     }
+    // Base version placeholder for ICD when visiting medcodesearch.ch.
+    // Will be set in mount effect to latestICD.
+    return 'ICD10-GM-XXXX'
+}
+
+function App() {
+    const navigate = useNavigate();
+    const { t } = useTranslation();
+
+    const [language, setLanguage] = useState(RouterService.initializeLanguageFromURL());
+    const [selectedButton, setSelectedButton] = useState(RouterService.initializeCatalogFromURL());
+    const [selectedVersion, setSelectedVersion] = useState(initializeVersionFromURL());
+    const [selectedDate, setSelectedDate] = useState(dateFormat(new Date(), "dd.mm.yyyy"));
+    const [searchResults, setSearchResults] = useState<string[] | ISearchResult[]>([]);
+    const [clickedOnLogo, setClickedOnLogo] = useState(false);
+    const [reSetPath, setReSetPath] = useState(false);
+    const [collapseMenu, setCollapseMenu] = useState(window.innerWidth <= 991);
+    const [initialVersions, setInitialVersions] = useState<IVersions>({...emptyVersions});
+    const [currentVersions, setCurrentVersions] = useState<IVersions>({...emptyVersions});
+    const [isFetching, setIsFetching] = useState(true);
+    const [isSearching, setIsSearching] = useState(false);
+    const [maxResults, setMaxResults] = useState(10);
+    const [displayNoSearchResultsMessage, setDisplayNoSearchResultsMessage] = useState(false);
+    const [maxResultsReached, setMaxResultsReached] = useState(false);
+
+    // Track hasCollapsedBefore in a ref since it's not rendered
+    const hasCollapsedBeforeRef = useRef(false);
+
+    // Track whether initial mount effects have completed
+    const isInitialNavRef = useRef(true);
+    const isInitialLangRef = useRef(true);
+
+    // Track previous language for reverting on invalid version
+    const prevLanguageRef = useRef(language);
+    const skipLangEffectRef = useRef(false);
 
     /**
-     * get the version defined in the url and if it isn't defined set it to latest icd version.
-     * @returns {string|*}
+     * Handles the collapseMenu state attribute according to the screen size.
      */
-    initializeVersionFromURL() {
-        if(window.location.pathname !== '/') {
-            let arr = window.location.pathname.split("/")
-            if(arr.length === 6) {
-                return arr[3]
-            } else {
-                return ''
+    const handleResize = useCallback(() => {
+        if (window.innerWidth >= 1200 || (window.innerWidth > 991 && window.innerWidth < 1200)) {
+            setCollapseMenu(false);
+            hasCollapsedBeforeRef.current = false;
+        } else {
+            if (!hasCollapsedBeforeRef.current) {
+                setCollapseMenu(true);
+                hasCollapsedBeforeRef.current = true;
             }
         }
-        // Base version placeholder for ICD when visiting medcodesearch.ch.
-        // Will be set in App componentDidMount to latestICD.
-        return 'ICD10-GM-XXXX'
+    }, []); // eslint-disable-line
+
+    /**
+     * Returns true if selected button has a valid version, false otherwise.
+     */
+    function isValidVersion(button: string, version: string, lang: string, currentVers: IVersions): boolean {
+        if(button === 'MIGEL' || button === 'AL' || button === 'DRUG') {
+            return lang !== "en"
+        } else {
+            return currentVers[button]?.includes(version) ?? false
+        }
     }
 
     /**
-     * Updates state of selectedVersion.
-     * @param version
+     * Builds the navigation path from current state.
      */
-    changeSelectedVersion = (version) => {
-        this.setState({selectedVersion: version})
+    function buildPath(btn = selectedButton, ver = selectedVersion): string {
+        let resource_type: string;
+        let code: string;
+
+        switch(btn) {
+            case 'MIGEL':
+            case 'AL':
+            case 'DRUG':
+                code = 'all';
+                resource_type = btn.toLowerCase() + 's';
+                break;
+            case 'SwissDRG':
+                code = ver;
+                resource_type = 'mdcs';
+                break;
+            case 'Supplements':
+                code = ver;
+                resource_type = 'supplements';
+                break;
+            case 'AmbGroup':
+                code = ver;
+                resource_type = 'capitula';
+                break;
+            case 'Reha':
+                code = ver;
+                resource_type = 'arcgs';
+                break;
+            default:
+                code = ver;
+                resource_type = btn.toLowerCase() + '_chapters';
+        }
+
+        return language + "/" + btn + '/' + ver + (ver.length === 0 ? "" : '/') + resource_type + '/' + code;
     }
 
     /**
-     * Changes the selected button.
-     * @param btn
+     * Reset everything back to the default but stay in current language.
      */
-    changeSelectedButton = (btn) => {
-        this.setState({selectedButton: btn})
+    function reNavigateToHome(initVers?: IVersions) {
+        // Clear current searchbar input.
+        const searchbarInput = document.getElementById('searchbarInput') as HTMLInputElement;
+        if (searchbarInput) {
+            searchbarInput.value = "";
+        }
+        setClickedOnLogo(true);
+        const vers = initVers || initialVersions;
+        let latestICD = vers['ICD'].at(-1);
+        setSelectedButton('ICD')
+        setSelectedVersion(latestICD)
+        navigate({pathname: "/" + language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD, search: ''});
     }
 
     /**
-     * Changes language.
-     * @param lang
+     * Mount effect: setup resize listener, fetch versions, validate.
      */
-    changeLanguage = (lang) => {
-        this.setState({language: lang})
-    }
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        async function init() {
+            const initVers = await getVersionsByLanguage('de');
+            setInitialVersions(initVers);
+            const currVers = await getVersionsByLanguage(language);
+            setCurrentVersions(currVers);
+
+            let resolvedVersion = selectedVersion;
+            if (resolvedVersion === 'ICD10-GM-XXXX') {
+                resolvedVersion = initVers['ICD'].at(-1);
+                setSelectedVersion(resolvedVersion);
+            }
+
+            if (!isValidVersion(selectedButton, resolvedVersion, language, currVers)) {
+                reNavigateToHome(initVers);
+            }
+            setIsFetching(false);
+        }
+        init();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []); // eslint-disable-line
 
     /**
-     * Updates state of selectedDate.
-     * @param date string in DD.MM.YYYY format
+     * Navigation effect: when button/version/date/reSetPath changes, navigate to new path.
      */
-    changeSelectedDate = (date) => {
-        this.setState({selectedDate: date})
-    }
+    useEffect(() => {
+        if (isInitialNavRef.current) {
+            isInitialNavRef.current = false;
+            return;
+        }
+        if (isFetching) return;
+
+        const searchString = RouterService.getQueryVariable('query') === "" ? "" :
+            "?query=" + RouterService.getQueryVariable('query');
+
+        if (isValidVersion(selectedButton, selectedVersion, language, currentVersions)) {
+            navigate({
+                pathname: buildPath(),
+                search: searchString
+            })
+        } else {
+            toast.warning(t("LBL_VERSION_NOT_AVAILABLE"), { position: "top-right" });
+        }
+        setReSetPath(false);
+    }, [selectedButton, selectedVersion, selectedDate, reSetPath]); // eslint-disable-line
+
+    /**
+     * Language change effect: fetch new versions and navigate or show toast.
+     */
+    useEffect(() => {
+        if (isInitialLangRef.current) {
+            isInitialLangRef.current = false;
+            return;
+        }
+
+        if (skipLangEffectRef.current) {
+            skipLangEffectRef.current = false;
+            return;
+        }
+
+        const prevLang = prevLanguageRef.current;
+        prevLanguageRef.current = language;
+
+        const searchString = RouterService.getQueryVariable('query') === "" ? "" :
+            "?query=" + RouterService.getQueryVariable('query');
+
+        async function handleLanguageChange() {
+            const currVers = await getVersionsByLanguage(language);
+            setCurrentVersions(currVers);
+
+            // If version is the initial placeholder, defer navigation to the mount effect.
+            if (selectedVersion === 'ICD10-GM-XXXX') return;
+
+            if (isValidVersion(selectedButton, selectedVersion, language, currVers)) {
+                navigate({
+                    pathname: buildPath(),
+                    search: searchString
+                })
+            } else {
+                toast.warning(t("LBL_VERSION_NOT_AVAILABLE"), {
+                    position: "top-right",
+                    toastId: 'no_version_toast',
+                });
+                // Revert language
+                skipLangEffectRef.current = true;
+                setLanguage(prevLang);
+            }
+        }
+        handleLanguageChange();
+    }, [language]); // eslint-disable-line
 
     /**
      * @param searchResult
      */
-    updateSearchResults = (searchResults) => {
-        this.setState({searchResults: searchResults, isSearching: false})
-    }
-
-    updateDisplayNoSearchResultsMessage = (displayMessage) => {
-        this.setState({displayNoSearchResultsMessage: displayMessage})
-    }
-
-    updateMaximumResultsReached = (maxResultsReached) => {
-        this.setState({maxResultsReached: maxResultsReached})
-    }
-
-    /**
-     * Returns true if selected button has a valid version, false otherwise.
-     * @param button
-     * @param version
-     * @param lang
-     * @returns {boolean|*}
-     */
-    isValidVersion(button, version, lang) {
-        if(button === 'MIGEL' || button === 'AL' || button === 'DRUG') {
-            return lang !== "en"
-        } else {
-            return this.state.currentVersions[button].includes(version)
-        }
-    }
-
-    /**
-     * Navigates to root url, i.e. newest ICD catalog.
-     * @param lang
-     */
-    navigateTo = (path, searchString) => {
-        let navigate = this.props.navigation;
-        navigate({
-            pathname: path,
-            search: searchString
-        })
+    const updateSearchResults = (results) => {
+        setSearchResults(results);
+        setIsSearching(false);
     }
 
     /**
      * Toggles the state of the `loadMoreResults` flag.
-     *
-     * Triggered by button click and triggers 10 more search results to show.
      */
-    toggleLoadMoreResults = () => {
-        this.setState((prevState) => ({
-            maxResults: prevState.maxResults + 10,
-        }));
-    };
-
-    async notAvailableToast(lang) {
-        const {t} = this.props.translation;
-        // Adding toastId avoids toast getting rendered multiple times (since we're firing this in component did mount
-        // and update. This want be necessary if we rewrite everything into functional components and use effect hook.
-        toast.warning(t("LBL_VERSION_NOT_AVAILABLE"), {
-            position: "top-right",
-            toastId: 'no_version_toast',
-        });
-        await this.changeLanguage(lang);
-    }
-
-    /**
-     * Navigates to the correct path.
-     * @param prevProps
-     * @param prevState
-     * @param snapshot
-     */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
-        // version is empty for non versionized catalogs.
-        let version = this.state.selectedVersion;
-        let button = this.state.selectedButton;
-        let searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" +
-            RouterService.getQueryVariable('query');
-        let resource_type = RouterService.initializeResourceTypeFromURL();
-        let code = RouterService.initializeCodeFromURL();
-
-        // Check for navigation other than language change.
-        let navigationWithoutLanguageChange = false;
-        if (prevState.selectedButton !== this.state.selectedButton ||
-            prevState.selectedVersion !== this.state.selectedVersion ||
-            prevState.selectedDate !== this.state.selectedDate ||
-            this.state.reSetPath) {
-            navigationWithoutLanguageChange = true;
-            switch(button) {
-                case 'MIGEL':
-                case 'AL':
-                case 'DRUG':
-                    code = 'all';
-                    resource_type = button.toLowerCase() + 's';
-                    break;
-                case 'SwissDRG':
-                    code = version;
-                    resource_type = 'mdcs';
-                    break;
-                case 'Supplements':
-                    code = version;
-                    resource_type = 'supplements';
-                    break;
-                case 'AmbGroup':
-                    code = version;
-                    resource_type = 'capitula';
-                    break;
-                case 'Reha':
-                    code = version;
-                    resource_type = 'arcgs';
-                    break;
-                default:
-                    code = version;
-                    resource_type = button.toLowerCase() + '_chapters';
-            }
-        }
-
-        // Set current version depending on language.
-        if (prevState.language !== this.state.language) {
-            this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
-        }
-
-        // Navigate to new path.
-        if (navigationWithoutLanguageChange || prevState.language !== this.state.language) {
-            if (this.isValidVersion(button, version, this.state.language)) {
-                this.navigateTo(this.state.language + "/" + button + '/' + version +
-                    (version.length === 0 ? "" : '/') + resource_type + '/' + code, searchString)
-            } else {
-                await this.notAvailableToast(prevState.language);
-            }
-            this.setState({reSetPath: false})
-        }
-    }
-
-    /**
-     * If component mount set the states
-     * @returns {Promise<void>}
-     */
-    async componentDidMount() {
-        window.addEventListener('resize', this.handleResize);
-        this.handleResize(); // Call the handleResize method initially
-        await this.setState({initialVersions: await getVersionsByLanguage('de')})
-        await this.setState({currentVersions: await getVersionsByLanguage(this.state.language)})
-        // If medcodesearch is accessed via root url, i.e. medcodesearch.ch, there is no version from url, i.e. the
-        // placeholder ICD10-GM-XXXX set in initializeVersionFromURL has to be transformed to latest ICD.
-        if (this.state.selectedVersion === "ICD10-GM-XXXX") {
-            await this.setState({selectedVersion:  this.state.initialVersions['ICD'].at(-1)})
-        }
-        if (!this.isValidVersion(this.state.selectedButton, this.state.selectedVersion, this.state.language)) {
-            await this.reNavigateToHome();
-        }
-        await this.setState({isFetching: false})
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.handleResize);
-    }
-
-    /**
-     * change the reSetPath state to true
-     */
-    reRenderButton(){
-        this.setState({reSetPath: true});
+    function toggleLoadMoreResults() {
+        setMaxResults(prev => prev + 10);
     }
 
     /**
      * Returns the labels for the catalog buttons depending on the chosen language.
-     * @returns labels
      */
-    labelHash() {
-        const {t} = this.props.translation;
+    function labelHash() {
         return {
             'ICD': t("LBL_ICD_LABEL"),
             'CHOP': 'CHOP',
@@ -332,25 +298,53 @@ class App extends Component<Props, IApp>{
     }
 
     /**
-     * Render search results from the backend.
-     * @returns {JSX.Element}
+     * Hide the catalog div if the window is too small.
      */
-    searchResults = (showButtons) => {
-        const {t} = this.props.translation;
-        const searchResults =
-            this.state.displayNoSearchResultsMessage ?
+    function showHide() {
+        if (window.innerWidth <= 991) {
+            setCollapseMenu(prev => !prev);
+        }
+    }
+
+    /**
+     * set the collapseMenu state to false and open it
+     */
+    function showSearchResults() {
+        setCollapseMenu(false);
+    }
+
+    /**
+     * change the reSetPath state to true
+     */
+    function reRenderButton() {
+        setReSetPath(true);
+    }
+
+    /**
+     * Change the clickedOnLogo state.
+     */
+    function reSetClickedOnLogo() {
+        setClickedOnLogo(false);
+    }
+
+    /**
+     * Render search results from the backend.
+     */
+    function renderSearchResults(showButtons) {
+        const results =
+            displayNoSearchResultsMessage ?
                 <div className="searchResult">{t("LBL_NO_RESULTS")}</div> :
-                this.state.searchResults.map((searchResult) => {
-                    return <SearchResult result={searchResult} key={searchResult.code} showHide={this.showHide}/>
+                (searchResults as any[]).map((searchResult) => {
+                    return <SearchResult result={searchResult} key={searchResult.code} showHide={showHide}/>
                 })
 
         return (
-            (this.state.searchResults.length > 0 || this.state.displayNoSearchResultsMessage || this.state.isSearching) &&
+            (searchResults.length > 0 || displayNoSearchResultsMessage || isSearching) &&
             <div key={"search_results"} className="col-12 col-lg">
                 <div className="container" id="searchResults">
                     <p className="text-center mt-3">
                         <button
-                            onClick={this.showHide}
+                            onClick={showHide}
                             className={"btn d-lg-none"}
                             type="button"
                             id={"collapse-button"}
@@ -358,14 +352,14 @@ class App extends Component<Props, IApp>{
                             aria-expanded="false"
                             aria-controls="collapseExample"
                         >
-                            {this.state.collapseMenu ? t("LBL_SHOW_SEARCH_RESULTS") : t("LBL_HIDE_SEARCH_RESULTS")}
+                            {collapseMenu ? t("LBL_SHOW_SEARCH_RESULTS") : t("LBL_HIDE_SEARCH_RESULTS")}
                         </button>
                     </p>
-                    <Collapse in={!this.state.collapseMenu}>
+                    <Collapse in={!collapseMenu}>
                         <div>
-                            {this.state.isSearching ?
+                            {isSearching ?
                                 loadingSpinner() :
-                                searchResults
+                                results
                             }
                         </div>
                     </Collapse>
@@ -373,11 +367,11 @@ class App extends Component<Props, IApp>{
                 {showButtons && (
                     <div className="d-flex justify-content-between">
                         <div className="d-flex">
-                            {!this.state.maxResultsReached && (
+                            {!maxResultsReached && (
                                 <button
                                     className={"btn ml-0"}
                                     id={"load-more-button"}
-                                    onClick={this.toggleLoadMoreResults}
+                                    onClick={toggleLoadMoreResults}
                                     style={{marginRight: '10px'}}
                                 >
                                     {t("LBL_LOAD_MORE_RESULTS")}
@@ -385,11 +379,11 @@ class App extends Component<Props, IApp>{
                             )}
                         </div>
                         <div className="d-flex">
-                            {this.state.maxResults > 10 && (
+                            {maxResults > 10 && (
                                 <button
                                     className={"btn mr-0"}
                                     id={"reset-button"}
-                                    onClick={() => this.setState({maxResults: 10})}
+                                    onClick={() => setMaxResults(10)}
                                     style={{marginLeft: '10px'}}
                                 >
                                     {t("LBL_RESET_RESULTS")}
@@ -402,147 +396,76 @@ class App extends Component<Props, IApp>{
         )
     }
 
-    /**
-     * Hide the catalog div if the window is too small.
-     * @param e
-     */
-    showHide = () => {
-        if (window.innerWidth <= 991) {
-            this.setState({
-                collapseMenu: !this.state.collapseMenu
-            });
-        }
-    }
-
-    /**
-     * Handles the collapseMenu state attribute according to the screen size.
-     * If the screen is mobile-sized, the `collapseMenu` state is set to `false`. Otherwise, the `collapseMenu` state
-     * is left unchanged.
-     */
-    handleResize = () => {
-        if (window.innerWidth >= 1200) {
-            this.setState({
-                    collapseMenu: false,
-                    hasCollapsedBefore: false
-                }
-            )
-        } else if (window.innerWidth > 991 && window.innerWidth < 1200) {
-            this.setState({
-                    collapseMenu: false,
-                    hasCollapsedBefore: false
-                }
-            )
-        } else {
-            this.setState((prevState) => ({
-                collapseMenu: prevState.hasCollapsedBefore ? prevState.collapseMenu : true,
-                hasCollapsedBefore: prevState.hasCollapsedBefore ? prevState.hasCollapsedBefore : true
-            }));
-        }
-    };
-
-    /**
-     * set the collapseMenu state to false and open it
-     */
-    showSearchResults() {
-        this.setState({
-            collapseMenu: false
-        })
-    }
-
-    /**
-     * Reset everything back to the default but stay in current language.
-     */
-    reNavigateToHome(){
-        // Clear current searchbar input.
-        const searchbarInput = document.getElementById('searchbarInput') as HTMLInputElement;
-        if (searchbarInput) {
-            searchbarInput.value = "";
-        }
-        this.setState({clickedOnLogo: true});
-        let latestICD = this.state.initialVersions['ICD'].at(-1);
-        this.changeSelectedButton('ICD')
-        this.changeSelectedVersion(latestICD)
-        this.props.navigation(
-            {pathname: "/" + this.state.language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD,search: ''});
-    }
-
-    /**
-     * Change the clickedOnLogo state.
-     */
-    reSetClickedOnLogo(){
-        this.setState({clickedOnLogo: false})
-    }
-
-    renderAfterFetch() {
+    function renderAfterFetch() {
         const isDesktop = window.innerWidth >= 1200;
-        const showSearchResultButtons = (isDesktop || !this.state.collapseMenu) && this.state.searchResults.length != 0;
+        const showSearchResultButtons = (isDesktop || !collapseMenu) && searchResults.length != 0;
         return(
             <div key={"app_content"}>
                 {isDesktop ?
                     <div className={"catalogAndSearchbarContainer"}>
                         <ButtonGroup
-                            initialVersions={this.state.initialVersions}
-                            currentVersions={this.state.currentVersions}
-                            clickedOnLogo={this.state.clickedOnLogo}
-                            selectedButton={this.state.selectedButton}
-                            version={this.state.selectedVersion}
-                            reSetClickOnLogo={this.reSetClickedOnLogo}
-                            reSetButton={this.reRenderButton}
-                            changeLanguage={this.changeLanguage}
-                            language={this.state.language}
-                            changeSelectedButton={this.changeSelectedButton}
-                            changeSelectedVersion={this.changeSelectedVersion}
-                            changeSelectedDate={this.changeSelectedDate}
-                            labels={this.labelHash()}
+                            initialVersions={initialVersions}
+                            currentVersions={currentVersions}
+                            clickedOnLogo={clickedOnLogo}
+                            selectedButton={selectedButton}
+                            version={selectedVersion}
+                            reSetClickOnLogo={reSetClickedOnLogo}
+                            reSetButton={reRenderButton}
+                            changeLanguage={setLanguage}
+                            language={language}
+                            changeSelectedButton={setSelectedButton}
+                            changeSelectedVersion={setSelectedVersion}
+                            changeSelectedDate={setSelectedDate}
+                            labels={labelHash()}
                             buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
                                 'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
                         />
-                        <div className={"searchbarItem"} onClick={this.showSearchResults}>
+                        <div className={"searchbarItem"} onClick={showSearchResults}>
                             <Searchbar
-                                language={this.state.language}
-                                selectedButton={this.state.selectedButton}
-                                version={this.state.selectedVersion}
-                                selectedDate={this.state.selectedDate}
-                                updateSearchResults={this.updateSearchResults}
-                                maxResults={this.state.maxResults}
-                                updateDisplayNoSearchResultsMessage={this.updateDisplayNoSearchResultsMessage}
-                                updateMaximumResultsReached={this.updateMaximumResultsReached}
-                                setIsSearching={(isSearching) => this.setState({ isSearching: isSearching })}
+                                language={language}
+                                selectedButton={selectedButton}
+                                version={selectedVersion}
+                                selectedDate={selectedDate}
+                                updateSearchResults={updateSearchResults}
+                                maxResults={maxResults}
+                                updateDisplayNoSearchResultsMessage={setDisplayNoSearchResultsMessage}
+                                updateMaximumResultsReached={setMaxResultsReached}
+                                setIsSearching={(searching) => setIsSearching(searching)}
                             />
                         </div>
                     </div> :
                     <>
                         <div key={"app_searchbar"} className="row">
-                            <div className={"search-mobile"} onClick={this.showSearchResults}>
+                            <div className={"search-mobile"} onClick={showSearchResults}>
                                 <Searchbar
-                                    language={this.state.language}
-                                    selectedButton={this.state.selectedButton}
-                                    version={this.state.selectedVersion}
-                                    selectedDate={this.state.selectedDate}
-                                    updateSearchResults={this.updateSearchResults}
-                                    maxResults={this.state.maxResults}
-                                    updateDisplayNoSearchResultsMessage={this.updateDisplayNoSearchResultsMessage}
-                                    updateMaximumResultsReached={this.updateMaximumResultsReached}
-                                    setIsSearching={(isSearching) => this.setState({ isSearching: isSearching })}
+                                    language={language}
+                                    selectedButton={selectedButton}
+                                    version={selectedVersion}
+                                    selectedDate={selectedDate}
+                                    updateSearchResults={updateSearchResults}
+                                    maxResults={maxResults}
+                                    updateDisplayNoSearchResultsMessage={setDisplayNoSearchResultsMessage}
+                                    updateMaximumResultsReached={setMaxResultsReached}
+                                    setIsSearching={(searching) => setIsSearching(searching)}
                                 />
                             </div>
                         </div>
                         <div key={"app_buttons"} className="row">
                             <div className={"centerMobileButtons"}>
                                 <ButtonGroup
-                                    initialVersions={this.state.initialVersions}
-                                    currentVersions={this.state.currentVersions}
-                                    clickedOnLogo={this.state.clickedOnLogo}
-                                    selectedButton={this.state.selectedButton}
-                                    version={this.state.selectedVersion}
-                                    reSetClickOnLogo={this.reSetClickedOnLogo}
-                                    reSetButton={this.reRenderButton}
-                                    changeLanguage={this.changeLanguage}
-                                    language={this.state.language}
-                                    changeSelectedButton={this.changeSelectedButton}
-                                    changeSelectedVersion={this.changeSelectedVersion}
-                                    changeSelectedDate={this.changeSelectedDate}
-                                    labels={this.labelHash()}
+                                    initialVersions={initialVersions}
+                                    currentVersions={currentVersions}
+                                    clickedOnLogo={clickedOnLogo}
+                                    selectedButton={selectedButton}
+                                    version={selectedVersion}
+                                    reSetClickOnLogo={reSetClickedOnLogo}
+                                    reSetButton={reRenderButton}
+                                    changeLanguage={setLanguage}
+                                    language={language}
+                                    changeSelectedButton={setSelectedButton}
+                                    changeSelectedVersion={setSelectedVersion}
+                                    changeSelectedDate={setSelectedDate}
+                                    labels={labelHash()}
                                     buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
                                         'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
                                 />
@@ -553,7 +476,7 @@ class App extends Component<Props, IApp>{
                 <div key={"app_body"} className="row">
                     <div className="Wrapper">
                         <div className="row">
-                            {this.searchResults(showSearchResultButtons)}
+                            {renderSearchResults(showSearchResultButtons)}
                             <div key={"code_body"} className="col">
                                 <div id="color" className="whiteBackground border border-5 border-bottom-0 border-top-0 border-right-0 border-end-0 rounded">
                                     <div className="col" id="codeBody">
@@ -570,20 +493,20 @@ class App extends Component<Props, IApp>{
         )
     }
 
-    renderContent() {
+    function renderContent() {
         return (
             <div>
                 <div className="container">
                     <div key={"app_header"} className="row col">
-                            <Header
-                                changeLanguage={this.changeLanguage}
-                                activeLanguage={this.state.language}
-                            />
+                        <Header
+                            changeLanguage={setLanguage}
+                            activeLanguage={language}
+                        />
                     </div>
                     <div key={"app_logo"} className="row col">
-                            <img onClick={this.reNavigateToHome} alt="logo" id="logo" src={logo}/>
+                        <img onClick={() => reNavigateToHome()} alt="logo" id="logo" src={logo}/>
                     </div>
-                    {this.state.isFetching ? loadingSpinner() : this.renderAfterFetch()}
+                    {isFetching ? loadingSpinner() : renderAfterFetch()}
                     <div key={"app_footer"} className="navbar row col">
                         <div key={"app_footer_0"}>
                             <Footer/>
@@ -598,24 +521,18 @@ class App extends Component<Props, IApp>{
      * Renders the whole website.
      * @returns {JSX.Element}
      */
-    render() {
-        let latestICD = this.state.initialVersions['ICD'].at(-1);
-        return (
-            <>
-                <Routes>
-                    <Route path="/" element={this.renderContent()}>
-                        <Route path="/" element={<Navigate to={"de/ICD/" + latestICD + "/icd_chapters/" + latestICD}/>}/>
-                        <Route path=":language/:catalog/:resource_type/:code" element={<CodeBodyUnversionized selectedDate={this.state.selectedDate} />}/>
-                        <Route path=":language/:catalog/:version/:resource_type/:code" element={<CodeBodyVersionized/>}/>
-                    </Route>
-                </Routes>
-            </>
+    let latestICD = initialVersions['ICD'].at(-1);
+    return (
+        <>
+            <Routes>
+                <Route path="/" element={renderContent()}>
+                    <Route path="/" element={<Navigate to={language + "/ICD/" + latestICD + "/icd_chapters/" + latestICD}/>}/>
+                    <Route path=":language/:catalog/:resource_type/:code" element={<CodeBodyUnversionized selectedDate={selectedDate} />}/>
+                    <Route path=":language/:catalog/:version/:resource_type/:code" element={<CodeBodyVersionized/>}/>
+                </Route>
+            </Routes>
+        </>
     )
-    }
 }
 
-function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} translation={useTranslation()}/>;
-}
-
-export default addProps(App);
+export default App;

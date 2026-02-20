@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {useState, useEffect} from "react";
 import "./PopUp.css"
 import {Modal} from "react-bootstrap";
 import {convertCatalogToResourceType, languages} from "../../Services/catalog-version.service";
@@ -15,79 +15,58 @@ interface Props {
     updatePopUpState: { (boolean_value: boolean): void },
     version: string,
     catalog: string
-    translation: any
-}
-
-interface IPopUp {
-    show: boolean,
-    availableLanguages: string[]
 }
 
 /**
  * Pop Up appearing if a non available version selected.
  * Points you out to go back or switch language where the version is available.
  */
-class PopUp extends Component<Props, IPopUp>{
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: false,
-            availableLanguages: ['de']
-        }
-    }
+function PopUp({ language, changeLanguage, selectedVersion, changeSelectedButton, show, updatePopUpState, version, catalog }: Props) {
+    const { t } = useTranslation();
+    const [showModal, setShowModal] = useState(false);
+    const [availableLanguages, setAvailableLanguages] = useState<string[]>(['de']);
 
     /**
-     * updates the value state
+     * updates the show state and notifies parent
      * @param value
      */
-    handleShow(value) {
-        this.setState({
-            show: value
-        })
-        this.props.updatePopUpState(value)
+    function handleShow(value) {
+        setShowModal(value)
+        updatePopUpState(value)
     }
 
     /**
-     * Responsible for initial state update
+     * Sync show state with props
      */
-    componentDidMount() {
-        this.handleShow(this.props.show)
-    }
+    useEffect(() => {
+        setShowModal(show)
+    }, [show]);
 
     /**
-     * Looks for update and change the state if needed
-     * @param prevProps
-     * @param prevState
-     * @param snapshot
-     * @returns {Promise<void>}
+     * Fetch available languages when version or catalog changes
      */
-    async componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps.version !== this.props.version ||
-            prevProps.catalog !== this.props.catalog) {
-            this.setState({availableLanguages: ['de']})
-            await this.findAvailableLanguages()
-        }
-        if(prevProps.show !== this.props.show) {
-            this.handleShow(this.props.show)
-        }
-    }
+    useEffect(() => {
+        if (!catalog) return;
+        setAvailableLanguages(['de'])
+        findAvailableLanguages()
+    }, [version, catalog]); // eslint-disable-line
 
     /**
      * Fetch the catalog and looks if there are languages for the selected version
      * @returns {Promise<void>}
      */
-    async findAvailableLanguages() {
-        if(this.props.catalog === "AL" || this.props.catalog === "DRUG" || this.props.catalog === "MIGEL") {
-            this.setState({availableLanguages: ["de", "fr", "it"]})
+    async function findAvailableLanguages() {
+        if(catalog === "AL" || catalog === "DRUG" || catalog === "MIGEL") {
+            setAvailableLanguages(["de", "fr", "it"])
         } else {
-            let ressource_type = convertCatalogToResourceType(this.props.catalog)
+            let ressource_type = convertCatalogToResourceType(catalog)
             for(let lang of languages) {
-                if(lang !== this.props.language && lang !== 'de') {
+                if(lang !== language && lang !== 'de') {
                     await fetch([fetchURL, lang, ressource_type, 'versions'].join("/"))
                         .then((res) => res.json())
                         .then((json) => {
-                            if(json.includes(this.props.version)) {
-                                this.setState({availableLanguages: [...this.state.availableLanguages, lang]})
+                            if(json.includes(version)) {
+                                setAvailableLanguages(prev => [...prev, lang])
                             }
                         })
                 }
@@ -97,47 +76,41 @@ class PopUp extends Component<Props, IPopUp>{
 
     /**
      * Handles the action after click on a disabled language.
-     * @param language
+     * @param lang
      */
-    handleLanguageClick(language) {
-        this.handleShow(false)
-        this.props.changeLanguage(language)
-        this.props.selectedVersion(this.props.version)
-        this.props.changeSelectedButton(this.props.catalog)
+    function handleLanguageClick(lang) {
+        handleShow(false)
+        changeLanguage(lang)
+        selectedVersion(version)
+        changeSelectedButton(catalog)
     }
 
     /**
      * Render the PopUp component
      * @returns {JSX.Element}
      */
-    render() {
-        const {t} = this.props.translation
-        return (
-            <>
-                <Modal size="sm" show={this.state.show} onHide={() => this.handleShow(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title className="pull-left">{t('LBL_SELECT_LANGUAGE')}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>{t('LBL_CATALOG_LANGUAGE_NOT_AVAILABLE')}</Modal.Body>
-                    <Modal.Footer>
-                            <button className="PopUpBtn" onClick={() => this.handleShow(false)}>
-                                {t('LBL_BACK')}
-                            </button>
-                        <div className="float-end">
-                        {this.state.availableLanguages.map((language, i) => (
-                            <button key={i} className="PopUpBtn" onClick={() => this.handleLanguageClick(language)}>
-                                {language}
-                            </button>
-                        ))}
-                        </div>
-                    </Modal.Footer>
-                </Modal>
-            </>
-        );
-    }
-}
-function addProps(Component) {
-    return props => <Component {...props} translation={useTranslation()}/>;
+    return (
+        <>
+            <Modal size="sm" show={showModal} onHide={() => handleShow(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title className="pull-left">{t('LBL_SELECT_LANGUAGE')}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{t('LBL_CATALOG_LANGUAGE_NOT_AVAILABLE')}</Modal.Body>
+                <Modal.Footer>
+                        <button className="PopUpBtn" onClick={() => handleShow(false)}>
+                            {t('LBL_BACK')}
+                        </button>
+                    <div className="float-end">
+                    {availableLanguages.map((lang, i) => (
+                        <button key={i} className="PopUpBtn" onClick={() => handleLanguageClick(lang)}>
+                            {lang}
+                        </button>
+                    ))}
+                    </div>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
 }
 
-export default addProps(PopUp);
+export default PopUp;

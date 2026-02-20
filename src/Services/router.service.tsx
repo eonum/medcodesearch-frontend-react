@@ -1,9 +1,8 @@
-import {Component} from "react";
 
 /**
  * Responsible for the url route
  */
-class RouterService extends Component {
+class RouterService {
 
     /**
      * get the query variable and compares it
