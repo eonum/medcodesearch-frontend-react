@@ -97,5 +97,6 @@
   "LBL_SHOW_SEARCH_RESULTS": "Show search results",
   "LBL_HIDE_SEARCH_RESULTS": "Collapse search results",
   "LBL_LOAD_MORE_RESULTS": "Show more search results",
-  "LBL_RESET_RESULTS": "Reset search results"
+  "LBL_RESET_RESULTS": "Reset search results",
+  "LBL_FETCH_ERROR": "An error occurred: could not load data."
 }

@@ -184,7 +184,8 @@ function App() {
                 setSelectedVersion(resolvedVersion);
             }
 
-            if (!isValidVersion(selectedButton, resolvedVersion, language, currVers)) {
+            const hasVersionData = Object.values(initVers).some((v) => (v as string[] | undefined)?.length > 0);
+            if (hasVersionData && !isValidVersion(selectedButton, resolvedVersion, language, currVers)) {
                 reNavigateToHome(initVers);
             }
             setIsFetching(false);

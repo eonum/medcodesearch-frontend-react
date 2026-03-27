@@ -5,6 +5,7 @@ import {IAttributes, IShortEntry} from "../../interfaces";
 import {fetchURL, getNavParams, initialCodeState} from "../../Utils";
 import CodeAttributesVersionized from "../CodeAttributes/CodeAttributesVersionized";
 import {useTranslation} from "react-i18next";
+import {toast} from "react-toastify";
 
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED, TARDOC, REHA, ZE).
@@ -23,7 +24,10 @@ function CodeBodyVersionized() {
      */
     async function fetchHelper(lang, res_type, cd, ver) {
         let fetchString = [fetchURL, lang, res_type, ver, cd].join("/") + "?show_detail=1";
-        return await fetch(fetchString).then((res) => res.json())
+        return await fetch(fetchString).then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`)
+            return res.json()
+        })
     }
 
     /**
@@ -35,11 +39,16 @@ function CodeBodyVersionized() {
         if (resource_type === 'mdcs' && code === version || resource_type === 'arcgs' && code === version) {
             codeForFetch = 'ALL'
         }
-        const detailedCode = await fetchHelper(language, resource_type, codeForFetch, version)
-        if (detailedCode !== null) {
-            setAttributes(detailedCode)
+        try {
+            const detailedCode = await fetchHelper(language, resource_type, codeForFetch, version)
+            if (detailedCode !== null) {
+                setAttributes(detailedCode)
+            }
+            return detailedCode
+        } catch {
+            toast.error(t('LBL_FETCH_ERROR'))
+            return null
         }
-        return detailedCode
     }
 
     /**
@@ -48,12 +57,18 @@ function CodeBodyVersionized() {
     async function fetchSiblings(attrs: IAttributes, parent: IShortEntry) {
         if (attrs.children === null && resource_type !== "partitions") {
             await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
-                .then((res) => res.json())
+                .then((res) => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                    return res.json()
+                })
                 .then((json) => {
                     let sibs = json.children.filter(function(child) {
                         return child.code !== code;
                     })
                     setSiblings(sibs)
+                })
+                .catch(() => {
+                    toast.error(t('LBL_FETCH_ERROR'))
                 })
         }
     }
@@ -66,9 +81,16 @@ function CodeBodyVersionized() {
         while(parent) {
             parentsArr = [...parentsArr, parent]
             await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
-                .then((res) => res.json())
+                .then((res) => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                    return res.json()
+                })
                 .then((json) => {
                     parent = json["parent"]
+                })
+                .catch(() => {
+                    toast.error(t('LBL_FETCH_ERROR'))
+                    parent = null
                 })
         }
         setParents(parentsArr)

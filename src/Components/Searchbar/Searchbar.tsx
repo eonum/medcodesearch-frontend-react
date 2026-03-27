@@ -7,6 +7,7 @@ import {getQueryVariable} from "../../Services/router.service";
 import {fetchURL} from "../../Utils";
 import dateFormat from "dateformat"
 import {useTranslation} from "react-i18next";
+import {toast} from "react-toastify";
 
 const resourceTypeByBtn = {
     "SwissDRG": 'drgs',
@@ -178,6 +179,7 @@ function Searchbar(props: Props) {
                 if(res.ok) {
                     return res.json()
                 }
+                throw new Error(`HTTP ${res.status}`)
             })
             .then((json) => {
                 props.setIsSearching(false);
@@ -188,6 +190,10 @@ function Searchbar(props: Props) {
                     props.updateDisplayNoSearchResultsMessage(false)
                     props.updateMaximumResultsReached(json.length < maxResults || json.length == 100 ? true : false)
                 }
+            })
+            .catch(() => {
+                props.setIsSearching(false);
+                toast.error(t('LBL_FETCH_ERROR'))
             })
     }
 

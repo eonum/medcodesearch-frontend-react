@@ -25,6 +25,7 @@
     "test:codeAttributes": "start-server-and-test start-test-server http-get://localhost:8080 'cypress run --spec cypress/e2e/codeAttributesMobile.cy.ts,cypress/e2e/codeAttributes.cy.ts,cypress/e2e/customCodeAttributes.cy.ts'",
     "test:default": "start-server-and-test start-test-server http-get://localhost:8080 'cypress run --spec cypress/e2e/defaultMobile.cy.ts,cypress/e2e/default.cy.ts'",
     "test:popUp": "start-server-and-test start-test-server http-get://localhost:8080 'cypress run --spec cypress/e2e/popUpMobile.cy.ts,cypress/e2e/popUp.cy.ts'",
+    "test:errorHandling": "start-server-and-test start-test-server http-get://localhost:8080 'cypress run --spec cypress/e2e/errorHandlingMobile.cy.ts,cypress/e2e/errorHandling.cy.ts'",
     "test-with-gui": "start-server-and-test start-test-server http-get://localhost:8080 'cypress open'",
     "start-test-server": "BROWSER=none PORT=8080 react-scripts start",
     "eject": "react-scripts eject"

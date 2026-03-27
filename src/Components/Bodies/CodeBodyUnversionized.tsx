@@ -5,6 +5,7 @@ import {IAttributes, IShortEntry} from "../../interfaces";
 import {fetchURL, getNavParams, initialCodeState} from "../../Utils";
 import CodeAttributesUnversionized from "../CodeAttributes/CodeAttributesUnversionized";
 import { useTranslation } from 'react-i18next';
+import {toast} from "react-toastify";
 
 interface Props {
     selectedDate: string,
@@ -28,7 +29,10 @@ function CodeBodyUnversionized({ selectedDate }: Props) {
     async function fetchHelper(lang, res_type, cd, cat) {
         let fetchString = [fetchURL, lang, res_type, cat, cd].join("/") +
             "?show_detail=1&date=" + selectedDate;
-        return await fetch(fetchString).then((res) => res.json())
+        return await fetch(fetchString).then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`)
+            return res.json()
+        })
     }
 
     /**
@@ -36,15 +40,20 @@ function CodeBodyUnversionized({ selectedDate }: Props) {
      */
     async function fetchInformations(): Promise<IAttributes | null> {
         let codeForFetch = code === 'all' ? catalog : code;
-        const newAttributes = await fetchHelper(
-            language,
-            catalog === 'AL' ? 'laboratory_analyses' : resource_type,
-            codeForFetch,
-            catalog)
-        if (newAttributes !== null) {
-            setAttributes(newAttributes)
+        try {
+            const newAttributes = await fetchHelper(
+                language,
+                catalog === 'AL' ? 'laboratory_analyses' : resource_type,
+                codeForFetch,
+                catalog)
+            if (newAttributes !== null) {
+                setAttributes(newAttributes)
+            }
+            return newAttributes
+        } catch {
+            toast.error(t('LBL_FETCH_ERROR'))
+            return null
         }
-        return newAttributes
     }
 
     /**
@@ -55,9 +64,16 @@ function CodeBodyUnversionized({ selectedDate }: Props) {
         while(parent) {
             parentsArr = [...parentsArr, parent]
             await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
-                .then((res) => res.json())
+                .then((res) => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                    return res.json()
+                })
                 .then((json) => {
                     parent = json["parent"]
+                })
+                .catch(() => {
+                    toast.error(t('LBL_FETCH_ERROR'))
+                    parent = null
                 })
         }
         setParents(parentsArr)
@@ -69,12 +85,18 @@ function CodeBodyUnversionized({ selectedDate }: Props) {
     async function fetchSiblings(parent: IShortEntry) {
         let fetchString = [fetchURL, parent.url].join("/") + "?show_detail=1&date=" + selectedDate;
         await fetch(fetchString)
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                return res.json()
+            })
             .then((json) => {
                 let sibs = json.children.filter(function(child) {
                     return child.code !== code;
                 })
                 setSiblings(sibs)
+            })
+            .catch(() => {
+                toast.error(t('LBL_FETCH_ERROR'))
             })
     }
 

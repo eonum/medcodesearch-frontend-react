@@ -5,6 +5,7 @@ import {convertCatalogToResourceType, languages} from "../../Services/catalog-ve
 import {fetchURL} from "../../Utils";
 import {IUpdateStateByArg} from "../../interfaces";
 import {useTranslation} from "react-i18next";
+import {toast} from "react-toastify";
 
 interface Props {
     language: string,
@@ -63,11 +64,17 @@ function PopUp({ language, changeLanguage, selectedVersion, changeSelectedButton
             for(let lang of languages) {
                 if(lang !== language && lang !== 'de') {
                     await fetch([fetchURL, lang, ressource_type, 'versions'].join("/"))
-                        .then((res) => res.json())
+                        .then((res) => {
+                            if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                            return res.json()
+                        })
                         .then((json) => {
                             if(json.includes(version)) {
                                 setAvailableLanguages(prev => [...prev, lang])
                             }
+                        })
+                        .catch(() => {
+                            toast.error(t('LBL_FETCH_ERROR'))
                         })
                 }
             }

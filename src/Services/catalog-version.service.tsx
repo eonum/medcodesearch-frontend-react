@@ -85,11 +85,16 @@ export function convertCatalogToResourceType(catalog) {
 export async function getVersionsByLanguage(language) {
     let allVersions = {}
     for (let catalog of versionizedCatalogs) {
+        allVersions[catalog] = [];
         await fetch([fetchURL, language, convertCatalogToResourceType(catalog), 'versions' ].join("/"))
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                return res.json()
+            })
             .then((json) => {
                 allVersions[catalog] = json;
             })
+            .catch(() => {})
     }
     return allVersions
 }

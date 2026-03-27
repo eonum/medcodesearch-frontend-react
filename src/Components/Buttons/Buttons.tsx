@@ -5,6 +5,8 @@ import React, {useState, useEffect} from "react";
 import DatePicker from "./DatePicker";
 import {IVersions, IUpdateStateByArg, IUpdateButton, ILabelHash} from "../../interfaces";
 import {fetchURL} from "../../Utils";
+import {toast} from "react-toastify";
+import {useTranslation} from "react-i18next";
 
 interface Props {
     selectedCatalog: string
@@ -36,6 +38,7 @@ export interface IButton {
  * @component
  */
 function Buttons(props: Props) {
+    const { t } = useTranslation();
     const [showPopUp, setShowPopUp] = useState(false);
     const [disabledVersion, setDisabledVersion] = useState("");
     const [disabledCatalog, setDisabledCatalog] = useState("");
@@ -56,10 +59,16 @@ function Buttons(props: Props) {
     async function fetchBaseVersions() {
         if (!isCalBut()) {
             await fetch([fetchURL, 'de', convertCatalogToResourceType(props.catalog), 'versions'].join("/"))
-                .then((res) => res.json())
+                .then((res) => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                    return res.json()
+                })
                 .then((json) => {
                     setAllVersions(json)
                     setAvailableVersions(json)
+                })
+                .catch(() => {
+                    toast.error(t('LBL_FETCH_ERROR'))
                 })
         } else {
             setAllVersions([])
@@ -74,9 +83,15 @@ function Buttons(props: Props) {
         if (!isCalBut()) {
             let versionsString = [fetchURL, props.language, convertCatalogToResourceType(props.catalog), 'versions'].join("/")
             await fetch(versionsString)
-                .then((res) => res.json())
+                .then((res) => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                    return res.json()
+                })
                 .then((json) => {
                     setAvailableVersions(json)
+                })
+                .catch(() => {
+                    toast.error(t('LBL_FETCH_ERROR'))
                 })
         } else {
             setAvailableVersions([])
