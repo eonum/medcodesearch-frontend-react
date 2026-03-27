@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import "./ButtonGroup.css"
 import {useParams} from "react-router-dom";
-import RouterService from "../../Services/router.service";
+import {initializeCatalogFromURL} from "../../Services/router.service";
 import Buttons from "./Buttons";
 import {
     IVersions,
@@ -36,7 +36,7 @@ interface Props {
 function ButtonGroup(props: Props) {
     const { catalog: paramCatalog, version: paramVersion } = useParams();
 
-    const [selectedButtonState, setSelectedButtonState] = useState(RouterService.initializeCatalogFromURL());
+    const [selectedButtonState, setSelectedButtonState] = useState(initializeCatalogFromURL());
     const [activeVersion, setActiveVersion] = useState(paramVersion);
     const [currentVersionsByButton, setCurrentVersionsByButton] = useState<Record<string, string>>({
         ICD: props.initialVersions['ICD'].at(-1),

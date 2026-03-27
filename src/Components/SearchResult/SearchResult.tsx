@@ -1,7 +1,7 @@
 import React from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
-import RouterService from "../../Services/router.service";
+import {getQueryVariable} from "../../Services/router.service";
 import {useTranslation} from "react-i18next";
 
 interface Props {
@@ -51,7 +51,7 @@ function SearchResult({ result, showHide }: Props) {
         }
         navigate({
             pathname: pathname,
-            search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+            search: getQueryVariable('query') === "" ? "" : "?query=" + getQueryVariable('query')
         })
         // Call the showHide function
         showHide();

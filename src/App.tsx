@@ -7,12 +7,12 @@ import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import ButtonGroup from "./Components/Buttons/ButtonGroup";
-import RouterService from "./Services/router.service";
+import {getQueryVariable, initializeLanguageFromURL, initializeCatalogFromURL} from "./Services/router.service";
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/catalog-version.service";
 import {IVersions} from "./interfaces";
-import loadingSpinner from "./Components/Spinner/spinner";
+import Loadingspinner from "./Components/Spinner/spinner";
 import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
 import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
 import dateFormat from "dateformat";
@@ -57,8 +57,8 @@ function App() {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const [language, setLanguage] = useState(RouterService.initializeLanguageFromURL());
-    const [selectedButton, setSelectedButton] = useState(RouterService.initializeCatalogFromURL());
+    const [language, setLanguage] = useState(initializeLanguageFromURL());
+    const [selectedButton, setSelectedButton] = useState(initializeCatalogFromURL());
     const [selectedVersion, setSelectedVersion] = useState(initializeVersionFromURL());
     const [selectedDate, setSelectedDate] = useState(dateFormat(new Date(), "dd.mm.yyyy"));
     const [searchResults, setSearchResults] = useState<string[] | ISearchResult[]>([]);
@@ -204,8 +204,8 @@ function App() {
         }
         if (isFetching) return;
 
-        const searchString = RouterService.getQueryVariable('query') === "" ? "" :
-            "?query=" + RouterService.getQueryVariable('query');
+        const searchString = getQueryVariable('query') === "" ? "" :
+            "?query=" + getQueryVariable('query');
 
         if (isValidVersion(selectedButton, selectedVersion, language, currentVersions)) {
             navigate({
@@ -235,8 +235,8 @@ function App() {
         const prevLang = prevLanguageRef.current;
         prevLanguageRef.current = language;
 
-        const searchString = RouterService.getQueryVariable('query') === "" ? "" :
-            "?query=" + RouterService.getQueryVariable('query');
+        const searchString = getQueryVariable('query') === "" ? "" :
+            "?query=" + getQueryVariable('query');
 
         async function handleLanguageChange() {
             const currVers = await getVersionsByLanguage(language);
@@ -358,7 +358,7 @@ function App() {
                     <Collapse in={!collapseMenu}>
                         <div>
                             {isSearching ?
-                                loadingSpinner() :
+                                Loadingspinner() :
                                 results
                             }
                         </div>
@@ -506,7 +506,7 @@ function App() {
                     <div key={"app_logo"} className="row col">
                         <img onClick={() => reNavigateToHome()} alt="logo" id="logo" src={logo}/>
                     </div>
-                    {isFetching ? loadingSpinner() : renderAfterFetch()}
+                    {isFetching ? Loadingspinner() : renderAfterFetch()}
                     <div key={"app_footer"} className="navbar row col">
                         <div key={"app_footer_0"}>
                             <Footer/>

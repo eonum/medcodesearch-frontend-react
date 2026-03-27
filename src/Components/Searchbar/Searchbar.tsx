@@ -3,7 +3,7 @@ import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useNavigate, useLocation} from "react-router-dom";
-import RouterService from "../../Services/router.service";
+import {getQueryVariable} from "../../Services/router.service";
 import {fetchURL} from "../../Utils";
 import dateFormat from "dateformat"
 import {useTranslation} from "react-i18next";
@@ -74,7 +74,7 @@ function Searchbar(props: Props) {
      * Mount: initialize from URL and fetch
      */
     useEffect(() => {
-        const query = RouterService.getQueryVariable('query');
+        const query = getQueryVariable('query');
         updateSearchTermState(query);
         fetchForSearchTerm(query);
         return () => {
@@ -93,7 +93,7 @@ function Searchbar(props: Props) {
             return;
         }
 
-        const query = RouterService.getQueryVariable('query');
+        const query = getQueryVariable('query');
 
         const prevSelectedButton = prevSelectedButtonRef.current;
         const prevVersion = prevVersionRef.current;
