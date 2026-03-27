@@ -1,24 +1,13 @@
 import React from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
+import {ISearchResult} from "../../interfaces";
 import {getQueryVariable} from "../../Services/router.service";
 import {useTranslation} from "react-i18next";
 
 interface Props {
     result: ISearchResult,
     showHide: () => void;
-}
-
-interface ISearchResult {
-    code: string
-    highlight: IHighlight,
-    text: string
-}
-
-interface IHighlight {
-    text: string,
-    synonyms: string[],
-    inclusions: string[]
 }
 
 /**

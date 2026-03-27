@@ -11,7 +11,7 @@ import {getQueryVariable, initializeLanguageFromURL, initializeCatalogFromURL} f
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/catalog-version.service";
-import {IVersions} from "./interfaces";
+import {IVersions, ISearchResult} from "./interfaces";
 import Loadingspinner from "./Components/Spinner/spinner";
 import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
 import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
@@ -23,14 +23,6 @@ import { useTranslation } from 'react-i18next';
  * App.js calls all the component to combine them and render the website
  * @component
  */
-
-interface ISearchResult {
-    code: string,
-    text: string,
-    terminal: boolean,
-    url: string,
-    highlight: object
-}
 
 const emptyVersions: IVersions = {
     'ICD': [], 'CHOP': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
@@ -335,8 +327,8 @@ function App() {
         const results =
             displayNoSearchResultsMessage ?
                 <div className="searchResult">{t("LBL_NO_RESULTS")}</div> :
-                (searchResults as any[]).map((searchResult) => {
-                    return <SearchResult result={searchResult} key={searchResult.code} showHide={showHide}/>
+                searchResults.map((searchResult, i) => {
+                    return <SearchResult result={searchResult} key={searchResult.code + "_" + i} showHide={showHide}/>
                 })
 
         return (

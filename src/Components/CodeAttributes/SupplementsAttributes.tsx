@@ -109,7 +109,7 @@ function SupplementsAttributes({ attributes }: Props) {
                                     case "age_lower_than":
                                         return value > 0 ? tableRow(key, value) : null;
                                     case 'dosage':
-                                        return value !== 0 ? dosageInfo(attributes) : null;
+                                        return value !== 0 ? <React.Fragment key={key}>{dosageInfo(attributes)}</React.Fragment> : null;
                                     case 'za':
                                     case 'va':
                                         return value ? tableRow(key, value) : null;
