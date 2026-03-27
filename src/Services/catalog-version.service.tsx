@@ -70,8 +70,6 @@ export function convertCatalogToResourceType(catalog) {
             return "amb_groups"
         case "Reha":
             return "rcgs"
-        case "Supplements":
-            return "supplements"
         default:
             return
     }

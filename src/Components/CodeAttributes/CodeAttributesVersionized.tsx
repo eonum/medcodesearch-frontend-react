@@ -44,7 +44,7 @@ function CodeAttributesVersionized({ attributes, catalog, version, siblings, lan
     let showNewCodeInfo = ['CHOP', 'ICD'].includes(catalog) &&
         !versionsWithoutMappingInfos.includes(version) &&
         attributes.predecessors &&
-        attributes.predecessors.length == 0 &&
+        attributes.predecessors.length === 0 &&
         !attributes['children']
 
     return (
@@ -58,9 +58,9 @@ function CodeAttributesVersionized({ attributes, catalog, version, siblings, lan
                     mappingFields.map((field, j) => (
                         attributes[field] != null &&
                         (attributes[field].length > 1 ||
-                            attributes[field].length == 1 && (
-                                (attributes[field][0]['code'] != attributes['code'] ||
-                                    attributes[field][0]['text'] != attributes['text']))) &&
+                            attributes[field].length === 1 && (
+                                (attributes[field][0]['code'] !== attributes['code'] ||
+                                    attributes[field][0]['text'] !== attributes['text']))) &&
                         <div key={"mapping_pre_succ" + j}>
                             <h5>{t("LBL_" + field.toUpperCase())}</h5>
                             <ul>

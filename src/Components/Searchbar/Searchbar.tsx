@@ -188,7 +188,9 @@ function Searchbar(props: Props) {
                 } else {
                     props.updateSearchResults(json)
                     props.updateDisplayNoSearchResultsMessage(false)
-                    props.updateMaximumResultsReached(json.length < maxResults || json.length == 100 ? true : false)
+                    // True when all results are exhausted (fewer returned than requested) or the API
+                    // hard cap of 100 is hit — in either case the "load more" button should be hidden.
+                    props.updateMaximumResultsReached(json.length < maxResults || json.length === 100)
                 }
             })
             .catch(() => {

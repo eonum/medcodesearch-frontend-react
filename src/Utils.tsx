@@ -25,7 +25,6 @@ const skippableAttributes = [
     "children",
     "is_limited",
     "rev",
-    "is_limited",
     "base_analyis",
     "special_analysis",
     "auth_holder_nr",

@@ -108,8 +108,8 @@ function PopUp({ language, changeLanguage, selectedVersion, changeSelectedButton
                             {t('LBL_BACK')}
                         </button>
                     <div className="float-end">
-                    {availableLanguages.map((lang, i) => (
-                        <button key={i} className="PopUpBtn" onClick={() => handleLanguageClick(lang)}>
+                    {availableLanguages.map((lang) => (
+                        <button key={lang} className="PopUpBtn" onClick={() => handleLanguageClick(lang)}>
                             {lang}
                         </button>
                     ))}

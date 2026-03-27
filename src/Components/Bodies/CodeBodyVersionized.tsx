@@ -122,20 +122,20 @@ function CodeBodyVersionized() {
             breadcrumbRoot = ver.replace("_", " ")
             currentItem = attributes.code.includes("ICD10") ?
                 internationalizeIcdBaseCode(cd) : cd.replace("_", " ")
-            if (cat == "SwissDRG") {
+            if (cat === "SwissDRG") {
                 breadcrumbRoot = "SwissDRG " + ver.substring(1)
-            } else if (cat == "Supplements") {
+            } else if (cat === "Supplements") {
                 breadcrumbRoot = t('LBL_SUPPLEMENTS') + ' ' + ver.substring(1)
-            } else if (cat == "Reha") {
+            } else if (cat === "Reha") {
                 breadcrumbRoot = "ST Reha " + ver.substring(5).replace("_", " ")
-            } else if (cat == "AmbGroup"){
+            } else if (cat === "AmbGroup"){
                 breadcrumbRoot = t('LBL_AMB_GROUP') + " " + ver.substring(1)
             }
         } else {
             breadcrumbRoot = '';
             currentItem = '';
         }
-        return cd == ver ? breadcrumbRoot : currentItem
+        return cd === ver ? breadcrumbRoot : currentItem
     }
 
     /**
@@ -147,10 +147,10 @@ function CodeBodyVersionized() {
     return (
         <div>
             <Breadcrumb>
-                {parents.slice().reverse().map((currElement, i) => {
+                {parents.slice().reverse().map((currElement) => {
                     return (
                         <Breadcrumb.Item
-                            key={i}
+                            key={currElement.code}
                             onClick={() => {
                                 let {pathname, searchString} = getNavParams(currElement, language, catalog)
                                 navigate({pathname: pathname, search: searchString})
@@ -166,7 +166,7 @@ function CodeBodyVersionized() {
                 </Breadcrumb.Item>
             </Breadcrumb>
             <h3>{displayCode(currentCode, version, catalog)}</h3>
-            {version == attributes.code || attributes.code == "ALL" ?
+            {version === attributes.code || attributes.code === "ALL" ?
                 <p></p> : <p>{attributes.text}</p>}
             <CodeAttributesVersionized
                 attributes={attributes}

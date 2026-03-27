@@ -61,7 +61,7 @@ function App() {
     const [selectedButton, setSelectedButton] = useState(initializeCatalogFromURL());
     const [selectedVersion, setSelectedVersion] = useState(initializeVersionFromURL());
     const [selectedDate, setSelectedDate] = useState(dateFormat(new Date(), "dd.mm.yyyy"));
-    const [searchResults, setSearchResults] = useState<string[] | ISearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<ISearchResult[]>([]);
     const [clickedOnLogo, setClickedOnLogo] = useState(false);
     const [reSetPath, setReSetPath] = useState(false);
     const [collapseMenu, setCollapseMenu] = useState(window.innerWidth <= 991);
@@ -399,7 +399,7 @@ function App() {
 
     function renderAfterFetch() {
         const isDesktop = window.innerWidth >= 1200;
-        const showSearchResultButtons = (isDesktop || !collapseMenu) && searchResults.length != 0;
+        const showSearchResultButtons = (isDesktop || !collapseMenu) && searchResults.length !== 0;
         return(
             <div key={"app_content"}>
                 {isDesktop ?

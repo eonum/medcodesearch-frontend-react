@@ -38,7 +38,7 @@ function RcgAttributes({ attributes }: Props) {
                 </div>
             </div>
             {attributes.phases && <div className="row vertical-spacer">
-                {(attributes.phases.length == 0 || attributes.phases == null) ?
+                {(attributes.phases == null || attributes.phases.length === 0) ?
                     <div className="col-lg-12">
                         {t('LBL_NO_COST_WEIGHT')}
                     </div> :
@@ -67,17 +67,17 @@ function RcgAttributes({ attributes }: Props) {
                                         <td>{attributes.phases.length}</td>
                                     </tr>
                                     {attributes.phases.map((phase, i) => (
-                                        <>
+                                        <React.Fragment key={i}>
                                         <tr>
                                             <td><b>{t('LBL_DAILY_PHASE_COSTS') + ' ' + (i + 1)}</b></td>
                                             <td>{phase.cost_weight.toFixed(3)}</td>
                                         </tr>
-                                        {phase.limit != 0 &&
+                                        {phase.limit !== 0 &&
                                         <tr>
                                         <td><b>{t('LBL_UPPER_PHASE_LIMIT') + ' ' + (i + 1)}</b></td>
                                     <td>{phase.limit}</td>
                                         </tr>}
-                                        </>
+                                        </React.Fragment>
                         ))}
                     </tbody>
                 }

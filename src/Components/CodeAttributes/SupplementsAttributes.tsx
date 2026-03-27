@@ -17,7 +17,7 @@ function SupplementsAttributes({ attributes }: Props) {
 
     function renderRelevantCodes(codes) {
         const zeType = attributes.ze_type;
-        return (zeType == "C" ?
+        return (zeType === "C" ?
             <ClickableCodesArray
                 codesArray={codes}
                 codesType={'REL_CODES_SUPPLEMENTS'}
@@ -40,10 +40,10 @@ function SupplementsAttributes({ attributes }: Props) {
 
     function transformRelevantCodesTitle(title, zeType) {
         let transformedTitle = title
-        if (zeType == 'C') {
+        if (zeType === 'C') {
             return (transformedTitle += " (CHOP)")
         }
-        if (zeType == 'A') {
+        if (zeType === 'A') {
             return (transformedTitle += " (ATC)")
         } else {
             return transformedTitle
@@ -55,8 +55,8 @@ function SupplementsAttributes({ attributes }: Props) {
             <div id={id}>
                 <h5>{transformRelevantCodesTitle(t(title), codeType)}</h5>
                 <ul>
-                    {codes.map((c) => (
-                        <li>{c.code + (c.text ? ": " + c.text : "")}</li>
+                    {codes.map((c, i) => (
+                        <li key={c.code + "_" + i}>{c.code + (c.text ? ": " + c.text : "")}</li>
                     ))}
                 </ul>
             </div>
@@ -109,7 +109,7 @@ function SupplementsAttributes({ attributes }: Props) {
                                     case "age_lower_than":
                                         return value > 0 ? tableRow(key, value) : null;
                                     case 'dosage':
-                                        return value != 0.0 ? dosageInfo(attributes) : null;
+                                        return value !== 0 ? dosageInfo(attributes) : null;
                                     case 'za':
                                     case 'va':
                                         return value ? tableRow(key, value) : null;
