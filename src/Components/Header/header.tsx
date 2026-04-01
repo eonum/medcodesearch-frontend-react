@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {useEffect} from 'react';
 import './header.css'
 import {IUpdateStateByArg} from "../../interfaces";
 import {useTranslation} from "react-i18next";
@@ -6,81 +6,53 @@ import {useTranslation} from "react-i18next";
 interface Props {
     changeLanguage: IUpdateStateByArg,
     activeLanguage: string,
-    translation: any
 }
 
-interface IHeader {
-    languagePrev: string,
-    language: string
-}
+const buttons = ['de', 'fr', 'it', 'en']
 
 /**
  * is the header of the website, which is responsible for language changes
  * @component
  */
-class Header extends Component<Props, IHeader> {
-
-    buttons = ['de', 'fr', 'it', 'en']
-
-    /**
-     * Constructor sets the default language and calls the updateLanguage to look for changes
-     * @param props
-     */
-    constructor(props) {
-        super(props);
-        this.state = {
-            languagePrev: 'de',
-            language: 'de'
-        };
-        this.updateLanguage = this.updateLanguage.bind(this);
-    }
+function Header({ changeLanguage, activeLanguage }: Props) {
+    const { i18n } = useTranslation();
 
     /**
-     * Change the languagePrev state to the current language
+     * Change the language and update i18n.
      * @param lang
      */
-    updateLanguage(lang) {
-        const {i18n} = this.props.translation;
-
-        this.props.changeLanguage(lang)
-        this.setState({languagePrev: this.state.language, language: lang})
+    function updateLanguage(lang) {
+        changeLanguage(lang)
         i18n.changeLanguage(lang)
     }
 
     /**
-     * If the component mounted componentDidMount() looks for a change in the language
+     * If the component mounted, look for a change in the language
      */
-    componentDidMount() {
-        if(this.state.language !== this.props.activeLanguage){
-            this.updateLanguage(this.props.activeLanguage)
+    useEffect(() => {
+        if (activeLanguage !== 'de') {
+            updateLanguage(activeLanguage)
         }
-    }
+    }, []); // eslint-disable-line
 
     /**
      * render full header for the website
      * @returns {JSX.Element}
      */
-    render() {
-        return (
-                <header className='header'>
-                    <div className='language-selection'>
-                        {this.buttons.map(buttonLabel =>
-                            <button onClick={this.updateLanguage.bind(null, buttonLabel)}
-                                    key={buttonLabel}
-                                    className= "language-btn"
-                                    id={buttonLabel === this.props.activeLanguage ? "activeLan" : ""}
-                                    >
-                               {buttonLabel}
-                            </button>)}
-                    </div>
-                </header>
-        );
-    }
+    return (
+        <header className='header'>
+            <div className='language-selection'>
+                {buttons.map(buttonLabel =>
+                    <button onClick={() => updateLanguage(buttonLabel)}
+                            key={buttonLabel}
+                            className= "language-btn"
+                            id={buttonLabel === activeLanguage ? "activeLan" : ""}
+                            >
+                       {buttonLabel}
+                    </button>)}
+            </div>
+        </header>
+    );
 }
 
-
-function addProps(Component) {
-    return props => <Component {...props} translation={useTranslation()}/>;
-}
-
-export default addProps(Header);
+export default Header;

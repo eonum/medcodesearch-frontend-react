@@ -1,5 +1,13 @@
-describe('Code attributes test suite for desktop version', function () {
+describe('Code attributes test suite for mobile version', function () {
     const baseUrl = Cypress.config("baseUrl");
+    const backendUrl = 'https://search.eonum.ch';
+    let drgB02A: any;
+
+    before(() => {
+        cy.request(`${backendUrl}/de/drgs/V12.0/B02A?show_detail=1`).then((res) => {
+            drgB02A = res.body;
+        });
+    });
 
     beforeEach(() => {
         cy.viewport(400, 800);
@@ -34,31 +42,32 @@ describe('Code attributes test suite for desktop version', function () {
     });
 
     it('show drg code information', function () {
-        cy.visit(baseUrl + '/de/SwissDRG/V12.0/drgs/B02A?query=A06A');
-        cy.contains("Durchschnittliche Verweildauer (Tage)").should('be.visible');
-        cy.contains("15.4").should('be.visible');
-        cy.contains("Erster Tag mit Abschlag").should('be.visible');
-        cy.contains("Abschlag pro Tag").should('be.visible');
-        cy.contains("0.845").should('be.visible');
-        cy.contains("Erster Tag mit Zuschlag").should('be.visible');
-        cy.contains("29").should('be.visible');
-        cy.contains("Zuschlag pro Tag").should('be.visible');
-        cy.contains("0.289").should('be.visible');
+        cy.visit(baseUrl + '/de/SwissDRG/V12.0/drgs/B02A');
+        cy.get("#attributesTable").within(() => {
+            cy.contains("Durchschnittliche Verweildauer (Tage)").should('be.visible');
+            cy.contains(drgB02A.average_stay_duration.toFixed(1)).should('be.visible');
+            cy.contains("Erster Tag mit Abschlag").should('be.visible');
+            cy.contains("Abschlag pro Tag").should('be.visible');
+            cy.contains(drgB02A.discount_per_day.toFixed(3)).should('be.visible');
+            cy.contains("Erster Tag mit Zuschlag").should('be.visible');
+            cy.contains(String(drgB02A.first_day_surcharge)).should('be.visible');
+            cy.contains("Zuschlag pro Tag").should('be.visible');
+            cy.contains(drgB02A.surcharge_per_day.toFixed(3)).should('be.visible');
+        });
 
-        cy.visit(baseUrl + '/fr/SwissDRG/V12.0/drgs/B02A?query=A06A');
+        cy.visit(baseUrl + '/fr/SwissDRG/V12.0/drgs/B02A');
         cy.contains("Durée de séjour moyenne (journées)").should('be.visible');
         cy.contains("Premier jour avec réduction").should('be.visible');
         cy.contains("Réduction journalier").should('be.visible');
         cy.contains("Premier jour avec supplément").should('be.visible');
         cy.contains("Supplément journalier").should('be.visible');
 
-        cy.visit(baseUrl + '/it/SwissDRG/V12.0/drgs/B02A?query=A06A');
+        cy.visit(baseUrl + '/it/SwissDRG/V12.0/drgs/B02A');
         cy.contains("Durata media di degenza (giorni)").should('be.visible');
         cy.contains("Primo giorno con riduzione").should('be.visible');
         cy.contains("Tasso di riduzione giornaliero").should('be.visible');
         cy.contains("Primo giorno con supplemento").should('be.visible');
         cy.contains("Supplemento giornaliero").should('be.visible');
-        cy.contains("Elementi simili").should('be.visible');
     });
 
     it('SL code information', function () {

@@ -128,5 +128,6 @@
   "LBL_SHOW_SEARCH_RESULTS": "Afficher les résultats de la recherche",
   "LBL_HIDE_SEARCH_RESULTS": "Masquer les résultats de recherche",
   "LBL_LOAD_MORE_RESULTS": "Afficher plus de résultats de recherche",
-  "LBL_RESET_RESULTS": "Réinitialiser les résultats de recherche"
+  "LBL_RESET_RESULTS": "Réinitialiser les résultats de recherche",
+  "LBL_FETCH_ERROR": "Une erreur s'est produite : impossible de charger les données."
 }

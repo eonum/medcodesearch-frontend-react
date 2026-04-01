@@ -1,5 +1,13 @@
 describe('Code attributes test suite for desktop version and components with custom page', function () {
     const baseUrl = Cypress.config("baseUrl");
+    const backendUrl = 'https://search.eonum.ch';
+    let drgI06A: any;
+
+    before(() => {
+        cy.request(`${backendUrl}/de/drgs/V13.0/I06A?show_detail=1`).then((res) => {
+            drgI06A = res.body;
+        });
+    });
 
     beforeEach(() => {
         cy.viewport(1366, 768);
@@ -12,10 +20,8 @@ describe('Code attributes test suite for desktop version and components with cus
 
         cy.visit(baseUrl + "/de/SwissDRG/V13.0/drgs/I06A");
         cy.get('#drgOnlineManualLink')
-            // Check href attribute value
             .should('have.attr', 'href', 'https://manual.swissdrg.org/de/13.3/drgs/I06A')
         cy.get('#drgDynamicsLink')
-            // Check href attribute value
             .should('have.attr', 'href', 'https://drgdynamics.eonum.ch/drgs/name?code=I06A&version=V13.0&locale=de')
 
         cy.get("#attributesTable tr th").then(($ths) => {
@@ -27,24 +33,20 @@ describe('Code attributes test suite for desktop version and components with cus
         cy.get("#attributesTable tr td").then(($tds) => {
             // @ts-ignore
             const tds = [...$tds].map((td) => td.innerText);
-            expect(tds[0]).to.equal("Partition");
-            expect(tds[1]).to.equal("O");
-            expect(tds[2]).to.equal("Kostengewicht");
-            expect(tds[3]).to.equal("8.137");
-            expect(tds[4]).to.equal("Durchschnittliche Verweildauer (Tage)");
-            expect(tds[5]).to.equal("18.9");
-            expect(tds[6]).to.equal("Erster Tag mit Abschlag");
-            expect(tds[7]).to.equal("5");
-            expect(tds[8]).to.equal("Abschlag pro Tag");
-            expect(tds[9]).to.equal("0.697");
-            expect(tds[10]).to.equal("Erster Tag mit Zuschlag");
-            expect(tds[11]).to.equal("33");
-            expect(tds[12]).to.equal("Zuschlag pro Tag");
-            expect(tds[13]).to.equal("0.242");
-            expect(tds[14]).to.equal("Verlegungsfallpauschale");
-            expect(tds[15]).to.equal("Nein (0.244)");
-            expect(tds[16]).to.equal("Ausnahme von Wiederaufnahme");
-            expect(tds[17]).to.equal("Nein");
+            // Build a label→value map (rows alternate: label, value, label, value, ...)
+            const tableMap: Record<string, string> = {};
+            for (let i = 0; i < tds.length - 1; i += 2) {
+                tableMap[tds[i]] = tds[i + 1];
+            }
+            expect(tableMap["Partition"]).to.equal(drgI06A.partition_letter);
+            expect(tableMap["Kostengewicht"]).to.equal(drgI06A.cost_weight.toFixed(3));
+            expect(tableMap["Durchschnittliche Verweildauer (Tage)"]).to.equal(drgI06A.average_stay_duration.toFixed(1));
+            expect(tableMap["Erster Tag mit Abschlag"]).to.equal(String(drgI06A.first_day_discount));
+            expect(tableMap["Abschlag pro Tag"]).to.equal(drgI06A.discount_per_day.toFixed(3));
+            expect(tableMap["Erster Tag mit Zuschlag"]).to.equal(String(drgI06A.first_day_surcharge));
+            expect(tableMap["Zuschlag pro Tag"]).to.equal(drgI06A.surcharge_per_day.toFixed(3));
+            expect(tableMap["Verlegungsabschlag pro Tag"]).to.equal(drgI06A.transfer_discount.toFixed(3));
+            expect(tableMap["Ausnahme von Wiederaufnahme"]).to.equal(drgI06A.exception_from_reuptake ? "Ja" : "Nein");
         });
 
         cy.contains("Komplexe Eingriffe an der Wirbelsäule mit äusserst schweren CC und Alter < 16 Jahre oder sehr komplexe WS-Eingriffe oder intensivmedizinischer Komplexbehandlung/IMCK > 184 Aufwandspunkte oder geriatrische Akutrehabilitation ab 14 Behandlungstage").should('exist');

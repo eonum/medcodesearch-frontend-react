@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dateFormat from "dateformat";
+import { parse } from "date-fns";
 
 interface Props {
     selectedCatalog: string,
@@ -9,56 +10,32 @@ interface Props {
     clickDate: { (date: string): void }
 }
 
-interface IDatePicker {
-    currentDate: string
-    showCalendar: boolean
-}
-
 /**
  * Creates the Datepicker for MIGEL, AL and Med.
  */
-class DatePicker extends React.Component<Props,IDatePicker>{
-    constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.state = {
-            currentDate: this.props.selectedDate,
-            showCalendar: false
-        }
-    }
+function DatePicker({ selectedCatalog, selectedDate, clickDate }: Props) {
+    const [currentDate, setCurrentDate] = useState<Date | null>(
+        parse(selectedDate, 'dd.MM.yyyy', new Date())
+    );
 
     /**
      * Update the date saved in the state.
-     * @param value
+     * @param date
      */
-    /**
-     * Update the date saved in the state.
-     * @param value
-     */
-    handleChange(date) {
-        let dateString = dateFormat(date, "dd.mm.yyyy")
-        this.setState({showCalendar: false})
-        this.setState({currentDate: dateString})
-        this.props.clickDate(dateString);
+    function handleChange(date: Date) {
+        setCurrentDate(date)
+        clickDate(dateFormat(date, "dd.mm.yyyy"));
     }
 
-    /**
-     * Render the DatePicker.
-     * @returns {JSX.Element}
-     */
-    render() {
-        return (
-            <ReactDatePicker
-                id={"datepicker"}
-                className="form-control"
-                selected={this.state.showCalendar}
-                dateFormat="dd.MM.yyyy"
-                placeholderText={this.state.currentDate}
-                onChange={val => {this.handleChange(val)}}
-            />
-        );
-    }
-
+    return (
+        <ReactDatePicker
+            id={"datepicker"}
+            className="form-control"
+            selected={currentDate}
+            dateFormat="dd.MM.yyyy"
+            onChange={handleChange}
+        />
+    );
 }
 
 export default DatePicker;

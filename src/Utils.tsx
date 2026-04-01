@@ -1,4 +1,4 @@
-import RouterService from "./Services/router.service";
+import {getQueryVariable} from "./Services/router.service";
 import React from "react";
 
 export const initialCodeState = {
@@ -25,7 +25,6 @@ const skippableAttributes = [
     "children",
     "is_limited",
     "rev",
-    "is_limited",
     "base_analyis",
     "special_analysis",
     "auth_holder_nr",
@@ -60,9 +59,17 @@ export const versionsWithoutMappingInfos = [
     "CHOP_2015",
     "CHOP_2025"]
 
+// For local development, set fetchURL to your local backend URL (e.g. 'http://localhost:3000')
 export const fetchURL = 'https://search.eonum.ch'
 
-// Get e2e url for navigation from backend code url.
+/**
+ * Builds the frontend pathname and search string for navigating to a code detail page.
+ * @param code - The code object returned by the backend, including a url and code field.
+ * @param language - The active language (e.g. 'de', 'fr').
+ * @param catalog - The active catalog name (e.g. 'ICD', 'MIGEL').
+ * @param resource_type - The resource type string; required for unversionized catalogs like MIGEL.
+ * @returns An object with pathname and searchString for use with useNavigate.
+ */
 export function getNavParams(code, language, catalog, resource_type?) {
     let backendUrlComponents = code.url.split("/").filter(e => e);
     let backendResourceType = backendUrlComponents[1];
@@ -74,14 +81,20 @@ export function getNavParams(code, language, catalog, resource_type?) {
     let searchString;
     if (['MIGEL', 'AL'].includes(catalog)) {
         pathname = "/" + [language, catalog, catalog === 'AL' ? 'laboratory_analyses' : resource_type, code.code].join("/")
-        searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+        searchString = getQueryVariable('query') === "" ? "" : "?query=" + getQueryVariable('query');
     } else {
-        searchString = RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query');
+        searchString = getQueryVariable('query') === "" ? "" : "?query=" + getQueryVariable('query');
         pathname = "/" + [language, catalog, backendVersion, backendResourceType, codeToNavigate].join("/")
     }
     return {pathname, searchString}
 }
 
+/**
+ * Extracts and formats the SL (Spezialitätenliste) attributes from a DRUG code's attribute map.
+ * @param attributes - The raw attributes object from the backend response.
+ * @param translation - The i18next t() function used to resolve label keys.
+ * @returns An object containing the SL status label and all non-empty SL-specific attribute values.
+ */
 export function collectAttributesSl(attributes, translation) {
     const attributesSl = ["public_price", "date_added_in_sl", "date_deleted_from_sl",
         "date_compulsatory_until", "has_limitation", "is_generica", "limitation_points"]
@@ -159,6 +172,15 @@ function collectEnabledAttributes(attributes) {
         }, {});
 }
 
+/**
+ * Renders the shared attribute section displayed on all code detail pages.
+ * Filters out skippable attributes and renders exclusion/supplement codes as clickable links.
+ * @param attributes - The raw attributes object from the backend response.
+ * @param translation - The i18next t() function used to resolve label keys.
+ * @param versionized - Whether the current catalog is versionized (affects link rendering for exclusions).
+ * @param navigate - The React Router navigate function for handling exclusion code clicks.
+ * @returns An array of JSX elements, one per displayable attribute.
+ */
 export function commonCodeInfos(attributes, translation, versionized, navigate) {
     const enabledAttributes = collectEnabledAttributes(attributes)
     const noCodeError = Object.keys(enabledAttributes).includes("error")

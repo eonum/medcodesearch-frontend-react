@@ -1,66 +1,86 @@
-# README MEDCODESEARCH
+# medcodesearch-frontend-react
 
-### Brief description
+React frontend for [medcodesearch.ch](http://medcodesearch.ch) — a search interface for Swiss medical coding catalogs (ICD, CHOP, SwissDRG, TARMED, TARDOC, MIGEL, AL, DRUG, and more).
 
-This React-App is used to represent the different catalogs which gets updated every year or two. This website helps to 
-find the catalog number easier and to look up the different versions or expiry dates. \
-Frontend from the website: [medcodesearch.ch](http://medcodesearch.ch) \
-Backend which is used is: [search.eonum.ch](https://search.eonum.ch/documentation) 
+Backend API: [search.eonum.ch](https://search.eonum.ch/documentation)
 
-### Setup
-#### Development
-For the local installation go into the folder `medcodesearch-frontend-react` and run ` install`. 
-To start the local app run `yarn start`. It will open at [http://localhost:3000](http://localhost:3000) in your browser.
-#### Production
-Run deploy script `deploy.sh`.
+---
 
-### Coding conventions
-Each class is defined in *its own file*. \
-Everything has been written in English (Comments included). \
-The first letter of a classname is in uppercase, the reminder is lowercase. \
-Method-names are always lowercase. \
-Variable-names are lowercase if only "oneword"-word, otherwise the first letter in between is capital. \
-Constants are always uppercase. \
-All components reside in their own subdirectory in `/src/Components`. \
-All services reside in their own subdirectory in `/src/Services`. \
-All test-suites reside in their own directory in `cypress/e2e`. \
-Every method has its own documentation written in Javadoc. 
+## Setup
 
-### Testing
-We use cypress for our tests. Since we use typescript, we also need babel for transformation.
-#### Config
-The configuration for babel and cypress are stored in babel.config.js and cypress.config.ts in the root folder and can 
-be adapted to your needs. We do frontend tests that can be run headless in terminal or, useful for debugging, run in 
-cypress GUI. To do so, we specified some custom commands in package.json under scripts section, namely
+**Development**
 
-```json
-{
-  "test": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run'", 
-  "test:search": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/searchMobile.cy.ts,cypress/e2e/search.cy.ts'", 
-  "test:breadcrumbs": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/breadcrumbsMobile.cy.ts,cypress/e2e/breadcrumbs.cy.ts'", 
-  "test:codeAttributes": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/codeAttributesMobile.cy.ts,cypress/e2e/codeAttributes.cy.ts,cypress/e2e/customCodeAttributes.cy.ts'", 
-  "test:default": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/defaultMobile.cy.ts,cypress/e2e/default.cy.ts'", 
-  "test:popUp": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress run --spec cypress/e2e/popUpMobile.cy.ts,cypress/e2e/popUp.cy.ts'", 
-  "test-with-gui": "start-server-and-test start-test-server http-get://localhost:$npm_package_config_testPort 'cypress open'", 
-  "start-test-server": "BROWSER=none PORT=$npm_package_config_testPort react-scripts start"
-}
+```bash
+yarn install
+yarn start   # http://localhost:3000
 ```
 
-#### Run tests
-Use `yarn test` to start headless server and tests or, for example `test:breadcrumbs` to run breadcrumbs tests only.
-Currently the port for test server is set to `localhost:8080` in package.json. To start graphical tests use 
-`yarn test-with-gui`.
+**Production**
 
-With cypress, there is no need to use hard coded timeouts to wait for. If using `.should`, cypress automatically retries
-the assertion for up to default timeout, before considering it a failure. The deault timeout is 4 seconds, but could be 
-changed in cypress.config.ts.
+```bash
+./deploy.sh
+```
 
-### Contact
-For further question: 
-- +41 (0)31 311 17 06 -> eonum contact
-- [info@eonum.ch](info@eonum.ch) -> eonum contact
-- [jan.koch@students.unibe.ch](jan.koch@students.unibe.ch) -> university development team
-- [eonum.ch/de/kontakt/](https://eonum.ch/de/kontakt/) -> eonum website
+---
 
-### Diagram
-![img.png](img.png)
+## Architecture
+
+All application state lives in `App.tsx` (a functional component). Child components receive state via props and bubble changes back up via callbacks — no Redux or Context is used.
+
+Components use React hooks directly: `useNavigate`, `useParams`, and `useLocation` from React Router v6, and `useTranslation` from react-i18next.
+
+**Key files**
+
+| Path | Purpose |
+|------|---------|
+| `src/App.tsx` | Root component and state hub |
+| `src/interfaces.ts` | Shared TypeScript interfaces |
+| `src/Utils.tsx` | `fetchURL` constant and shared utilities |
+| `src/i18n.tsx` | i18next setup; translations in `src/assets/translations/` |
+| `src/Services/router.service.tsx` | URL parsing functions (`getQueryVariable`, `initializeLanguageFromURL`, `initializeCatalogFromURL`) |
+| `src/Services/catalog-version.service.tsx` | Version fetching and catalog↔resource_type mapping |
+| `src/Components/Bodies/` | `CodeBodyVersionized.tsx` and `CodeBodyUnversionized.tsx` — top-level page bodies |
+| `src/Components/CodeAttributes/` | Attribute display components per catalog type |
+| `src/Components/Buttons/` | `ButtonGroup.tsx` (catalog selector tabs), `Buttons.tsx` (individual button + version dropdown), `DatePicker.tsx` (date selector for unversionized catalogs) |
+| `src/Components/Searchbar/Searchbar.tsx` | Search input with debounce; triggers search API and updates results in App |
+| `src/Components/SearchResult/SearchResult.tsx` | Single search result row; navigates to code detail on click |
+| `src/Components/PopUp/PopUp.tsx` | Modal overlay shown on code detail pages |
+| `src/Components/Header/header.tsx` | App header with logo and language switcher |
+| `src/Components/Footer/footer.tsx` | App footer |
+| `src/Components/Spinner/spinner.tsx` | Loading spinner shown while fetching |
+
+---
+
+## Testing
+
+Tests are Cypress E2E only (no unit tests). Cypress runs against a local dev server on port 8080.
+
+```bash
+yarn test               # Run all tests headlessly
+yarn test:search        # Search specs only
+yarn test:breadcrumbs   # Breadcrumb specs only
+yarn test:codeAttributes
+yarn test:default
+yarn test:popUp
+yarn test-with-gui      # Open Cypress interactive GUI
+```
+
+Cypress retries assertions automatically (default timeout: 4 s, configurable in `cypress.config.ts`).
+
+---
+
+## Coding conventions
+
+- Each component in its own file; components under `src/Components/`, services under `src/Services/`, test suites under `cypress/e2e/`
+- Component names: first letter uppercase, rest lowercase (e.g. `Searchbar`)
+- Function/method names: lowercase
+- Variable names: camelCase
+- Constants: UPPERCASE
+- Every function documented with JSDoc
+
+---
+
+## Contact
+
+- [info@eonum.ch](mailto:info@eonum.ch)
+- [eonum.ch/de/kontakt/](https://eonum.ch/de/kontakt/)
