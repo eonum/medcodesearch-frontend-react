@@ -31,8 +31,6 @@ function SearchResult({ result, showHide }: Props) {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/drgs/" + result.code
         } else if (path[2] === "Reha") {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/rcgs/" + result.code
-        } else if (path[2] === "AmbGroup") {
-            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/amb_groups/" + result.code
         } else if (path[2] === "Supplements") {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/supplements/" + result.code
         } else {

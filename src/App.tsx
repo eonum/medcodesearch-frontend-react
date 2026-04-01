@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
  */
 
 const emptyVersions: IVersions = {
-    'ICD': [], 'CHOP': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
+    'ICD': [], 'CHOP': [], 'TARMED': [], 'SwissDRG': [], 'Reha': [], 'Supplements': []
 }
 
 /**
@@ -123,10 +123,6 @@ function App() {
             case 'Supplements':
                 code = ver;
                 resource_type = 'supplements';
-                break;
-            case 'AmbGroup':
-                code = ver;
-                resource_type = 'capitula';
                 break;
             case 'Reha':
                 code = ver;
@@ -280,8 +276,6 @@ function App() {
             'CHOP': 'CHOP',
             'SwissDRG': 'SwissDRG',
             'TARMED': 'TARMED',
-            'TARDOC': 'TARDOC',
-            'AmbGroup': t("LBL_AMB_GROUP"),
             'MIGEL': t("LBL_MIGEL_LABEL"),
             'AL': t("LBL_AL"),
             'DRUG': t("LBL_DRUG"),
@@ -410,8 +404,7 @@ function App() {
                             changeSelectedVersion={setSelectedVersion}
                             changeSelectedDate={setSelectedDate}
                             labels={labelHash()}
-                            buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
-                                'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
+                            buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'MIGEL', 'AL', 'DRUG']}
                         />
                         <div className={"searchbarItem"} onClick={showSearchResults}>
                             <Searchbar
@@ -459,8 +452,7 @@ function App() {
                                     changeSelectedVersion={setSelectedVersion}
                                     changeSelectedDate={setSelectedDate}
                                     labels={labelHash()}
-                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
-                                        'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
+                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'MIGEL', 'AL', 'DRUG']}
                                 />
                             </div>
                         </div>

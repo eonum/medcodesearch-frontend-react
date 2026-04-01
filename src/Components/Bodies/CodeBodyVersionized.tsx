@@ -128,8 +128,6 @@ function CodeBodyVersionized() {
                 breadcrumbRoot = t('LBL_SUPPLEMENTS') + ' ' + ver.substring(1)
             } else if (cat === "Reha") {
                 breadcrumbRoot = "ST Reha " + ver.substring(5).replace("_", " ")
-            } else if (cat === "AmbGroup"){
-                breadcrumbRoot = t('LBL_AMB_GROUP') + " " + ver.substring(1)
             }
         } else {
             breadcrumbRoot = '';
