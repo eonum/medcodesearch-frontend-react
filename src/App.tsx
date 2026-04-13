@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
  */
 
 const emptyVersions: IVersions = {
-    'ICD': [], 'CHOP': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
+    'ICD': [], 'CHOP': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': [], 'LKAAT': []
 }
 
 /**
@@ -131,6 +131,10 @@ function App() {
             case 'Reha':
                 code = ver;
                 resource_type = 'arcgs';
+                break;
+            case 'LKAAT':
+                code = ver;
+                resource_type = 'service_catalogs';
                 break;
             default:
                 code = ver;
@@ -286,7 +290,8 @@ function App() {
             'AL': t("LBL_AL"),
             'DRUG': t("LBL_DRUG"),
             'Reha': 'ST Reha',
-            'Supplements': t("LBL_SUPPLEMENTS")
+            'Supplements': t("LBL_SUPPLEMENTS"),
+            'LKAAT': t("LBL_LKAAT_LABEL")
         }
     }
 
@@ -411,7 +416,7 @@ function App() {
                             changeSelectedDate={setSelectedDate}
                             labels={labelHash()}
                             buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
-                                'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
+                                'AmbGroup', 'MIGEL', 'AL', 'DRUG', 'LKAAT']}
                         />
                         <div className={"searchbarItem"} onClick={showSearchResults}>
                             <Searchbar

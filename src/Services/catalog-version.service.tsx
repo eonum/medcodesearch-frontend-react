@@ -9,7 +9,8 @@ export const versionizedCatalogs = [
     'TARDOC',
     'AmbGroup',
     'Reha',
-    'Supplements'
+    'Supplements',
+    'LKAAT'
 ]
 export const currentCatalogsByButton = {
     'ICD': 'currentICD',
@@ -19,7 +20,8 @@ export const currentCatalogsByButton = {
     'TARDOC': 'currentTARDOC',
     'AmbGroup': 'currentAmbGroup',
     'Reha': 'currentReha',
-    'Supplements': 'currentSupplements'
+    'Supplements': 'currentSupplements',
+    'LKAAT': 'currentLKAAT'
 }
 
 /**
@@ -38,6 +40,7 @@ export function cutCatalogFromVersion(catalog, version) {
         case "SwissDRG":
         case "Supplements":
         case "AmbGroup":
+        case "LKAAT":
             return version
         case "TARMED":
         case "TARDOC":
@@ -70,6 +73,8 @@ export function convertCatalogToResourceType(catalog) {
             return "amb_groups"
         case "Reha":
             return "rcgs"
+        case "LKAAT":
+            return "service_catalogs"
         default:
             return
     }

@@ -7,6 +7,7 @@ import DrgAttributes from "./DrgAttributes"
 import RcgAttributes from "./RcgAttributes";
 import {useTranslation} from "react-i18next";
 import SupplementsAttributes from "./SupplementsAttributes";
+import LkaatAttributes from "./LkaatAttributes";
 
 interface Props {
     attributes: IAttributes,
@@ -32,6 +33,8 @@ function CodeAttributesVersionized({ attributes, catalog, version, siblings, lan
                 return <SupplementsAttributes attributes={attributes as any} />
             case 'rcgs':
                 return <RcgAttributes attributes={attributes as any} />
+            case 'service_catalogs':
+                return <LkaatAttributes attributes={attributes} />
             default:
                 return codeInfos;
         }

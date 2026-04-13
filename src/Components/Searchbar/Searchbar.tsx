@@ -20,7 +20,8 @@ const resourceTypeByBtn = {
     "DRUG": 'drugs',
     'AmbGroup': 'amb_groups',
     'Reha': 'rcgs',
-    'Supplements': 'supplements'
+    'Supplements': 'supplements',
+    'LKAAT': 'service_catalogs'
 }
 
 interface Props {
