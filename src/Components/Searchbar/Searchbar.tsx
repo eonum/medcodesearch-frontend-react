@@ -115,7 +115,8 @@ function Searchbar(props: Props) {
             || prevLanguage !== props.language
             || prevSelectedDate !== props.selectedDate) {
             props.updateSearchResults([]);
-            debouncedSearch(searchTermRef.current);
+            updateSearchTermState(query);
+            debouncedSearch(query);
             return;
         }
 

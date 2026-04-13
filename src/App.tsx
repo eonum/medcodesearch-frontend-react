@@ -154,6 +154,8 @@ function App() {
             searchbarInput.value = "";
         }
         setClickedOnLogo(true);
+        setSearchResults([]);
+        setDisplayNoSearchResultsMessage(false);
         const vers = initVers || initialVersions;
         let latestICD = vers['ICD'].at(-1);
         setSelectedButton('ICD')
