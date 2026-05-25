@@ -43,11 +43,8 @@ function ButtonGroup(props: Props) {
         SwissDRG: props.initialVersions['SwissDRG'].at(-1),
         CHOP: props.initialVersions['CHOP'].at(-1),
         TARMED: props.initialVersions['TARMED'].at(-1),
-        TARDOC: props.initialVersions['TARDOC'].at(-1),
-        AmbGroup: props.initialVersions['AmbGroup'].at(-1),
         Reha: props.initialVersions['Reha'].at(-1),
         Supplements: props.initialVersions['Supplements'].at(-1),
-        LKAAT: props.initialVersions['LKAAT'].at(-1),
     });
     const [selectedDate, setSelectedDate] = useState(dateFormat(new Date(), "dd.mm.yyyy"));
 

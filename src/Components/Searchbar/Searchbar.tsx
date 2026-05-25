@@ -14,14 +14,11 @@ const resourceTypeByBtn = {
     "ICD": 'icds',
     "CHOP": 'chops',
     "TARMED": 'tarmeds',
-    "TARDOC": 'tardocs',
     "MIGEL": 'migels',
     "AL": 'laboratory_analyses',
     "DRUG": 'drugs',
-    'AmbGroup': 'amb_groups',
     'Reha': 'rcgs',
-    'Supplements': 'supplements',
-    'LKAAT': 'service_catalogs'
+    'Supplements': 'supplements'
 }
 
 interface Props {

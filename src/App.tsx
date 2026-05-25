@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
  */
 
 const emptyVersions: IVersions = {
-    'ICD': [], 'CHOP': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': [], 'LKAAT': []
+    'ICD': [], 'CHOP': [], 'TARMED': [], 'SwissDRG': [], 'Reha': [], 'Supplements': []
 }
 
 /**
@@ -124,17 +124,9 @@ function App() {
                 code = ver;
                 resource_type = 'supplements';
                 break;
-            case 'AmbGroup':
-                code = ver;
-                resource_type = 'capitula';
-                break;
             case 'Reha':
                 code = ver;
                 resource_type = 'arcgs';
-                break;
-            case 'LKAAT':
-                code = ver;
-                resource_type = 'service_catalogs';
                 break;
             default:
                 code = ver;
@@ -286,14 +278,11 @@ function App() {
             'CHOP': 'CHOP',
             'SwissDRG': 'SwissDRG',
             'TARMED': 'TARMED',
-            'TARDOC': 'TARDOC',
-            'AmbGroup': t("LBL_AMB_GROUP"),
             'MIGEL': t("LBL_MIGEL_LABEL"),
             'AL': t("LBL_AL"),
             'DRUG': t("LBL_DRUG"),
             'Reha': 'ST Reha',
-            'Supplements': t("LBL_SUPPLEMENTS"),
-            'LKAAT': t("LBL_LKAAT_LABEL")
+            'Supplements': t("LBL_SUPPLEMENTS")
         }
     }
 
@@ -417,8 +406,7 @@ function App() {
                             changeSelectedVersion={setSelectedVersion}
                             changeSelectedDate={setSelectedDate}
                             labels={labelHash()}
-                            buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
-                                'AmbGroup', 'MIGEL', 'AL', 'DRUG', 'LKAAT']}
+                            buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'MIGEL', 'AL', 'DRUG']}
                         />
                         <div className={"searchbarItem"} onClick={showSearchResults}>
                             <Searchbar
@@ -466,8 +454,7 @@ function App() {
                                     changeSelectedVersion={setSelectedVersion}
                                     changeSelectedDate={setSelectedDate}
                                     labels={labelHash()}
-                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
-                                        'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
+                                    buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'MIGEL', 'AL', 'DRUG']}
                                 />
                             </div>
                         </div>
