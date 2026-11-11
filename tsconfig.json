@@ -6,7 +6,6 @@
       "es2022"
     ],
     "types": [
-      "cypress",
       "node",
       "vite/client"
     ],
