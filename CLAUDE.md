@@ -5,8 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-yarn start              # Dev server at http://localhost:3000
-yarn build              # Production build
+yarn start              # Vite dev server at http://localhost:3000
+yarn build              # Type-check (tsc) + Vite production build into build/
 yarn test               # Start test server (port 8080) + run all Cypress E2E tests headlessly
 yarn test:search        # Run only search specs
 yarn test:breadcrumbs   # Run only breadcrumb specs

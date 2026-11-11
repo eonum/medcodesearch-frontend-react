@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^5.3.7",
-    "dateformat": "^5.0.3",
+    "dateformat": "^5.0.5",
     "i18next": "^22.4.14",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
@@ -12,13 +12,12 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^12.2.0",
     "react-icons": "^4.3.1",
-    "react-router-dom": "^6.2.2",
-    "react-scripts": "^5.0.1",
-    "react-toastify": "^11.0.5"
+    "react-router-dom": "^6.30.6",
+    "react-toastify": "^11.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "vite",
+    "build": "tsc --noEmit && vite build",
     "test": "start-server-and-test start-test-server http-get://localhost:8080 'cypress run'",
     "test:search": "start-server-and-test start-test-server http-get://localhost:8080 'cypress run --spec cypress/e2e/searchMobile.cy.ts,cypress/e2e/search.cy.ts'",
     "test:breadcrumbs": "start-server-and-test start-test-server http-get://localhost:8080 'cypress run --spec cypress/e2e/breadcrumbsMobile.cy.ts,cypress/e2e/breadcrumbs.cy.ts'",
@@ -26,30 +25,21 @@
     "test:default": "start-server-and-test start-test-server http-get://localhost:8080 'cypress run --spec cypress/e2e/defaultMobile.cy.ts,cypress/e2e/default.cy.ts'",
     "test:popUp": "start-server-and-test start-test-server http-get://localhost:8080 'cypress run --spec cypress/e2e/popUpMobile.cy.ts,cypress/e2e/popUp.cy.ts'",
     "test-with-gui": "start-server-and-test start-test-server http-get://localhost:8080 'cypress open'",
-    "start-test-server": "BROWSER=none PORT=8080 react-scripts start",
-    "eject": "react-scripts eject"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "start-test-server": "vite --port 8080 --strictPort",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@cypress/webpack-preprocessor": "^6.0.2",
-    "@types/node": "^24.0.0",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.2.13",
-    "cypress": "^13.12.0",
-    "start-server-and-test": "^2.0.4",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.5.2"
+    "@types/node": "^24.19.2",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.3.0",
+    "cypress": "^16.3.0",
+    "start-server-and-test": "^3.0.13",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8"
+  },
+  "type": "module",
+  "resolutions": {
+    "form-data": "^4.0.6"
   }
 }

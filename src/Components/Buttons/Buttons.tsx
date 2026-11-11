@@ -61,7 +61,7 @@ function Buttons(props: Props) {
                     setAllVersions(json)
                     setAvailableVersions(json)
                 })
-        } else {
+        } else { 
             setAllVersions([])
             setAvailableVersions([])
         }
