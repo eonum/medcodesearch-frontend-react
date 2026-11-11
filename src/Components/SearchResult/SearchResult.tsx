@@ -1,24 +1,13 @@
 import React from "react";
 import './SearchResult.css';
 import {useNavigate, useLocation} from "react-router-dom";
-import RouterService from "../../Services/router.service";
+import {ISearchResult} from "../../interfaces";
+import {getQueryVariable} from "../../Services/router.service";
 import {useTranslation} from "react-i18next";
 
 interface Props {
     result: ISearchResult,
     showHide: () => void;
-}
-
-interface ISearchResult {
-    code: string
-    highlight: IHighlight,
-    text: string
-}
-
-interface IHighlight {
-    text: string,
-    synonyms: string[],
-    inclusions: string[]
 }
 
 /**
@@ -46,12 +35,14 @@ function SearchResult({ result, showHide }: Props) {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/amb_groups/" + result.code
         } else if (path[2] === "Supplements") {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/supplements/" + result.code
+        } else if (path[2] === "LKAAT") {
+            pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/service_catalogs/" + result.code
         } else {
             pathname = "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + path[2].toLowerCase() + "s/" + result.code
         }
         navigate({
             pathname: pathname,
-            search: RouterService.getQueryVariable('query') === "" ? "" : "?query=" + RouterService.getQueryVariable('query')
+            search: getQueryVariable('query') === "" ? "" : "?query=" + getQueryVariable('query')
         })
         // Call the showHide function
         showHide();

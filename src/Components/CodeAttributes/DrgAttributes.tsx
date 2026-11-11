@@ -48,7 +48,7 @@ function DrgAttributes({ attributes }: Props) {
                 </div>
             </div>
             <div className="row vertical-spacer">
-                { (attributes.cost_weight == 0 || attributes.cost_weight == null) ?
+                { (attributes.cost_weight === 0 || attributes.cost_weight === null) ?
                     <div className="col-lg-12">
                         {t('LBL_NO_COST_WEIGHT')}
                     </div> :

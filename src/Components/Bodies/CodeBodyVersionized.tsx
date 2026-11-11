@@ -5,6 +5,7 @@ import {IAttributes, IShortEntry} from "../../interfaces";
 import {fetchURL, getNavParams, initialCodeState} from "../../Utils";
 import CodeAttributesVersionized from "../CodeAttributes/CodeAttributesVersionized";
 import {useTranslation} from "react-i18next";
+import {toast} from "react-toastify";
 
 /**
  * Responsible for the body of the website, for catalogs with versions (i.e. ICD, CHOP, DRG, TARMED, TARDOC, REHA, ZE).
@@ -23,7 +24,10 @@ function CodeBodyVersionized() {
      */
     async function fetchHelper(lang, res_type, cd, ver) {
         let fetchString = [fetchURL, lang, res_type, ver, cd].join("/") + "?show_detail=1";
-        return await fetch(fetchString).then((res) => res.json())
+        return await fetch(fetchString).then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`)
+            return res.json()
+        })
     }
 
     /**
@@ -35,11 +39,16 @@ function CodeBodyVersionized() {
         if (resource_type === 'mdcs' && code === version || resource_type === 'arcgs' && code === version) {
             codeForFetch = 'ALL'
         }
-        const detailedCode = await fetchHelper(language, resource_type, codeForFetch, version)
-        if (detailedCode !== null) {
-            setAttributes(detailedCode)
+        try {
+            const detailedCode = await fetchHelper(language, resource_type, codeForFetch, version)
+            if (detailedCode !== null) {
+                setAttributes(detailedCode)
+            }
+            return detailedCode
+        } catch {
+            toast.error(t('LBL_FETCH_ERROR'))
+            return null
         }
-        return detailedCode
     }
 
     /**
@@ -48,12 +57,18 @@ function CodeBodyVersionized() {
     async function fetchSiblings(attrs: IAttributes, parent: IShortEntry) {
         if (attrs.children === null && resource_type !== "partitions") {
             await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
-                .then((res) => res.json())
+                .then((res) => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                    return res.json()
+                })
                 .then((json) => {
                     let sibs = json.children.filter(function(child) {
                         return child.code !== code;
                     })
                     setSiblings(sibs)
+                })
+                .catch(() => {
+                    toast.error(t('LBL_FETCH_ERROR'))
                 })
         }
     }
@@ -66,9 +81,16 @@ function CodeBodyVersionized() {
         while(parent) {
             parentsArr = [...parentsArr, parent]
             await fetch([fetchURL, parent.url].join("/") + "?show_detail=1")
-                .then((res) => res.json())
+                .then((res) => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                    return res.json()
+                })
                 .then((json) => {
                     parent = json["parent"]
+                })
+                .catch(() => {
+                    toast.error(t('LBL_FETCH_ERROR'))
+                    parent = null
                 })
         }
         setParents(parentsArr)
@@ -93,27 +115,29 @@ function CodeBodyVersionized() {
         return cd.replace("ICD10-GM", t("LBL_ICD_LABEL"))
     }
 
-    function displayCode(cd, ver, cat) {
+    function displayCode(cd, ver, cat, isHeader = false) {
         let currentItem;
         let breadcrumbRoot;
         if (cd) {
             breadcrumbRoot = ver.replace("_", " ")
             currentItem = attributes.code.includes("ICD10") ?
                 internationalizeIcdBaseCode(cd) : cd.replace("_", " ")
-            if (cat == "SwissDRG") {
+            if (cat === "SwissDRG") {
                 breadcrumbRoot = "SwissDRG " + ver.substring(1)
-            } else if (cat == "Supplements") {
+            } else if (cat === "Supplements") {
                 breadcrumbRoot = t('LBL_SUPPLEMENTS') + ' ' + ver.substring(1)
-            } else if (cat == "Reha") {
+            } else if (cat === "Reha") {
                 breadcrumbRoot = "ST Reha " + ver.substring(5).replace("_", " ")
-            } else if (cat == "AmbGroup"){
+            } else if (cat === "AmbGroup"){
                 breadcrumbRoot = t('LBL_AMB_GROUP') + " " + ver.substring(1)
+            } else if (cat === "LKAAT") {
+                breadcrumbRoot = isHeader ? t('LBL_LKAAT') : t('LBL_LKAAT_LABEL')
             }
         } else {
             breadcrumbRoot = '';
             currentItem = '';
         }
-        return cd == ver ? breadcrumbRoot : currentItem
+        return cd === ver ? breadcrumbRoot : currentItem
     }
 
     /**
@@ -125,10 +149,10 @@ function CodeBodyVersionized() {
     return (
         <div>
             <Breadcrumb>
-                {parents.slice().reverse().map((currElement, i) => {
+                {parents.slice().reverse().map((currElement) => {
                     return (
                         <Breadcrumb.Item
-                            key={i}
+                            key={currElement.code}
                             onClick={() => {
                                 let {pathname, searchString} = getNavParams(currElement, language, catalog)
                                 navigate({pathname: pathname, search: searchString})
@@ -143,8 +167,8 @@ function CodeBodyVersionized() {
                     {displayCode(currentCode, version, catalog)}
                 </Breadcrumb.Item>
             </Breadcrumb>
-            <h3>{displayCode(currentCode, version, catalog)}</h3>
-            {version == attributes.code || attributes.code == "ALL" ?
+            <h3>{displayCode(currentCode, version, catalog, true)}</h3>
+            {version === attributes.code || attributes.code === "ALL" ?
                 <p></p> : <p>{attributes.text}</p>}
             <CodeAttributesVersionized
                 attributes={attributes}

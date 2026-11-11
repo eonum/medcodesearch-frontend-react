@@ -29,7 +29,8 @@ export default defineConfig({
         },
     ],
     webServer: {
-        command: `yarn vite --port ${PORT} --strictPort`,
+        // VITE_E2E disables React StrictMode (see src/index.tsx).
+        command: `VITE_E2E=true yarn vite --port ${PORT} --strictPort`,
         url: `http://localhost:${PORT}`,
         reuseExistingServer: !process.env.CI,
     },

@@ -25,6 +25,7 @@
     "test:codeAttributes": "playwright test codeAttributes customCodeAttributePages",
     "test:default": "playwright test default",
     "test:popUp": "playwright test popUp",
+    "test:errorHandling": "playwright test errorHandling",
     "test:ui": "playwright test --ui"
   },
   "devDependencies": {

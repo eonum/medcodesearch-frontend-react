@@ -20,7 +20,7 @@ function ClickableCodesArray({ codesArray, codesType, language, catalog, resourc
     const { t } = useTranslation();
 
     function triggeringCodes(shortEntries) {
-        if (shortEntries && catalog == 'Supplements') {
+        if (shortEntries && catalog === 'Supplements') {
             return shortEntries[0].triggering_code ? shortEntries.map((c) => c.triggering_code) : undefined
         } else {
             return undefined

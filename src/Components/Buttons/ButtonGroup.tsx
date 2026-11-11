@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import "./ButtonGroup.css"
 import {useParams} from "react-router-dom";
-import RouterService from "../../Services/router.service";
+import {initializeCatalogFromURL} from "../../Services/router.service";
 import Buttons from "./Buttons";
 import {
     IVersions,
@@ -36,7 +36,7 @@ interface Props {
 function ButtonGroup(props: Props) {
     const { catalog: paramCatalog, version: paramVersion } = useParams();
 
-    const [selectedButtonState, setSelectedButtonState] = useState(RouterService.initializeCatalogFromURL());
+    const [selectedButtonState, setSelectedButtonState] = useState(initializeCatalogFromURL());
     const [activeVersion, setActiveVersion] = useState(paramVersion);
     const [currentVersionsByButton, setCurrentVersionsByButton] = useState<Record<string, string>>({
         ICD: props.initialVersions['ICD'].at(-1),
@@ -47,6 +47,7 @@ function ButtonGroup(props: Props) {
         AmbGroup: props.initialVersions['AmbGroup'].at(-1),
         Reha: props.initialVersions['Reha'].at(-1),
         Supplements: props.initialVersions['Supplements'].at(-1),
+        LKAAT: props.initialVersions['LKAAT'].at(-1),
     });
     const [selectedDate, setSelectedDate] = useState(dateFormat(new Date(), "dd.mm.yyyy"));
 

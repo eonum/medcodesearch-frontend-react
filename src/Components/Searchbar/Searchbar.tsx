@@ -3,10 +3,11 @@ import {Button, Form, FormControl} from "react-bootstrap";
 import './Searchbar.css';
 import {BsSearch} from "react-icons/bs";
 import {createSearchParams, useNavigate, useLocation} from "react-router-dom";
-import RouterService from "../../Services/router.service";
+import {getQueryVariable} from "../../Services/router.service";
 import {fetchURL} from "../../Utils";
 import dateFormat from "dateformat"
 import {useTranslation} from "react-i18next";
+import {toast} from "react-toastify";
 
 const resourceTypeByBtn = {
     "SwissDRG": 'drgs',
@@ -19,7 +20,8 @@ const resourceTypeByBtn = {
     "DRUG": 'drugs',
     'AmbGroup': 'amb_groups',
     'Reha': 'rcgs',
-    'Supplements': 'supplements'
+    'Supplements': 'supplements',
+    'LKAAT': 'service_catalogs'
 }
 
 interface Props {
@@ -74,7 +76,7 @@ function Searchbar(props: Props) {
      * Mount: initialize from URL and fetch
      */
     useEffect(() => {
-        const query = RouterService.getQueryVariable('query');
+        const query = getQueryVariable('query');
         updateSearchTermState(query);
         fetchForSearchTerm(query);
         return () => {
@@ -93,7 +95,7 @@ function Searchbar(props: Props) {
             return;
         }
 
-        const query = RouterService.getQueryVariable('query');
+        const query = getQueryVariable('query');
 
         const prevSelectedButton = prevSelectedButtonRef.current;
         const prevVersion = prevVersionRef.current;
@@ -113,7 +115,8 @@ function Searchbar(props: Props) {
             || prevLanguage !== props.language
             || prevSelectedDate !== props.selectedDate) {
             props.updateSearchResults([]);
-            debouncedSearch(searchTermRef.current);
+            updateSearchTermState(query);
+            debouncedSearch(query);
             return;
         }
 
@@ -178,6 +181,7 @@ function Searchbar(props: Props) {
                 if(res.ok) {
                     return res.json()
                 }
+                throw new Error(`HTTP ${res.status}`)
             })
             .then((json) => {
                 props.setIsSearching(false);
@@ -186,8 +190,14 @@ function Searchbar(props: Props) {
                 } else {
                     props.updateSearchResults(json)
                     props.updateDisplayNoSearchResultsMessage(false)
-                    props.updateMaximumResultsReached(json.length < maxResults || json.length == 100 ? true : false)
+                    // True when all results are exhausted (fewer returned than requested) or the API
+                    // hard cap of 100 is hit — in either case the "load more" button should be hidden.
+                    props.updateMaximumResultsReached(json.length < maxResults || json.length === 100)
                 }
+            })
+            .catch(() => {
+                props.setIsSearching(false);
+                toast.error(t('LBL_FETCH_ERROR'))
             })
     }
 

@@ -9,7 +9,8 @@ export const versionizedCatalogs = [
     'TARDOC',
     'AmbGroup',
     'Reha',
-    'Supplements'
+    'Supplements',
+    'LKAAT'
 ]
 export const currentCatalogsByButton = {
     'ICD': 'currentICD',
@@ -19,7 +20,8 @@ export const currentCatalogsByButton = {
     'TARDOC': 'currentTARDOC',
     'AmbGroup': 'currentAmbGroup',
     'Reha': 'currentReha',
-    'Supplements': 'currentSupplements'
+    'Supplements': 'currentSupplements',
+    'LKAAT': 'currentLKAAT'
 }
 
 /**
@@ -38,6 +40,7 @@ export function cutCatalogFromVersion(catalog, version) {
         case "SwissDRG":
         case "Supplements":
         case "AmbGroup":
+        case "LKAAT":
             return version
         case "TARMED":
         case "TARDOC":
@@ -70,8 +73,8 @@ export function convertCatalogToResourceType(catalog) {
             return "amb_groups"
         case "Reha":
             return "rcgs"
-        case "Supplements":
-            return "supplements"
+        case "LKAAT":
+            return "service_catalogs"
         default:
             return
     }
@@ -85,11 +88,16 @@ export function convertCatalogToResourceType(catalog) {
 export async function getVersionsByLanguage(language) {
     let allVersions = {}
     for (let catalog of versionizedCatalogs) {
+        allVersions[catalog] = [];
         await fetch([fetchURL, language, convertCatalogToResourceType(catalog), 'versions' ].join("/"))
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`)
+                return res.json()
+            })
             .then((json) => {
                 allVersions[catalog] = json;
             })
+            .catch(() => {})
     }
     return allVersions
 }

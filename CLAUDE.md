@@ -34,18 +34,11 @@ Two route shapes cover all catalogs:
 
 ### State Management
 
-No Redux/Zustand/Context. `App.tsx` is the sole state hub (class component). All state (`language`, `selectedButton`, `selectedVersion`, `searchResults`, `currentVersions`, etc.) lives there and flows down via props. Child components bubble changes back up via callback props.
+No Redux/Zustand/Context. `App.tsx` is the sole state hub (functional component using `useState`/`useEffect`). All state (`language`, `selectedButton`, `selectedVersion`, `searchResults`, `currentVersions`, etc.) lives there and flows down via props. Child components bubble changes back up via callback props.
 
-### HOC Pattern for Class Components
+All components are functional and use React Router v6 hooks (`useNavigate`, `useParams`, `useLocation`) and `useTranslation` directly — no HOC wrappers needed.
 
-Since the entire app uses class components but needs React Router v6 hooks (`useNavigate`, `useParams`) and `useTranslation`, every component wraps itself with an `addProps` HOC:
-
-```typescript
-function addProps(Component) {
-    return props => <Component {...props} navigation={useNavigate()} params={useParams()} translation={useTranslation()}/>;
-}
-export default addProps(MyClassComponent);
-```
+Child components may hold local UI state (e.g. Searchbar debounce timers, PopUp open/close, Buttons hover state) — this is intentional and does not violate the App.tsx-as-hub rule.
 
 ### API
 
@@ -70,19 +63,28 @@ The mapping between catalog names and `resource_type` strings lives in `src/Serv
 | `src/interfaces.ts` | All shared TypeScript interfaces |
 | `src/Utils.tsx` | `fetchURL` constant, shared utilities |
 | `src/i18n.tsx` | i18next setup; translations in `src/assets/translations/` |
-| `src/Services/router.service.tsx` | URL parsing utilities |
+| `src/Services/router.service.tsx` | Exported functions for URL parsing (`getQueryVariable`, `initializeLanguageFromURL`, `initializeCatalogFromURL`) |
 | `src/Services/catalog-version.service.tsx` | Version fetching, catalog↔resource_type mapping |
 | `src/Components/Bodies/` | `CodeBodyVersionized.tsx` and `CodeBodyUnversionized.tsx` — top-level page bodies |
 | `src/Components/CodeAttributes/` | Attribute display components per catalog type |
+| `src/Components/Buttons/` | `ButtonGroup.tsx` (catalog selector tabs), `Buttons.tsx` (individual button + version dropdown), `DatePicker.tsx` (date selector for unversionized catalogs) |
+| `src/Components/Searchbar/Searchbar.tsx` | Search input with debounce; triggers search API and updates results in App |
+| `src/Components/SearchResult/SearchResult.tsx` | Single search result row; navigates to code detail on click |
+| `src/Components/PopUp/PopUp.tsx` | Modal overlay shown on code detail pages |
+| `src/Components/Header/header.tsx` | App header with logo and language switcher |
+| `src/Components/Footer/footer.tsx` | App footer |
+| `src/Components/Spinner/spinner.tsx` | Loading spinner shown while fetching |
 
 ### Coding Conventions (from README)
 
-- Each class in its own file; all components under `src/Components/`, services under `src/Services/`
-- Class names: first letter uppercase, rest lowercase (e.g. `Searchbar`)
-- Method names: always lowercase
+- Each component in its own file; all components under `src/Components/`, services under `src/Services/`
+- Component names: first letter uppercase, rest lowercase (e.g. `Searchbar`)
+- Function names: always lowercase
 - Variable names: camelCase
 - Constants: UPPERCASE
-- Every method documented with JSDoc
+- Every function documented with JSDoc
+- CSS files are colocated with their component (e.g. `Searchbar/Searchbar.css` next to `Searchbar/Searchbar.tsx`)
+- Props interfaces are defined inline at the top of each component file, not in `interfaces.ts` (which holds shared domain interfaces only)
 
 ### Responsive Layout
 

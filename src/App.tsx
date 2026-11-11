@@ -7,12 +7,12 @@ import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
 import ButtonGroup from "./Components/Buttons/ButtonGroup";
-import RouterService from "./Services/router.service";
+import {getQueryVariable, initializeLanguageFromURL, initializeCatalogFromURL} from "./Services/router.service";
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import {Collapse} from "react-bootstrap";
 import {getVersionsByLanguage} from "./Services/catalog-version.service";
-import {IVersions} from "./interfaces";
-import loadingSpinner from "./Components/Spinner/spinner";
+import {IVersions, ISearchResult} from "./interfaces";
+import Loadingspinner from "./Components/Spinner/spinner";
 import CodeBodyUnversionized from "./Components/Bodies/CodeBodyUnversionized";
 import CodeBodyVersionized from "./Components/Bodies/CodeBodyVersionized";
 import dateFormat from "dateformat";
@@ -24,16 +24,8 @@ import { useTranslation } from 'react-i18next';
  * @component
  */
 
-interface ISearchResult {
-    code: string,
-    text: string,
-    terminal: boolean,
-    url: string,
-    highlight: object
-}
-
 const emptyVersions: IVersions = {
-    'ICD': [], 'CHOP': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': []
+    'ICD': [], 'CHOP': [], 'TARMED': [], 'TARDOC': [], 'SwissDRG': [], 'AmbGroup': [], 'Reha': [], 'Supplements': [], 'LKAAT': []
 }
 
 /**
@@ -57,11 +49,11 @@ function App() {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const [language, setLanguage] = useState(RouterService.initializeLanguageFromURL());
-    const [selectedButton, setSelectedButton] = useState(RouterService.initializeCatalogFromURL());
+    const [language, setLanguage] = useState(initializeLanguageFromURL());
+    const [selectedButton, setSelectedButton] = useState(initializeCatalogFromURL());
     const [selectedVersion, setSelectedVersion] = useState(initializeVersionFromURL());
     const [selectedDate, setSelectedDate] = useState(dateFormat(new Date(), "dd.mm.yyyy"));
-    const [searchResults, setSearchResults] = useState<string[] | ISearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<ISearchResult[]>([]);
     const [clickedOnLogo, setClickedOnLogo] = useState(false);
     const [reSetPath, setReSetPath] = useState(false);
     const [collapseMenu, setCollapseMenu] = useState(window.innerWidth <= 991);
@@ -140,6 +132,10 @@ function App() {
                 code = ver;
                 resource_type = 'arcgs';
                 break;
+            case 'LKAAT':
+                code = ver;
+                resource_type = 'service_catalogs';
+                break;
             default:
                 code = ver;
                 resource_type = btn.toLowerCase() + '_chapters';
@@ -158,6 +154,8 @@ function App() {
             searchbarInput.value = "";
         }
         setClickedOnLogo(true);
+        setSearchResults([]);
+        setDisplayNoSearchResultsMessage(false);
         const vers = initVers || initialVersions;
         let latestICD = vers['ICD'].at(-1);
         setSelectedButton('ICD')
@@ -184,7 +182,8 @@ function App() {
                 setSelectedVersion(resolvedVersion);
             }
 
-            if (!isValidVersion(selectedButton, resolvedVersion, language, currVers)) {
+            const hasVersionData = Object.values(initVers).some((v) => (v as string[] | undefined)?.length > 0);
+            if (hasVersionData && !isValidVersion(selectedButton, resolvedVersion, language, currVers)) {
                 reNavigateToHome(initVers);
             }
             setIsFetching(false);
@@ -204,8 +203,8 @@ function App() {
         }
         if (isFetching) return;
 
-        const searchString = RouterService.getQueryVariable('query') === "" ? "" :
-            "?query=" + RouterService.getQueryVariable('query');
+        const searchString = getQueryVariable('query') === "" ? "" :
+            "?query=" + getQueryVariable('query');
 
         if (isValidVersion(selectedButton, selectedVersion, language, currentVersions)) {
             navigate({
@@ -235,8 +234,8 @@ function App() {
         const prevLang = prevLanguageRef.current;
         prevLanguageRef.current = language;
 
-        const searchString = RouterService.getQueryVariable('query') === "" ? "" :
-            "?query=" + RouterService.getQueryVariable('query');
+        const searchString = getQueryVariable('query') === "" ? "" :
+            "?query=" + getQueryVariable('query');
 
         async function handleLanguageChange() {
             const currVers = await getVersionsByLanguage(language);
@@ -293,7 +292,8 @@ function App() {
             'AL': t("LBL_AL"),
             'DRUG': t("LBL_DRUG"),
             'Reha': 'ST Reha',
-            'Supplements': t("LBL_SUPPLEMENTS")
+            'Supplements': t("LBL_SUPPLEMENTS"),
+            'LKAAT': t("LBL_LKAAT_LABEL")
         }
     }
 
@@ -334,8 +334,8 @@ function App() {
         const results =
             displayNoSearchResultsMessage ?
                 <div className="searchResult">{t("LBL_NO_RESULTS")}</div> :
-                (searchResults as any[]).map((searchResult) => {
-                    return <SearchResult result={searchResult} key={searchResult.code} showHide={showHide}/>
+                searchResults.map((searchResult, i) => {
+                    return <SearchResult result={searchResult} key={searchResult.code + "_" + i} showHide={showHide}/>
                 })
 
         return (
@@ -358,7 +358,7 @@ function App() {
                     <Collapse in={!collapseMenu}>
                         <div>
                             {isSearching ?
-                                loadingSpinner() :
+                                Loadingspinner() :
                                 results
                             }
                         </div>
@@ -398,7 +398,7 @@ function App() {
 
     function renderAfterFetch() {
         const isDesktop = window.innerWidth >= 1200;
-        const showSearchResultButtons = (isDesktop || !collapseMenu) && searchResults.length != 0;
+        const showSearchResultButtons = (isDesktop || !collapseMenu) && searchResults.length !== 0;
         return(
             <div key={"app_content"}>
                 {isDesktop ?
@@ -418,7 +418,7 @@ function App() {
                             changeSelectedDate={setSelectedDate}
                             labels={labelHash()}
                             buttons={['ICD', 'CHOP', 'SwissDRG', 'Supplements', 'Reha', 'TARMED', 'TARDOC',
-                                'AmbGroup', 'MIGEL', 'AL', 'DRUG']}
+                                'AmbGroup', 'MIGEL', 'AL', 'DRUG', 'LKAAT']}
                         />
                         <div className={"searchbarItem"} onClick={showSearchResults}>
                             <Searchbar
@@ -506,7 +506,7 @@ function App() {
                     <div key={"app_logo"} className="row col">
                         <img onClick={() => reNavigateToHome()} alt="logo" id="logo" src={logo}/>
                     </div>
-                    {isFetching ? loadingSpinner() : renderAfterFetch()}
+                    {isFetching ? Loadingspinner() : renderAfterFetch()}
                     <div key={"app_footer"} className="navbar row col">
                         <div key={"app_footer_0"}>
                             <Footer/>

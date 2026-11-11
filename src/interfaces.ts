@@ -123,6 +123,20 @@ export interface ICode {
     siblings: IShortEntry[]
 }
 
+export interface IHighlight {
+    text?: string,
+    synonyms?: string[],
+    inclusions?: string[]
+}
+
+export interface ISearchResult {
+    code: string,
+    text: string,
+    terminal: boolean,
+    url: string,
+    highlight: IHighlight
+}
+
 export interface IVersions {
     [index: string]: string[];
 }
