@@ -115,7 +115,7 @@ function CodeBodyVersionized() {
         return cd.replace("ICD10-GM", t("LBL_ICD_LABEL"))
     }
 
-    function displayCode(cd, ver, cat, isHeader = false) {
+    function displayCode(cd, ver, cat) {
         let currentItem;
         let breadcrumbRoot;
         if (cd) {
@@ -128,10 +128,6 @@ function CodeBodyVersionized() {
                 breadcrumbRoot = t('LBL_SUPPLEMENTS') + ' ' + ver.substring(1)
             } else if (cat === "Reha") {
                 breadcrumbRoot = "ST Reha " + ver.substring(5).replace("_", " ")
-            } else if (cat === "AmbGroup"){
-                breadcrumbRoot = t('LBL_AMB_GROUP') + " " + ver.substring(1)
-            } else if (cat === "LKAAT") {
-                breadcrumbRoot = isHeader ? t('LBL_LKAAT') : t('LBL_LKAAT_LABEL')
             }
         } else {
             breadcrumbRoot = '';
@@ -167,7 +163,7 @@ function CodeBodyVersionized() {
                     {displayCode(currentCode, version, catalog)}
                 </Breadcrumb.Item>
             </Breadcrumb>
-            <h3>{displayCode(currentCode, version, catalog, true)}</h3>
+            <h3>{displayCode(currentCode, version, catalog)}</h3>
             {version === attributes.code || attributes.code === "ALL" ?
                 <p></p> : <p>{attributes.text}</p>}
             <CodeAttributesVersionized

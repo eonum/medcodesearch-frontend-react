@@ -6,22 +6,16 @@ export const versionizedCatalogs = [
     'SwissDRG',
     'CHOP',
     'TARMED',
-    'TARDOC',
-    'AmbGroup',
     'Reha',
-    'Supplements',
-    'LKAAT'
+    'Supplements'
 ]
 export const currentCatalogsByButton = {
     'ICD': 'currentICD',
     'SwissDRG': 'currentSwissDRG',
     'CHOP': 'currentCHOP',
     'TARMED': 'currentTARMED',
-    'TARDOC': 'currentTARDOC',
-    'AmbGroup': 'currentAmbGroup',
     'Reha': 'currentReha',
-    'Supplements': 'currentSupplements',
-    'LKAAT': 'currentLKAAT'
+    'Supplements': 'currentSupplements'
 }
 
 /**
@@ -39,11 +33,8 @@ export function cutCatalogFromVersion(catalog, version) {
             return version.substring(5).replace("_", " ")
         case "SwissDRG":
         case "Supplements":
-        case "AmbGroup":
-        case "LKAAT":
             return version
         case "TARMED":
-        case "TARDOC":
             return version.substring(7)
         default:
             return
@@ -67,14 +58,8 @@ export function convertCatalogToResourceType(catalog) {
             return "supplements"
         case "TARMED":
             return "tarmeds"
-        case "TARDOC":
-            return "tardocs"
-        case "AmbGroup":
-            return "amb_groups"
         case "Reha":
             return "rcgs"
-        case "LKAAT":
-            return "service_catalogs"
         default:
             return
     }
