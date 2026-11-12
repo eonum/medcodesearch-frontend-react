@@ -49,8 +49,12 @@ function Buttons(props: Props) {
      * Fetches base and available versions when language, catalog, or reRender changes.
      */
     useEffect(() => {
-        fetchBaseVersions();
-        fetchAvailableVersions();
+        // Must run sequentially: fetchBaseVersions also sets availableVersions (to all 'de' versions), so it has
+        // to finish before the language-specific versions are set. Otherwise the result depends on response order.
+        (async () => {
+            await fetchBaseVersions();
+            await fetchAvailableVersions();
+        })();
     }, [props.language, props.catalog, props.reRender]); // eslint-disable-line
 
     /**

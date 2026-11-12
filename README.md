@@ -53,7 +53,11 @@ Components use React hooks directly: `useNavigate`, `useParams`, and `useLocatio
 
 ## Testing
 
-Tests are Cypress E2E only (no unit tests). Cypress runs against a local dev server on port 8080.
+Tests are Playwright E2E only (no unit tests). Playwright starts the Vite dev server on port 8080 automatically
+(or reuses one that is already running) and runs every spec in a desktop (1366×768) and a mobile (400×800) project.
+Specs named `*.desktop.spec.ts` / `*.mobile.spec.ts` only run in that project.
+
+First-time setup: `npx playwright install chromium`.
 
 ```bash
 yarn test               # Run all tests headlessly
@@ -62,16 +66,17 @@ yarn test:breadcrumbs   # Breadcrumb specs only
 yarn test:codeAttributes
 yarn test:default
 yarn test:popUp
-yarn test-with-gui      # Open Cypress interactive GUI
+yarn test:ui            # Open Playwright UI mode
 ```
 
-Cypress retries assertions automatically (default timeout: 4 s, configurable in `cypress.config.ts`).
+Playwright retries assertions automatically (default timeout: 5 s). Config lives in `playwright.config.ts`, shared helpers in `e2e/helpers.ts`.
+The tests run against the live backend (`https://search.eonum.ch`), so expected values are read from the API where they change over time (e.g. latest versions, prices).
 
 ---
 
 ## Coding conventions
 
-- Each component in its own file; components under `src/Components/`, services under `src/Services/`, test suites under `cypress/e2e/`
+- Each component in its own file; components under `src/Components/`, services under `src/Services/`, test suites under `e2e/`
 - Component names: first letter uppercase, rest lowercase (e.g. `Searchbar`)
 - Function/method names: lowercase
 - Variable names: camelCase

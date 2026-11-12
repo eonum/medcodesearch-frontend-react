@@ -5,18 +5,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-yarn start              # Dev server at http://localhost:3000
-yarn build              # Production build
-yarn test               # Start test server (port 8080) + run all Cypress E2E tests headlessly
+yarn start              # Vite dev server at http://localhost:3000
+yarn build              # Type-check (tsc) + Vite production build into build/
+yarn test               # Playwright E2E tests (auto-starts Vite on port 8080; desktop + mobile projects)
 yarn test:search        # Run only search specs
 yarn test:breadcrumbs   # Run only breadcrumb specs
 yarn test:codeAttributes
 yarn test:default
 yarn test:popUp
-yarn test-with-gui      # Open Cypress interactive GUI
+yarn test:ui            # Playwright UI mode
 ```
 
-There is no lint script. Tests are Cypress E2E only — no Jest/unit tests exist.
+There is no lint script. Tests are Playwright E2E only (`e2e/`, config in `playwright.config.ts`) — no unit tests exist. First-time setup: `npx playwright install chromium`.
 
 ## Architecture
 

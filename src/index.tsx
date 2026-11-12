@@ -13,17 +13,17 @@ import i18n from "./i18n";
 /**
  * Renders the whole application.
  *
- * StrictMode is enabled in development but disabled during Cypress tests.
+ * StrictMode is enabled in development but disabled during E2E (Playwright) tests.
  * In React 18, StrictMode double-invokes effects in development to surface side-effect bugs.
- * This causes Cypress tests to time out waiting for data that gets refetched after the second
- * invocation resets component state. Setting REACT_APP_CYPRESS=true (done in the
- * start-test-server script) replaces StrictMode with a plain Fragment so effects run once,
+ * This causes E2E tests to time out waiting for data that gets refetched after the second
+ * invocation resets component state. Setting VITE_E2E=true (done by the webServer command in
+ * playwright.config.ts) replaces StrictMode with a plain Fragment so effects run once,
  * matching production behaviour. StrictMode has no effect in production builds regardless.
  */
 const root = createRoot(document.getElementById('root') as HTMLElement);
-const isCypress = process.env.REACT_APP_CYPRESS === 'true';
+const isE2E = import.meta.env.VITE_E2E === 'true';
 // StrictMode is the recommended wrapper for React 18 apps — keep it enabled during development.
-const Wrapper = isCypress ? React.Fragment : React.StrictMode;
+const Wrapper = isE2E ? React.Fragment : React.StrictMode;
 
 root.render(
     <Wrapper>
