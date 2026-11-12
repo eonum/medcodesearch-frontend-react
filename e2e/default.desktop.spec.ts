@@ -80,6 +80,22 @@ test.describe('General navigation via clicks (desktop)', () => {
         await contains(page, 'Certaines maladies infectieuses et parasitaires');
     });
 
+    test('changing languages keeps the current code and search', async ({ page }) => {
+        await page.goto('/de/SwissDRG/V12.0/drgs/B02A?query=B02A');
+        await contains(page, 'B02A');
+        await page.locator('.language-btn:nth-child(2)').click();
+        await expect(page).toHaveURL('/fr/SwissDRG/V12.0/drgs/B02A?query=B02A');
+        await page.locator('.language-btn:nth-child(3)').click();
+        await expect(page).toHaveURL('/it/SwissDRG/V12.0/drgs/B02A?query=B02A');
+    });
+
+    test('changing languages keeps the current code of an unversionized catalog', async ({ page }) => {
+        await page.goto('/de/MIGEL/migels/10.01.01.00.1');
+        await contains(page, '10.01.01.00.1');
+        await page.locator('.language-btn:nth-child(2)').click();
+        await expect(page).toHaveURL('/fr/MIGEL/migels/10.01.01.00.1');
+    });
+
     test('moving from a specific catalog version to other versions of other catalogs', async ({ page }) => {
         await page.goto('/');
         await page.locator('#catalog_button').click();

@@ -2,7 +2,7 @@ import './App.css';
 import './index.css';
 import Footer from './Components/Footer/footer';
 import Header from './Components/Header/header';
-import {Navigate, Routes, Route, Outlet, useNavigate} from "react-router-dom";
+import {Navigate, Routes, Route, Outlet, useNavigate, useLocation} from "react-router-dom";
 import Searchbar from './Components/Searchbar/Searchbar'
 import SearchResult from "./Components/SearchResult/SearchResult";
 import logo from "./assets/medcodesearch_big.png";
@@ -47,6 +47,7 @@ function initializeVersionFromURL() {
 
 function App() {
     const navigate = useNavigate();
+    const location = useLocation();
     const { t } = useTranslation();
 
     const [language, setLanguage] = useState(initializeLanguageFromURL());
@@ -234,9 +235,6 @@ function App() {
         const prevLang = prevLanguageRef.current;
         prevLanguageRef.current = language;
 
-        const searchString = getQueryVariable('query') === "" ? "" :
-            "?query=" + getQueryVariable('query');
-
         async function handleLanguageChange() {
             const currVers = await getVersionsByLanguage(language);
             setCurrentVersions(currVers);
@@ -245,9 +243,13 @@ function App() {
             if (selectedVersion === 'ICD10-GM-XXXX') return;
 
             if (isValidVersion(selectedButton, selectedVersion, language, currVers)) {
+                // Only swap the locale segment; keep the current code and query string.
+                const LANGUAGE_PREFIX = /^\/(de|fr|it|en)(?=\/|$)/;
                 navigate({
-                    pathname: buildPath(),
-                    search: searchString
+                    pathname: LANGUAGE_PREFIX.test(location.pathname)
+                        ? location.pathname.replace(LANGUAGE_PREFIX, '/' + language)
+                        : '/' + buildPath(),
+                    search: location.search
                 })
             } else {
                 toast.warning(t("LBL_VERSION_NOT_AVAILABLE"), {
